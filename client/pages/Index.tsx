@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const features = [
   {
