@@ -1,19 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info } from "lucide-react";
+import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const navLinks = [
     { name: "Home", path: "/", icon: Home },
-    { name: "Rent Equipment", path: "/rent", icon: Tractor },
-    { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
-    { name: "How it Works", path: "/how-it-works", icon: Info },
+    { name: "Rent", path: "/rent", icon: Tractor },
+    { name: "Owner", path: "/owner", icon: LayoutDashboard },
+    { name: "Admin", path: "/admin", icon: ShieldCheck },
   ];
 
   return (
@@ -46,11 +51,19 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex items-center space-x-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
+              </Button>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <User className="h-5 w-5" />
               </Button>
               <Link to="/login">
-                <Button className="rounded-full px-6">Login</Button>
+                <Button className="rounded-full px-6 shadow-lg hover:shadow-primary/20 transition-all">Login</Button>
               </Link>
             </div>
           </div>
