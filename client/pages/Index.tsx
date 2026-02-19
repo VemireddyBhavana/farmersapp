@@ -253,6 +253,61 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Smart Suite Section */}
+      <section className="py-24 overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:w-1/2 space-y-8"
+            >
+              <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight">
+                More than just <span className="text-primary italic">Rentals.</span>
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Smart Farmer provides a complete digital suite designed specifically for the needs of Indian agriculture. Manage your crops, detect pests, and track government schemes all in one place.
+              </p>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {[
+                  { title: "Farming Calendar", desc: "Track sowing and harvests", path: "/calendar" },
+                  { title: "Pest Detection", desc: "AI-powered plant health", path: "/pests" },
+                  { title: "Agri Schemes", desc: "Live government support", path: "/agri-schemes" },
+                  { title: "Mandi Rates", desc: "Real-time crop pricing", path: "/market" }
+                ].map((item, i) => (
+                  <Link key={i} to={item.path} className="group">
+                    <div className="p-6 rounded-2xl bg-muted/30 border border-primary/5 hover:border-primary/20 hover:bg-white hover:shadow-xl transition-all h-full">
+                      <h4 className="font-black text-primary group-hover:translate-x-1 transition-transform">{item.title}</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="lg:w-1/2 relative"
+            >
+              <div className="aspect-video rounded-[3rem] bg-primary/10 border border-primary/10 shadow-2xl overflow-hidden relative group">
+                <img
+                  src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800"
+                  alt="Farmer using tablet"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
+                <div className="absolute bottom-10 left-10 text-white">
+                  <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">Smart Dashboard</p>
+                  <h3 className="text-3xl font-black">Empowering Villages</h3>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* How it Works */}
       <section className="py-24">
         <div className="container mx-auto px-4 text-center">

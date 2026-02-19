@@ -13,6 +13,11 @@ import OwnerDashboard from "./pages/OwnerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Weather from "./pages/Weather";
 import Market from "./pages/Market";
+import Calendar from "./pages/Calendar";
+import Pests from "./pages/Pests";
+import Chat from "./pages/Chat";
+import AgriSchemes from "./pages/AgriSchemes";
+import HelpCenter from "./pages/HelpCenter";
 
 const queryClient = new QueryClient();
 
@@ -34,9 +39,24 @@ const App = () => (
             <Route path="/register" element={<Auth />} />
 
             {/* Feature Routes */}
-            <Route path="/ai-assistant" element={<Placeholder title="AI Farming Assistant" />} />
+            <Route path="/ai-assistant" element={<Chat />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/Chat" element={<Chat />} />
             <Route path="/market" element={<Market />} />
+            <Route path="/Market" element={<Market />} />
             <Route path="/weather" element={<Weather />} />
+            <Route path="/Weather" element={<Weather />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/Calendar" element={<Calendar />} />
+            <Route path="/pests" element={<Pests />} />
+            <Route path="/Pests" element={<Pests />} />
+            <Route path="/agri-schemes" element={<AgriSchemes />} />
+            <Route path="/AgriSchemes" element={<AgriSchemes />} />
+            <Route path="/help-center" element={<HelpCenter />} />
+            <Route path="/GovernmentHelpCenter" element={<HelpCenter />} />
+            <Route path="/Home" element={<Index />} />
+
+            {/* Placeholder Routes */}
             <Route path="/about" element={<Placeholder title="About Smart Farmer" />} />
             <Route path="/privacy" element={<Placeholder title="Privacy Policy" />} />
             <Route path="/terms" element={<Placeholder title="Terms of Service" />} />

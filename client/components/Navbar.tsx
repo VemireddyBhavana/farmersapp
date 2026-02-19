@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck } from "lucide-react";
+import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck, Bug, Calendar, MessageCircle, HeartHandshake, ScrollText, IndianRupee, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -17,8 +23,17 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/", icon: Home },
     { name: "Rent", path: "/rent", icon: Tractor },
+    { name: "Weather", path: "/weather", icon: Sun },
+    { name: "Market", path: "/market", icon: IndianRupee },
     { name: "Owner", path: "/owner", icon: LayoutDashboard },
-    { name: "Admin", path: "/admin", icon: ShieldCheck },
+  ];
+
+  const moreLinks = [
+    { name: "Calendar", path: "/calendar", icon: Calendar },
+    { name: "Pests", path: "/pests", icon: Bug },
+    { name: "AI Chat", path: "/chat", icon: MessageCircle },
+    { name: "Agri Schemes", path: "/agri-schemes", icon: ScrollText },
+    { name: "Help Center", path: "/help-center", icon: HeartHandshake },
   ];
 
   return (
@@ -50,6 +65,28 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-primary gap-1">
+                  More <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
+                {moreLinks.map((link) => (
+                  <DropdownMenuItem key={link.path} asChild>
+                    <Link
+                      to={link.path}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium text-muted-foreground"
+                    >
+                      <link.icon className="h-4 w-4" />
+                      {link.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
@@ -92,7 +129,7 @@ const Navbar = () => {
             className="md:hidden border-b bg-background"
           >
             <div className="space-y-1 px-4 pb-6 pt-2">
-              {navLinks.map((link) => (
+              {[...navLinks, ...moreLinks].map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
