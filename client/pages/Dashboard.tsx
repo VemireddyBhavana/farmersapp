@@ -20,7 +20,12 @@ import {
   CheckCircle2,
   ChevronLeft,
   X,
-  Clock
+  Clock,
+  Bug,
+  MessageCircle,
+  HeartHandshake,
+  ScrollText,
+  LayoutGrid
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -194,6 +199,30 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      {/* Quick Access Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-12">
+        {[
+          { name: "Calendar", path: "/calendar", icon: Calendar, color: "bg-green-100 text-green-700" },
+          { name: "Pest Control", path: "/pests", icon: Bug, color: "bg-red-100 text-red-700" },
+          { name: "AI Chat", path: "/chat", icon: MessageCircle, color: "bg-blue-100 text-blue-700" },
+          { name: "Market", path: "/market", icon: IndianRupee, color: "bg-amber-100 text-amber-700" },
+          { name: "Schemes", path: "/agri-schemes", icon: ScrollText, color: "bg-cyan-100 text-cyan-700" },
+          { name: "Help Center", path: "/help-center", icon: HeartHandshake, color: "bg-primary/10 text-primary" },
+        ].map((item, i) => (
+          <Link key={i} to={item.path}>
+            <motion.div
+              whileHover={{ y: -5 }}
+              className="glass p-6 rounded-[2rem] flex flex-col items-center justify-center gap-3 border-primary/5 hover:border-primary/20 transition-all text-center h-full"
+            >
+              <div className={cn("p-3 rounded-2xl", item.color)}>
+                <item.icon className="h-6 w-6" />
+              </div>
+              <span className="text-xs font-black uppercase tracking-widest">{item.name}</span>
+            </motion.div>
+          </Link>
+        ))}
+      </div>
+
       <div className="grid gap-8 lg:grid-cols-4">
         {/* Sidebar Filters & Stats */}
         <aside className="space-y-8">
@@ -263,7 +292,9 @@ export default function Dashboard() {
                   <p className="text-[10px] text-muted-foreground">Check eligibility</p>
                 </div>
               </div>
-              <Button variant="outline" className="w-full rounded-xl py-4 h-auto text-xs font-bold">View All Schemes</Button>
+              <Link to="/agri-schemes">
+                <Button variant="outline" className="w-full rounded-xl py-4 h-auto text-xs font-bold">View All Schemes</Button>
+              </Link>
             </div>
           </div>
         </aside>

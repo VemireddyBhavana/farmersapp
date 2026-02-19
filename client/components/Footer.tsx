@@ -40,33 +40,36 @@ const Footer = () => {
                 <Link to="/rent" className="hover:text-primary">Tractor Rental</Link>
               </li>
               <li>
-                <Link to="/ai-assistant" className="hover:text-primary">AI Farming Help</Link>
+                <Link to="/chat" className="hover:text-primary">AI Farming Help</Link>
               </li>
               <li>
                 <Link to="/market" className="hover:text-primary">Market Rates</Link>
               </li>
               <li>
-                <Link to="/weather" className="hover:text-primary">Weather Forecast</Link>
+                <Link to="/calendar" className="hover:text-primary">Farming Calendar</Link>
+              </li>
+              <li>
+                <Link to="/pests" className="hover:text-primary">Pest Control</Link>
               </li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-primary/80">
-              Company
+              Information
             </h3>
             <ul className="space-y-4 text-muted-foreground">
               <li>
-                <Link to="/about" className="hover:text-primary">About Us</Link>
+                <Link to="/agri-schemes" className="hover:text-primary">Agri Schemes</Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-primary">Contact</Link>
+                <Link to="/help-center" className="hover:text-primary">Help Center</Link>
+              </li>
+              <li>
+                <Link to="/weather" className="hover:text-primary">Weather Forecast</Link>
               </li>
               <li>
                 <Link to="/privacy" className="hover:text-primary">Privacy Policy</Link>
-              </li>
-              <li>
-                <Link to="/terms" className="hover:text-primary">Terms of Service</Link>
               </li>
             </ul>
           </div>
