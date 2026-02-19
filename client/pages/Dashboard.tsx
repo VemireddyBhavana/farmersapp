@@ -167,28 +167,30 @@ export default function Dashboard() {
             Everything looks good for farming today. Here's your agricultural overview.
           </p>
         </div>
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          className="glass p-6 rounded-3xl flex items-center justify-between border-primary/10 bg-gradient-to-br from-primary/5 to-transparent"
-        >
-          <div className="space-y-1">
-            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Weather - Chittoor</p>
-            <h3 className="text-2xl font-bold flex items-center gap-2 text-foreground">
-              32°C <Sun className="text-amber-500 h-6 w-6" />
-            </h3>
-            <p className="text-xs text-muted-foreground">Partly Cloudy • Humidity 45%</p>
-          </div>
-          <div className="flex gap-4">
-            <div className="text-center">
-              <Droplets className="h-5 w-5 text-blue-500 mx-auto mb-1" />
-              <p className="text-[10px] font-bold">12%</p>
+        <Link to="/weather">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            className="glass p-6 h-full rounded-3xl flex items-center justify-between border-primary/10 bg-gradient-to-br from-primary/5 to-transparent cursor-pointer"
+          >
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Weather - Chittoor</p>
+              <h3 className="text-2xl font-bold flex items-center gap-2 text-foreground">
+                32°C <Sun className="text-amber-500 h-6 w-6" />
+              </h3>
+              <p className="text-xs text-muted-foreground">Partly Cloudy • Humidity 45%</p>
             </div>
-            <div className="text-center">
-              <Wind className="h-5 w-5 text-slate-400 mx-auto mb-1" />
-              <p className="text-[10px] font-bold">14km/h</p>
+            <div className="flex gap-4">
+              <div className="text-center">
+                <Droplets className="h-5 w-5 text-blue-500 mx-auto mb-1" />
+                <p className="text-[10px] font-bold">12%</p>
+              </div>
+              <div className="text-center">
+                <Wind className="h-5 w-5 text-slate-400 mx-auto mb-1" />
+                <p className="text-[10px] font-bold">14km/h</p>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </Link>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-4">
@@ -230,9 +232,37 @@ export default function Dashboard() {
                   </div>
                 </div>
               ))}
-              <Button variant="ghost" className="w-full text-xs text-primary hover:text-primary-foreground hover:bg-primary transition-all rounded-none py-3 h-auto">
-                View All Market Data <ArrowUpRight className="ml-1 h-3 w-3" />
-              </Button>
+              <Link to="/market">
+                <Button variant="ghost" className="w-full text-xs text-primary hover:text-primary-foreground hover:bg-primary transition-all rounded-none py-3 h-auto">
+                  View All Market Data <ArrowUpRight className="ml-1 h-3 w-3" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          {/* Govt Schemes */}
+          <div className="space-y-4 pt-4">
+            <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground/80">Govt Schemes</h3>
+            <div className="glass p-5 rounded-3xl border-primary/10 bg-gradient-to-br from-primary/5 to-transparent space-y-4">
+              <div className="flex gap-3">
+                <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-bold text-primary">PM</span>
+                </div>
+                <div>
+                  <p className="text-xs font-bold">PM-Kisan Nidhi</p>
+                  <p className="text-[10px] text-muted-foreground">₹2,000 due in Nov</p>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] font-bold text-blue-700">AP</span>
+                </div>
+                <div>
+                  <p className="text-xs font-bold">Rythu Bharosa</p>
+                  <p className="text-[10px] text-muted-foreground">Check eligibility</p>
+                </div>
+              </div>
+              <Button variant="outline" className="w-full rounded-xl py-4 h-auto text-xs font-bold">View All Schemes</Button>
             </div>
           </div>
         </aside>

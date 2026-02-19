@@ -59,7 +59,7 @@ const AIChat = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-3xl bg-background border shadow-2xl glass sm:w-[400px]"
+            className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-3xl bg-background/80 border shadow-2xl glass dark:glass-dark sm:w-[400px]"
           >
             {/* Header */}
             <div className="flex items-center justify-between bg-primary p-4 text-primary-foreground">

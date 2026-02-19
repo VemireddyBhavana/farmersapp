@@ -71,32 +71,56 @@ export default function Auth() {
 
           <div className="space-y-4">
             {!isLogin && (
-              <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Full Name</Label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input placeholder="Enter your full name" className="pl-12 h-14 rounded-2xl border-primary/5 focus-visible:ring-primary" />
-                </div>
+              <div className="relative group">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
+                <Input
+                  id="fullname"
+                  placeholder=" "
+                  className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
+                />
+                <label
+                  htmlFor="fullname"
+                  className="absolute left-12 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
+                >
+                  Full Name
+                </label>
               </div>
             )}
-            <div className="space-y-2">
-              <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Phone Number</Label>
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center text-sm font-bold text-muted-foreground border-r pr-3 border-primary/10 mr-2">
-                  +91
-                </div>
-                <Input placeholder="98765 43210" className="pl-16 h-14 rounded-2xl border-primary/5 focus-visible:ring-primary" />
+            <div className="relative group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center text-sm font-bold text-muted-foreground border-r pr-3 border-primary/10 mr-2 z-10 group-focus-within:text-primary transition-colors">
+                +91
               </div>
+              <Input
+                id="phone"
+                placeholder=" "
+                className="peer pl-16 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
+              />
+              <label
+                htmlFor="phone"
+                className="absolute left-16 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
+              >
+                Phone Number
+              </label>
             </div>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center ml-1">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Password</Label>
-                {isLogin && <Link to="#" className="text-xs text-primary font-bold hover:underline">Forgot?</Link>}
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input type="password" placeholder="••••••••" className="pl-12 h-14 rounded-2xl border-primary/5 focus-visible:ring-primary" />
-              </div>
+            <div className="relative group">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
+              <Input
+                id="password"
+                type="password"
+                placeholder=" "
+                className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
+              />
+              <label
+                htmlFor="password"
+                className="absolute left-12 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
+              >
+                Password
+              </label>
+              {isLogin && (
+                <Link to="#" className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-primary font-bold hover:underline z-10">
+                  Forgot?
+                </Link>
+              )}
             </div>
           </div>
 
