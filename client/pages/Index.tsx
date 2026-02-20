@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf } from "lucide-react";
+import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -43,123 +43,75 @@ export default function Index() {
   return (
     <div className="overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-32 lg:pt-32 lg:pb-48">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(45%_45%_at_50%_50%,rgba(22,101,52,0.1)_0%,rgba(255,255,255,0)_100%)]" />
-        <div className="container mx-auto px-4">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=2000"
+            alt="Farming Grains"
+            className="w-full h-full object-cover scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
+        </div>
+
+        <div className="container relative z-10 mx-auto px-4 py-20 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center justify-center space-y-8"
+          >
+            {/* Centered Icon Box */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="space-y-8"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="w-20 h-20 rounded-3xl glass-dark flex items-center justify-center border border-white/20 shadow-2xl"
             >
-              <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border-none px-4 py-1 text-sm font-medium">
-                🌾 Revolutionizing Indian Farming
-              </Badge>
-              <h1 className="text-5xl font-extrabold tracking-tight text-foreground lg:text-7xl">
-                Smart Tools for <br />
-                <span className="text-primary italic">Smarter Farmers</span>
+              <Leaf className="h-10 w-10 text-emerald-400" />
+            </motion.div>
+
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.1]">
+                Grow Smarter. <br />
+                <span className="text-yellow-400">Farm Better.</span> <br />
+                <span className="text-emerald-400">Thrive Together.</span>
               </h1>
-              <p className="max-w-xl text-lg text-muted-foreground lg:text-xl">
-                Rent high-quality tractors, get expert AI-driven farming advice, and boost your harvest with Smart Farmer.
+
+              <p className="max-w-2xl mx-auto text-lg md:text-xl text-white/80 font-medium">
+                Empowering farmers with smart technology for sustainable agriculture.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to="/rent">
-                  <Button className="rounded-full px-8 py-6 text-lg shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                    Book a Tractor
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <Link to="/how-it-works">
-                  <Button variant="outline" className="rounded-full px-8 py-6 text-lg">
-                    How it Works
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex items-center space-x-6 pt-4">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="h-10 w-10 rounded-full border-2 border-background bg-muted overflow-hidden"
-                    >
-                      <img
-                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 10}`}
-                        alt="User"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="text-sm">
-                  <div className="flex text-amber-500">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
-                  </div>
-                  <p className="font-medium text-muted-foreground">Loved by 10k+ Farmers</p>
-                </div>
-              </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="relative lg:ml-12"
-            >
-              <div className="relative aspect-square max-w-[500px] mx-auto overflow-hidden rounded-[2rem] shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1594398044700-1482072f80c2?auto=format&fit=crop&q=80&w=800"
-                  alt="Modern Tractor"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 glass p-4 rounded-2xl">
-                  <div className="flex items-center justify-between text-white">
-                    <div>
-                      <p className="text-xs opacity-80 uppercase tracking-widest">Featured Equipment</p>
-                      <h4 className="text-lg font-bold">John Deere 5310 GearPro</h4>
-                    </div>
-                    <Badge className="bg-primary/90">₹800/hr</Badge>
-                  </div>
-                </div>
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+              <Link to="/rent">
+                <Button className="rounded-full px-10 py-7 text-lg bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-900/40 border-none transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+                  <Play className="h-4 w-4 fill-current" />
+                  Get Started Today
+                </Button>
+              </Link>
+              <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
+                Watch Demo <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Floating Decorative Elements */}
+        <div className="absolute bottom-10 left-10 hidden lg:block">
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="glass-dark p-4 rounded-2xl border border-white/10"
+          >
+            <div className="flex items-center space-x-3 text-white">
+              <div className="h-8 w-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <TrendingUp className="h-4 w-4" />
               </div>
-
-              {/* Floating elements */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -top-6 -right-6 glass p-4 rounded-2xl hidden md:block"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center text-white">
-                    <TrendingUp className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Yield Growth</p>
-                    <p className="text-sm font-bold">+24% This Season</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 5, repeat: Infinity }}
-                className="absolute -bottom-10 -left-6 glass p-4 rounded-2xl hidden md:block"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="h-10 w-10 rounded-full bg-amber-500 flex items-center justify-center text-white">
-                    <Cloud className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">Next Rain</p>
-                    <p className="text-sm font-bold">In 2 Days</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+              <p className="text-sm font-bold">2.4k+ Farmers Joined Today</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -167,10 +119,13 @@ export default function Index() {
       <section className="bg-muted/30 py-24">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto mb-16 space-y-4">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
-              Why Choose Smart Farmer?
+            <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl uppercase tracking-widest text-primary/60 text-sm mb-2">
+              Our Ecosystem
             </h2>
-            <p className="text-muted-foreground">
+            <h3 className="text-4xl lg:text-5xl font-black text-foreground">
+              Why Choose AgriPath?
+            </h3>
+            <p className="text-muted-foreground text-lg">
               We provide the tools and technology to make modern farming accessible and profitable for everyone.
             </p>
           </div>
@@ -264,10 +219,10 @@ export default function Index() {
               className="lg:w-1/2 space-y-8"
             >
               <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight">
-                More than just <span className="text-primary italic">Rentals.</span>
+                More than just <span className="text-emerald-500 italic">Rentals.</span>
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Smart Farmer provides a complete digital suite designed specifically for the needs of Indian agriculture. Manage your crops, detect pests, and track government schemes all in one place.
+                AgriPath provides a complete digital suite designed specifically for the needs of Indian agriculture. Manage your crops, detect pests, and track government schemes all in one place.
               </p>
               <div className="grid gap-6 sm:grid-cols-2">
                 {[

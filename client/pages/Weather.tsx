@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, Calendar, ArrowLeft, SunMedium, CloudLightning } from "lucide-react";
+import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, Calendar, ArrowLeft, SunMedium, CloudLightning, MapPin, Navigation, Sprout, Info, Waves } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,92 +18,147 @@ const weeklyForecast = [
 
 export default function Weather() {
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="flex items-center gap-4 mb-8">
-        <Link to="/dashboard">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Weather Forecast</h1>
-          <p className="text-muted-foreground">Agricultural weather advisory for Chittoor District</p>
-        </div>
+    <div className="container mx-auto px-4 py-8 space-y-12">
+      <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+          Live Weather Analysis & Recommendations
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Get real-time weather data and AI-powered farming recommendations based on your exact location.
+        </p>
+        <Button className="rounded-full bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg shadow-xl shadow-blue-500/20 flex items-center gap-2 mx-auto">
+          <Navigation className="h-5 w-5 fill-current" />
+          Get Live Weather & Recommendations
+        </Button>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Today's Weather */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="lg:col-span-2"
-        >
-          <Card className="rounded-[3rem] border-primary/10 overflow-hidden bg-gradient-to-br from-primary/5 to-transparent shadow-xl">
-            <CardContent className="p-8 lg:p-12">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                <div className="text-center md:text-left space-y-4">
-                  <Badge className="bg-primary/10 text-primary border-none px-4 py-1">Today, Oct 12</Badge>
-                  <h2 className="text-6xl font-black text-foreground">32°C</h2>
-                  <p className="text-2xl font-bold text-muted-foreground flex items-center justify-center md:justify-start gap-2">
-                    Partly Cloudy <SunMedium className="text-amber-500 h-8 w-8" />
-                  </p>
-                  <div className="flex gap-6 pt-4 justify-center md:justify-start">
-                    <div className="flex items-center gap-2">
-                      <Droplets className="h-5 w-5 text-blue-500" />
-                      <span className="font-bold">45% Humidity</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Wind className="h-5 w-5 text-slate-400" />
-                      <span className="font-bold">14km/h Wind</span>
-                    </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { label: "Temperature", value: "24°C", sub: "Feels like 22.7°C", icon: Thermometer, color: "text-red-500" },
+          { label: "Humidity", value: "80%", sub: "High", icon: Droplets, color: "text-blue-500" },
+          { label: "Wind Speed", value: "5 km/h", sub: "Gentle", icon: Wind, color: "text-slate-400" },
+          { label: "Location", value: "Hyderabad, India", sub: "Cloudy", icon: MapPin, color: "text-amber-500" },
+        ].map((stat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+          >
+            <Card className="rounded-3xl border-primary/5 shadow-sm hover:shadow-md transition-all">
+              <CardContent className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
+                    <h3 className="text-2xl font-black">{stat.value}</h3>
                   </div>
+                  <stat.icon className={cn("h-5 w-5", stat.color)} />
                 </div>
-                <div className="relative h-48 w-48 lg:h-64 lg:w-64">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 bg-amber-400/20 rounded-full blur-3xl"
-                  />
-                  <Sun className="h-full w-full text-amber-500 drop-shadow-2xl animate-pulse" />
-                </div>
-              </div>
+                <p className="text-xs text-muted-foreground font-medium">{stat.sub}</p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
 
-              <div className="mt-12 p-6 rounded-[2rem] bg-white/50 backdrop-blur-sm border border-primary/5">
-                <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
-                  <CloudRain className="text-primary" /> Agri Advisory
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Ideal conditions for harvesting and drying crops. Rainfall expected in 48 hours, consider completing field preparation by tomorrow evening. Low risk of pests due to dry winds.
-                </p>
-              </div>
+      <div className="grid gap-8 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Card className="rounded-[2.5rem] border-primary/5 shadow-sm h-full overflow-hidden">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl font-bold flex items-center gap-3">
+                <Sprout className="h-6 w-6 text-emerald-500" />
+                Farming Recommendations
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 pt-0">
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                Given the current overcast skies and light winds at 24°C in Hyderabad, it's advisable to monitor soil moisture levels closely. If the soil is moist, delay irrigation to prevent waterlogging, which can harm root systems. If the soil is dry, provide light irrigation in the early morning or late evening to minimize evaporation losses. Additionally, applying mulch around plant bases can help retain soil moisture and regulate temperature.
+              </p>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* 7-Day Forecast */}
-        <Card className="rounded-[3rem] border-primary/10 shadow-lg">
-          <CardHeader className="p-8 pb-4">
-            <CardTitle className="text-xl font-bold">7-Day Forecast</CardTitle>
-          </CardHeader>
-          <CardContent className="p-8 pt-0 space-y-4">
-            {weeklyForecast.map((day, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="flex items-center justify-between p-4 rounded-2xl hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 text-sm font-bold">{day.day}</div>
-                  <day.icon className={cn("h-6 w-6", day.condition === "Rainy" ? "text-blue-500" : "text-amber-500")} />
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <Card className="rounded-[2.5rem] border-primary/5 shadow-sm h-full overflow-hidden">
+            <CardHeader className="p-8 pb-4">
+              <CardTitle className="text-xl font-bold flex items-center gap-3">
+                <Waves className="h-6 w-6 text-blue-500" />
+                Irrigation Advice
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8 pt-0">
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                With humidity at 80% and clouds present, evapotranspiration rates are lower.
+                <br /><br />
+                • <strong>Timing:</strong> Irrigate before 9 AM or after 5 PM.
+                <br />
+                • <strong>Method:</strong> Drip irrigation is highly recommended to save water.
+                <br />
+                • <strong>Note:</strong> Check for upcoming rain before starting a heavy irrigation cycle.
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+
+      <div className="space-y-8 pt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-black tracking-tight">Recommended Crops for Current Weather</h2>
+          <Link to="/calendar">
+            <Button variant="outline" className="rounded-xl font-bold">View Planting Calendar</Button>
+          </Link>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { name: "Rice (Kharif)", suitability: "High", reason: "Current humidity and temperature are ideal for growth." },
+            { name: "Cotton", suitability: "Medium", reason: "Good for gentle winds, but watch for excessive humidity." },
+            { name: "Pulses", suitability: "High", reason: "Moderate temperature supports nitrogen fixation." },
+          ].map((crop, i) => (
+            <Card key={i} className="rounded-3xl border-primary/5 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
+              <div className="h-2 bg-emerald-500 w-full" />
+              <CardContent className="p-8 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-xl font-bold group-hover:text-emerald-600 transition-colors">{crop.name}</h4>
+                  <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-none px-3">{crop.suitability}</Badge>
                 </div>
-                <div className="text-sm font-medium text-muted-foreground">{day.condition}</div>
-                <div className="font-bold">{day.temp}</div>
-              </motion.div>
-            ))}
-          </CardContent>
-        </Card>
+                <p className="text-muted-foreground leading-relaxed">
+                  {crop.reason}
+                </p>
+                <Button variant="ghost" className="p-0 text-emerald-600 hover:text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">
+                  View Growing Guide <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+
+      {/* 7-Day Forecast */}
+      <div className="pt-12">
+        <h2 className="text-3xl font-black tracking-tight mb-8">7-Day Outlook</h2>
+        <div className="grid gap-4 md:grid-cols-7">
+          {weeklyForecast.map((day, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: idx * 0.05 }}
+              className="flex flex-col items-center p-6 rounded-[2rem] bg-muted/30 border border-primary/5 hover:bg-white hover:shadow-xl transition-all cursor-default"
+            >
+              <span className="text-sm font-bold text-muted-foreground mb-4 uppercase tracking-wider">{day.day}</span>
+              <day.icon className={cn("h-10 w-10 mb-4", day.condition === "Rainy" || day.condition === "Thunderstorm" ? "text-blue-500" : "text-amber-500")} />
+              <span className="text-xl font-black">{day.temp}</span>
+              <span className="text-xs font-medium text-muted-foreground mt-2 text-center">{day.condition}</span>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );

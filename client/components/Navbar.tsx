@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck, Bug, Calendar, MessageCircle, HeartHandshake, ScrollText, IndianRupee, ChevronDown } from "lucide-react";
+import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck, Bug, Calendar, MessageCircle, HeartHandshake, ScrollText, IndianRupee, ChevronDown, Languages, Leaf, CloudSun, TrendingUp, Shield, Bot, Landmark, Truck, Settings, Grid } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,23 +17,34 @@ const Navbar = () => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [language, setLanguage] = useState("English");
 
   useEffect(() => setMounted(true), []);
 
-  const navLinks = [
-    { name: "Home", path: "/", icon: Home },
-    { name: "Rent", path: "/rent", icon: Tractor },
-    { name: "Weather", path: "/weather", icon: Sun },
-    { name: "Market", path: "/market", icon: IndianRupee },
-    { name: "Owner", path: "/owner", icon: LayoutDashboard },
+  const languages = [
+    { name: "English", native: "English" },
+    { name: "Hindi", native: "हिन्दी" },
+    { name: "Telugu", native: "తెలుగు" },
+    { name: "Tamil", native: "தமிழ்" },
+    { name: "Marathi", native: "मराठी" },
+    { name: "Gujarati", native: "ગુજરાતી" },
+    { name: "Kannada", native: "ಕನ್ನಡ" },
+    { name: "Malayalam", native: "മലയാളം" },
+    { name: "Punjabi", native: "ਪੰਜਾਬੀ" },
+    { name: "Bangla", native: "বাংলা" },
   ];
 
-  const moreLinks = [
+  const navLinks = [
+    { name: "Home", path: "/", icon: Grid },
+    { name: "Weather", path: "/weather", icon: CloudSun },
+    { name: "Market", path: "/market", icon: TrendingUp },
     { name: "Calendar", path: "/calendar", icon: Calendar },
-    { name: "Pests", path: "/pests", icon: Bug },
-    { name: "AI Chat", path: "/chat", icon: MessageCircle },
-    { name: "Agri Schemes", path: "/agri-schemes", icon: ScrollText },
-    { name: "Help Center", path: "/help-center", icon: HeartHandshake },
+    { name: "Security", path: "/pests", icon: Shield },
+    { name: "AI Chat", path: "/chat", icon: Bot },
+    { name: "Schemes", path: "/agri-schemes", icon: ScrollText },
+    { name: "Government", path: "/help-center", icon: Landmark },
+    { name: "Rent", path: "/rent", icon: Truck },
+    { name: "Settings", path: "/owner", icon: Settings },
   ];
 
   return (
@@ -41,66 +52,73 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="rounded-xl bg-primary p-1.5">
-              <Tractor className="h-6 w-6 text-primary-foreground" />
+            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/20">
+              <Leaf className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-primary">
-              Smart Farmer
+            <span className="text-xl font-bold tracking-tight text-emerald-600">
+              AgriPath
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary",
-                  location.pathname === link.path
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center space-x-2">
+            <div className="flex items-center bg-muted/30 rounded-2xl p-1 gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={cn(
+                    "flex items-center justify-center p-2 rounded-xl transition-all hover:scale-110",
+                    location.pathname === link.path
+                      ? "bg-primary/10 text-primary shadow-sm"
+                      : "text-muted-foreground hover:bg-muted"
+                  )}
+                  title={link.name}
+                >
+                  <link.icon className="h-5 w-5" />
+                </Link>
+              ))}
+            </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-primary gap-1">
-                  More <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
-                {moreLinks.map((link) => (
-                  <DropdownMenuItem key={link.path} asChild>
-                    <Link
-                      to={link.path}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium text-muted-foreground"
+            <div className="flex items-center space-x-3 ml-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-10 px-3 rounded-xl gap-2 text-muted-foreground hover:text-primary bg-muted/30">
+                    <Languages className="h-4 w-4" />
+                    <span className="text-sm font-medium">{language}</span>
+                    <ChevronDown className="h-3 w-3 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
+                  {languages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.name}
+                      onClick={() => setLanguage(lang.name)}
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium"
                     >
-                      <link.icon className="h-4 w-4" />
-                      {link.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                      <span>{lang.native}</span>
+                      {language === lang.name && <ShieldCheck className="h-4 w-4 text-primary" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            <div className="flex items-center space-x-4">
+              <div className="h-6 w-px bg-border mx-2" />
+
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full"
+                className="rounded-xl bg-muted/30 h-10 w-10"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               >
                 {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
               </Button>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <User className="h-5 w-5" />
-              </Button>
+
               <Link to="/login">
-                <Button className="rounded-full px-6 shadow-lg hover:shadow-primary/20 transition-all">Login</Button>
+                <Button className="rounded-xl px-5 h-10 shadow-lg hover:shadow-primary/20 transition-all font-semibold bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-lg bg-white/20 flex items-center justify-center text-[10px] font-bold">B</div>
+                  Bhavana
+                </Button>
               </Link>
             </div>
           </div>
@@ -129,7 +147,7 @@ const Navbar = () => {
             className="md:hidden border-b bg-background"
           >
             <div className="space-y-1 px-4 pb-6 pt-2">
-              {[...navLinks, ...moreLinks].map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
@@ -145,7 +163,19 @@ const Navbar = () => {
                   <span>{link.name}</span>
                 </Link>
               ))}
-              <div className="pt-4 flex flex-col space-y-2">
+              <div className="pt-4 border-t mt-4 flex flex-col space-y-4">
+                <div className="flex items-center justify-between px-3">
+                  <span className="text-sm font-medium text-muted-foreground">Language</span>
+                  <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="bg-transparent text-sm font-medium text-primary outline-none"
+                  >
+                    {languages.map(lang => (
+                      <option key={lang.name} value={lang.name}>{lang.native}</option>
+                    ))}
+                  </select>
+                </div>
                 <Link to="/login" onClick={() => setIsOpen(false)}>
                   <Button className="w-full rounded-xl py-6" variant="outline">
                     Login

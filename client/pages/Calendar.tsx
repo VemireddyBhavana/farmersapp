@@ -1,150 +1,144 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, MapPin, Clock, Leaf, ArrowLeft } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, MapPin, Clock, Leaf, ArrowLeft, Info, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const farmingEvents = [
-  { id: 1, date: "Oct 15", title: "Paddy Sowing", type: "Sowing", color: "bg-green-100 text-green-700" },
-  { id: 2, date: "Oct 18", title: "Fertilizer Application", type: "Maintenance", color: "bg-blue-100 text-blue-700" },
-  { id: 3, date: "Oct 22", title: "Irrigation Schedule", type: "Watering", color: "bg-cyan-100 text-cyan-700" },
-  { id: 4, date: "Oct 25", title: "Pest Inspection", type: "Security", color: "bg-amber-100 text-amber-700" },
-];
-
-const cropCycles = [
-  { crop: "Kharif Paddy", progress: 75, status: "Ripening Stage", end: "Nov 10" },
-  { crop: "Tomato", progress: 40, status: "Vegetative Stage", end: "Dec 05" },
+  { id: 1, date: "Feb 15", title: "Tomato Sowing", type: "Sowing", color: "bg-green-100 text-green-700" },
+  { id: 2, date: "Feb 18", title: "Fertilizer Application", type: "Maintenance", color: "bg-blue-100 text-blue-700" },
+  { id: 3, date: "Feb 22", title: "Irrigation Schedule", type: "Watering", color: "bg-cyan-100 text-cyan-700" },
+  { id: 4, date: "Feb 25", title: "Pest Inspection", type: "Security", color: "bg-amber-100 text-amber-700" },
 ];
 
 export default function FarmingCalendar() {
-  const [currentMonth, setCurrentMonth] = useState("October 2023");
+  const [currentMonth, setCurrentMonth] = useState("February 2026");
+  const [selectedCrop, setSelectedCrop] = useState<string | undefined>(undefined);
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="flex items-center gap-4 mb-8">
-        <Link to="/dashboard">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-        </Link>
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Farming Calendar</h1>
-          <p className="text-muted-foreground">Manage your seasonal crop cycles and daily tasks</p>
-        </div>
+    <div className="container mx-auto px-4 py-8 space-y-12">
+      <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+          Planting Calendar
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Plan your farming activities with optimal planting and harvesting dates for different crops.
+        </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* Calendar View */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="rounded-[3rem] border-primary/10 shadow-xl overflow-hidden">
-            <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
-              <CardTitle className="text-2xl font-black">{currentMonth}</CardTitle>
-              <div className="flex gap-2">
-                <Button variant="outline" size="icon" className="rounded-xl"><ChevronLeft className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" className="rounded-xl"><ChevronRight className="h-4 w-4" /></Button>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8 pt-0">
-              <div className="grid grid-cols-7 gap-2 mb-4 text-center text-xs font-black text-muted-foreground uppercase tracking-widest">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => <div key={day}>{day}</div>)}
-              </div>
-              <div className="grid grid-cols-7 gap-4">
-                {Array.from({ length: 31 }).map((_, i) => {
-                  const day = i + 1;
-                  const hasEvent = [15, 18, 22, 25].includes(day);
-                  return (
-                    <motion.div
-                      whileHover={{ scale: 1.05 }}
-                      key={i}
-                      className={cn(
-                        "aspect-square rounded-2xl flex flex-col items-center justify-center border transition-all cursor-pointer relative overflow-hidden group",
-                        day === 12 ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20" : "bg-muted/30 border-primary/5 hover:border-primary/20 hover:bg-white"
-                      )}
-                    >
-                      <span className="text-lg font-black">{day}</span>
-                      {hasEvent && (
-                        <div className="absolute bottom-2 h-1.5 w-1.5 rounded-full bg-secondary group-hover:scale-150 transition-transform"></div>
-                      )}
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+      {/* Select Crop Section */}
+      <Card className="rounded-[2.5rem] border-primary/5 bg-white shadow-sm overflow-hidden">
+        <CardHeader className="p-8 pb-4">
+          <CardTitle className="text-2xl font-black flex items-center gap-3">
+            <Sprout className="h-7 w-7 text-emerald-600" />
+            Select Crop
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-8 pt-4">
+          <div className="max-w-xl">
+            <Select onValueChange={(value) => setSelectedCrop(value)}>
+              <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white text-lg font-medium">
+                <SelectValue placeholder="Choose a crop to view calendar" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="tomato">Tomato</SelectItem>
+                <SelectItem value="rice">Rice (Paddy)</SelectItem>
+                <SelectItem value="wheat">Wheat</SelectItem>
+                <SelectItem value="cotton">Cotton</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
 
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold px-2">Upcoming Events</h3>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {farmingEvents.map((event) => (
-                <Card key={event.id} className="rounded-[2rem] border-primary/5 hover:shadow-md transition-all">
-                  <CardContent className="p-6 flex items-center gap-4">
-                    <div className="text-center bg-muted/50 p-2 rounded-2xl min-w-[60px]">
-                      <p className="text-[10px] font-bold uppercase text-muted-foreground">{event.date.split(' ')[0]}</p>
-                      <p className="text-xl font-black">{event.date.split(' ')[1]}</p>
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-sm">{event.title}</h4>
-                      <Badge className={cn("mt-1 text-[10px] font-bold py-0 h-5", event.color)}>{event.type}</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+      {selectedCrop === "tomato" && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6 bg-emerald-50/30 p-8 rounded-[2.5rem] border border-emerald-100"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">🍅</span>
+            <h2 className="text-3xl font-black tracking-tight">Tomato Growing Guide</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 font-bold text-emerald-800">
+                <Leaf className="h-5 w-5" /> Planting Season
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {["March", "April", "May", "June"].map(m => (
+                  <Badge key={m} className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-none px-4 py-1.5 rounded-full text-sm font-bold">{m}</Badge>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 font-bold text-amber-800">
+                <div className="text-xl">🌾</div> Harvesting Season
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {["June", "July", "August", "September"].map(m => (
+                  <Badge key={m} className="bg-amber-100 text-amber-700 hover:bg-amber-200 border-none px-4 py-1.5 rounded-full text-sm font-bold">{m}</Badge>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
+      )}
 
-        {/* Sidebar: Crop Cycles */}
-        <div className="space-y-6">
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-lg bg-gradient-to-br from-primary/5 to-transparent">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-lg font-black flex items-center gap-2">
-                <Leaf className="h-5 w-5 text-primary" /> Active Cycles
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 pt-0 space-y-8">
-              {cropCycles.map((cycle, idx) => (
-                <div key={idx} className="space-y-3">
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <h4 className="font-black text-xl">{cycle.crop}</h4>
-                      <p className="text-xs text-muted-foreground font-bold">{cycle.status}</p>
+      {/* Calendar View */}
+      <Card className="rounded-[3rem] border-primary/5 shadow-xl overflow-hidden bg-white">
+        <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
+          <CardTitle className="text-2xl font-black flex items-center gap-3">
+            <CalendarIcon className="h-6 w-6 text-emerald-600" />
+            {currentMonth}
+          </CardTitle>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-muted"><ChevronLeft className="h-5 w-5" /></Button>
+            <Button variant="ghost" size="icon" className="rounded-xl hover:bg-muted"><ChevronRight className="h-5 w-5" /></Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-8 pt-0">
+          <div className="grid grid-cols-7 gap-2 mb-6 text-center text-sm font-bold text-muted-foreground uppercase tracking-wider">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => <div key={day} className="py-2">{day}</div>)}
+          </div>
+          <div className="grid grid-cols-7 gap-3">
+            {Array.from({ length: 28 }).map((_, i) => {
+              const day = i + 1;
+              const hasEvent = [15, 18, 22, 25].includes(day);
+              const isToday = day === 20;
+              return (
+                <motion.div
+                  whileHover={{ y: -2 }}
+                  key={i}
+                  className={cn(
+                    "min-h-[100px] p-3 rounded-2xl flex flex-col items-start justify-start border transition-all cursor-pointer relative group",
+                    isToday ? "bg-blue-50 border-blue-200" : "bg-muted/10 border-transparent hover:border-emerald-200 hover:bg-emerald-50/30"
+                  )}
+                >
+                  <span className={cn("text-lg font-bold", isToday ? "text-blue-600" : "text-foreground")}>{day}</span>
+                  {hasEvent && (
+                    <div className="mt-2 w-full space-y-1">
+                      <div className="h-1.5 w-full rounded-full bg-emerald-400"></div>
+                      {day === 15 && <span className="text-[10px] font-black text-emerald-700 leading-none">Tomato Sowing</span>}
                     </div>
-                    <p className="text-xs font-black text-primary">{cycle.progress}%</p>
-                  </div>
-                  <div className="h-3 w-full bg-muted rounded-full overflow-hidden border border-primary/5">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${cycle.progress}%` }}
-                      transition={{ duration: 1, delay: idx * 0.2 }}
-                      className="h-full bg-primary"
-                    />
-                  </div>
-                  <p className="text-[10px] text-muted-foreground font-medium flex items-center gap-1">
-                    <Clock className="h-3 w-3" /> Harvest expected by {cycle.end}
-                  </p>
-                </div>
-              ))}
-              <Button className="w-full rounded-2xl py-6 h-auto font-black shadow-lg shadow-primary/10 transition-all hover:translate-y-[-2px]">
-                <Plus className="h-5 w-5 mr-2" /> Start New Cycle
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-lg bg-amber-50/30">
-            <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-lg font-black text-amber-700">Daily Advisory</CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 pt-0">
-              <p className="text-sm text-amber-900/70 leading-relaxed font-medium">
-                High humidity levels detected for today. Monitor your paddy fields for early signs of stem borer. Next irrigation window opens on Oct 14th morning.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
