@@ -13,12 +13,13 @@ import { useTheme } from "next-themes";
 import { useAuth } from "@/lib/AuthContext";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
+import { UserButton } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { theme, setTheme } = useTheme();
-  const { user, logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, isLoaded } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
@@ -84,56 +85,53 @@ const Navbar = () => {
             </div>
 
             <div className="flex items-center space-x-3 ml-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-10 px-3 rounded-xl gap-2 text-muted-foreground hover:text-primary bg-muted/30">
-                    <Languages className="h-4 w-4" />
-                    <span className="text-sm font-medium">{language}</span>
-                    <ChevronDown className="h-3 w-3 opacity-50" />
+              {isLoaded && (
+                <>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-10 px-3 rounded-xl gap-2 text-muted-foreground hover:text-primary bg-muted/30">
+                        <Languages className="h-4 w-4" />
+                        <span className="text-sm font-medium">{language}</span>
+                        <ChevronDown className="h-3 w-3 opacity-50" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
+                      {languages.map((lang) => (
+                        <DropdownMenuItem
+                          key={lang.name}
+                          onClick={() => setLanguage(lang.name)}
+                          className="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium"
+                        >
+                          <span>{lang.native}</span>
+                          {language === lang.name && <ShieldCheck className="h-4 w-4 text-primary" />}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <div className="h-6 w-px bg-border mx-2" />
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-xl bg-muted/30 h-10 w-10"
+                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  >
+                    {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
-                  {languages.map((lang) => (
-                    <DropdownMenuItem
-                      key={lang.name}
-                      onClick={() => setLanguage(lang.name)}
-                      className="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium"
-                    >
-                      <span>{lang.native}</span>
-                      {language === lang.name && <ShieldCheck className="h-4 w-4 text-primary" />}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
 
-              <div className="h-6 w-px bg-border mx-2" />
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-xl bg-muted/30 h-10 w-10"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
-              </Button>
-
-              <Link to={isAuthenticated ? "/dashboard" : "/login"}>
-                <Button className="rounded-xl px-5 h-10 shadow-lg hover:shadow-primary/20 transition-all font-semibold bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
-                  <div className="h-6 w-6 rounded-lg bg-white/20 flex items-center justify-center text-[10px] font-bold">
-                    {user?.username?.[0] || "U"}
-                  </div>
-                  {user?.username?.split(" ")[0] || t("login")}
-                </Button>
-              </Link>
-              {isAuthenticated && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={logout}
-                  className="text-xs font-bold text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg px-2"
-                >
-                  Logout
-                </Button>
+                  {!isAuthenticated ? (
+                    <Link to="/login">
+                      <Button className="rounded-xl px-5 h-10 shadow-lg hover:shadow-primary/20 transition-all font-semibold bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
+                        {t("login")}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <div className="flex items-center gap-4">
+                      <UserButton afterSignOutUrl="/" />
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
