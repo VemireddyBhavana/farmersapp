@@ -42,6 +42,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+import { useAuth } from "@/lib/AuthContext";
+import { useLanguage } from "@/lib/LanguageContext";
+
 const equipment = [
   {
     id: 1,
@@ -131,6 +134,8 @@ const mandiRates = [
 ];
 
 export default function Dashboard() {
+  const { user } = useAuth();
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("All");
   const [selectedEquipment, setSelectedEquipment] = useState<any>(null);
@@ -167,10 +172,10 @@ export default function Dashboard() {
       <div className="grid gap-6 lg:grid-cols-3 mb-10">
         <div className="lg:col-span-2 space-y-2">
           <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-            Welcome back, Ramarao! 🌾
+            {t("welcome")} {user?.username?.split(" ")[0]}! 🌾
           </h1>
           <p className="text-muted-foreground">
-            Everything looks good for farming today. Here's your agricultural overview.
+            {t("agriOverview")}
           </p>
         </div>
         <Link to="/weather">
@@ -202,12 +207,12 @@ export default function Dashboard() {
       {/* Quick Access Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-12">
         {[
-          { name: "Calendar", path: "/calendar", icon: Calendar, color: "bg-green-100 text-green-700" },
-          { name: "Pest Control", path: "/pests", icon: Bug, color: "bg-red-100 text-red-700" },
-          { name: "AI Chat", path: "/chat", icon: MessageCircle, color: "bg-blue-100 text-blue-700" },
-          { name: "Market", path: "/market", icon: IndianRupee, color: "bg-amber-100 text-amber-700" },
-          { name: "Schemes", path: "/agri-schemes", icon: ScrollText, color: "bg-cyan-100 text-cyan-700" },
-          { name: "Help Center", path: "/help-center", icon: HeartHandshake, color: "bg-primary/10 text-primary" },
+          { name: t("calendar"), path: "/calendar", icon: Calendar, color: "bg-green-100 text-green-700" },
+          { name: t("security"), path: "/pests", icon: Bug, color: "bg-red-100 text-red-700" },
+          { name: t("aiChat"), path: "/chat", icon: MessageCircle, color: "bg-blue-100 text-blue-700" },
+          { name: t("market"), path: "/market", icon: IndianRupee, color: "bg-amber-100 text-amber-700" },
+          { name: t("schemes"), path: "/agri-schemes", icon: ScrollText, color: "bg-cyan-100 text-cyan-700" },
+          { name: t("government"), path: "/help-center", icon: HeartHandshake, color: "bg-primary/10 text-primary" },
         ].map((item, i) => (
           <Link key={i} to={item.path}>
             <motion.div

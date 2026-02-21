@@ -9,19 +9,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
+import { useAuth } from "@/lib/AuthContext";
+import { useLanguage, Language } from "@/lib/LanguageContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const { user, logout, isAuthenticated } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const [mounted, setMounted] = useState(false);
-  const [language, setLanguage] = useState("English");
 
   useEffect(() => setMounted(true), []);
 
-  const languages = [
+  const languages: { name: Language; native: string }[] = [
     { name: "English", native: "English" },
     { name: "Hindi", native: "हिन्दी" },
     { name: "Telugu", native: "తెలుగు" },
@@ -35,16 +37,16 @@ const Navbar = () => {
   ];
 
   const navLinks = [
-    { name: "Home", path: "/", icon: Grid },
-    { name: "Weather", path: "/weather", icon: CloudSun },
-    { name: "Market", path: "/market", icon: TrendingUp },
-    { name: "Calendar", path: "/calendar", icon: Calendar },
-    { name: "Security", path: "/pests", icon: Shield },
-    { name: "AI Chat", path: "/chat", icon: Bot },
-    { name: "Schemes", path: "/agri-schemes", icon: ScrollText },
-    { name: "Government", path: "/help-center", icon: Landmark },
-    { name: "Rent", path: "/rent", icon: Truck },
-    { name: "Settings", path: "/owner", icon: Settings },
+    { name: t("home"), path: "/", icon: Grid },
+    { name: t("weather"), path: "/weather", icon: CloudSun },
+    { name: t("market"), path: "/market", icon: TrendingUp },
+    { name: t("calendar"), path: "/calendar", icon: Calendar },
+    { name: t("security"), path: "/pests", icon: Shield },
+    { name: t("aiChat"), path: "/chat", icon: Bot },
+    { name: t("schemes"), path: "/agri-schemes", icon: ScrollText },
+    { name: t("government"), path: "/help-center", icon: Landmark },
+    { name: t("rent"), path: "/rent", icon: Truck },
+    { name: t("settings"), path: "/owner", icon: Settings },
   ];
 
   return (
@@ -114,12 +116,24 @@ const Navbar = () => {
                 {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
               </Button>
 
-              <Link to="/login">
+              <Link to={isAuthenticated ? "/dashboard" : "/login"}>
                 <Button className="rounded-xl px-5 h-10 shadow-lg hover:shadow-primary/20 transition-all font-semibold bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
-                  <div className="h-6 w-6 rounded-lg bg-white/20 flex items-center justify-center text-[10px] font-bold">B</div>
-                  Bhavana
+                  <div className="h-6 w-6 rounded-lg bg-white/20 flex items-center justify-center text-[10px] font-bold">
+                    {user?.username?.[0] || "U"}
+                  </div>
+                  {user?.username?.split(" ")[0] || t("login")}
                 </Button>
               </Link>
+              {isAuthenticated && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={logout}
+                  className="text-xs font-bold text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg px-2"
+                >
+                  Logout
+                </Button>
+              )}
             </div>
           </div>
 
@@ -168,7 +182,7 @@ const Navbar = () => {
                   <span className="text-sm font-medium text-muted-foreground">Language</span>
                   <select
                     value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
+                    onChange={(e) => setLanguage(e.target.value as Language)}
                     className="bg-transparent text-sm font-medium text-primary outline-none"
                   >
                     {languages.map(lang => (
@@ -176,16 +190,24 @@ const Navbar = () => {
                     ))}
                   </select>
                 </div>
-                <Link to="/login" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full rounded-xl py-6" variant="outline">
-                    Login
+                {!isAuthenticated ? (
+                  <>
+                    <Link to="/login" onClick={() => setIsOpen(false)}>
+                      <Button className="w-full rounded-xl py-6" variant="outline">
+                        {t("login")}
+                      </Button>
+                    </Link>
+                    <Link to="/register" onClick={() => setIsOpen(false)}>
+                      <Button className="w-full rounded-xl py-6">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <Button className="w-full rounded-xl py-6" variant="destructive" onClick={() => { logout(); setIsOpen(false); }}>
+                    Logout
                   </Button>
-                </Link>
-                <Link to="/register" onClick={() => setIsOpen(false)}>
-                  <Button className="w-full rounded-xl py-6">
-                    Get Started
-                  </Button>
-                </Link>
+                )}
               </div>
             </div>
           </motion.div>

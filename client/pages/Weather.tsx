@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
+import { useLanguage } from "@/lib/LanguageContext";
+
 const weeklyForecast = [
   { day: "Mon", temp: "32°C", condition: "Sunny", icon: Sun },
   { day: "Tue", temp: "30°C", condition: "Partly Cloudy", icon: SunMedium },
@@ -17,11 +19,12 @@ const weeklyForecast = [
 ];
 
 export default function Weather() {
+  const { t } = useLanguage();
   return (
     <div className="container mx-auto px-4 py-8 space-y-12">
       <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
-          Live Weather Analysis & Recommendations
+          {t("weatherAnalysis")}
         </h1>
         <p className="text-muted-foreground text-lg">
           Get real-time weather data and AI-powered farming recommendations based on your exact location.
@@ -117,9 +120,9 @@ export default function Weather() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { name: "Rice (Kharif)", suitability: "High", reason: "Current humidity and temperature are ideal for growth." },
-            { name: "Cotton", suitability: "Medium", reason: "Good for gentle winds, but watch for excessive humidity." },
-            { name: "Pulses", suitability: "High", reason: "Moderate temperature supports nitrogen fixation." },
+            { name: "Rice (Kharif)", key: "rice", suitability: "High", reason: "Current humidity and temperature are ideal for growth." },
+            { name: "Cotton", key: "cotton", suitability: "Medium", reason: "Good for gentle winds, but watch for excessive humidity." },
+            { name: "Pulses", key: "pulses", suitability: "High", reason: "Moderate temperature supports nitrogen fixation." },
           ].map((crop, i) => (
             <Card key={i} className="rounded-3xl border-primary/5 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
               <div className="h-2 bg-emerald-500 w-full" />
@@ -131,9 +134,11 @@ export default function Weather() {
                 <p className="text-muted-foreground leading-relaxed">
                   {crop.reason}
                 </p>
-                <Button variant="ghost" className="p-0 text-emerald-600 hover:text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">
-                  View Growing Guide <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
-                </Button>
+                <Link to={`/growing-guide?crop=${crop.key}`}>
+                  <Button variant="ghost" className="p-0 text-emerald-600 hover:text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">
+                    {t("viewGrowingGuide")} <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
