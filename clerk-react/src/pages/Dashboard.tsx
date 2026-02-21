@@ -22,7 +22,6 @@ import {
   Upload,
   Camera,
   Activity,
-  CheckCircle,
   BadgeIndianRupee,
   ShieldCheck,
   Bug,
@@ -316,7 +315,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </Link>
-          <Link to="/pest-control">
+          <Link to="/pest-alerts">
             <Card className="rounded-[2rem] border-primary/5 hover:border-primary/20 transition-all hover:shadow-lg overflow-hidden h-full group">
               <CardContent className="p-6 space-y-3">
                 <div className="h-12 w-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-600 group-hover:scale-110 transition-transform">
@@ -476,7 +475,7 @@ export default function Dashboard() {
                   <p className="text-sm font-bold">Apply Fertilizer</p>
                   <p className="text-[10px] text-muted-foreground">Ideal weather window (next 24h)</p>
                 </div>
-                <CheckCircle className="h-5 w-5 text-muted-foreground/30 hover:text-green-500 cursor-pointer transition-colors" />
+                <CheckCircle2 className="h-5 w-5 text-muted-foreground/30 hover:text-green-500 cursor-pointer transition-colors" />
               </div>
               <div className="glass p-4 rounded-2xl border-primary/5 bg-amber-500/5 flex items-center gap-4">
                 <div className="h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
@@ -486,7 +485,7 @@ export default function Dashboard() {
                   <p className="text-sm font-bold">Check for Stem Borers</p>
                   <p className="text-[10px] text-muted-foreground">Recent humidity rise increases risk</p>
                 </div>
-                <CheckCircle className="h-5 w-5 text-muted-foreground/30 hover:text-green-500 cursor-pointer transition-colors" />
+                <CheckCircle2 className="h-5 w-5 text-muted-foreground/30 hover:text-green-500 cursor-pointer transition-colors" />
               </div>
             </div>
           </div>

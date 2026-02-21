@@ -21,6 +21,9 @@ const MapView = lazy(() => import("@/pages/MapView"));
 const AIAssistant = lazy(() => import("@/pages/AIAssistant"));
 const PlantingCalendar = lazy(() => import("@/pages/PlantingCalendar"));
 const PestAlerts = lazy(() => import("@/pages/PestAlerts"));
+const GrowingGuide = lazy(() => import("@/pages/GrowingGuide"));
+const SupportForm = lazy(() => import("@/pages/SupportForm"));
+const TrackApplications = lazy(() => import("@/pages/TrackApplications"));
 
 // Clerk Auth Page replacement
 import ClerkAuthPage from "@/pages/ClerkAuth";
@@ -151,6 +154,30 @@ export default function App() {
               element={
                 <SignedIn>
                   <PestAlerts />
+                </SignedIn>
+              }
+            />
+            <Route
+              path="/growing-guide/:id"
+              element={
+                <SignedIn>
+                  <GrowingGuide />
+                </SignedIn>
+              }
+            />
+            <Route
+              path="/apply/:type"
+              element={
+                <SignedIn>
+                  <SupportForm />
+                </SignedIn>
+              }
+            />
+            <Route
+              path="/track-applications"
+              element={
+                <SignedIn>
+                  <TrackApplications />
                 </SignedIn>
               }
             />
