@@ -1,201 +1,57 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Tractor, User, Lock, Mail, ChevronRight, ArrowLeft, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/lib/AuthContext";
-import { useToast } from "@/components/ui/use-toast";
+import { SignIn, SignUp } from "@clerk/clerk-react";
+import { useLocation, Link } from "react-router-dom";
+import { ArrowLeft, Leaf } from "lucide-react";
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [role, setRole] = useState<"farmer" | "owner">("farmer");
-  const [fullname, setFullname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { login } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
-  const { toast } = useToast();
-
-  const from = (location.state as any)?.from?.pathname || "/dashboard";
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!phone || !password || (!isLogin && !fullname)) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      login({
-        username: isLogin ? "Farmer Ramarao" : fullname,
-        phone: phone,
-        role: role === "farmer" ? "Farmer" : "Owner",
-      });
-      setIsLoading(false);
-      navigate(from, { replace: true });
-      toast({
-        title: "Success",
-        description: isLogin ? "Welcome back!" : "Account created successfully.",
-      });
-    }, 1500);
-  };
+  const isRegister = location.pathname === "/register";
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-muted/10 relative overflow-hidden">
+    <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center p-4 bg-muted/10 relative overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-        <Tractor className="h-96 w-96 rotate-12" />
-      </div>
-      <div className="absolute bottom-0 left-0 p-12 opacity-5 pointer-events-none">
-        <ShieldCheck className="h-80 w-80 -rotate-12" />
+        <Leaf className="h-96 w-96 rotate-12 text-emerald-500" />
       </div>
 
-      <div className="w-full max-w-md space-y-8 relative z-10">
-        <div className="text-center space-y-4">
+      <div className="w-full max-w-md space-y-8 relative z-10 flex flex-col items-center">
+        <div className="text-center space-y-4 mb-4">
           <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:opacity-80 transition-all mb-4">
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm font-medium">Back to Home</span>
           </Link>
-          <div className="mx-auto h-16 w-16 rounded-2xl bg-primary flex items-center justify-center shadow-xl shadow-primary/20">
-            <Tractor className="h-10 w-10 text-primary-foreground" />
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/20">
+            <Leaf className="h-10 w-10 text-white" />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight">
-            {isLogin ? "Welcome Back" : "Create Account"}
+          <h1 className="text-3xl font-bold tracking-tight text-emerald-600">
+            AgriPath
           </h1>
-          <p className="text-muted-foreground">
-            {isLogin 
-              ? "Login to manage your farm or equipment rentals." 
-              : "Join 10k+ farmers and equipment owners today."}
-          </p>
         </div>
 
-        <motion.form
-          layout
-          onSubmit={handleSubmit}
-          className="glass p-8 rounded-[2.5rem] border-primary/10 shadow-2xl space-y-6"
-        >
-          {/* Role Toggle (Only for Register) */}
-          {!isLogin && (
-            <div className="grid grid-cols-2 gap-2 p-1 bg-muted/50 rounded-2xl">
-              <button
-                type="button"
-                onClick={() => setRole("farmer")}
-                className={cn(
-                  "py-3 rounded-xl text-sm font-bold transition-all",
-                  role === "farmer" ? "bg-primary text-primary-foreground shadow-lg" : "text-muted-foreground hover:text-primary"
-                )}
-              >
-                I'm a Farmer
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("owner")}
-                className={cn(
-                  "py-3 rounded-xl text-sm font-bold transition-all",
-                  role === "owner" ? "bg-primary text-primary-foreground shadow-lg" : "text-muted-foreground hover:text-primary"
-                )}
-              >
-                I'm an Owner
-              </button>
-            </div>
-          )}
-
-          <div className="space-y-4">
-            {!isLogin && (
-              <div className="relative group">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
-                <Input
-                  id="fullname"
-                  placeholder=" "
-                  value={fullname}
-                  onChange={(e) => setFullname(e.target.value)}
-                  className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
-                />
-                <label
-                  htmlFor="fullname"
-                  className="absolute left-12 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
-                >
-                  Full Name
-                </label>
-              </div>
-            )}
-            <div className="relative group">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center text-sm font-bold text-muted-foreground border-r pr-3 border-primary/10 mr-2 z-10 group-focus-within:text-primary transition-colors">
-                +91
-              </div>
-              <Input
-                id="phone"
-                placeholder=" "
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="peer pl-16 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
-              />
-              <label
-                htmlFor="phone"
-                className="absolute left-16 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
-              >
-                Phone Number
-              </label>
-            </div>
-            <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
-              <Input
-                id="password"
-                type="password"
-                placeholder=" "
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
-              />
-              <label
-                htmlFor="password"
-                className="absolute left-12 top-4 text-xs font-bold uppercase tracking-widest text-muted-foreground peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 transition-all cursor-text pointer-events-none"
-              >
-                Password
-              </label>
-              {isLogin && (
-                <Link to="#" className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-primary font-bold hover:underline z-10">
-                  Forgot?
-                </Link>
-              )}
-            </div>
-          </div>
-
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all"
-          >
-            {isLoading ? "Processing..." : (isLogin ? "Login Now" : "Register Account")}
-            {!isLoading && <ChevronRight className="ml-2 h-5 w-5" />}
-          </Button>
-
-          <div className="text-center">
-            <p className="text-sm text-muted-foreground">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-primary font-bold hover:underline"
-              >
-                {isLogin ? "Sign Up" : "Login"}
-              </button>
-            </p>
-          </div>
-        </motion.form>
+        {isRegister ? (
+          <SignUp
+            routing="path"
+            path="/register"
+            signInUrl="/login"
+            appearance={{
+              elements: {
+                rootBox: "mx-auto",
+                card: "rounded-[2.5rem] border-primary/10 shadow-2xl glass",
+              }
+            }}
+          />
+        ) : (
+          <SignIn
+            routing="path"
+            path="/login"
+            signUpUrl="/register"
+            appearance={{
+              elements: {
+                rootBox: "mx-auto",
+                card: "rounded-[2.5rem] border-primary/10 shadow-2xl glass",
+              }
+            }}
+          />
+        )}
       </div>
     </div>
   );
