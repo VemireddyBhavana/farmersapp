@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/lib/AuthContext";
 import { useLanguage, Language } from "@/lib/LanguageContext";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
