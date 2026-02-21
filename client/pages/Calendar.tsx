@@ -14,6 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { useAuth } from "@/lib/AuthContext";
+import { useLanguage } from "@/lib/LanguageContext";
+import { backend, Booking } from "@/lib/MockBackend";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 const farmingEvents = [
   { id: 1, date: "Feb 15", title: "Tomato Sowing", type: "Sowing", color: "bg-green-100 text-green-700" },
   { id: 2, date: "Feb 18", title: "Fertilizer Application", type: "Maintenance", color: "bg-blue-100 text-blue-700" },
@@ -24,12 +37,46 @@ const farmingEvents = [
 export default function FarmingCalendar() {
   const [currentMonth, setCurrentMonth] = useState("February 2026");
   const [selectedCrop, setSelectedCrop] = useState<string | undefined>(undefined);
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [userBookings, setUserBookings] = useState<Booking[]>([]);
+
+  const { user } = useAuth();
+  const { t } = useLanguage();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (user) {
+      setUserBookings(backend.getBookings(user.phone));
+    }
+  }, [user]);
+
+  const handleDateClick = (day: number) => {
+    setSelectedDate(day);
+    setIsBookingModalOpen(true);
+  };
+
+  const handleConfirmBooking = () => {
+    if (!user || !selectedDate) return;
+    const newBooking = backend.addBooking({
+      equipmentName: "Tractor (Simulated)",
+      date: `${selectedDate} ${currentMonth}`,
+      duration: 1,
+      userId: user.phone
+    });
+    setUserBookings([...userBookings, newBooking]);
+    setIsBookingModalOpen(false);
+    toast({
+      title: "Date Booked",
+      description: `Equipment reserved for ${selectedDate} ${currentMonth}.`,
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-12">
       <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
-          Planting Calendar
+          {t("plantingCalendar")}
         </h1>
         <p className="text-muted-foreground text-lg">
           Plan your farming activities with optimal planting and harvesting dates for different crops.
@@ -117,20 +164,31 @@ export default function FarmingCalendar() {
               const day = i + 1;
               const hasEvent = [15, 18, 22, 25].includes(day);
               const isToday = day === 20;
+              const isBooked = userBookings.some(b => b.date.startsWith(day.toString()));
+
               return (
                 <motion.div
                   whileHover={{ y: -2 }}
                   key={i}
+                  onClick={() => handleDateClick(day)}
                   className={cn(
                     "min-h-[100px] p-3 rounded-2xl flex flex-col items-start justify-start border transition-all cursor-pointer relative group",
-                    isToday ? "bg-blue-50 border-blue-200" : "bg-muted/10 border-transparent hover:border-emerald-200 hover:bg-emerald-50/30"
+                    isToday ? "bg-blue-50 border-blue-200" :
+                    isBooked ? "bg-emerald-50 border-emerald-200" :
+                    "bg-muted/10 border-transparent hover:border-emerald-200 hover:bg-emerald-50/30"
                   )}
                 >
-                  <span className={cn("text-lg font-bold", isToday ? "text-blue-600" : "text-foreground")}>{day}</span>
-                  {hasEvent && (
+                  <span className={cn("text-lg font-bold", isToday ? "text-blue-600" : isBooked ? "text-emerald-600" : "text-foreground")}>{day}</span>
+                  {isBooked && (
                     <div className="mt-2 w-full space-y-1">
                       <div className="h-1.5 w-full rounded-full bg-emerald-400"></div>
-                      {day === 15 && <span className="text-[10px] font-black text-emerald-700 leading-none">Tomato Sowing</span>}
+                      <span className="text-[10px] font-black text-emerald-700 leading-none">Confirmed</span>
+                    </div>
+                  )}
+                  {hasEvent && !isBooked && (
+                    <div className="mt-2 w-full space-y-1">
+                      <div className="h-1.5 w-full rounded-full bg-orange-400"></div>
+                      {day === 15 && <span className="text-[10px] font-black text-orange-700 leading-none">Tomato Sowing</span>}
                     </div>
                   )}
                 </motion.div>
@@ -139,6 +197,26 @@ export default function FarmingCalendar() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Booking Modal */}
+      <Dialog open={isBookingModalOpen} onOpenChange={setIsBookingModalOpen}>
+        <DialogContent className="sm:max-w-[400px] rounded-[2rem] p-8 border-none glass">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-black">Plan Activity</DialogTitle>
+            <DialogDescription className="font-medium">
+              Schedule farming activity or book equipment for <strong>{selectedDate} {currentMonth}</strong>.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-6 space-y-4">
+            <Button className="w-full rounded-xl py-6 font-bold" onClick={handleConfirmBooking}>
+              Confirm Schedule
+            </Button>
+            <Button variant="outline" className="w-full rounded-xl py-6 font-bold" onClick={() => setIsBookingModalOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

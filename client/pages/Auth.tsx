@@ -1,16 +1,57 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Tractor, User, Lock, Mail, ChevronRight, ArrowLeft, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [role, setRole] = useState<"farmer" | "owner">("farmer");
+  const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
+
+  const from = (location.state as any)?.from?.pathname || "/dashboard";
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!phone || !password || (!isLogin && !fullname)) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      login({
+        username: isLogin ? "Farmer Ramarao" : fullname,
+        phone: phone,
+        role: role === "farmer" ? "Farmer" : "Owner",
+      });
+      setIsLoading(false);
+      navigate(from, { replace: true });
+      toast({
+        title: "Success",
+        description: isLogin ? "Welcome back!" : "Account created successfully.",
+      });
+    }, 1500);
+  };
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 bg-muted/10 relative overflow-hidden">
@@ -41,14 +82,16 @@ export default function Auth() {
           </p>
         </div>
 
-        <motion.div 
+        <motion.form
           layout
+          onSubmit={handleSubmit}
           className="glass p-8 rounded-[2.5rem] border-primary/10 shadow-2xl space-y-6"
         >
           {/* Role Toggle (Only for Register) */}
           {!isLogin && (
             <div className="grid grid-cols-2 gap-2 p-1 bg-muted/50 rounded-2xl">
               <button
+                type="button"
                 onClick={() => setRole("farmer")}
                 className={cn(
                   "py-3 rounded-xl text-sm font-bold transition-all",
@@ -58,6 +101,7 @@ export default function Auth() {
                 I'm a Farmer
               </button>
               <button
+                type="button"
                 onClick={() => setRole("owner")}
                 className={cn(
                   "py-3 rounded-xl text-sm font-bold transition-all",
@@ -76,6 +120,8 @@ export default function Auth() {
                 <Input
                   id="fullname"
                   placeholder=" "
+                  value={fullname}
+                  onChange={(e) => setFullname(e.target.value)}
                   className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
                 />
                 <label
@@ -93,6 +139,8 @@ export default function Auth() {
               <Input
                 id="phone"
                 placeholder=" "
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="peer pl-16 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
               />
               <label
@@ -108,6 +156,8 @@ export default function Auth() {
                 id="password"
                 type="password"
                 placeholder=" "
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="peer pl-12 h-14 rounded-2xl border-primary/10 focus-visible:ring-primary pt-6 pb-2"
               />
               <label
@@ -124,15 +174,20 @@ export default function Auth() {
             </div>
           </div>
 
-          <Button className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all">
-            {isLogin ? "Login Now" : "Register Account"}
-            <ChevronRight className="ml-2 h-5 w-5" />
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full h-14 rounded-2xl text-lg font-bold shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all"
+          >
+            {isLoading ? "Processing..." : (isLogin ? "Login Now" : "Register Account")}
+            {!isLoading && <ChevronRight className="ml-2 h-5 w-5" />}
           </Button>
 
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-              <button 
+              <button
+                type="button"
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-primary font-bold hover:underline"
               >
@@ -140,7 +195,7 @@ export default function Auth() {
               </button>
             </p>
           </div>
-        </motion.div>
+        </motion.form>
       </div>
     </div>
   );
