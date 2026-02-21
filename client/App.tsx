@@ -2,13 +2,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Auth from "./pages/Auth";
 import Layout from "./components/Layout";
-import Placeholder from "./pages/Placeholder";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Weather from "./pages/Weather";
@@ -19,21 +18,11 @@ import Chat from "./pages/Chat";
 import AgriSchemes from "./pages/AgriSchemes";
 import HelpCenter from "./pages/HelpCenter";
 import GrowingGuide from "./pages/GrowingGuide";
-import { AuthProvider, useAuth } from "./lib/AuthContext";
+import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
+import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 
 const queryClient = new QueryClient();
-
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  const location = useLocation();
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return <>{children}</>;
-};
 
 const AppRoutes = () => {
   return (
@@ -44,109 +33,121 @@ const AppRoutes = () => {
       <Route
         path="/"
         element={
-          <ProtectedRoute>
-            <Index />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Index /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Dashboard /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/rent"
         element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Dashboard /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/owner"
         element={
-          <ProtectedRoute>
-            <OwnerDashboard />
-          </ProtectedRoute>
+          <>
+            <SignedIn><OwnerDashboard /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
+          <>
+            <SignedIn><AdminDashboard /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/weather"
         element={
-          <ProtectedRoute>
-            <Weather />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Weather /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/market"
         element={
-          <ProtectedRoute>
-            <Market />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Market /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/calendar"
         element={
-          <ProtectedRoute>
-            <Calendar />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Calendar /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/pests"
         element={
-          <ProtectedRoute>
-            <Pests />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Pests /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/chat"
         element={
-          <ProtectedRoute>
-            <Chat />
-          </ProtectedRoute>
+          <>
+            <SignedIn><Chat /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/agri-schemes"
         element={
-          <ProtectedRoute>
-            <AgriSchemes />
-          </ProtectedRoute>
+          <>
+            <SignedIn><AgriSchemes /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/help-center"
         element={
-          <ProtectedRoute>
-            <HelpCenter />
-          </ProtectedRoute>
+          <>
+            <SignedIn><HelpCenter /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
       <Route
         path="/growing-guide"
         element={
-          <ProtectedRoute>
-            <GrowingGuide />
-          </ProtectedRoute>
+          <>
+            <SignedIn><GrowingGuide /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
         }
       />
 
-      {/* Legacy Aliases for SEO/Bookmark Compatibility */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
       <Route path="/Weather" element={<Navigate to="/weather" replace />} />
       <Route path="/Market" element={<Navigate to="/market" replace />} />
