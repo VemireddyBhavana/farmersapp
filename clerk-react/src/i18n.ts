@@ -86,6 +86,26 @@ const resources = {
             },
             "chat": {
                 "placeholder": "Ask about tractors, crops, schemes..."
+            },
+            "guides": {
+                "title": "Growing Guides",
+                "phases": "Growth Phases",
+                "protection": "Smart Protection",
+                "expert_tip": "Expert Tip",
+                "overview": "Overview"
+            },
+            "forms": {
+                "personal": "Personal Information",
+                "land": "Land Details",
+                "docs": "Documentation",
+                "submit": "Submit Application",
+                "success": "Application Submitted!"
+            },
+            "track": {
+                "title": "Track Applications",
+                "status": "Filter Status",
+                "next_update": "Next Update In",
+                "no_apps": "No Applications Found"
             }
         }
     },
@@ -168,6 +188,26 @@ const resources = {
             },
             "chat": {
                 "placeholder": "ट्रैक्टर, फसल, योजनाओं के बारे में पूछें..."
+            },
+            "guides": {
+                "title": "फसल गाइड",
+                "phases": "विकास के चरण",
+                "protection": "स्मार्ट सुरक्षा",
+                "expert_tip": "विशेषज्ञ टिप",
+                "overview": "अवलोकन"
+            },
+            "forms": {
+                "personal": "व्यक्तिगत जानकारी",
+                "land": "भूमि का विवरण",
+                "docs": "दस्तावेज़ीकरण",
+                "submit": "आवेदन जमा करें",
+                "success": "आवेदन जमा हो गया!"
+            },
+            "track": {
+                "title": "आवेदन ट्रैक करें",
+                "status": "स्थिति फ़िल्टर",
+                "next_update": "अगला अपडेट",
+                "no_apps": "कोई आवेदन नहीं मिला"
             }
         }
     },
