@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, IndianRupee, MapPin, Search, Filter, ArrowUpRight, ArrowLeft, Leaf, LayoutGrid, LayoutList, CheckCircle2, AlertTriangle, ExternalLink, ScrollText, Navigation, Info } from "lucide-react";
+import { AlertTriangle, ExternalLink, ScrollText, Navigation, Calendar, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,57 +18,58 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 
 const schemes = [
   {
     id: 1,
-    name: "PM-Kisan Samman Nidhi",
-    benefit: "₹6,000 / Year",
-    category: "Income Support",
-    status: "Active",
-    eligibility: "Small & Marginal Farmers",
+    nameKey: "schemePmKisan",
+    benefitKey: "benefitPmKisan",
+    categoryKey: "incomeSupport",
+    statusKey: "statusActive",
+    eligibilityKey: "eligPmKisan",
     color: "bg-green-100 text-green-700",
-    desc: "Income support of ₹6,000 per year in three equal installments to all landholding farmer families."
+    descKey: "descPmKisan",
+    url: "https://pmkisan.gov.in",
   },
   {
     id: 2,
-    name: "Pradhan Mantri Fasal Bima Yojana",
-    benefit: "Crop Insurance",
-    category: "Risk Protection",
-    status: "Open",
-    eligibility: "All Farmers",
+    nameKey: "schemePmfby",
+    benefitKey: "benefitPmfby",
+    categoryKey: "riskProtection",
+    statusKey: "statusOpen",
+    eligibilityKey: "eligPmfby",
     color: "bg-blue-100 text-blue-700",
-    desc: "Provides financial support to farmers suffering crop loss/damage arising out of natural calamities."
+    descKey: "descPmfby",
+    url: "https://pmfby.gov.in",
   },
   {
     id: 3,
-    name: "YSR Rythu Bharosa",
-    benefit: "₹13,500 / Year",
-    category: "State Support",
-    status: "Active",
-    eligibility: "AP Farmers",
+    nameKey: "schemeYsr",
+    benefitKey: "benefitYsr",
+    categoryKey: "stateSupport",
+    statusKey: "statusActive",
+    eligibilityKey: "eligYsr",
     color: "bg-cyan-100 text-cyan-700",
-    desc: "Financial assistance to farmers in Andhra Pradesh for agricultural operations."
+    descKey: "descYsr",
+    url: "https://ysrrythubharosa.ap.gov.in/",
   },
   {
     id: 4,
-    name: "Soil Health Card Scheme",
-    benefit: "Free Soil Testing",
-    category: "Scientific Farming",
-    status: "Ongoing",
-    eligibility: "All Landholders",
+    nameKey: "schemeSoilHealth",
+    benefitKey: "benefitSoilHealth",
+    categoryKey: "scientificFarming",
+    statusKey: "statusOngoing",
+    eligibilityKey: "eligSoilHealth",
     color: "bg-amber-100 text-amber-700",
-    desc: "Informs farmers about the nutrient status of their soil and recommendations on dosage of nutrients."
+    descKey: "descSoilHealth",
+    url: "https://soilhealth.dac.gov.in",
   },
 ];
 
 export default function AgriSchemes() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [isTrackModalOpen, setIsTrackModalOpen] = useState(false);
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [selectedScheme, setSelectedScheme] = useState<any>(null);
   const [isLocating, setIsLocating] = useState(false);
   const [userApps, setUserApps] = useState<Application[]>([]);
 
@@ -83,22 +84,8 @@ export default function AgriSchemes() {
     setIsTrackModalOpen(true);
   };
 
-  const handleApplyClick = (scheme: any) => {
-    setSelectedScheme(scheme);
-    setIsApplyModalOpen(true);
-  };
-
-  const handleApplyConfirm = () => {
-    if (!user || !selectedScheme) return;
-    backend.addApplication({
-      schemeName: selectedScheme.name,
-      userId: user.phone
-    });
-    setIsApplyModalOpen(false);
-    toast({
-      title: "Application Submitted",
-      description: `Your application for ${selectedScheme.name} has been received.`,
-    });
+  const handleApplyClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleLocate = () => {
@@ -106,14 +93,14 @@ export default function AgriSchemes() {
     setTimeout(() => {
       setIsLocating(false);
       toast({
-        title: "Location Detected",
-        description: "Displaying schemes for Chittoor District, Andhra Pradesh.",
+        title: t("locationDetected"),
+        description: t("locationDetectedDesc"),
       });
     }, 2000);
   };
 
   const filteredSchemes = schemes.filter(s =>
-    activeCategory === "All" || s.category === activeCategory
+    activeCategory === "All" || s.categoryKey === activeCategory
   );
 
   return (
@@ -136,7 +123,7 @@ export default function AgriSchemes() {
               {t("findSchemes")}
             </div>
             <p className="text-muted-foreground max-w-2xl font-medium">
-              Click the button below to use your device location to find schemes specific to your state.
+              {t("clickLocationSchemes")}
             </p>
           </div>
 
@@ -146,7 +133,7 @@ export default function AgriSchemes() {
             className="rounded-xl bg-amber-500 hover:bg-amber-600 px-10 py-7 text-lg font-bold shadow-xl shadow-amber-500/20 flex items-center gap-3 mx-auto"
           >
             <Navigation className={cn("h-5 w-5 fill-current", isLocating && "animate-spin")} />
-            {isLocating ? "Getting Your Location..." : "Get Local Schemes"}
+            {isLocating ? t("gettingLocation") : t("getLocalSchemes")}
           </Button>
         </CardContent>
       </Card>
@@ -154,9 +141,9 @@ export default function AgriSchemes() {
       {/* Categories and Grid */}
       <div className="space-y-8 pt-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <h2 className="text-3xl font-black tracking-tight">Available Schemes</h2>
+          <h2 className="text-3xl font-black tracking-tight">{t("availableSchemes")}</h2>
           <div className="flex gap-2 p-1 bg-muted rounded-2xl overflow-x-auto no-scrollbar">
-            {["All", "Income Support", "Risk Protection", "State Support"].map((tab) => (
+            {["All", "incomeSupport", "riskProtection", "stateSupport"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveCategory(tab)}
@@ -165,7 +152,7 @@ export default function AgriSchemes() {
                   activeCategory === tab ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "text-muted-foreground hover:text-foreground hover:bg-white/50"
                 )}
               >
-                {tab === "Income Support" ? t("incomeSupport") : tab === "Risk Protection" ? t("riskProtection") : tab === "State Support" ? t("stateSupport") : t("viewAll")}
+                {tab === "incomeSupport" ? t("incomeSupport") : tab === "riskProtection" ? t("riskProtection") : tab === "stateSupport" ? t("stateSupport") : t("viewAll")}
               </button>
             ))}
           </div>
@@ -189,31 +176,36 @@ export default function AgriSchemes() {
                           <div className={cn("p-4 rounded-2xl transition-transform duration-300 group-hover:scale-110", scheme.color)}>
                             <ScrollText className="h-8 w-8" />
                           </div>
-                          <Badge className="rounded-full bg-green-500/10 text-green-700 hover:bg-green-500/10 border-none font-black text-[10px] uppercase tracking-widest">{scheme.status}</Badge>
+                          <Badge className="rounded-full bg-green-500/10 text-green-700 hover:bg-green-500/10 border-none font-black text-[10px] uppercase tracking-widest">{t(scheme.statusKey)}</Badge>
                         </div>
-                        <CardTitle className="text-2xl font-black group-hover:text-primary transition-colors leading-tight">{scheme.name}</CardTitle>
-                        <CardDescription className="text-sm font-bold text-primary mt-1">{scheme.benefit}</CardDescription>
+                        <CardTitle className="text-2xl font-black group-hover:text-primary transition-colors leading-tight">{t(scheme.nameKey)}</CardTitle>
+                        <CardDescription className="text-sm font-bold text-primary mt-1">{t(scheme.benefitKey)}</CardDescription>
                       </CardHeader>
                       <CardContent className="p-8 pt-0 space-y-6">
-                        <p className="text-sm text-muted-foreground leading-relaxed font-medium">{scheme.desc}</p>
+                        <p className="text-sm text-muted-foreground leading-relaxed font-medium">{t(scheme.descKey)}</p>
                         <div className="flex flex-wrap gap-4 pt-2">
                           <div className="space-y-1">
-                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Category</p>
-                            <p className="text-xs font-bold">{scheme.category}</p>
+                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("categoryLabel")}</p>
+                            <p className="text-xs font-bold">{t(scheme.categoryKey)}</p>
                           </div>
                           <div className="space-y-1">
-                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Eligibility</p>
-                            <p className="text-xs font-bold">{scheme.eligibility}</p>
+                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("eligibilityLabel")}</p>
+                            <p className="text-xs font-bold">{t(scheme.eligibilityKey)}</p>
                           </div>
                         </div>
                         <div className="flex gap-3 pt-4">
                           <Button
-                            onClick={() => handleApplyClick(scheme)}
+                            onClick={() => handleApplyClick(scheme.url)}
                             className="flex-1 rounded-2xl py-6 h-auto font-black shadow-lg shadow-primary/20"
                           >
                             {t("applyNow")}
                           </Button>
-                          <Button variant="outline" size="icon" className="rounded-2xl h-14 w-14 border-primary/10 hover:bg-primary/5 transition-all group-hover:translate-x-1">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-2xl h-14 w-14 border-primary/10 hover:bg-primary/5 transition-all group-hover:translate-x-1"
+                            onClick={() => handleApplyClick(scheme.url)}
+                          >
                             <ExternalLink className="h-6 w-6 text-primary" />
                           </Button>
                         </div>
@@ -229,11 +221,11 @@ export default function AgriSchemes() {
             <Card className="rounded-[2.5rem] border-primary/10 shadow-lg bg-gradient-to-br from-primary/5 to-transparent overflow-hidden">
               <CardContent className="p-8 space-y-8">
                 <div className="space-y-2 text-center">
-                  <p className="text-xs font-black uppercase tracking-widest text-primary/60">Eligible For You</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-primary/60">{t("eligibleForYou")}</p>
                   <p className="text-5xl font-black text-primary">05</p>
                 </div>
                 <div className="space-y-2 text-center">
-                  <p className="text-xs font-black uppercase tracking-widest text-primary/60">Total Schemes</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-primary/60">{t("totalSchemes")}</p>
                   <p className="text-4xl font-black">24+</p>
                 </div>
                 <Button
@@ -248,17 +240,17 @@ export default function AgriSchemes() {
             <Card className="rounded-[2.5rem] border-primary/10 shadow-lg bg-amber-50/50">
               <CardHeader className="p-8 pb-4">
                 <CardTitle className="text-lg font-black flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-amber-500" /> Deadline Alerts
+                  <AlertTriangle className="h-5 w-5 text-amber-500" /> {t("deadlineAlerts")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 pt-0 space-y-4">
                 <div className="p-4 rounded-2xl bg-white border border-amber-100">
-                  <p className="text-xs font-bold text-amber-800">PM-Kisan Verification</p>
-                  <p className="text-[10px] text-amber-700/80 mt-1">Submit your e-KYC by Oct 31st.</p>
+                  <p className="text-xs font-bold text-amber-800">{t("pmKisanVerification")}</p>
+                  <p className="text-[10px] text-amber-700/80 mt-1">{t("eKycDeadline")}</p>
                 </div>
                 <div className="p-4 rounded-2xl bg-white border border-blue-100">
-                  <p className="text-xs font-bold text-blue-800">Crop Insurance</p>
-                  <p className="text-[10px] text-blue-700/80 mt-1">Enrollment starts Nov 1st.</p>
+                  <p className="text-xs font-bold text-blue-800">{t("cropInsuranceLabel")}</p>
+                  <p className="text-[10px] text-blue-700/80 mt-1">{t("cropInsuranceEnrollment")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -266,45 +258,15 @@ export default function AgriSchemes() {
         </div>
       </div>
 
-      {/* Apply Modal */}
-      <Dialog open={isApplyModalOpen} onOpenChange={setIsApplyModalOpen}>
-        <DialogContent className="sm:max-w-[500px] rounded-[2rem] p-8 border-none glass">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-black">Scheme Application</DialogTitle>
-            <DialogDescription className="font-medium">
-              You are applying for <strong>{selectedScheme?.name}</strong>. Please confirm your details.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
-              <p className="text-xs font-black uppercase text-muted-foreground tracking-widest">Applicant Name</p>
-              <p className="font-bold">{user?.username}</p>
-            </div>
-            <div className="p-4 rounded-xl bg-primary/5 border border-primary/10 space-y-2">
-              <p className="text-xs font-black uppercase text-muted-foreground tracking-widest">Phone Number</p>
-              <p className="font-bold">{user?.phone}</p>
-            </div>
-            <div className="p-4 rounded-xl bg-amber-50 border border-amber-100">
-              <p className="text-sm font-medium text-amber-800">
-                Note: By clicking confirm, your pre-verified land records will be attached to this application automatically.
-              </p>
-            </div>
-          </div>
-
-          <DialogFooter>
-            <Button className="w-full rounded-xl py-6 text-lg font-bold" onClick={handleApplyConfirm}>
-              Confirm Application
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Track Modal */}
       <Dialog open={isTrackModalOpen} onOpenChange={setIsTrackModalOpen}>
         <DialogContent className="sm:max-w-[600px] rounded-[2rem] p-8 border-none glass max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black">{t("trackMyApps")}</DialogTitle>
+            <DialogDescription className="font-medium">
+              {t("trackAppDesc")}
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-6">
@@ -328,6 +290,22 @@ export default function AgriSchemes() {
                       {app.status}
                     </Badge>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("beneficiary") || "Beneficiary"}</p>
+                      <p className="text-xs font-bold">{app.beneficiaryName}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("location") || "Location"}</p>
+                      <p className="text-xs font-bold">{app.location}</p>
+                    </div>
+                    <div className="space-y-1 col-span-2">
+                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Verification Status</p>
+                      <p className="text-xs font-bold text-emerald-600">{app.verificationStep}</p>
+                    </div>
+                  </div>
+
                   <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground border-t pt-4">
                     <Calendar className="h-3 w-3" />
                     {t("date")}: {app.date}

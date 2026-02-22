@@ -4,42 +4,45 @@ import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Le
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-const features = [
-  {
-    icon: Tractor,
-    title: "Premium Equipment",
-    description: "Access to the latest and most efficient tractors and farm tools.",
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    icon: Shield,
-    title: "Verified Owners",
-    description: "Every piece of equipment is verified for quality and performance.",
-    color: "bg-green-100 text-green-600",
-  },
-  {
-    icon: Clock,
-    title: "Flexible Rental",
-    description: "Rent by the hour, day, or season. Scale your farm as needed.",
-    color: "bg-amber-100 text-amber-600",
-  },
-  {
-    icon: MapPin,
-    title: "Nearby Availability",
-    description: "Find equipment available in your local district or village.",
-    color: "bg-red-100 text-red-600",
-  },
-];
-
-const stats = [
-  { label: "Active Farmers", value: "10,000+" },
-  { label: "Tractors Listed", value: "2,500+" },
-  { label: "Districts Covered", value: "150+" },
-  { label: "Average Rating", value: "4.9/5" },
-];
+import { useLanguage } from "../lib/LanguageContext";
 
 export default function Index() {
+  const { t } = useLanguage();
+
+  const features = [
+    {
+      icon: Tractor,
+      title: t('premiumEquipment'),
+      description: t('premiumEquipmentDesc'),
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      icon: Shield,
+      title: t('verifiedOwners'),
+      description: t('verifiedOwnersDesc'),
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      icon: Clock,
+      title: t('flexibleRental'),
+      description: t('flexibleRentalDesc'),
+      color: "bg-amber-100 text-amber-600",
+    },
+    {
+      icon: MapPin,
+      title: t('nearbyAvailability'),
+      description: t('nearbyAvailabilityDesc'),
+      color: "bg-red-100 text-red-600",
+    },
+  ];
+
+  const stats = [
+    { label: t('activeFarmers'), value: "10,000+" },
+    { label: t('tractorsListed'), value: "2,500+" },
+    { label: t('districtsCovered'), value: "150+" },
+    { label: t('averageRating'), value: "4.9/5" },
+  ];
+
   return (
     <div className="overflow-x-hidden">
       {/* Hero Section */}
@@ -74,13 +77,13 @@ export default function Index() {
 
             <div className="space-y-4 max-w-4xl mx-auto">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.1]">
-                Grow Smarter. <br />
-                <span className="text-yellow-400">Farm Better.</span> <br />
-                <span className="text-emerald-400">Thrive Together.</span>
+                {t('growSmarter')} <br />
+                <span className="text-yellow-400">{t('farmBetter')}</span> <br />
+                <span className="text-emerald-400">{t('thriveTogether')}</span>
               </h1>
 
               <p className="max-w-2xl mx-auto text-lg md:text-xl text-white/80 font-medium">
-                Empowering farmers with smart technology for sustainable agriculture.
+                {t('heroSubtitle')}
               </p>
             </div>
 
@@ -88,12 +91,14 @@ export default function Index() {
               <Link to="/rent">
                 <Button className="rounded-full px-10 py-7 text-lg bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-900/40 border-none transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                   <Play className="h-4 w-4 fill-current" />
-                  Get Started Today
+                  {t('getStarted')}
                 </Button>
               </Link>
-              <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
-                Watch Demo <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
-              </Button>
+              <Link to="/dashboard">
+                <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
+                  {t('watchDemo')} <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -109,7 +114,7 @@ export default function Index() {
               <div className="h-8 w-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
                 <TrendingUp className="h-4 w-4" />
               </div>
-              <p className="text-sm font-bold">2.4k+ Farmers Joined Today</p>
+              <p className="text-sm font-bold">{t('farmersJoined')}</p>
             </div>
           </motion.div>
         </div>
@@ -120,13 +125,13 @@ export default function Index() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl uppercase tracking-widest text-primary/60 text-sm mb-2">
-              Our Ecosystem
+              {t('ourEcosystem')}
             </h2>
             <h3 className="text-4xl lg:text-5xl font-black text-foreground">
-              Why Choose AgriPath?
+              {t('whyChooseTechSpark')}
             </h3>
             <p className="text-muted-foreground text-lg">
-              We provide the tools and technology to make modern farming accessible and profitable for everyone.
+              {t('whyChooseDesc')}
             </p>
           </div>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -181,14 +186,16 @@ export default function Index() {
             <div className="grid items-center gap-12 p-12 lg:grid-cols-2 lg:p-24">
               <div className="space-y-6 text-primary-foreground relative z-10">
                 <h2 className="text-3xl font-extrabold tracking-tight lg:text-5xl leading-tight">
-                  Need Help Choosing <br /> the Right Equipment?
+                  {t('needHelpEquipment').split('?')[0]}?
                 </h2>
                 <p className="text-lg text-primary-foreground/80 max-w-lg">
-                  Our AI Farming Assistant is ready to help you 24/7. Get advice in Telugu, Hindi, or English.
+                  {t('aiAssistantDesc')}
                 </p>
-                <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-6 text-lg">
-                  Chat with AgriAI
-                </Button>
+                <Link to="/chat">
+                  <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-6 text-lg">
+                    {t('chatAgriAI')}
+                  </Button>
+                </Link>
               </div>
               <div className="flex justify-center lg:justify-end">
                 <div className="relative h-64 w-64 md:h-80 md:w-80">
@@ -219,17 +226,17 @@ export default function Index() {
               className="lg:w-1/2 space-y-8"
             >
               <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight">
-                More than just <span className="text-emerald-500 italic">Rentals.</span>
+                {t('moreThanRentals').split('.')[0]} <span className="text-emerald-500 italic">Rentals.</span>
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                AgriPath provides a complete digital suite designed specifically for the needs of Indian agriculture. Manage your crops, detect pests, and track government schemes all in one place.
+                {t('moreThanRentalsDesc')}
               </p>
               <div className="grid gap-6 sm:grid-cols-2">
                 {[
-                  { title: "Farming Calendar", desc: "Track sowing and harvests", path: "/calendar" },
-                  { title: "Pest Detection", desc: "AI-powered plant health", path: "/pests" },
-                  { title: "Agri Schemes", desc: "Live government support", path: "/agri-schemes" },
-                  { title: "Mandi Rates", desc: "Real-time crop pricing", path: "/market" }
+                  { title: t('farmingCalendar'), desc: t('trackSowingHarvests'), path: "/calendar" },
+                  { title: t('pestDetection'), desc: t('aiPoweredPlantHealth'), path: "/pests" },
+                  { title: t('agriSchemes'), desc: t('liveGovSupport'), path: "/agri-schemes" },
+                  { title: t('mandiRates'), desc: t('realtimePricing'), path: "/market" }
                 ].map((item, i) => (
                   <Link key={i} to={item.path} className="group">
                     <div className="p-6 rounded-2xl bg-muted/30 border border-primary/5 hover:border-primary/20 hover:bg-white hover:shadow-xl transition-all h-full">
@@ -254,8 +261,8 @@ export default function Index() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
                 <div className="absolute bottom-10 left-10 text-white">
-                  <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">Smart Dashboard</p>
-                  <h3 className="text-3xl font-black">Empowering Villages</h3>
+                  <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">{t('smartDashboard')}</p>
+                  <h3 className="text-3xl font-black">{t('empoweringVillages')}</h3>
                 </div>
               </div>
             </motion.div>
@@ -268,17 +275,17 @@ export default function Index() {
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
-              How it Works
+              {t('howItWorks')}
             </h2>
             <p className="text-muted-foreground">
-              Getting the right equipment for your farm is easier than ever.
+              {t('howItWorksDesc')}
             </p>
           </div>
           <div className="grid gap-12 md:grid-cols-3">
             {[
-              { step: "01", title: "Browse & Select", desc: "Choose from a wide range of tractors and tools near you." },
-              { step: "02", title: "Book Instantly", desc: "Select dates, check prices, and confirm your booking securely." },
-              { step: "03", title: "Happy Farming", desc: "Equipment is delivered or ready for pickup. Start your work!" },
+              { step: "01", title: t('browseSelect'), desc: t('browseSelectDesc') },
+              { step: "02", title: t('bookInstantly'), desc: t('bookInstantlyDesc') },
+              { step: "03", title: t('happyFarming'), desc: t('happyFarmingDesc') },
             ].map((step, idx) => (
               <div key={idx} className="relative group">
                 <div className="mb-6 text-8xl font-black text-primary/5 group-hover:text-primary/10 transition-colors absolute -top-10 left-1/2 -translate-x-1/2">
@@ -294,3 +301,4 @@ export default function Index() {
     </div>
   );
 }
+

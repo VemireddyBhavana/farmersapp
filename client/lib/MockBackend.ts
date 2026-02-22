@@ -4,6 +4,9 @@ export interface Application {
   status: "Pending" | "Approved" | "Rejected";
   date: string;
   userId: string;
+  beneficiaryName: string;
+  location: string;
+  verificationStep: string;
 }
 
 export interface Booking {
@@ -36,12 +39,15 @@ class MockBackend {
     return this.applications.filter(app => app.userId === userId);
   }
 
-  addApplication(app: Omit<Application, "id" | "date" | "status">) {
+  addApplication(app: Omit<Application, "id" | "date" | "status" | "beneficiaryName" | "location" | "verificationStep">) {
     const newApp: Application = {
       ...app,
       id: "APP-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
       date: new Date().toLocaleDateString(),
-      status: "Pending"
+      status: "Pending",
+      beneficiaryName: "Kisan Suvidha User",
+      location: "Anantapur, AP",
+      verificationStep: "Document Verification"
     };
     this.applications.push(newApp);
     this.save();

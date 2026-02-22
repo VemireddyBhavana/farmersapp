@@ -2,6 +2,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Sprout, Droplets, Leaf, Bug, Hammer, Sun, Thermometer } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -120,7 +121,7 @@ export default function GrowingGuide() {
   const [searchParams] = useSearchParams();
   const cropKey = searchParams.get("crop") || "rice";
   const { t } = useLanguage();
-  
+
   const data = cropData[cropKey] || cropData.rice;
 
   return (
