@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, User, Bot, Sparkles, ChevronDown, ArrowLeft, BotIcon, LayoutGrid, Zap, History, BellRing, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,25 +6,39 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-
-const suggestions = [
-  "Which tractor is best for wet soil?",
-  "Recommend a seeder for wheat crops.",
-  "What is the best time for paddy sowing?",
-  "Current market price for Basmati Paddy?",
-];
+import { useLanguage, Language } from "@/lib/LanguageContext";
 
 export default function ChatPage() {
+  const { t, language, setLanguage } = useLanguage();
+
+  const suggestions = useMemo(() => [
+    t("suggestion1"),
+    t("suggestion2"),
+    t("suggestion3"),
+    t("suggestion4"),
+  ], [t]);
+
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      content: "Namaste! I am your AI Farming Assistant. How can I help you today? I can help with tractor booking, crop advice, or market rates.",
+      content: t("botWelcome"),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Update initial message when language changes if no other messages exist
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].role === "bot") {
+      setMessages([{
+        role: "bot",
+        content: t("botWelcome"),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }]);
+    }
+  }, [language, t]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -49,16 +63,44 @@ export default function ChatPage() {
     // Simulate bot response
     setTimeout(() => {
       setIsTyping(false);
+      let response = t("botDistrictQuestion");
+
+      const lowerContent = content.toLowerCase();
+      if (lowerContent.includes("paddy") || lowerContent.includes("rice")) {
+        response = "For Paddy (Rice), sowing should ideally happen in June-July for the Kharif season. Ensure your nursery is 25-30 days old before transplanting. Maintain 5cm standing water in the field. You can follow the full day-by-day guide in our Growing Guide section: /growing-guide?crop=rice";
+      } else if (lowerContent.includes("tractor") || lowerContent.includes("rent") || lowerContent.includes("soil")) {
+        response = "For wet or clayey soil, the Mahindra 275 DI or John Deere 5310 are excellent due to their high torque and puddling capabilities. We have several available near Chittoor and Tirupati starting at ₹600/hour. You can view them on the Dashboard.";
+      } else if (lowerContent.includes("tomato") || lowerContent.includes("trend") || lowerContent.includes("price")) {
+        response = "Tomato prices are currently trending UP at ₹1,800/quintal in local mandis like Madanapalle. For the best yield, ensure staking for indeterminate varieties and regular NPK application. Demand is expected to stay strong for the next 3 weeks.";
+      } else if (lowerContent.includes("seed") || lowerContent.includes("variety") || lowerContent.includes("recommend")) {
+        response = "I recommend high-yielding seeds like BPT-5204 (Samba Mahsuri) for Rice or hybrid varieties from Nuziveedu for Maize. Treat seeds with Carbendazim (2g/kg) before sowing to prevent soil-borne diseases.";
+      } else if (lowerContent.includes("chittoor")) {
+        response = "Chittoor district is currently seeing good weather for groundnut and tomato. Local rental hubs are active near the MRO office in Chittoor and Bangarupalem. I can show you specific equipment available there on the Dashboard.";
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
-          content: "I'm looking into that for you. For the best agricultural recommendation, could you tell me your district?",
+          content: response,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
     }, 1500);
   };
+
+  const languages: { name: Language; label: string }[] = [
+    { name: "English", label: "English" },
+    { name: "Telugu", label: "తెలుగు" },
+    { name: "Hindi", label: "हिन्दी" },
+    { name: "Tamil", label: "தமிழ்" },
+    { name: "Kannada", label: "ಕನ್ನಡ" },
+    { name: "Malayalam", label: "മലയാളം" },
+    { name: "Marathi", label: "मराठी" },
+    { name: "Gujarati", label: "ગુજરાતી" },
+    { name: "Punjabi", label: "ਪੰਜਾਬੀ" },
+    { name: "Bangla", label: "বাংলা" },
+  ];
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8 flex flex-col h-[calc(100vh-64px)]">
@@ -70,20 +112,23 @@ export default function ChatPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight">AI Farming Chat</h1>
-            <p className="text-muted-foreground">Expert agricultural advice in your language</p>
+            <h1 className="text-3xl font-extrabold tracking-tight">{t("aiFarmingChat")}</h1>
+            <p className="text-muted-foreground">{t("expertAdvice")}</p>
           </div>
         </div>
-        <div className="flex gap-2 p-1 bg-muted rounded-2xl w-full md:w-auto overflow-x-auto no-scrollbar">
-          {["English", "తెలుగు", "हिन्दी"].map((lang) => (
+        <div className="flex gap-2 p-1 bg-muted rounded-2xl w-full md:w-[450px] lg:w-[600px] overflow-x-auto no-scrollbar">
+          {languages.map((lang) => (
             <button
-              key={lang}
+              key={lang.name}
+              onClick={() => setLanguage(lang.name)}
               className={cn(
-                "px-8 py-3 rounded-xl text-sm font-black transition-all whitespace-nowrap",
-                lang === "English" ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "text-muted-foreground hover:text-foreground hover:bg-white/50"
+                "px-6 py-2 rounded-xl text-sm font-black transition-all whitespace-nowrap",
+                language === lang.name
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/50"
               )}
             >
-              {lang}
+              {lang.label}
             </button>
           ))}
         </div>
@@ -95,37 +140,40 @@ export default function ChatPage() {
           <Card className="rounded-[2.5rem] border-primary/10 overflow-hidden shadow-sm bg-muted/20">
             <CardHeader className="p-8 pb-4">
               <CardTitle className="text-lg font-black flex items-center gap-2">
-                <History className="h-5 w-5 text-primary" /> Recent History
+                <History className="h-5 w-5 text-primary" /> {t("recentHistory")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8 pt-0 space-y-4">
+              {/* These could be translated or kept as is if they represent real history */}
               {[
-                "Paddy Sowing advice",
-                "Tractor rates near Chittoor",
-                "Market trends for Tomato",
-                "Seed recommendation"
+                { text: "Paddy Sowing advice", path: "/growing-guide?crop=rice" },
+                { text: "Tractor rates near Chittoor", path: "/dashboard?search=chittoor" },
+                { text: "Market trends for Tomato", path: "/market?crop=tomato" },
+                { text: "Seed recommendation", path: "/growing-guide?crop=rice" }
               ].map((h, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/50 transition-all cursor-pointer group">
-                  <MessageCircle className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
-                  <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground truncate">{h}</p>
-                </div>
+                <Link to={h.path} key={i}>
+                  <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/50 transition-all cursor-pointer group">
+                    <MessageCircle className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                    <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground truncate">{h.text}</p>
+                  </div>
+                </Link>
               ))}
             </CardContent>
           </Card>
-          
+
           <div className="glass p-8 rounded-[2.5rem] border-primary/10 space-y-4">
             <h4 className="font-black text-xl flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-primary" /> Assistant Status
+              <Sparkles className="h-5 w-5 text-primary" /> {t("assistantStatus")}
             </h4>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
-                <Zap className="h-4 w-4 text-amber-500" /> Responses: <span className="text-primary">Instant</span>
+                <Zap className="h-4 w-4 text-amber-500" /> {t("responses")}: <span className="text-primary">{t("instant")}</span>
               </div>
               <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
-                <BellRing className="h-4 w-4 text-green-500" /> Availability: <span className="text-primary">24/7 Online</span>
+                <BellRing className="h-4 w-4 text-green-500" /> {t("availability")}: <span className="text-primary">{t("online247")}</span>
               </div>
               <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground">
-                <Settings className="h-4 w-4 text-slate-400" /> Language: <span className="text-primary">Multi-modal</span>
+                <Settings className="h-4 w-4 text-slate-400" /> {t("languageLabel")}: <span className="text-primary">{t("multiModal")}</span>
               </div>
             </div>
           </div>
@@ -140,10 +188,10 @@ export default function ChatPage() {
                   <BotIcon className="h-10 w-10" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black">Agri Assistant</h3>
+                  <h3 className="text-2xl font-black">{t("agriAssistant")}</h3>
                   <div className="flex items-center gap-2 text-xs font-black text-white/80 uppercase tracking-widest mt-1">
                     <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
-                    Online
+                    {t("onlineStatus")}
                   </div>
                 </div>
               </div>
@@ -171,8 +219,8 @@ export default function ChatPage() {
                 >
                   <div className={cn(
                     "rounded-[1.5rem] p-5 lg:p-8 text-sm lg:text-base font-medium shadow-sm leading-relaxed",
-                    msg.role === "user" 
-                      ? "bg-primary text-primary-foreground rounded-tr-none shadow-primary/20" 
+                    msg.role === "user"
+                      ? "bg-primary text-primary-foreground rounded-tr-none shadow-primary/20"
                       : "bg-white border-primary/5 text-foreground rounded-tl-none shadow-lg shadow-primary/5"
                   )}>
                     {msg.content}
@@ -210,7 +258,7 @@ export default function ChatPage() {
                   </button>
                 ))}
               </div>
-              <form 
+              <form
                 onSubmit={(e) => { e.preventDefault(); handleSend(); }}
                 className="flex items-center gap-4"
               >
@@ -218,16 +266,16 @@ export default function ChatPage() {
                   <Input
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Ask me anything in English, తెలుగు, or हिन्दी..."
+                    placeholder={t("askMeAnything")}
                     className="h-14 rounded-[1.5rem] bg-slate-50 border-primary/5 pl-6 pr-14 focus-visible:ring-primary shadow-inner"
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     <Sparkles className="h-5 w-5 text-primary opacity-20" />
                   </div>
                 </div>
-                <Button 
+                <Button
                   type="submit"
-                  size="icon" 
+                  size="icon"
                   className="h-14 w-14 rounded-[1.5rem] shadow-xl shadow-primary/20 flex-shrink-0"
                   disabled={!inputValue.trim()}
                 >

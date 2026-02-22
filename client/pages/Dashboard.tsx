@@ -25,8 +25,10 @@ import {
   MessageCircle,
   HeartHandshake,
   ScrollText,
-  LayoutGrid
+  LayoutGrid,
+  Camera
 } from "lucide-react";
+import DiseaseDetection from "@/components/DiseaseDetection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +58,7 @@ const equipment = [
     location: "Chittoor, AP",
     rating: 4.8,
     reviews: 124,
-    image: "https://images.unsplash.com/photo-1594398044700-1482072f80c2?auto=format&fit=crop&q=80&w=400",
+    image: "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&q=80&w=400",
     tags: ["High Power", "AC Cabin"]
   },
   {
@@ -69,7 +71,7 @@ const equipment = [
     location: "Tirupati, AP",
     rating: 4.5,
     reviews: 89,
-    image: "https://images.unsplash.com/photo-1590682680395-03ad7e0b8609?auto=format&fit=crop&q=80&w=400",
+    image: "https://images.unsplash.com/photo-1592919016383-703774888be4?auto=format&fit=crop&q=80&w=400",
     tags: ["Fuel Efficient"]
   },
   {
@@ -82,7 +84,7 @@ const equipment = [
     location: "Nellore, AP",
     rating: 4.9,
     reviews: 210,
-    image: "https://images.unsplash.com/photo-1592919016383-703774888be4?auto=format&fit=crop&q=80&w=400",
+    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=400",
     tags: ["Best Seller", "Rugged"]
   },
   {
@@ -95,7 +97,7 @@ const equipment = [
     location: "Kadapa, AP",
     rating: 4.7,
     reviews: 56,
-    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=400",
+    image: "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&q=80&w=400",
     tags: ["Smooth Gearbox"]
   },
   {
@@ -170,38 +172,59 @@ export default function Dashboard() {
     <div className="container mx-auto px-4 py-8">
       {/* Top Section: Welcome & Weather */}
       <div className="grid gap-6 lg:grid-cols-3 mb-10">
-        <div className="lg:col-span-2 space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-            {t("welcome")} {user?.username?.split(" ")[0]}! 🌾
+        <div className="lg:col-span-2 space-y-4">
+          <h1 className="text-4xl font-black tracking-tight text-foreground">
+            {t("welcome")} {user?.username || "Farmer"}! 🌾
           </h1>
-          <p className="text-muted-foreground">
-            {t("agriOverview")}
+          <p className="text-lg text-muted-foreground max-w-2xl">
+            Live Weather Analysis & Recommendations: Get real-time weather data and AI-powered farming recommendations based on your exact location.
           </p>
+          <div className="flex flex-wrap gap-4">
+            <Link to="/weather">
+              <Button className="rounded-full bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg shadow-xl shadow-blue-500/20 flex items-center gap-2">
+                <Cloud className="h-5 w-5" />
+                Get Live Weather Recommendations
+              </Button>
+            </Link>
+          </div>
         </div>
-        <Link to="/weather">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="glass p-6 h-full rounded-3xl flex items-center justify-between border-primary/10 bg-gradient-to-br from-primary/5 to-transparent cursor-pointer"
-          >
+
+        {/* Camera Upload Section (Top Priority) */}
+        <div className="lg:col-span-3">
+          <Card className="rounded-[2.5rem] border-primary/10 overflow-hidden shadow-2xl bg-gradient-to-br from-emerald-500/10 to-transparent">
+            <CardContent className="p-0">
+              <DiseaseDetection />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="glass p-6 h-full rounded-[2.5rem] border-primary/10 bg-gradient-to-br from-emerald-50 to-transparent dark:from-emerald-950/20">
+          <div className="flex justify-between items-start mb-4">
+            <div>
+              <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Current Weather</p>
+              <h3 className="text-3xl font-black">32°C</h3>
+            </div>
+            <Sun className="h-10 w-10 text-amber-500 animate-pulse" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Weather - Chittoor</p>
-              <h3 className="text-2xl font-bold flex items-center gap-2 text-foreground">
-                32°C <Sun className="text-amber-500 h-6 w-6" />
-              </h3>
-              <p className="text-xs text-muted-foreground">Partly Cloudy • Humidity 45%</p>
-            </div>
-            <div className="flex gap-4">
-              <div className="text-center">
-                <Droplets className="h-5 w-5 text-blue-500 mx-auto mb-1" />
-                <p className="text-[10px] font-bold">12%</p>
-              </div>
-              <div className="text-center">
-                <Wind className="h-5 w-5 text-slate-400 mx-auto mb-1" />
-                <p className="text-[10px] font-bold">14km/h</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Humidity</p>
+              <div className="flex items-center gap-1">
+                <Droplets className="h-3 w-3 text-blue-500" />
+                <span className="text-sm font-bold">45%</span>
               </div>
             </div>
-          </motion.div>
-        </Link>
+            <div className="space-y-1">
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Wind</p>
+              <div className="flex items-center gap-1">
+                <Wind className="h-3 w-3 text-slate-400" />
+                <span className="text-sm font-bold">14 km/h</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-4 border-t border-emerald-100 dark:border-emerald-900">
+            <p className="text-xs font-medium text-emerald-600">Recommendation: Clear skies. Ideal for open-field sowing and fertilization.</p>
+          </div>
+        </div>
       </div>
 
       {/* Quick Access Grid */}
@@ -374,10 +397,10 @@ export default function Dashboard() {
                           <Zap className="h-4 w-4 text-amber-500" />
                           <span>{item.hp}</span>
                         </div>
-                        <div className="flex items-center gap-1">
+                        <Link to={`/location?area=${item.location.split(',')[0]}`} className="flex items-center gap-1 hover:text-primary transition-colors">
                           <MapPin className="h-4 w-4 text-red-500" />
                           <span>{item.location}</span>
-                        </div>
+                        </Link>
                       </div>
                       <div className="flex items-end justify-between">
                         <div>
@@ -448,7 +471,7 @@ export default function Dashboard() {
                     <label className="text-sm font-semibold">Select Date</label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input type="date" className="pl-10 rounded-xl" onChange={(e) => setBookingDetails({...bookingDetails, date: e.target.value})} />
+                      <Input type="date" className="pl-10 rounded-xl" onChange={(e) => setBookingDetails({ ...bookingDetails, date: e.target.value })} />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -460,7 +483,7 @@ export default function Dashboard() {
                         min="1"
                         className="pl-10 rounded-xl"
                         value={bookingDetails.duration}
-                        onChange={(e) => setBookingDetails({...bookingDetails, duration: parseInt(e.target.value)})}
+                        onChange={(e) => setBookingDetails({ ...bookingDetails, duration: parseInt(e.target.value) })}
                       />
                     </div>
                   </div>

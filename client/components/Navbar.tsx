@@ -39,16 +39,14 @@ const Navbar = () => {
   ];
 
   const navLinks = [
-    { name: t("home"), path: "/", icon: Grid },
+    { name: t("home"), path: "/dashboard", icon: Grid },
     { name: t("weather"), path: "/weather", icon: CloudSun },
     { name: t("market"), path: "/market", icon: TrendingUp },
     { name: t("calendar"), path: "/calendar", icon: Calendar },
     { name: t("security"), path: "/pests", icon: Shield },
     { name: t("aiChat"), path: "/chat", icon: Bot },
     { name: t("schemes"), path: "/agri-schemes", icon: ScrollText },
-    { name: t("government"), path: "/help-center", icon: Landmark },
-    { name: t("rent"), path: "/rent", icon: Truck },
-    { name: t("settings"), path: "/owner", icon: Settings },
+    { name: t("supportPortal"), path: "/support", icon: HeartHandshake },
   ];
 
   return (
@@ -60,7 +58,7 @@ const Navbar = () => {
               <Leaf className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight text-emerald-600">
-              AgriPath
+              TechSpark AI
             </span>
           </Link>
 
@@ -198,13 +196,13 @@ const Navbar = () => {
                     </Link>
                     <Link to="/register" onClick={() => setIsOpen(false)}>
                       <Button className="w-full rounded-xl py-6">
-                        Get Started
+                        {t('getStarted')}
                       </Button>
                     </Link>
                   </>
                 ) : (
                   <Button className="w-full rounded-xl py-6" variant="destructive" onClick={() => { logout(); setIsOpen(false); }}>
-                    Logout
+                    {t('logout')}
                   </Button>
                 )}
               </div>

@@ -4,13 +4,15 @@ import { MessageCircle, X, Send, User, Bot, Sparkles, ChevronDown } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useLanguage, Language } from "@/lib/LanguageContext";
 
 const AIChat = () => {
+  const { t, language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      content: "Namaste! I am your AI Farming Assistant. How can I help you today? I can help with tractor booking, crop advice, or market rates.",
+      content: t("botWelcome"),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -18,18 +20,30 @@ const AIChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Update initial message when language changes if no other messages exist
+  useEffect(() => {
+    if (messages.length === 1 && messages[0].role === "bot") {
+      setMessages([{
+        role: "bot",
+        content: t("botWelcome"),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }]);
+    }
+  }, [language, t]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
+  const handleSend = (text?: string) => {
+    const content = text || inputValue;
+    if (!content.trim()) return;
 
     const userMessage = {
       role: "user",
-      content: inputValue,
+      content,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
@@ -37,19 +51,49 @@ const AIChat = () => {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate bot response
+    // Simulated bot response logic
     setTimeout(() => {
       setIsTyping(false);
+      let response = t("botSoilQuestion");
+
+      const lowerContent = content.toLowerCase();
+      if (lowerContent.includes("ysr") || lowerContent.includes("bharosa")) {
+        response = "The YSR Rythu Bharosa scheme provides ₹13,500 per year to farmers in Andhra Pradesh. You can apply through our 'Agri Schemes' section or visit the official portal at https://ysrrythubharosa.ap.gov.in/";
+      } else if (lowerContent.includes("paddy") || lowerContent.includes("rice") || lowerContent.includes("sowing")) {
+        response = "For Paddy sowing, ensure you use 25-30 day old seedlings for transplanting. Maintain 5cm water level and apply urea in 3 splits. For a full guide, check: /growing-guide?crop=rice";
+      } else if (lowerContent.includes("tractor") || lowerContent.includes("rent") || lowerContent.includes("soil")) {
+        response = "For heavy or wet soil, many farmers prefer the John Deere 5310 or Mahindra 275 DI. You can find several models for rent in Chittoor and Tirupati on the Dashboard starting at ₹600/hr.";
+      } else if (lowerContent.includes("tomato") || lowerContent.includes("trend") || lowerContent.includes("price")) {
+        response = "Tomato prices are currently high at approx ₹1,800/quintal in AP mandis. It's a good time to harvest if your crop is ready. Check the 'Market' page for real-time daily updates.";
+      } else if (lowerContent.includes("track") || lowerContent.includes("application")) {
+        response = "You can track your scheme applications by clicking 'Track My Applications' on the Agri Schemes page. It shows your ID, location, and current verification status.";
+      } else if (lowerContent.includes("seed") || lowerContent.includes("variety")) {
+        response = "For the current season, high-yielding Rice varieties like BPT-5204 or MTU-1010 are recommended for your region. Ensure seeds are treated before sowing.";
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
-          content: "I'm looking into that for you. For the best tractor recommendation, could you tell me your soil type?",
+          content: response,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
     }, 1500);
   };
+
+  const languages: { name: Language; label: string }[] = [
+    { name: "English", label: "En" },
+    { name: "Telugu", label: "తె" },
+    { name: "Hindi", label: "हि" },
+    { name: "Tamil", label: "த" },
+    { name: "Kannada", label: "ಕ" },
+    { name: "Malayalam", label: "മല" },
+    { name: "Marathi", label: "म" },
+    { name: "Gujarati", label: "ગુ" },
+    { name: "Punjabi", label: "ਪੰ" },
+    { name: "Bangla", label: "ব" },
+  ];
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] sm:bottom-10 sm:right-10">
@@ -68,10 +112,10 @@ const AIChat = () => {
                   <Bot className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">Agri Assistant</h3>
+                  <h3 className="font-semibold">{t("agriAssistant")}</h3>
                   <div className="flex items-center space-x-1 text-xs text-primary-foreground/80">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-400"></span>
-                    <span>AI Assistant Online</span>
+                    <span>{t("aiAssistantOnline")}</span>
                   </div>
                 </div>
               </div>
@@ -86,16 +130,25 @@ const AIChat = () => {
             </div>
 
             {/* Language Selection Bar */}
-            <div className="flex justify-around bg-muted/50 p-2 text-xs font-medium border-b">
-              <span className="cursor-pointer text-primary">English</span>
-              <span className="cursor-pointer hover:text-primary transition-colors">తెలుగు</span>
-              <span className="cursor-pointer hover:text-primary transition-colors">हिन्दी</span>
+            <div className="flex justify-around bg-muted/50 p-2 text-[10px] font-black border-b overflow-x-auto no-scrollbar gap-1">
+              {languages.map((lang) => (
+                <span
+                  key={lang.name}
+                  onClick={() => setLanguage(lang.name)}
+                  className={cn(
+                    "cursor-pointer px-1.5 py-1 rounded transition-colors whitespace-nowrap",
+                    language === lang.name ? "text-primary bg-primary/10" : "hover:text-primary"
+                  )}
+                >
+                  {lang.label}
+                </span>
+              ))}
             </div>
 
             {/* Messages */}
             <div
               ref={scrollRef}
-              className="flex-1 overflow-y-auto p-4 space-y-4"
+              className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar"
             >
               {messages.map((msg, idx) => (
                 <motion.div
@@ -117,18 +170,18 @@ const AIChat = () => {
                   >
                     {msg.content}
                   </div>
-                  <span className="mt-1 text-[10px] text-muted-foreground px-1">
+                  <span className="mt-1 text-[10px] text-muted-foreground px-1 uppercase font-black tracking-widest">
                     {msg.timestamp}
                   </span>
                 </motion.div>
               ))}
               {isTyping && (
                 <div className="flex items-center space-x-2 text-muted-foreground p-2">
-                  <Bot className="h-4 w-4 animate-bounce" />
+                  <Bot className="h-4 w-4 animate-bounce text-primary" />
                   <div className="flex space-x-1">
-                    <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground"></div>
-                    <div className="h-1.5 w-1.5 animate-bounce delay-75 rounded-full bg-muted-foreground"></div>
-                    <div className="h-1.5 w-1.5 animate-bounce delay-150 rounded-full bg-muted-foreground"></div>
+                    <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary"></div>
+                    <div className="h-1.5 w-1.5 animate-bounce delay-75 rounded-full bg-primary"></div>
+                    <div className="h-1.5 w-1.5 animate-bounce delay-150 rounded-full bg-primary"></div>
                   </div>
                 </div>
               )}
@@ -136,9 +189,24 @@ const AIChat = () => {
 
             {/* Quick Actions */}
             <div className="flex gap-2 p-2 overflow-x-auto no-scrollbar border-t bg-muted/10">
-              <button className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-xs text-accent-foreground hover:bg-primary/20 transition-colors">🚜 Rent Tractor</button>
-              <button className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-xs text-accent-foreground hover:bg-primary/20 transition-colors">🌾 Crop Advice</button>
-              <button className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-xs text-accent-foreground hover:bg-primary/20 transition-colors">💰 Mandi Rates</button>
+              <button
+                onClick={() => handleSend(t("rentTractor"))}
+                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
+              >
+                {t("rentTractor")}
+              </button>
+              <button
+                onClick={() => handleSend(t("cropAdvice"))}
+                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
+              >
+                {t("cropAdvice")}
+              </button>
+              <button
+                onClick={() => handleSend(t("mandiRates"))}
+                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
+              >
+                {t("mandiRates")}
+              </button>
             </div>
 
             {/* Input */}
@@ -153,7 +221,7 @@ const AIChat = () => {
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Ask me anything..."
+                  placeholder={t("askMeAnything Placeholder") || t("askMeAnything")}
                   className="rounded-full border-muted bg-muted/50 focus-visible:ring-primary"
                 />
                 <Button

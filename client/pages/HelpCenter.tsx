@@ -15,19 +15,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const govServices = [
-  { name: "PM-KISAN", category: "Agriculture & Farmers", desc: "Farmer Support Scheme", icon: Leaf },
-  { name: "eNAM (Agri Market)", category: "Agriculture & Farmers", desc: "National Agriculture Market", icon: LayoutGrid },
-  { name: "Agmarknet (Prices)", category: "Agriculture & Farmers", desc: "Agricultural Marketing Information", icon: IndianRupee },
-  { name: "Soil Health Card", category: "Agriculture & Farmers", desc: "Crop-wise Nutrient Management", icon: Sprout },
-  { name: "Aadhaar Services", category: "Identity & Documents", desc: "Update or Verify Aadhaar Details", icon: Fingerprint },
-  { name: "Ration Card", category: "Food & Public Distribution", desc: "Apply or Manage Ration Cards", icon: FileText },
-  { name: "Ayushman Bharat", category: "Health & Welfare", desc: "Universal Health Insurance", icon: HeartPulse },
-  { name: "Digital India", category: "Education & Literacy", desc: "Digital Skills and Learning", icon: GraduationCap },
-];
+import { useLanguage } from "@/lib/LanguageContext";
+import { useMemo } from "react";
 
 export default function HelpCenter() {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const govServices = useMemo(() => [
+    { name: "PM-KISAN", category: t("agriFarmers"), desc: "Farmer Support Scheme", icon: Leaf, url: "https://pmkisan.gov.in" },
+    { name: "eNAM (Agri Market)", category: t("agriFarmers"), desc: "National Agriculture Market", icon: LayoutGrid, url: "https://enam.gov.in" },
+    { name: "Agmarknet (Prices)", category: t("agriFarmers"), desc: "Agricultural Marketing Information", icon: IndianRupee, url: "https://agmarknet.gov.in" },
+    { name: "Soil Health Card", category: t("agriFarmers"), desc: "Crop-wise Nutrient Management", icon: Sprout, url: "https://soilhealth.dac.gov.in" },
+    { name: "Aadhaar Services", category: t("identityDocs"), desc: "Update or Verify Aadhaar Details", icon: Fingerprint, url: "https://uidai.gov.in" },
+    { name: "Ration Card", category: t("foodPublicDist"), desc: "Apply or Manage Ration Cards", icon: FileText, url: "https://nfsa.gov.in" },
+    { name: "Ayushman Bharat", category: t("healthWelfare"), desc: "Universal Health Insurance", icon: HeartPulse, url: "https://pmjay.gov.in" },
+    { name: "Digital India", category: t("educationLiteracy"), desc: "Digital Skills and Learning", icon: GraduationCap, url: "https://digitalindia.gov.in" },
+  ], [t]);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-12">
@@ -36,10 +40,10 @@ export default function HelpCenter() {
           <Landmark className="h-10 w-10 text-emerald-600" />
         </div>
         <h1 className="text-5xl md:text-6xl font-black tracking-tight text-foreground">
-          One-Click Access to Official Government Services
+          {t("govServicesTitle")}
         </h1>
         <p className="text-muted-foreground text-xl font-medium">
-          Find important links for Aadhaar, Ration, Crop Schemes, Health, Education & more.
+          {t("govServicesDesc")}
         </p>
       </div>
 
@@ -48,7 +52,7 @@ export default function HelpCenter() {
         <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search for a service..."
+            placeholder={t("searchServices")}
             className="h-14 rounded-xl border-primary/5 pl-12 bg-muted/20 text-lg font-medium"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -56,13 +60,13 @@ export default function HelpCenter() {
         </div>
         <Select defaultValue="all">
           <SelectTrigger className="w-full md:w-64 h-14 rounded-xl border-primary/5 bg-muted/20 text-lg font-medium">
-            <SelectValue placeholder="All Categories" />
+            <SelectValue placeholder={t("allCategories")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="agri">Agriculture & Farmers</SelectItem>
-            <SelectItem value="identity">Identity & Documents</SelectItem>
-            <SelectItem value="health">Health & Welfare</SelectItem>
+            <SelectItem value="all">{t("allCategories")}</SelectItem>
+            <SelectItem value="agri">{t("agriFarmers")}</SelectItem>
+            <SelectItem value="identity">{t("identityDocs")}</SelectItem>
+            <SelectItem value="health">{t("healthWelfare")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -92,9 +96,11 @@ export default function HelpCenter() {
                     <p className="text-sm text-muted-foreground font-medium">{service.desc}</p>
                   </div>
                 </div>
-                <Button className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 h-12 font-bold flex items-center gap-2 mt-auto">
-                  Visit Website <ExternalLink className="h-4 w-4" />
-                </Button>
+                <a href={service.url} target="_blank" rel="noopener noreferrer" className="mt-auto">
+                  <Button className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 h-12 font-bold flex items-center gap-2">
+                    {t("visitWebsite")} <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </a>
               </CardContent>
             </Card>
           </motion.div>
@@ -103,12 +109,12 @@ export default function HelpCenter() {
 
       {/* Support Options */}
       <div className="pt-20 space-y-12">
-        <h2 className="text-3xl font-black tracking-tight text-center">Need Direct Support?</h2>
+        <h2 className="text-3xl font-black tracking-tight text-center">{t("needDirectSupport")}</h2>
         <div className="grid gap-6 sm:grid-cols-3 max-w-5xl mx-auto">
           {[
-            { label: "Kisan Call Center", val: "1800-180-1551", icon: PhoneCall, color: "bg-emerald-600" },
-            { label: "Email Support", val: "help@agri.gov.in", icon: Mail, color: "bg-blue-600" },
-            { label: "WhatsApp Chat", val: "+91 9876543210", icon: MessageCircle, color: "bg-cyan-600" }
+            { label: t("kisanCallCenter"), val: "1800-180-1551", icon: PhoneCall, color: "bg-emerald-600" },
+            { label: t("emailSupport"), val: "help@agri.gov.in", icon: Mail, color: "bg-blue-600" },
+            { label: t("whatsappChat"), val: "+91 9876543210", icon: MessageCircle, color: "bg-cyan-600" }
           ].map((contact, i) => (
             <motion.div
               whileHover={{ y: -5 }}

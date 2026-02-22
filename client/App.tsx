@@ -18,9 +18,16 @@ import Chat from "./pages/Chat";
 import AgriSchemes from "./pages/AgriSchemes";
 import HelpCenter from "./pages/HelpCenter";
 import GrowingGuide from "./pages/GrowingGuide";
+import Support from "./pages/Support";
 import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Placeholder from "./pages/Placeholder";
+import Location from "./pages/Location";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +37,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Auth />} />
       <Route path="/register" element={<Auth />} />
 
+      {/* Protected Routes */}
       <Route
         path="/"
         element={
@@ -147,7 +155,64 @@ const AppRoutes = () => {
           </>
         }
       />
+      <Route
+        path="/support"
+        element={
+          <>
+            <SignedIn><Support /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/location"
+        element={
+          <>
+            <SignedIn><Location /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
 
+      {/* Company Pages */}
+      <Route
+        path="/about"
+        element={
+          <>
+            <SignedIn><About /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <>
+            <SignedIn><Contact /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/privacy"
+        element={
+          <>
+            <SignedIn><Privacy /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/terms"
+        element={
+          <>
+            <SignedIn><Terms /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+
+      {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
       <Route path="/Weather" element={<Navigate to="/weather" replace />} />
       <Route path="/Market" element={<Navigate to="/market" replace />} />
@@ -169,7 +234,7 @@ const App = () => (
         <AuthProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <Layout>
               <AppRoutes />
             </Layout>

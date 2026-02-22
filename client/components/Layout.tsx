@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import AIChat from "./AIChat";
+import { useUser } from "@clerk/clerk-react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -11,10 +12,15 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
+  const { isSignedIn, isLoaded } = useUser();
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+
+  // Strictly show nothing except the children (login form) if not signed in or on auth pages
+  const showUI = isLoaded && isSignedIn && !isAuthPage;
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
-      <Navbar />
+      {showUI && <Navbar />}
       <main className="flex-1">
         <AnimatePresence mode="wait">
           <motion.div
@@ -29,8 +35,8 @@ const Layout = ({ children }: LayoutProps) => {
           </motion.div>
         </AnimatePresence>
       </main>
-      <Footer />
-      <AIChat />
+      {showUI && <Footer />}
+      {showUI && <AIChat />}
     </div>
   );
 };
