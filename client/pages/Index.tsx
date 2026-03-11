@@ -180,17 +180,17 @@ export default function Index() {
       <section className="py-24 bg-muted/20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center mb-16 space-y-4">
-            <p className="text-xs font-black uppercase tracking-widest text-emerald-600">AgroStar Network</p>
+            <p className="text-xs font-black uppercase tracking-widest text-emerald-600">{t('agroStarNetwork')}</p>
             <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-foreground">
-              The Numbers That <span className="text-emerald-600">Matter</span>
+              {t('theNumbersThatMatter').split(' ').slice(0,-1).join(' ')} <span className="text-emerald-600">{t('theNumbersThatMatter').split(' ').slice(-1)}</span>
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Store, value: "10,000+", label: "Saathi Retail Stores", color: "bg-emerald-100 text-emerald-600", desc: "Franchise stores across rural India" },
-              { icon: Globe, value: "11", label: "Local Languages", color: "bg-blue-100 text-blue-600", desc: "Advisory in regional languages" },
-              { icon: TrendingUp, value: "100K+ MT", label: "Produce Processed/yr", color: "bg-amber-100 text-amber-600", desc: "Through Kimaye output brand" },
-              { icon: Leaf, value: "5M+", label: "Farmers Empowered", color: "bg-rose-100 text-rose-600", desc: "Across 250,000+ villages" },
+              { icon: Store, value: "10,000+", label: t('saathiRetailStores'), color: "bg-emerald-100 text-emerald-600", desc: t('saathiRetailDesc') },
+              { icon: Globe, value: "11", label: t('localLanguages'), color: "bg-blue-100 text-blue-600", desc: t('localLanguagesDesc') },
+              { icon: TrendingUp, value: "100K+ MT", label: t('produceProcessed'), color: "bg-amber-100 text-amber-600", desc: t('produceProcessedDesc') },
+              { icon: Leaf, value: "5M+", label: t('farmersEmpowered'), color: "bg-rose-100 text-rose-600", desc: t('farmersEmpoweredDesc') },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -213,7 +213,7 @@ export default function Index() {
           <div className="text-center mt-10">
             <Link to="/impact">
               <Button variant="outline" className="rounded-full px-8 py-5 font-semibold">
-                See Full Impact <ArrowRight className="ml-2 h-4 w-4" />
+                {t('seeFullImpact')} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -229,10 +229,10 @@ export default function Index() {
             viewport={{ once: true }}
             className="text-center mb-12 space-y-3"
           >
-            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Backed By</p>
-            <h2 className="text-3xl font-black text-foreground">World-Class Investors</h2>
+            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">{t('backedBy')}</p>
+            <h2 className="text-3xl font-black text-foreground">{t('worldClassInvestors')}</h2>
             <p className="text-muted-foreground max-w-lg mx-auto">
-              AgroStar is trusted by leading global investors committed to transforming agriculture and sustainable development.
+              {t('investorsDesc')}
             </p>
           </motion.div>
           <motion.div
@@ -267,7 +267,7 @@ export default function Index() {
             viewport={{ once: true }}
             className="text-center text-sm text-muted-foreground mt-8"
           >
-            🏆 Recently raised <strong>$30M</strong> for omnichannel expansion and AI investment
+            🏆 {t('recentlyRaised')}
           </motion.p>
         </div>
       </section>
