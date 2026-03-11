@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play, Globe, Store } from "lucide-react";
+import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play, Globe, Store, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "../lib/LanguageContext";
 
 export default function Index() {
   const { t } = useLanguage();
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   const features = [
     {
@@ -94,11 +97,33 @@ export default function Index() {
                   {t('getStarted')}
                 </Button>
               </Link>
-              <Link to="/dashboard">
-                <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
-                  {t('watchDemo')} <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
-                </Button>
-              </Link>
+              <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
+                    {t('watchDemo')} <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-4xl p-0 overflow-hidden bg-black border-slate-800">
+                  <div className="relative pt-[56.25%] w-full h-0">
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full"
+                      src="https://www.youtube.com/embed/ZzE4-W46Gk0?autoplay=1"
+                      title="Modern Farming from Scratch"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="absolute top-4 right-4 z-50 rounded-full bg-black/50 text-white hover:bg-black/80 w-10 h-10 border border-white/10" 
+                    onClick={() => setIsVideoOpen(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </DialogContent>
+              </Dialog>
             </div>
           </motion.div>
         </div>
