@@ -200,24 +200,24 @@ export default function Dashboard() {
             <Card className="md:col-span-2 rounded-xl bg-[#106A3A] text-white p-8 md:p-12 overflow-hidden relative border border-[#0A4A28] shadow-lg flex flex-col justify-center min-h-[320px]">
               <div className="relative z-10 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-emerald-100 rounded text-xs font-semibold tracking-wider uppercase border border-white/20">
-                  <HeartHandshake className="w-4 h-4" /> Empowering Farmers
+                  <HeartHandshake className="w-4 h-4" /> {t('empoweringFarmers')}
                 </div>
                 <h2 className="text-4xl font-extrabold leading-tight">
-                  Welcome to the National Agriculture Portal, {user?.username || "Farmer"}
+                  {t('nationalAgriPortal')}, {user?.username || "Farmer"}
                 </h2>
                 <p className="text-lg text-emerald-50 max-w-lg leading-relaxed border-l-2 border-emerald-400 pl-4 mt-2">
-                  Access real-time commodity pricing, live meteorological data, and government schemes through this unified Digital Green initiative platform.
+                  {t('dashboardDesc')}
                 </p>
                 <div className="flex gap-4 pt-6">
                   <Button
                     onClick={getLocationAndFetch}
                     className="rounded bg-white text-emerald-800 hover:bg-emerald-50 h-12 px-6 font-bold shadow-sm"
                   >
-                    Fetch Area Data
+                    {t('fetchAreaData')}
                   </Button>
                   <Link to="/seeds">
                     <Button variant="outline" className="rounded bg-transparent border-white text-white hover:bg-white/10 h-12 px-6 font-bold">
-                      Seed Portal
+                      {t('seedPortal')}
                     </Button>
                   </Link>
                 </div>
@@ -229,69 +229,69 @@ export default function Dashboard() {
             {/* Official Weather Data Table Panel */}
             <Card className="rounded-xl border border-slate-200 shadow-sm bg-white overflow-hidden flex flex-col">
               <div className="bg-slate-100 border-b border-slate-200 px-4 py-3 flex justify-between items-center">
-                <span className="text-sm font-bold text-slate-700 uppercase tracking-widest">Meteorological Data</span>
+                <span className="text-sm font-bold text-slate-700 uppercase tracking-widest">{t('meteorologicalData')}</span>
                 {weather && <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium border border-emerald-200">LIVE</span>}
               </div>
               <CardContent className="flex-1 flex flex-col p-0">
                 {weatherLoading ? (
                   <div className="flex-1 flex flex-col items-center justify-center space-y-3 p-8">
                     <Loader2 className="h-6 w-6 text-emerald-700 animate-spin" />
-                    <p className="text-xs font-semibold text-slate-500 uppercase">Fetching Sync...</p>
+                    <p className="text-xs font-semibold text-slate-500 uppercase">{t('fetchingSync')}</p>
                   </div>
                 ) : weather ? (
                   <div className="divide-y divide-slate-100 text-sm">
                     <div className="p-4 grid grid-cols-2 items-center bg-slate-50/50">
-                      <div className="text-slate-500 text-xs font-semibold">STATION</div>
+                      <div className="text-slate-500 text-xs font-semibold">{t('station')}</div>
                       <div className="text-right font-bold text-slate-800 flex items-center justify-end gap-1"><MapPin className="h-3 w-3 text-red-500" /> {weather.location}</div>
                     </div>
                     <div className="p-4 grid grid-cols-2 items-center">
-                      <div className="text-slate-500 text-xs font-semibold">TEMP & COND</div>
+                      <div className="text-slate-500 text-xs font-semibold">{t('tempAndCond')}</div>
                       <div className="text-right font-bold text-slate-800 flex items-center justify-end gap-2">
                         {weather.temp}°C <Sun className="h-4 w-4 text-amber-500" />
                       </div>
                     </div>
                     <div className="p-4 grid grid-cols-2 items-center bg-slate-50/50">
-                      <div className="text-slate-500 text-xs font-semibold flex items-center gap-1"><Droplets className="h-3 w-3" /> HUMIDITY</div>
+                      <div className="text-slate-500 text-xs font-semibold flex items-center gap-1"><Droplets className="h-3 w-3" /> {t('humidity')}</div>
                       <div className="text-right font-bold text-slate-800">{weather.humidity}%</div>
                     </div>
                     <div className="p-4 grid grid-cols-2 items-center">
-                      <div className="text-slate-500 text-xs font-semibold flex items-center gap-1"><Wind className="h-3 w-3" /> WIND SPEED</div>
+                      <div className="text-slate-500 text-xs font-semibold flex items-center gap-1"><Wind className="h-3 w-3" /> {t('windSpeed')}</div>
                       <div className="text-right font-bold text-slate-800">{weather.windSpeed} km/h</div>
                     </div>
 
                     {/* Official Advisory Block */}
                     <div className="p-4 bg-yellow-50/80 border-t border-yellow-200/50">
                       <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1.5 flex items-center gap-1">
-                        <AlertTriangle className="h-3 w-3" /> OFFICIAL ADVISORY
+                        <AlertTriangle className="h-3 w-3" /> {t('officialAdvisory')}
                       </p>
                       <p className="text-xs font-medium text-amber-900 leading-relaxed">
                         {weather.temp > 35
-                          ? "CRITICAL HEAT WARNING: High risk of crop wilting. Initiate emergency irrigation protocols."
+                          ? t('criticalHeatWarning')
                           : weather.temp > 30
-                            ? "WARM ADVISORY: Evaporation rates elevated. Increase scheduled irrigation limits."
+                            ? t('warmAdvisory')
                             : weather.humidity > 80
-                              ? "FUNGAL ALERT: Atmospheric moisture exceeds 80%. Preventative fungicidal application recommended."
+                              ? t('fungalAlert')
                               : weather.humidity > 60
-                                ? "MILD ALERT: Monitor fields for early pest manifestations due to humidity."
+                                ? t('mildAlert')
                                 : weather.rainProbability > 50
-                                  ? "PRECIPITATION EXPECTED: Halt scheduled chemical spraying. Validate field drainage."
-                                  : "NOMINAL CONDITIONS: Execute standard agricultural activities as planned."}
+                                  ? t('precipitationExpected')
+                                  : t('nominalConditions')}
                       </p>
                     </div>
                   </div>
                 ) : weatherError ? (
                   <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-red-50/30">
                     <AlertTriangle className="h-8 w-8 text-red-500 mb-3" />
-                    <p className="text-xs font-bold text-red-700 uppercase mb-4">{weatherError.includes("permission") ? "GPS Access Denied" : "Data Link Offline"}</p>
+                    <p className="text-xs font-bold text-red-700 uppercase mb-4">{weatherError.includes("permission") ? t('gpsAccessDenied') : t('dataLinkOffline')}</p>
                     <Button onClick={getLocationAndFetch} variant="outline" size="sm" className="rounded shadow-sm text-xs">
-                      Retry Connection
+                      {t('retryConnection')}
                     </Button>
                   </div>
                 ) : (
                   <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
                     <MapPin className="h-8 w-8 text-slate-300 mb-3" />
-                    <p className="text-xs font-semibold text-slate-500 uppercase mb-4">Location Validation Required</p>
-                    <Button onClick={getLocationAndFetch} size="sm" className="rounded bg-emerald-700 hover:bg-emerald-800 text-xs">Authorize GPS</Button>
+                    <p className="text-xs font-semibold text-slate-500 uppercase mb-4">{t('locationRequired')}</p>
+                    <Button onClick={getLocationAndFetch} size="sm" className="rounded bg-emerald-700 hover:bg-emerald-800 text-xs">{t('authorizeGPS')}</Button>
                   </div>
                 )}
               </CardContent>
@@ -300,13 +300,13 @@ export default function Dashboard() {
 
           {/* Quick Access Grid Redesigned */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold tracking-tight text-slate-800 border-b-2 border-emerald-600 pb-2 inline-block">Portal Services</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-800 border-b-2 border-emerald-600 pb-2 inline-block">{t('portalServices')}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { name: "Crop Calendar", path: "/calendar", icon: Calendar, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: "Pest Advisory", path: "/pests", icon: Bug, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: "Kisan Support", path: "/chat", icon: MessageCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: "Mandi Prices", path: "/market", icon: IndianRupee, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: t('cropCalendar'), path: "/calendar", icon: Calendar, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: t('pestAdvisory'), path: "/pests", icon: Bug, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: t('kisanSupport'), path: "/chat", icon: MessageCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: t('mandiPrices'), path: "/market", icon: IndianRupee, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
               ].map((item, i) => (
                 <Link key={i} to={item.path}>
                   <div
@@ -325,7 +325,7 @@ export default function Dashboard() {
           {/* Disease Detection Integration */}
           <section className="space-y-4 pt-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-              <h2 className="text-xl font-bold tracking-tight text-slate-800">AI Crop Diagnostics</h2>
+              <h2 className="text-xl font-bold tracking-tight text-slate-800">{t('aiCropDiagnostics')}</h2>
               <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">BETA</Badge>
             </div>
             <Card className="rounded-xl border border-slate-200 shadow-sm overflow-hidden bg-slate-50">
@@ -341,21 +341,21 @@ export default function Dashboard() {
           {/* Mandi Rates Enhanced Sidebar */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-              <h2 className="text-lg font-bold tracking-tight text-slate-800 flex items-center gap-2"><TrendingUp className="h-4 w-4 text-emerald-600" /> Live Commodity Rates</h2>
+              <h2 className="text-lg font-bold tracking-tight text-slate-800 flex items-center gap-2"><TrendingUp className="h-4 w-4 text-emerald-600" /> {t('liveCommodityRates')}</h2>
               <Link to="/market" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 underline underline-offset-2">
-                View All
+                {t('viewAll')}
               </Link>
             </div>
             <div className="bg-white rounded border border-slate-200 shadow-sm overflow-hidden">
               <div className="grid grid-cols-3 bg-slate-100 text-xs font-bold text-slate-600 p-2 border-b border-slate-200">
-                <div className="col-span-1">COMMODITY</div>
-                <div className="col-span-1 text-right">RATE (₹/QTL)</div>
-                <div className="col-span-1 text-right">TREND</div>
+                <div className="col-span-1">{t('commodity')}</div>
+                <div className="col-span-1 text-right">{t('rateQtl')}</div>
+                <div className="col-span-1 text-right">{t('trend')}</div>
               </div>
               {mandiLoading ? (
                 <div className="p-8 flex flex-col items-center gap-3 text-center">
                   <Loader2 className="h-6 w-6 text-emerald-600 animate-spin" />
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Syncing Data...</p>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{t('syncingData')}</p>
                 </div>
               ) : (
                 <div className="divide-y divide-slate-100">
@@ -383,7 +383,7 @@ export default function Dashboard() {
           {/* Govt Schemes Sidebar */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-              <h2 className="text-lg font-bold tracking-tight text-slate-800 flex items-center gap-2"><Landmark className="h-4 w-4 text-emerald-600" /> National Schemes</h2>
+              <h2 className="text-lg font-bold tracking-tight text-slate-800 flex items-center gap-2"><Landmark className="h-4 w-4 text-emerald-600" /> {t('nationalSchemes')}</h2>
             </div>
             <div className="bg-white rounded border border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100">
               {[
@@ -400,7 +400,7 @@ export default function Dashboard() {
                 </div>
               ))}
               <Link to="/agri-schemes" className="block p-3 bg-slate-50 text-center text-sm font-bold text-emerald-700 hover:text-emerald-800 hover:bg-slate-100 transition-colors border-t border-slate-200">
-                Access Scheme Directory →
+                {t('accessSchemeDirectory')}
               </Link>
             </div>
           </div>
@@ -411,13 +411,13 @@ export default function Dashboard() {
       <section className="space-y-6 pt-8 border-t border-slate-200">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800">Agricultural Machinery Database</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-800">{t('agriMachineryDB')}</h2>
             <p className="text-sm font-medium text-slate-500">
-              Procure and schedule heavy machinery for field operations.
+              {t('procureAndSchedule')}
             </p>
           </div>
           <Button variant="outline" className="shrink-0 text-emerald-700 border-emerald-200 hover:bg-emerald-50 text-sm font-bold">
-            Access Full Catalog <ArrowUpRight className="ml-2 h-4 w-4" />
+            {t('accessFullCatalog')} <ArrowUpRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
@@ -426,7 +426,7 @@ export default function Dashboard() {
           <div className="relative w-full md:max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
-              placeholder="Search machinery by SKU or Category..."
+              placeholder={t('searchMachinery')}
               className="pl-9 h-10 rounded bg-white border-slate-300 focus-visible:ring-emerald-500 text-sm"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -434,10 +434,10 @@ export default function Dashboard() {
           </div>
           <Tabs defaultValue="All" onValueChange={setSelectedType} className="w-full md:w-auto">
             <TabsList className="bg-slate-200/50 p-1 rounded h-10">
-              <TabsTrigger value="All" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">All</TabsTrigger>
-              <TabsTrigger value="Heavy" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">Heavy Duty</TabsTrigger>
-              <TabsTrigger value="Medium" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">Medium Duty</TabsTrigger>
-              <TabsTrigger value="Attachment" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">Attachments</TabsTrigger>
+              <TabsTrigger value="All" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">{t('all')}</TabsTrigger>
+              <TabsTrigger value="Heavy" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">{t('heavyDuty')}</TabsTrigger>
+              <TabsTrigger value="Medium" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">{t('mediumDuty')}</TabsTrigger>
+              <TabsTrigger value="Attachment" className="rounded px-4 h-full data-[state=active]:bg-white data-[state=active]:text-emerald-700 data-[state=active]:shadow-sm font-semibold text-xs uppercase tracking-wider">{t('attachments')}</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -445,14 +445,14 @@ export default function Dashboard() {
         {/* Platform Capabilities Section */}
         <section className="py-12 bg-white border border-slate-200 rounded px-8 my-8">
           <div className="text-center mb-10 space-y-2 border-b border-slate-100 pb-8">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800 uppercase text-center w-full">Platform Capabilities</h2>
-            <p className="text-slate-500 font-medium text-sm">Comprehensive digital infrastructure for modern agriculture.</p>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-800 uppercase text-center w-full">{t('platformCapabilities')}</h2>
+            <p className="text-slate-500 font-medium text-sm">{t('platformCapDesc')}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
-              { step: "01", title: "Meteorological Intelligence", desc: "Access hyper-local weather alerts and AI-powered agronomic recommendations specific to your geographic coordinates.", icon: Cloud, color: "text-blue-600 bg-blue-50 border-blue-100" },
-              { step: "02", title: "Market Analytics", desc: "Monitor real-time Mandi rates and leverage our commodity pricing estimator to ascertain crop market valuation.", icon: IndianRupee, color: "text-amber-600 bg-amber-50 border-amber-100" },
-              { step: "03", title: "Resource Procurement", desc: "Procure certified quality seeds and schedule premium heavy machinery with reliable door-step logistics.", icon: Sprout, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
+              { step: "01", title: t('meteorologicalIntelligence'), desc: t('meteorologicalIntelligenceDesc'), icon: Cloud, color: "text-blue-600 bg-blue-50 border-blue-100" },
+              { step: "02", title: t('marketAnalytics'), desc: t('marketAnalyticsDesc'), icon: IndianRupee, color: "text-amber-600 bg-amber-50 border-amber-100" },
+              { step: "03", title: t('resourceProcurement'), desc: t('resourceProcurementDesc'), icon: Sprout, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
             ].map((item, i) => (
               <div key={i} className="relative group border border-slate-100 p-6 rounded hover:border-slate-300 hover:shadow-sm transition-all bg-slate-50/50">
                 <div className={cn("mb-6 h-12 w-12 rounded flex items-center justify-center border", item.color)}>
@@ -473,14 +473,14 @@ export default function Dashboard() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-1">
               <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
-                <BookOpen className="h-6 w-6 text-emerald-600" /> AgriFarming Knowledge Hub
+                <BookOpen className="h-6 w-6 text-emerald-600" /> {t('agriFarmingHub')}
               </h2>
               <p className="text-sm font-medium text-slate-500">
-                Latest farming techniques, project reports, and livestock management guides.
+                {t('agriFarmingHubDesc')}
               </p>
             </div>
             <Button variant="outline" className="shrink-0 text-emerald-700 border-emerald-200 hover:bg-emerald-50 text-sm font-bold">
-              View All Topics <ArrowUpRight className="ml-2 h-4 w-4" />
+              {t('viewAllTopics')} <ArrowUpRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
 
@@ -503,11 +503,11 @@ export default function Dashboard() {
                 <div className="p-4 flex flex-col flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={cn("px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest leading-none", post.color)}>{post.tag}</span>
-                    <span className="text-[10px] text-slate-400 font-semibold leading-none">Today</span>
+                    <span className="text-[10px] text-slate-400 font-semibold leading-none">{t('today')}</span>
                   </div>
                   <h3 className="font-bold text-slate-800 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">{post.title}</h3>
                   <div className="mt-auto pt-4 text-xs font-semibold text-emerald-600 group-hover:underline underline-offset-2 flex items-center">
-                    Read Full Guide <ArrowRight className="ml-1 h-3 w-3" />
+                    {t('readFullGuide')} <ArrowRight className="ml-1 h-3 w-3" />
                   </div>
                 </div>
               </div>
@@ -560,14 +560,14 @@ export default function Dashboard() {
                         <p className="text-lg font-black text-slate-900 leading-none">
                           ₹{item.price}
                         </p>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">per {item.unit}</span>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">{t('perHour')}</span>
                       </div>
                       <Button
                         size="sm"
                         className="rounded font-bold bg-emerald-700 hover:bg-emerald-800 text-xs px-4"
                         onClick={() => handleBookClick(item)}
                       >
-                        Initiate Booking
+                        {t('initiateBooking')}
                       </Button>
                     </div>
                   </div>
@@ -580,8 +580,8 @@ export default function Dashboard() {
         {filteredEquipment.length === 0 && (
           <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded bg-slate-50 space-y-3">
             <Search className="h-8 w-8 text-slate-400 mx-auto" />
-            <h3 className="text-base font-bold text-slate-700">No machinery matched the criteria</h3>
-            <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setSelectedType("All"); }}>Reset Filters</Button>
+            <h3 className="text-base font-bold text-slate-700">{t('noMachineryMatched')}</h3>
+            <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setSelectedType("All"); }}>{t('resetFilters')}</Button>
           </div>
         )}
       </section>
@@ -598,9 +598,9 @@ export default function Dashboard() {
                 className="p-6 space-y-6"
               >
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold">Book Equipment</DialogTitle>
+                  <DialogTitle className="text-2xl font-bold">{t('bookEquipment')}</DialogTitle>
                   <DialogDescription>
-                    Select your preferred date and duration.
+                    {t('selectDateAndDuration')}
                   </DialogDescription>
                 </DialogHeader>
 
@@ -617,14 +617,14 @@ export default function Dashboard() {
                 <div className="space-y-4 max-h-[400px] overflow-y-auto px-1 pr-2 custom-scrollbar">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold">Select Date</label>
+                      <label className="text-sm font-semibold">{t('selectDate')}</label>
                       <div className="relative">
                         <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input type="date" className="pl-10 rounded-xl" onChange={(e) => setBookingDetails({ ...bookingDetails, date: e.target.value })} />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold">Duration (Hours)</label>
+                      <label className="text-sm font-semibold">{t('durationHours')}</label>
                       <div className="relative">
                         <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -639,7 +639,7 @@ export default function Dashboard() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Contact Phone</label>
+                    <label className="text-sm font-semibold">{t('contactPhone')}</label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -652,11 +652,11 @@ export default function Dashboard() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Farm Delivery Location</label>
+                    <label className="text-sm font-semibold">{t('farmDeliveryLocation')}</label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="Enter your exact farm location"
+                        placeholder={t('enterFarmLocation')}
                         className="pl-10 rounded-xl"
                         value={bookingDetails.location}
                         onChange={(e) => setBookingDetails({ ...bookingDetails, location: e.target.value })}
@@ -665,31 +665,31 @@ export default function Dashboard() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Special Requirements (Optional)</label>
+                    <label className="text-sm font-semibold">{t('specialRequirements')}</label>
                     <textarea
                       className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[80px]"
-                      placeholder="e.g. Need driver, specific attachment needed..."
+                      placeholder={t('requirementsPlaceholder')}
                       value={bookingDetails.requirements}
                       onChange={(e) => setBookingDetails({ ...bookingDetails, requirements: e.target.value })}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Payment Method</label>
+                    <label className="text-sm font-semibold">{t('paymentMethod')}</label>
                     <div className="flex gap-4">
                       <Button
                         variant={bookingDetails.paymentMethod === 'COD' ? 'default' : 'outline'}
                         className="flex-1 rounded-xl"
                         onClick={() => setBookingDetails({ ...bookingDetails, paymentMethod: 'COD' })}
                       >
-                        Cash on Delivery
+                        {t('cashOnDelivery')}
                       </Button>
                       <Button
                         variant={bookingDetails.paymentMethod === 'Online' ? 'default' : 'outline'}
                         className="flex-1 rounded-xl"
                         disabled
                       >
-                        Online (Coming Soon)
+                        {t('onlineComingSoon')}
                       </Button>
                     </div>
                   </div>
@@ -697,22 +697,22 @@ export default function Dashboard() {
 
                 <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Rate</span>
+                    <span className="text-muted-foreground">{t('rate')}</span>
                     <span className="font-medium">₹{selectedEquipment?.price}/{selectedEquipment?.unit}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Total Hours</span>
+                    <span className="text-muted-foreground">{t('totalHours')}</span>
                     <span className="font-medium">{bookingDetails.duration} hrs</span>
                   </div>
                   <div className="border-t border-primary/10 pt-2 flex justify-between font-bold text-lg text-primary">
-                    <span>Estimated Total</span>
+                    <span>{t('estimatedTotal')}</span>
                     <span>₹{(selectedEquipment?.price || 0) * bookingDetails.duration}</span>
                   </div>
                 </div>
 
                 <DialogFooter className="px-6 pb-6 pt-2">
                   <Button className="w-full rounded-xl py-6 text-lg bg-emerald-600 hover:bg-emerald-700 font-bold" onClick={handleConfirmBooking}>
-                    Confirm Booking Now
+                    {t('confirmBookingNow')}
                   </Button>
                 </DialogFooter>
               </motion.div>
@@ -734,8 +734,8 @@ export default function Dashboard() {
                   </motion.div>
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Processing...</h3>
-                  <p className="text-muted-foreground text-sm">Securing your equipment with the owner. Please wait a moment.</p>
+                  <h3 className="text-2xl font-bold">{t('processing')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('processingDesc')}</p>
                 </div>
               </motion.div>
             )}
@@ -751,11 +751,11 @@ export default function Dashboard() {
                   <CheckCircle2 className="h-10 w-10 text-green-600" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-green-600">Booking Confirmed!</h3>
-                  <p className="text-muted-foreground text-sm">Your booking for <strong>{selectedEquipment?.name}</strong> has been successfully placed. You will receive an SMS shortly.</p>
+                  <h3 className="text-2xl font-bold text-green-600">{t('bookingConfirmedTitle')}</h3>
+                  <p className="text-muted-foreground text-sm">{t('bookingConfirmedDesc')}</p>
                 </div>
                 <Button className="w-full rounded-xl py-6" onClick={() => setIsBookingModalOpen(false)}>
-                  Go to My Bookings
+                  {t('goToMyBookings')}
                 </Button>
               </motion.div>
             )}
