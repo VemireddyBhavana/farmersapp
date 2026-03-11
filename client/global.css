@@ -99,6 +99,15 @@
   .glass-dark {
     @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl;
   }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-emerald-50/50 rounded-full;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-emerald-200 rounded-full hover:bg-emerald-300 transition-colors;
+  }
 }
 
 @layer base {
@@ -120,4 +129,15 @@
     overflow-x: auto;
     white-space: pre;
   }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }

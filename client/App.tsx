@@ -28,6 +28,15 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Placeholder from "./pages/Placeholder";
 import Location from "./pages/Location";
+import SeedsBuyer from "./pages/SeedsBuyer";
+import WhatsAppChat from "./pages/WhatsAppChat";
+import { FloatingChatbot } from "./components/FloatingChatbot";
+import AgriKnowledge from "./pages/AgriKnowledge";
+import Impact from "./pages/Impact";
+import Leadership from "./pages/Leadership";
+import MarketLinkage from "./pages/MarketLinkage";
+import Omnichannel from "./pages/Omnichannel";
+import JoinUs from "./pages/JoinUs";
 
 const queryClient = new QueryClient();
 
@@ -129,6 +138,15 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/knowledge"
+        element={
+          <>
+            <SignedIn><AgriKnowledge /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
         path="/agri-schemes"
         element={
           <>
@@ -165,10 +183,75 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/seeds"
+        element={
+          <>
+            <SignedIn><SeedsBuyer /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/whatsapp-bot"
+        element={
+          <>
+            <SignedIn><WhatsAppChat /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
         path="/location"
         element={
           <>
             <SignedIn><Location /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+
+      {/* AgroStar Corporate Pages */}
+      <Route
+        path="/impact"
+        element={
+          <>
+            <SignedIn><Impact /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/leadership"
+        element={
+          <>
+            <SignedIn><Leadership /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/market-linkage"
+        element={
+          <>
+            <SignedIn><MarketLinkage /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/omnichannel"
+        element={
+          <>
+            <SignedIn><Omnichannel /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/join-us"
+        element={
+          <>
+            <SignedIn><JoinUs /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
@@ -238,6 +321,7 @@ const App = () => (
             <Layout>
               <AppRoutes />
             </Layout>
+            <FloatingChatbot />
           </BrowserRouter>
         </AuthProvider>
       </LanguageProvider>

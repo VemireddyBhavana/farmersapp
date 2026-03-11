@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play } from "lucide-react";
+import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play, Globe, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -173,6 +173,102 @@ export default function Index() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* AgroStar Numbers */}
+      <section className="py-24 bg-muted/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center mb-16 space-y-4">
+            <p className="text-xs font-black uppercase tracking-widest text-emerald-600">AgroStar Network</p>
+            <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-foreground">
+              The Numbers That <span className="text-emerald-600">Matter</span>
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: Store, value: "10,000+", label: "Saathi Retail Stores", color: "bg-emerald-100 text-emerald-600", desc: "Franchise stores across rural India" },
+              { icon: Globe, value: "11", label: "Local Languages", color: "bg-blue-100 text-blue-600", desc: "Advisory in regional languages" },
+              { icon: TrendingUp, value: "100K+ MT", label: "Produce Processed/yr", color: "bg-amber-100 text-amber-600", desc: "Through Kimaye output brand" },
+              { icon: Leaf, value: "5M+", label: "Farmers Empowered", color: "bg-rose-100 text-rose-600", desc: "Across 250,000+ villages" },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ y: -6 }}
+                className="bg-white dark:bg-white/5 rounded-3xl p-8 border border-primary/5 shadow-sm hover:shadow-xl transition-all"
+              >
+                <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center mb-4`}>
+                  <item.icon className="h-6 w-6" />
+                </div>
+                <p className="text-4xl font-black text-foreground">{item.value}</p>
+                <p className="font-bold text-foreground mt-1">{item.label}</p>
+                <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link to="/impact">
+              <Button variant="outline" className="rounded-full px-8 py-5 font-semibold">
+                See Full Impact <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Investors Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 space-y-3"
+          >
+            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Backed By</p>
+            <h2 className="text-3xl font-black text-foreground">World-Class Investors</h2>
+            <p className="text-muted-foreground max-w-lg mx-auto">
+              AgroStar is trusted by leading global investors committed to transforming agriculture and sustainable development.
+            </p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {[
+              { name: "Schroders Capital", color: "bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800" },
+              { name: "IFC (World Bank Group)", color: "bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800" },
+              { name: "Chiratae Ventures", color: "bg-purple-50 dark:bg-purple-950/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800" },
+              { name: "Hero Enterprise", color: "bg-rose-50 dark:bg-rose-950/20 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800" },
+              { name: "British International Investment", color: "bg-amber-50 dark:bg-amber-950/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800" },
+            ].map((inv, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.08 }}
+                whileHover={{ scale: 1.04 }}
+                className={`px-8 py-4 rounded-2xl border font-bold text-sm ${inv.color} transition-all cursor-default`}
+              >
+                {inv.name}
+              </motion.div>
+            ))}
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center text-sm text-muted-foreground mt-8"
+          >
+            🏆 Recently raised <strong>$30M</strong> for omnichannel expansion and AI investment
+          </motion.p>
         </div>
       </section>
 

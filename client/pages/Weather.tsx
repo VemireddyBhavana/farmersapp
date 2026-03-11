@@ -1,255 +1,429 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, Calendar, ArrowLeft, SunMedium, CloudLightning, MapPin, Navigation, Sprout, Info, Waves, RefreshCw, Loader2 } from "lucide-react";
+import { Cloud, Sun, CloudRain, Wind, Droplets, Thermometer, Calendar, ArrowLeft, SunMedium, CloudLightning, MapPin, Navigation, Sprout, Info, Waves, RefreshCw, Loader2, AlertTriangle, CloudSun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 
 import { useLanguage } from "@/lib/LanguageContext";
-
-const weeklyForecast = [
-  { day: "Mon", temp: "32°C", condition: "Sunny", icon: Sun },
-  { day: "Tue", temp: "30°C", condition: "Partly Cloudy", icon: SunMedium },
-  { day: "Wed", temp: "28°C", condition: "Rainy", icon: CloudRain },
-  { day: "Thu", temp: "27°C", condition: "Thunderstorm", icon: CloudLightning },
-  { day: "Fri", temp: "29°C", condition: "Cloudy", icon: Cloud },
-  { day: "Sat", temp: "31°C", condition: "Sunny", icon: Sun },
-  { day: "Sun", temp: "33°C", condition: "Hot", icon: Sun },
-];
+import { useWeather } from "@/hooks/useWeather";
 
 export default function Weather() {
   const { t } = useLanguage();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-  const [weather, setWeather] = useState({
-    temp: "24°C",
-    humidity: "80%",
-    wind: "5 km/h",
-    location: "Hyderabad, India",
-    condition: "Cloudy",
-    recommendation: "Given the current overcast skies and light winds at 24°C in Hyderabad, it's advisable to monitor soil moisture levels closely. If the soil is moist, delay irrigation to prevent waterlogging, which can harm root systems. If the soil is dry, provide light irrigation in the early morning or late evening to minimize evaporation losses."
-  });
+  const { weather, forecast, loading, error, fetchWeather, getLocationAndFetch } = useWeather();
+  const [manualLocation, setManualLocation] = useState("");
+  const [showManualInput, setShowManualInput] = useState(false);
 
-  const fetchWeather = async () => {
-    setLoading(true);
-    if (!navigator.geolocation) {
-      toast({
-        title: "Error",
-        description: "Geolocation is not supported by your browser",
-        variant: "destructive",
+  const handleManualSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (manualLocation.trim()) {
+      fetchWeather(undefined, undefined, manualLocation);
+      setManualLocation("");
+      setShowManualInput(false);
+    }
+  };
+
+  const getAdvisory = () => {
+    if (!weather) return null;
+    const advisories = [];
+
+    if (weather.rainProbability > 60 || weather.description.includes("rain")) {
+      advisories.push({
+        title: "Rain Expected",
+        text: "Rain expected soon. It's recommended to reduce or pause irrigation to prevent waterlogging.",
+        type: "warning",
+        icon: CloudRain
       });
-      setLoading(false);
-      return;
     }
 
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const { latitude, longitude } = position.coords;
-
-      // Simulating realistic dynamic data based on "location"
-      // In a real app, we'd use lat/lon to call OpemWeatherMap
-      setTimeout(() => {
-        const tempValue = 25 + Math.floor(Math.random() * 10);
-        const humidityValue = 40 + Math.floor(Math.random() * 40);
-        const windValue = 5 + Math.floor(Math.random() * 15);
-
-        setWeather({
-          temp: `${tempValue}°C`,
-          humidity: `${humidityValue}%`,
-          wind: `${windValue} km/h`,
-          location: "Live Precision Location", // This would be the reverse geocoded name
-          condition: tempValue > 30 ? "Clear Sky" : "Partly Cloudy",
-          recommendation: tempValue > 30
-            ? "High temperature detected. Increase drip irrigation frequency and monitor for heat stress in young saplings. Best time for weeding is late afternoon."
-            : "Moderate climate detected. Ideal for nutrient application. Soil moisture retention is high, optimize irrigation cycles accordingly."
-        });
-        setLoading(false);
-        toast({
-          title: "Weather Synchronized",
-          description: `Live data fetched for ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`,
-        });
-      }, 1500);
-    }, (error) => {
-      toast({
-        title: "Location Error",
-        description: "Unable to retrieve your exact location. Using default station data.",
-        variant: "destructive",
+    if (weather.temp > 35) {
+      advisories.push({
+        title: "High Heat Alert",
+        text: "Temperature is above 35°C. High heat detected. Increase irrigation frequency to prevent crop heat stress.",
+        type: "danger",
+        icon: Thermometer
       });
-      setLoading(false);
-    });
+    }
+
+    if (weather.humidity > 70) {
+      advisories.push({
+        title: "Fungal Risk",
+        text: "High humidity levels detected. Monitor crops closely for fungal disease risk and ensure proper aeration.",
+        type: "info",
+        icon: Droplets
+      });
+    }
+
+    if (weather.windSpeed > 20) {
+      advisories.push({
+        title: "High Wind Alert",
+        text: "Wind speed is high. Avoid pesticide spraying as it might drift and reduce effectiveness.",
+        type: "warning",
+        icon: Wind
+      });
+    }
+
+    if (advisories.length === 0) {
+      advisories.push({
+        title: "Optimal Conditions",
+        text: "Weather conditions are moderate. Ideal for nutrient application and standard irrigation cycles.",
+        type: "success",
+        icon: Sprout
+      });
+    }
+
+    return advisories;
+  };
+
+  const getWeatherIcon = (condition: string) => {
+    const c = condition.toLowerCase();
+    if (c.includes("clear") || c.includes("sun")) return Sun;
+    if (c.includes("cloud") && c.includes("sun")) return CloudSun;
+    if (c.includes("cloud")) return Cloud;
+    if (c.includes("rain")) return CloudRain;
+    if (c.includes("thunder") || c.includes("storm")) return CloudLightning;
+    return Cloud;
   };
 
   useEffect(() => {
-    fetchWeather();
-  }, []);
+    if (error) {
+      toast({
+        title: "Weather Update Failed",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-12">
       <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm mb-4"
+        >
+          <Sprout className="h-4 w-4" />
+          Smart Agriculture Intelligence
+        </motion.div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
           {t("weatherAnalysis")}
         </h1>
         <p className="text-muted-foreground text-lg">
           Get real-time weather data and AI-powered farming recommendations based on your exact location.
         </p>
-        <div className="flex gap-4 justify-center">
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
           <Button
-            onClick={fetchWeather}
+            onClick={getLocationAndFetch}
             disabled={loading}
-            className="rounded-full bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg shadow-xl shadow-blue-500/20 flex items-center gap-2"
+            className="rounded-full bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg shadow-xl shadow-blue-500/20 flex items-center gap-2 w-full sm:w-auto"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Navigation className="h-5 w-5 fill-current" />}
-            Get Live Weather & Recommendations
+            Detect My Location
           </Button>
+
           <Button
             variant="outline"
-            onClick={fetchWeather}
+            onClick={() => setShowManualInput(!showManualInput)}
+            className="rounded-full px-8 py-6 text-lg border-blue-200 hover:bg-blue-50 w-full sm:w-auto"
+          >
+            {showManualInput ? "Cancel" : "Enter Location Manually"}
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={getLocationAndFetch}
             disabled={loading}
-            className="rounded-full h-14 w-14 p-0 flex items-center justify-center border-blue-200 hover:bg-blue-50"
+            className="rounded-full h-14 w-14 p-0 flex items-center justify-center border-blue-200 hover:bg-blue-50 hidden sm:flex"
           >
             <RefreshCw className={cn("h-6 w-6 text-blue-600", loading && "animate-spin")} />
           </Button>
         </div>
+
+        <AnimatePresence>
+          {showManualInput && (
+            <motion.form
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              onSubmit={handleManualSearch}
+              className="mt-6 flex gap-2 max-w-md mx-auto"
+            >
+              <Input
+                placeholder="Enter city or district name..."
+                value={manualLocation}
+                onChange={(e) => setManualLocation(e.target.value)}
+                className="rounded-full py-6 px-6"
+                autoFocus
+              />
+              <Button type="submit" className="rounded-full py-6 px-8 bg-emerald-600 hover:bg-emerald-700">Search</Button>
+            </motion.form>
+          )}
+        </AnimatePresence>
       </div>
 
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
+            key="loading"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="flex flex-col items-center justify-center py-20"
           >
-            <Loader2 className="h-12 w-12 text-blue-500 animate-spin mb-4" />
-            <p className="text-lg font-medium text-muted-foreground">Fetching live data...</p>
+            <div className="relative">
+              <Loader2 className="h-16 w-16 text-blue-500 animate-spin mb-4" />
+              <Cloud className="h-8 w-8 text-blue-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+            </div>
+            <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">Fetching Hyper-Local Data...</p>
+            <p className="text-sm text-muted-foreground mt-2">Connecting to ISMIGS Weather Stations</p>
           </motion.div>
-        ) : (
+        ) : weather ? (
           <motion.div
+            key="content"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="space-y-12"
           >
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {[
-                { label: "Temperature", value: weather.temp, sub: "Feels like 22.7°C", icon: Thermometer, color: "text-red-500" },
-                { label: "Humidity", value: weather.humidity, sub: parseInt(weather.humidity) > 60 ? "High" : "Optimal", icon: Droplets, color: "text-blue-500" },
-                { label: "Wind Speed", value: weather.wind, sub: "Gentle", icon: Wind, color: "text-slate-400" },
-                { label: "Location", value: weather.location, sub: weather.condition, icon: MapPin, color: "text-amber-500" },
-              ].map((stat, i) => (
-                <Card key={i} className="rounded-3xl border-primary/5 shadow-sm hover:shadow-md transition-all">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium text-muted-foreground">{stat.label}</p>
-                        <h3 className="text-2xl font-black">{stat.value}</h3>
-                      </div>
-                      <stat.icon className={cn("h-5 w-5", stat.color)} />
+            {/* Main Weather Card */}
+            <Card className="rounded-[3rem] border-none shadow-2xl bg-gradient-to-br from-white via-white to-blue-50/50 overflow-hidden group">
+              <CardContent className="p-0">
+                <div className="grid md:grid-cols-2">
+                  <div className="p-10 md:p-16 flex flex-col justify-center">
+                    <div className="flex items-center gap-2 text-blue-600 font-black uppercase tracking-widest mb-6">
+                      <MapPin className="h-5 w-5" />
+                      {weather.location}
                     </div>
-                    <p className="text-xs text-muted-foreground font-medium">{stat.sub}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    <div className="flex items-start gap-6 mb-8">
+                      <h2 className="text-8xl font-black tracking-tighter text-foreground">
+                        {weather.temp}°
+                      </h2>
+                      <div className="mt-4">
+                        <Badge variant="secondary" className="px-4 py-2 rounded-full text-lg bg-blue-100 text-blue-700 border-none font-black">
+                          {weather.description}
+                        </Badge>
+                        <p className="text-muted-foreground mt-2 font-bold">Feels like {weather.feelsLike}°C</p>
+                      </div>
+                    </div>
 
-            <div className="grid gap-8 lg:grid-cols-2">
-              <Card className="rounded-[2.5rem] border-primary/5 shadow-sm h-full overflow-hidden">
-                <CardHeader className="p-8 pb-4">
-                  <CardTitle className="text-xl font-bold flex items-center gap-3">
-                    <Sprout className="h-6 w-6 text-emerald-500" />
-                    Farming Recommendations
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8 pt-0">
-                  <p className="text-muted-foreground leading-relaxed text-lg">
-                    {weather.recommendation}
-                  </p>
-                </CardContent>
-              </Card>
+                    <div className="grid grid-cols-2 gap-8">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500">
+                          <Droplets className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-muted-foreground">Humidity</p>
+                          <p className="text-xl font-black">{weather.humidity}%</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-500">
+                          <Wind className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-muted-foreground">Wind Speed</p>
+                          <p className="text-xl font-black">{weather.windSpeed} km/h</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              <Card className="rounded-[2.5rem] border-primary/5 shadow-sm h-full overflow-hidden">
-                <CardHeader className="p-8 pb-4">
-                  <CardTitle className="text-xl font-bold flex items-center gap-3">
-                    <Waves className="h-6 w-6 text-blue-500" />
-                    Irrigation Advice
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-8 pt-0">
-                  <p className="text-muted-foreground leading-relaxed text-lg">
-                    {parseInt(weather.humidity) > 60
-                      ? "High humidity reduces evaporation. Stop irrigation for now."
-                      : "Optimal humidity. Maintain standard drip irrigation schedule."}
-                    <br /><br />
-                    • <strong>Timing:</strong> Irrigate before 9 AM or after 5 PM.
-                    <br />
-                    • <strong>Method:</strong> Drip irrigation is highly recommended to save water.
-                    <br />
-                    • <strong>Note:</strong> Check for upcoming rain before starting a heavy irrigation cycle.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="space-y-8 pt-8">
-        <div className="flex items-center justify-between">
-          <h2 className="text-3xl font-black tracking-tight">Recommended Crops for Current Weather</h2>
-          <Link to="/calendar">
-            <Button variant="outline" className="rounded-xl font-bold">View Planting Calendar</Button>
-          </Link>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { name: "Rice (Kharif)", key: "rice", suitability: "High", reason: "Current humidity and temperature are ideal for growth." },
-            { name: "Cotton", key: "cotton", suitability: "Medium", reason: "Good for gentle winds, but watch for excessive humidity." },
-            { name: "Pulses", key: "pulses", suitability: "High", reason: "Moderate temperature supports nitrogen fixation." },
-          ].map((crop, i) => (
-            <Card key={i} className="rounded-3xl border-primary/5 shadow-sm hover:shadow-xl transition-all group overflow-hidden">
-              <div className="h-2 bg-emerald-500 w-full" />
-              <CardContent className="p-8 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-xl font-bold group-hover:text-emerald-600 transition-colors">{crop.name}</h4>
-                  <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-none px-3">{crop.suitability}</Badge>
+                  <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-10 md:p-16 text-white flex flex-col items-center justify-center text-center relative overflow-hidden">
+                    <motion.div
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                      className="relative z-10"
+                    >
+                      {(() => {
+                        const Icon = getWeatherIcon(weather.description);
+                        return <Icon className="h-48 w-48 text-white stroke-[1.5px] drop-shadow-2xl" />;
+                      })()}
+                    </motion.div>
+                    <div className="absolute top-0 right-0 p-8">
+                      <Badge className="bg-white/20 hover:bg-white/30 backdrop-blur-md border-none text-white px-4 py-2 rounded-xl text-sm font-bold">
+                        Updated {new Date(weather.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </Badge>
+                    </div>
+                    <div className="mt-8 z-10">
+                      <h3 className="text-3xl font-black mb-2">{weather.description.toUpperCase()}</h3>
+                      <p className="opacity-80 font-medium">Hyper-local Precision Data</p>
+                    </div>
+                    {/* Background decorations */}
+                    <div className="absolute -bottom-20 -left-20 h-64 w-64 bg-white/10 rounded-full blur-3xl" />
+                    <div className="absolute -top-20 -right-20 h-64 w-64 bg-blue-400/20 rounded-full blur-3xl" />
+                  </div>
                 </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  {crop.reason}
-                </p>
-                <Link to={`/growing-guide?crop=${crop.key}`}>
-                  <Button variant="ghost" className="p-0 text-emerald-600 hover:text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">
-                    {t("viewGrowingGuide")} <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
-                  </Button>
-                </Link>
               </CardContent>
             </Card>
-          ))}
-        </div>
-      </div>
 
-      {/* 7-Day Forecast */}
-      <div className="pt-12">
-        <h2 className="text-3xl font-black tracking-tight mb-8">7-Day Outlook</h2>
-        <div className="grid gap-4 md:grid-cols-7">
-          {weeklyForecast.map((day, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.05 }}
-              className="flex flex-col items-center p-6 rounded-[2rem] bg-muted/30 border border-primary/5 hover:bg-white hover:shadow-xl transition-all cursor-default"
-            >
-              <span className="text-sm font-bold text-muted-foreground mb-4 uppercase tracking-wider">{day.day}</span>
-              <day.icon className={cn("h-10 w-10 mb-4", day.condition === "Rainy" || day.condition === "Thunderstorm" ? "text-blue-500" : "text-amber-500")} />
-              <span className="text-xl font-black">{day.temp}</span>
-              <span className="text-xs font-medium text-muted-foreground mt-2 text-center">{day.condition}</span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+            {/* Advisory Section */}
+            <div className="space-y-6">
+              <h2 className="text-3xl font-black tracking-tight flex items-center gap-3">
+                <AlertTriangle className="h-8 w-8 text-amber-500" />
+                Smart Agricultural Advisory
+              </h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                {getAdvisory()?.map((adv, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <Card className={cn(
+                      "rounded-[2.5rem] border-none shadow-xl overflow-hidden",
+                      adv.type === "warning" ? "bg-amber-50" :
+                        adv.type === "danger" ? "bg-red-50" :
+                          adv.type === "info" ? "bg-blue-50" : "bg-emerald-50"
+                    )}>
+                      <CardContent className="p-8 flex gap-6">
+                        <div className={cn(
+                          "h-16 w-16 rounded-3xl flex items-center justify-center flex-shrink-0 shadow-lg",
+                          adv.type === "warning" ? "bg-amber-500 text-white" :
+                            adv.type === "danger" ? "bg-red-500 text-white" :
+                              adv.type === "info" ? "bg-blue-500 text-white" : "bg-emerald-500 text-white"
+                        )}>
+                          <adv.icon className="h-8 w-8" />
+                        </div>
+                        <div className="space-y-2">
+                          <h3 className={cn(
+                            "text-xl font-bold",
+                            adv.type === "warning" ? "text-amber-700" :
+                              adv.type === "danger" ? "text-red-700" :
+                                adv.type === "info" ? "text-blue-700" : "text-emerald-700"
+                          )}>{adv.title}</h3>
+                          <p className="text-muted-foreground leading-relaxed font-medium">
+                            {adv.text}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Forecast and Irrigation Grid */}
+            <div className="grid gap-8 lg:grid-cols-3">
+              <Card className="rounded-[3rem] border-none shadow-xl overflow-hidden bg-white lg:col-span-2">
+                <CardHeader className="p-10 pb-4">
+                  <CardTitle className="text-2xl font-black flex items-center gap-3">
+                    <Calendar className="h-6 w-6 text-blue-500" />
+                    5-Day Weather Forecast
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-10 pt-0">
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                    {forecast.map((day, idx) => {
+                      const Icon = getWeatherIcon(day.condition);
+                      return (
+                        <motion.div
+                          key={idx}
+                          whileHover={{ y: -5 }}
+                          className="flex flex-col items-center p-6 rounded-[2rem] bg-slate-50 border border-transparent hover:border-blue-100 hover:bg-white hover:shadow-xl transition-all"
+                        >
+                          <span className="text-sm font-black text-muted-foreground mb-4 uppercase">{day.day}</span>
+                          <Icon className={cn("h-12 w-12 mb-4", day.condition.toLowerCase().includes("rain") ? "text-blue-500" : "text-amber-500")} />
+                          <span className="text-2xl font-black">{day.temp}°</span>
+                          <span className="text-[10px] font-bold text-muted-foreground mt-2 text-center uppercase tracking-tighter">{day.condition}</span>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-[3rem] border-none shadow-xl overflow-hidden bg-gradient-to-br from-emerald-600 to-emerald-800 text-white">
+                <CardHeader className="p-10 pb-4">
+                  <CardTitle className="text-2xl font-black flex items-center gap-3">
+                    <Waves className="h-6 w-6 text-emerald-300" />
+                    Irrigation Planner
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="p-10 pt-4 space-y-6">
+                  <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10">
+                    <p className="text-sm font-bold text-emerald-200 uppercase mb-2">Recommended Strategy</p>
+                    <p className="text-lg font-bold">
+                      {weather.rainProbability > 40 ? "Pause Irrigation (Probable Rain)" : weather.temp > 30 ? "Increase Frequency (High Evaporation)" : "Standard Schedule"}
+                    </p>
+                  </div>
+
+                  <ul className="space-y-4 font-medium opacity-90">
+                    <li className="flex items-center gap-3">
+                      <div className="h-2 w-2 rounded-full bg-emerald-300" />
+                      Best Time: Early Morning (Before 8 AM)
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="h-2 w-2 rounded-full bg-emerald-300" />
+                      Drip Irrigation Priority: HIGH
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="h-2 w-2 rounded-full bg-emerald-300" />
+                      Water Needs: {weather.temp > 32 ? "High (+20%)" : "Normal"}
+                    </li>
+                  </ul>
+
+                  <Link to="/calendar" className="block pt-4">
+                    <Button className="w-full rounded-2xl bg-white text-emerald-700 hover:bg-emerald-50 h-14 font-black shadow-xl">
+                      Update Irrigation Schedule
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recommended Crops */}
+            <div className="space-y-8 pt-8">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-black tracking-tight">Weather-Adaptive Choice</h2>
+                <Link to="/calendar">
+                  <Button variant="outline" className="rounded-xl font-bold px-6 border-emerald-200">View Planting Calendar</Button>
+                </Link>
+              </div>
+
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {[
+                  { name: "Rice (Paddy)", key: "rice", suitability: weather.humidity > 60 ? "Excellent" : "Good", reason: "Current humidity and hydration levels are supportive." },
+                  { name: "Cotton", key: "cotton", suitability: weather.temp > 28 && weather.humidity < 70 ? "High" : "Medium", reason: "Good for moderate heat and light winds." },
+                  { name: "Vegetables", key: "tomato", suitability: "High", reason: "Moderate temperature supports diverse vegetable growth." },
+                ].map((crop, i) => (
+                  <Card key={i} className="rounded-[2.5rem] border-none shadow-lg hover:shadow-2xl transition-all group overflow-hidden bg-white">
+                    <div className="h-2 bg-emerald-500 w-full" />
+                    <CardContent className="p-8 space-y-4">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-xl font-bold group-hover:text-emerald-600 transition-colors uppercase tracking-tight">{crop.name}</h4>
+                        <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-none px-3 py-1 font-bold">{crop.suitability}</Badge>
+                      </div>
+                      <p className="text-muted-foreground leading-relaxed font-medium">
+                        {crop.reason}
+                      </p>
+                      <Link to={`/growing-guide?crop=${crop.key}`} className="block">
+                        <Button variant="ghost" className="p-0 text-emerald-600 hover:text-emerald-700 font-bold group-hover:translate-x-1 transition-transform">
+                          {t("viewGrowingGuide")} <ArrowLeft className="h-4 w-4 ml-2 rotate-180" />
+                        </Button>
+                      </Link>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+            <Navigation className="h-16 w-16 text-slate-300 mb-4 animate-bounce" />
+            <h3 className="text-2xl font-black text-slate-400">Location Access Required</h3>
+            <p className="text-muted-foreground mt-2 max-w-sm text-center">Please enable location access or search for your district manually to see personalized farming insights.</p>
+            <Button onClick={getLocationAndFetch} className="mt-8 rounded-full px-8 py-6 bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20">Enable Location</Button>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

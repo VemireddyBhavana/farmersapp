@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, MapPin, Clock, Leaf, ArrowLeft, Info, Sprout, CheckCircle2, AlertTriangle, Timer, X } from "lucide-react";
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, MapPin, Clock, Leaf, ArrowLeft, Info, Sprout, CheckCircle2, AlertTriangle, Timer, X, CloudRain, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { useLanguage } from "@/lib/LanguageContext";
 import { backend, Booking } from "@/lib/MockBackend";
 import { useToast } from "@/components/ui/use-toast";
+import { useWeather } from "@/hooks/useWeather";
 import {
   Dialog,
   DialogContent,
@@ -99,6 +100,7 @@ export default function FarmingCalendar() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { weather, forecast, loading: weatherLoading } = useWeather();
 
   const selectedCrop = cropsData[selectedCropKey];
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -147,6 +149,34 @@ export default function FarmingCalendar() {
             Smart agricultural scheduling & activity management.
           </p>
         </div>
+
+        {/* Weather Alert Integration */}
+        {weather && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={cn(
+              "flex-1 max-w-md p-4 rounded-3xl border-none shadow-lg flex items-center gap-4",
+              weather.rainProbability > 40 ? "bg-amber-100 text-amber-800" : "bg-blue-100 text-blue-800"
+            )}
+          >
+            <div className={cn(
+              "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0",
+              weather.rainProbability > 40 ? "bg-amber-500 text-white" : "bg-blue-500 text-white"
+            )}>
+              {weather.rainProbability > 40 ? <CloudRain className="h-6 w-6" /> : <Sun className="h-6 w-6" />}
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest">{weather.rainProbability > 40 ? "Rain Alert" : "Irrigation Tip"}</p>
+              <p className="text-sm font-bold leading-tight">
+                {weather.rainProbability > 40
+                  ? "Rain predicted. Consider delaying your scheduled irrigation."
+                  : "Optimal conditions. Recommended irrigation: 6 AM - 8 AM."}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
         <div className="flex bg-white p-2 rounded-2xl shadow-xl border border-emerald-100 items-center gap-4">
           <div className="bg-emerald-600 p-2 rounded-xl text-white">
             <Sprout className="h-6 w-6" />
