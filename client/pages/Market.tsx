@@ -17,8 +17,11 @@ import {
 
 import { useLanguage } from "@/lib/LanguageContext";
 
+import { useMandi } from "@/hooks/useMandi";
+
 export default function Market() {
   const { t, language } = useLanguage();
+  const { prices: mandiRates, loading: mandiLoading, refresh: refreshMandi } = useMandi();
 
   const cropPrices: Record<string, number> = useMemo(() => ({
     paddy: 4200,
@@ -29,18 +32,6 @@ export default function Market() {
     cotton: 8200
   }), []);
 
-  const mandiRates = useMemo(() => [
-    { crop: t("paddy"), rate: "₹4,200", change: "+150", trend: "up", mandi: t("ap") + " Mandi", state: "ap", date: "21 Feb 2026" },
-    { crop: t("wheat"), rate: "₹2,125", change: "-25", trend: "down", mandi: t("pb") + " Mandi", state: "pb", date: "21 Feb 2026" },
-    { crop: t("tomato"), rate: "₹1,800", change: "+400", trend: "up", mandi: t("dl") + " Mandi", state: "dl", date: "21 Feb 2026" },
-    { crop: t("onion"), rate: "₹2,400", change: "0", trend: "neutral", mandi: t("mh") + " Mandi", state: "mh", date: "21 Feb 2026" },
-    { crop: t("groundnut"), rate: "₹6,800", change: "+320", trend: "up", mandi: t("gj") + " Mandi", state: "gj", date: "21 Feb 2026" },
-    { crop: t("cotton"), rate: "₹8,200", change: "-100", trend: "down", mandi: t("ap") + " Mandi", state: "ap", date: "20 Feb 2026" },
-    { crop: t("maize"), rate: "₹2,090", change: "+45", trend: "up", mandi: t("br") + " Mandi", state: "br", date: "21 Feb 2026" },
-    { crop: t("soybean"), rate: "₹4,600", change: "+120", trend: "up", mandi: t("mp") + " Mandi", state: "mp", date: "21 Feb 2026" },
-    { crop: t("mustard"), rate: "₹5,400", change: "-50", trend: "down", mandi: t("rj") + " Mandi", state: "rj", date: "21 Feb 2026" },
-    { crop: t("sugarcane"), rate: "₹3,150", change: "0", trend: "neutral", mandi: t("up") + " Mandi", state: "up", date: "21 Feb 2026" },
-  ], [t]);
   const [selectedCrop, setSelectedCrop] = useState("paddy");
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState("quintals");
@@ -64,20 +55,19 @@ export default function Market() {
       const matchesState = selectedState === "all" || item.state === selectedState;
       return matchesSearch && matchesState;
     });
-  }, [searchQuery, selectedState]);
+  }, [mandiRates, searchQuery, selectedState]);
 
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast({
-        title: t("marketDataUpdated"),
-        description: t("pricesSynched"),
-      });
-    }, 1500);
+    await refreshMandi();
+    setIsRefreshing(false);
+    toast({
+      title: t("marketDataUpdated"),
+      description: t("pricesSynched"),
+    });
   };
 
   return (
@@ -264,9 +254,14 @@ export default function Market() {
                     <div className="space-y-1">
                       <h4 className="text-2xl font-black text-foreground group-hover:text-emerald-700 transition-colors">{item.crop}</h4>
                       <div className="flex items-center gap-2">
-                        <p className="text-xs text-muted-foreground font-bold flex items-center gap-1">
+                        <a
+                          href={`https://maps.google.com/?q=${encodeURIComponent(item.mandi)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs text-muted-foreground font-bold flex items-center gap-1 hover:text-emerald-600 transition-colors relative z-10"
+                        >
                           <MapPin className="h-3.5 w-3.5 text-emerald-500" /> {item.mandi}
-                        </p>
+                        </a>
                         <span className="text-muted-foreground/30">•</span>
                         <Badge variant="secondary" className="text-[9px] font-black uppercase py-0 px-2 bg-slate-100">{item.state.toUpperCase()}</Badge>
                         <span className="text-muted-foreground/30">•</span>
@@ -278,9 +273,18 @@ export default function Market() {
                         <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.1em] mb-1">{t("marketPriceQtl")}</p>
                         <p className="text-3xl font-black text-emerald-600">{item.rate}</p>
                       </div>
-                      <div className="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:translate-x-1 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:translate-x-1 group-hover:bg-emerald-600 group-hover:text-white transition-all"
+                        onClick={() => {
+                          setSelectedCrop(item.crop.toLowerCase().split(' ')[0]);
+                          calculateEstimate();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      >
                         <ArrowUpRight className="h-6 w-6" />
-                      </div>
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>

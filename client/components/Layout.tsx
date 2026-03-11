@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import AIChat from "./AIChat";
 import { useUser } from "@clerk/clerk-react";
+import { GovHeader } from "./GovHeader";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,6 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
+      {showUI && <GovHeader />}
       {showUI && <Navbar />}
       <main className="flex-1">
         <AnimatePresence mode="wait">
@@ -36,7 +37,6 @@ const Layout = ({ children }: LayoutProps) => {
         </AnimatePresence>
       </main>
       {showUI && <Footer />}
-      {showUI && <AIChat />}
     </div>
   );
 };

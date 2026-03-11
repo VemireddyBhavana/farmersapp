@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Tractor, User, ShoppingCart, Home, LayoutDashboard, Info, Sun, Moon, ShieldCheck, Bug, Calendar, MessageCircle, HeartHandshake, ScrollText, IndianRupee, ChevronDown, Languages, Leaf, CloudSun, TrendingUp, Shield, Bot, Landmark, Truck, Settings, Grid } from "lucide-react";
+import {
+  Menu, X, Sun, Moon, ChevronDown, Leaf, CloudSun, TrendingUp, Shield, Bot,
+  ScrollText, HeartHandshake, Sprout, Globe, Users, Zap, Target, Grid, Calendar,
+  Store
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +19,19 @@ import { useLanguage, Language } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/clerk-react";
 
+const allLanguages: { name: Language; native: string }[] = [
+  { name: "English",  native: "English"    },
+  { name: "Hindi",    native: "हिन्दी"      },
+  { name: "Telugu",   native: "తెలుగు"     },
+  { name: "Tamil",    native: "தமிழ்"      },
+  { name: "Marathi",  native: "मराठी"      },
+  { name: "Gujarati", native: "ગુજરાતી"    },
+  { name: "Kannada",  native: "ಕನ್ನಡ"      },
+  { name: "Malayalam",native: "മലയാളം"     },
+  { name: "Punjabi",  native: "ਪੰਜਾਬੀ"    },
+  { name: "Bangla",   native: "বাংলা"      },
+];
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -25,187 +42,287 @@ const Navbar = () => {
 
   useEffect(() => setMounted(true), []);
 
-  const languages: { name: Language; native: string }[] = [
-    { name: "English", native: "English" },
-    { name: "Hindi", native: "हिन्दी" },
-    { name: "Telugu", native: "తెలుగు" },
-    { name: "Tamil", native: "தமிழ்" },
-    { name: "Marathi", native: "मराठी" },
-    { name: "Gujarati", native: "ગુજરાતી" },
-    { name: "Kannada", native: "ಕನ್ನಡ" },
-    { name: "Malayalam", native: "മലയാളം" },
-    { name: "Punjabi", native: "ਪੰਜਾਬੀ" },
-    { name: "Bangla", native: "বাংলা" },
+  // Primary nav — only 5 most-used links shown as icon+text pills
+  const primaryLinks = [
+    { name: t("home"),    path: "/dashboard",  icon: Grid     },
+    { name: t("weather"), path: "/weather",    icon: CloudSun },
+    { name: t("market"),  path: "/market",     icon: TrendingUp },
+    { name: t("aiChat"),  path: "/chat",       icon: Bot      },
+    { name: t("schemes"), path: "/agri-schemes", icon: ScrollText },
   ];
 
-  const navLinks = [
-    { name: t("home"), path: "/dashboard", icon: Grid },
-    { name: t("weather"), path: "/weather", icon: CloudSun },
-    { name: t("market"), path: "/market", icon: TrendingUp },
-    { name: t("calendar"), path: "/calendar", icon: Calendar },
-    { name: t("security"), path: "/pests", icon: Shield },
-    { name: t("aiChat"), path: "/chat", icon: Bot },
-    { name: t("schemes"), path: "/agri-schemes", icon: ScrollText },
-    { name: t("supportPortal"), path: "/support", icon: HeartHandshake },
+  // "More" items inside a dropdown
+  const moreLinks = [
+    { name: "Seeds Store",      path: "/seeds",        icon: Sprout        },
+    { name: t("calendar"),      path: "/calendar",     icon: Calendar      },
+    { name: t("security"),      path: "/pests",        icon: Shield        },
+    { name: t("supportPortal"), path: "/support",      icon: HeartHandshake},
+    { name: "Agri Knowledge",   path: "/knowledge",    icon: ScrollText    },
+  ];
+
+  const ourSolutionsLinks = [
+    { name: "Farm Advisory",  path: "/chat",          icon: Bot,           desc: t("solutionAdvisoryDesc") },
+    { name: "Agri Inputs",    path: "/seeds",         icon: Sprout,        desc: t("solutionInputsDesc")   },
+    { name: "Omnichannel",    path: "/omnichannel",   icon: Store,         desc: t("solutionOmniDesc")     },
+    { name: "Market Linkage", path: "/market-linkage",icon: TrendingUp,    desc: t("solutionMarketDesc")   },
+  ];
+
+  const insideAgroStarLinks = [
+    { name: t("aboutUs"),       path: "/about",      icon: Target,        desc: "#HelpingFarmersWin since 2013" },
+    { name: "Leadership",       path: "/leadership", icon: Users,         desc: t("leadershipDesc")             },
+    { name: t("ourImpact"),     path: "/impact",     icon: Zap,           desc: t("impactDesc")                 },
+    { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake,desc: t("joinUsDesc")                 },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-lg shadow-emerald-500/20">
-              <Leaf className="h-6 w-6 text-white" />
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-xl shadow-sm">
+      <div className="container mx-auto px-3 lg:px-6">
+        <div className="flex h-14 items-center justify-between gap-2">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-md shadow-emerald-500/30">
+              <Leaf className="h-5 w-5 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight text-emerald-600">
+            <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block">
               TechSpark AI
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-2">
-            <div className="flex items-center bg-muted/30 rounded-2xl p-1 gap-1">
-              {navLinks.map((link) => (
+          <div className="hidden lg:flex items-center gap-1 flex-1 mx-4">
+            <div className="flex items-center bg-muted/40 rounded-2xl px-1.5 py-1 gap-0.5 flex-wrap">
+              {primaryLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   className={cn(
-                    "flex items-center justify-center p-2 rounded-xl transition-all hover:scale-110",
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide transition-all whitespace-nowrap",
                     location.pathname === link.path
-                      ? "bg-primary/10 text-primary shadow-sm"
-                      : "text-muted-foreground hover:bg-muted"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   )}
-                  title={link.name}
                 >
-                  <link.icon className="h-5 w-5" />
+                  <link.icon className="h-3.5 w-3.5 flex-shrink-0" />
+                  {link.name}
                 </Link>
               ))}
-            </div>
 
-            <div className="flex items-center space-x-3 ml-4">
-              {isLoaded && (
-                <>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-10 px-3 rounded-xl gap-2 text-muted-foreground hover:text-primary bg-muted/30">
-                        <Languages className="h-4 w-4" />
-                        <span className="text-sm font-medium">{language}</span>
-                        <ChevronDown className="h-3 w-3 opacity-50" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="rounded-2xl p-2 w-48 border-primary/10 shadow-xl glass">
-                      {languages.map((lang) => (
-                        <DropdownMenuItem
-                          key={lang.name}
-                          onClick={() => setLanguage(lang.name)}
-                          className="flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer hover:bg-primary/10 hover:text-primary transition-all font-medium"
-                        >
-                          <span>{lang.native}</span>
-                          {language === lang.name && <ShieldCheck className="h-4 w-4 text-primary" />}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <div className="h-6 w-px bg-border mx-2" />
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-xl bg-muted/30 h-10 w-10"
-                    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  >
-                    {mounted && (theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />)}
+              {/* More dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1">
+                    {t("more")} <ChevronDown className="h-3 w-3" />
                   </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-52 rounded-xl shadow-xl p-1.5 mt-1">
+                  {moreLinks.map((l) => (
+                    <DropdownMenuItem key={l.path} asChild>
+                      <Link to={l.path} className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg cursor-pointer">
+                        <l.icon className="h-4 w-4 text-emerald-600" /> {l.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                  {!isAuthenticated ? (
-                    <Link to="/login">
-                      <Button className="rounded-xl px-5 h-10 shadow-lg hover:shadow-primary/20 transition-all font-semibold bg-blue-600 hover:bg-blue-700 flex items-center gap-2">
-                        {t("login")}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <div className="flex items-center gap-4">
-                      <UserButton afterSignOutUrl="/" />
-                    </div>
-                  )}
-                </>
-              )}
+              {/* Our Solutions dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1">
+                    {t("ourSolutions")} <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
+                  {ourSolutionsLinks.map((item) => (
+                    <DropdownMenuItem key={item.path} asChild>
+                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-foreground">{item.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Inside AgroStar dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1">
+                    {t("insideAgroStar")} <ChevronDown className="h-3 w-3" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
+                  {insideAgroStarLinks.map((item) => (
+                    <DropdownMenuItem key={item.path} asChild>
+                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 group">
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center flex-shrink-0">
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-foreground">{item.name}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-4">
+          {/* Right Controls */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {/* Language Switcher */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-9 px-2.5 rounded-xl bg-muted/40 flex items-center gap-1 text-xs font-bold" title="Language">
+                  <Globe className="h-4 w-4 text-emerald-600" />
+                  <span className="hidden md:inline text-muted-foreground">
+                    {allLanguages.find(l => l.name === language)?.native || language}
+                  </span>
+                  <ChevronDown className="h-3 w-3 text-muted-foreground hidden md:block" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44 rounded-xl shadow-xl p-1.5 mt-1 bg-white dark:bg-slate-900">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2 py-1">{t("selectLanguage")}</p>
+                {allLanguages.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.name}
+                    onClick={() => setLanguage(lang.name)}
+                    className={cn(
+                      "cursor-pointer rounded-lg py-2 px-3 flex items-center gap-2 text-sm font-semibold",
+                      language === lang.name
+                        ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700"
+                        : "hover:bg-muted"
+                    )}
+                  >
+                    {lang.native}
+                    {language === lang.name && <span className="ml-auto text-emerald-500 text-xs">✓</span>}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Theme toggle */}
+            {mounted && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 rounded-xl bg-muted/40"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </Button>
+            )}
+
+            {/* Auth */}
+            {isLoaded && (
+              isAuthenticated
+                ? <UserButton afterSignOutUrl="/" />
+                : (
+                  <Link to="/login">
+                    <Button size="sm" className="rounded-xl px-4 h-9 font-bold bg-emerald-600 hover:bg-emerald-700 text-white hidden sm:flex">
+                      {t("login")}
+                    </Button>
+                  </Link>
+                )
+            )}
+
+            {/* Mobile Burger */}
             <Button
               variant="ghost"
               size="icon"
+              className="lg:hidden h-9 w-9 rounded-xl"
               onClick={() => setIsOpen(!isOpen)}
-              className="text-primary"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b bg-background"
+            className="lg:hidden border-t bg-background overflow-y-auto max-h-[85vh]"
           >
-            <div className="space-y-1 px-4 pb-6 pt-2">
-              {navLinks.map((link) => (
+            <div className="px-4 py-4 space-y-1">
+              <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Navigation</p>
+              {[...primaryLinks, ...moreLinks].map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "flex items-center space-x-3 rounded-lg px-3 py-3 text-base font-medium transition-colors",
+                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors",
                     location.pathname === link.path
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:bg-muted"
                   )}
                 >
-                  <link.icon className="h-5 w-5" />
-                  <span>{link.name}</span>
+                  <link.icon className="h-4 w-4 flex-shrink-0" />
+                  {link.name}
                 </Link>
               ))}
-              <div className="pt-4 border-t mt-4 flex flex-col space-y-4">
-                <div className="flex items-center justify-between px-3">
-                  <span className="text-sm font-medium text-muted-foreground">Language</span>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as Language)}
-                    className="bg-transparent text-sm font-medium text-primary outline-none"
-                  >
-                    {languages.map(lang => (
-                      <option key={lang.name} value={lang.name}>{lang.native}</option>
-                    ))}
-                  </select>
-                </div>
-                {!isAuthenticated ? (
-                  <>
-                    <Link to="/login" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full rounded-xl py-6" variant="outline">
-                        {t("login")}
-                      </Button>
-                    </Link>
-                    <Link to="/register" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full rounded-xl py-6">
-                        {t('getStarted')}
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  <Button className="w-full rounded-xl py-6" variant="destructive" onClick={() => { logout(); setIsOpen(false); }}>
-                    {t('logout')}
-                  </Button>
-                )}
+
+              <div className="pt-2 border-t">
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600">{t("ourSolutions")}</p>
+                {ourSolutionsLinks.map((link) => (
+                  <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted-foreground hover:bg-muted transition-colors">
+                    <link.icon className="h-4 w-4 flex-shrink-0 text-emerald-600" /> {link.name}
+                  </Link>
+                ))}
               </div>
+
+              <div className="pt-2 border-t">
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600">{t("insideAgroStar")}</p>
+                {insideAgroStarLinks.map((link) => (
+                  <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted-foreground hover:bg-muted transition-colors">
+                    <link.icon className="h-4 w-4 flex-shrink-0 text-blue-600" /> {link.name}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="pt-2 border-t">
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-purple-600">🌐 {t("selectLanguage")}</p>
+                <div className="grid grid-cols-2 gap-1 mt-1">
+                  {allLanguages.map((lang) => (
+                    <button
+                      key={lang.name}
+                      onClick={() => { setLanguage(lang.name); setIsOpen(false); }}
+                      className={cn(
+                        "flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors text-left",
+                        language === lang.name
+                          ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700"
+                          : "text-muted-foreground hover:bg-muted"
+                      )}
+                    >
+                      {lang.native}
+                      {language === lang.name && <span className="ml-auto text-emerald-500 text-xs">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {isLoaded && !isAuthenticated && (
+                <div className="pt-4 border-t">
+                  <Link to="/login" onClick={() => setIsOpen(false)}>
+                    <Button className="w-full rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white">{t("login")}</Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
