@@ -1,10 +1,12 @@
 import { SignIn, SignUp } from "@clerk/clerk-react";
 import { useLocation, Link } from "react-router-dom";
 import { ArrowLeft, Leaf } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Auth() {
   const location = useLocation();
   const isRegister = location.pathname === "/register";
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center p-4 bg-muted/10 relative overflow-hidden">
@@ -17,7 +19,7 @@ export default function Auth() {
         <div className="text-center space-y-4 mb-4">
           <Link to="/" className="inline-flex items-center space-x-2 text-primary hover:opacity-80 transition-all mb-4">
             <ArrowLeft className="h-4 w-4" />
-            <span className="text-sm font-medium">Back to Home</span>
+            <span className="text-sm font-medium">{t('backToHome')}</span>
           </Link>
           <div className="mx-auto h-16 w-16 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/20">
             <Leaf className="h-10 w-10 text-white" />

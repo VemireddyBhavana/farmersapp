@@ -34,8 +34,8 @@ export default function Weather() {
 
     if (weather.rainProbability > 60 || weather.description.includes("rain")) {
       advisories.push({
-        title: "Rain Expected",
-        text: "Rain expected soon. It's recommended to reduce or pause irrigation to prevent waterlogging.",
+        title: t('rainExpectedTitle'),
+        text: t('rainExpectedText'),
         type: "warning",
         icon: CloudRain
       });
@@ -43,8 +43,8 @@ export default function Weather() {
 
     if (weather.temp > 35) {
       advisories.push({
-        title: "High Heat Alert",
-        text: "Temperature is above 35°C. High heat detected. Increase irrigation frequency to prevent crop heat stress.",
+        title: t('heatAlertTitle'),
+        text: t('heatAlertText'),
         type: "danger",
         icon: Thermometer
       });
@@ -52,8 +52,8 @@ export default function Weather() {
 
     if (weather.humidity > 70) {
       advisories.push({
-        title: "Fungal Risk",
-        text: "High humidity levels detected. Monitor crops closely for fungal disease risk and ensure proper aeration.",
+        title: t('fungalRiskTitle'),
+        text: t('fungalRiskText'),
         type: "info",
         icon: Droplets
       });
@@ -61,8 +61,8 @@ export default function Weather() {
 
     if (weather.windSpeed > 20) {
       advisories.push({
-        title: "High Wind Alert",
-        text: "Wind speed is high. Avoid pesticide spraying as it might drift and reduce effectiveness.",
+        title: t('windAlertTitle'),
+        text: t('windAlertText'),
         type: "warning",
         icon: Wind
       });
@@ -70,8 +70,8 @@ export default function Weather() {
 
     if (advisories.length === 0) {
       advisories.push({
-        title: "Optimal Conditions",
-        text: "Weather conditions are moderate. Ideal for nutrient application and standard irrigation cycles.",
+        title: t('optimalConditionsTitle'),
+        text: t('optimalConditionsText'),
         type: "success",
         icon: Sprout
       });
@@ -109,13 +109,13 @@ export default function Weather() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 font-bold text-sm mb-4"
         >
           <Sprout className="h-4 w-4" />
-          Smart Agriculture Intelligence
+          {t('smartAgriIntelligence')}
         </motion.div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
           {t("weatherAnalysis")}
         </h1>
         <p className="text-muted-foreground text-lg">
-          Get real-time weather data and AI-powered farming recommendations based on your exact location.
+          {t('weatherDashboardSubtitle')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
@@ -125,7 +125,7 @@ export default function Weather() {
             className="rounded-full bg-blue-600 hover:bg-blue-700 px-8 py-6 text-lg shadow-xl shadow-blue-500/20 flex items-center gap-2 w-full sm:w-auto"
           >
             {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Navigation className="h-5 w-5 fill-current" />}
-            Detect My Location
+            {t('detectMyLocation')}
           </Button>
 
           <Button
@@ -133,7 +133,7 @@ export default function Weather() {
             onClick={() => setShowManualInput(!showManualInput)}
             className="rounded-full px-8 py-6 text-lg border-blue-200 hover:bg-blue-50 w-full sm:w-auto"
           >
-            {showManualInput ? "Cancel" : "Enter Location Manually"}
+            {showManualInput ? t('cancel') : t('enterLocationManually')}
           </Button>
 
           <Button
@@ -155,14 +155,14 @@ export default function Weather() {
               onSubmit={handleManualSearch}
               className="mt-6 flex gap-2 max-w-md mx-auto"
             >
-              <Input
-                placeholder="Enter city or district name..."
+            <Input
+                placeholder={t('searchPlaceholder')}
                 value={manualLocation}
                 onChange={(e) => setManualLocation(e.target.value)}
                 className="rounded-full py-6 px-6"
                 autoFocus
               />
-              <Button type="submit" className="rounded-full py-6 px-8 bg-emerald-600 hover:bg-emerald-700">Search</Button>
+              <Button type="submit" className="rounded-full py-6 px-8 bg-emerald-600 hover:bg-emerald-700">{t('search')}</Button>
             </motion.form>
           )}
         </AnimatePresence>
@@ -181,8 +181,8 @@ export default function Weather() {
               <Loader2 className="h-16 w-16 text-blue-500 animate-spin mb-4" />
               <Cloud className="h-8 w-8 text-blue-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
             </div>
-            <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">Fetching Hyper-Local Data...</p>
-            <p className="text-sm text-muted-foreground mt-2">Connecting to ISMIGS Weather Stations</p>
+            <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">{t('fetchingData')}</p>
+            <p className="text-sm text-muted-foreground mt-2">{t('connectingToStations')}</p>
           </motion.div>
         ) : weather ? (
           <motion.div
@@ -209,7 +209,7 @@ export default function Weather() {
                         <Badge variant="secondary" className="px-4 py-2 rounded-full text-lg bg-blue-100 text-blue-700 border-none font-black">
                           {weather.description}
                         </Badge>
-                        <p className="text-muted-foreground mt-2 font-bold">Feels like {weather.feelsLike}°C</p>
+                        <p className="text-muted-foreground mt-2 font-bold">{t('feelsLike')} {weather.feelsLike}°C</p>
                       </div>
                     </div>
 
@@ -219,7 +219,7 @@ export default function Weather() {
                           <Droplets className="h-6 w-6" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-muted-foreground">Humidity</p>
+                          <p className="text-sm font-bold text-muted-foreground">{t('humidity')}</p>
                           <p className="text-xl font-black">{weather.humidity}%</p>
                         </div>
                       </div>
@@ -228,7 +228,7 @@ export default function Weather() {
                           <Wind className="h-6 w-6" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-muted-foreground">Wind Speed</p>
+                          <p className="text-sm font-bold text-muted-foreground">{t('windSpeed')}</p>
                           <p className="text-xl font-black">{weather.windSpeed} km/h</p>
                         </div>
                       </div>
@@ -253,7 +253,7 @@ export default function Weather() {
                     </div>
                     <div className="mt-8 z-10">
                       <h3 className="text-3xl font-black mb-2">{weather.description.toUpperCase()}</h3>
-                      <p className="opacity-80 font-medium">Hyper-local Precision Data</p>
+                      <p className="opacity-80 font-medium">{t('hyperLocalPrecisionData')}</p>
                     </div>
                     {/* Background decorations */}
                     <div className="absolute -bottom-20 -left-20 h-64 w-64 bg-white/10 rounded-full blur-3xl" />
@@ -267,7 +267,7 @@ export default function Weather() {
             <div className="space-y-6">
               <h2 className="text-3xl font-black tracking-tight flex items-center gap-3">
                 <AlertTriangle className="h-8 w-8 text-amber-500" />
-                Smart Agricultural Advisory
+                {t('smartAdvisoryTitle')}
               </h2>
               <div className="grid gap-6 md:grid-cols-2">
                 {getAdvisory()?.map((adv, idx) => (
@@ -316,7 +316,7 @@ export default function Weather() {
                 <CardHeader className="p-10 pb-4">
                   <CardTitle className="text-2xl font-black flex items-center gap-3">
                     <Calendar className="h-6 w-6 text-blue-500" />
-                    5-Day Weather Forecast
+                    {t('weatherForecastTitle')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-10 pt-0">
@@ -344,35 +344,35 @@ export default function Weather() {
                 <CardHeader className="p-10 pb-4">
                   <CardTitle className="text-2xl font-black flex items-center gap-3">
                     <Waves className="h-6 w-6 text-emerald-300" />
-                    Irrigation Planner
+                    {t('irrigationPlanner')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-10 pt-4 space-y-6">
                   <div className="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10">
-                    <p className="text-sm font-bold text-emerald-200 uppercase mb-2">Recommended Strategy</p>
+                    <p className="text-sm font-bold text-emerald-200 uppercase mb-2">{t('recommendedStrategy')}</p>
                     <p className="text-lg font-bold">
-                      {weather.rainProbability > 40 ? "Pause Irrigation (Probable Rain)" : weather.temp > 30 ? "Increase Frequency (High Evaporation)" : "Standard Schedule"}
+                      {weather.rainProbability > 40 ? t('pauseIrrigation') : weather.temp > 30 ? t('increaseFrequency') : t('standardSchedule')}
                     </p>
                   </div>
 
                   <ul className="space-y-4 font-medium opacity-90">
                     <li className="flex items-center gap-3">
                       <div className="h-2 w-2 rounded-full bg-emerald-300" />
-                      Best Time: Early Morning (Before 8 AM)
+                      {t('irrigationBestTime')}
                     </li>
                     <li className="flex items-center gap-3">
                       <div className="h-2 w-2 rounded-full bg-emerald-300" />
-                      Drip Irrigation Priority: HIGH
+                      {t('dripIrrigationPriority')}
                     </li>
                     <li className="flex items-center gap-3">
                       <div className="h-2 w-2 rounded-full bg-emerald-300" />
-                      Water Needs: {weather.temp > 32 ? "High (+20%)" : "Normal"}
+                      {weather.temp > 32 ? t('waterNeedsHigh') : t('waterNeedsNormal')}
                     </li>
                   </ul>
 
                   <Link to="/calendar" className="block pt-4">
                     <Button className="w-full rounded-2xl bg-white text-emerald-700 hover:bg-emerald-50 h-14 font-black shadow-xl">
-                      Update Irrigation Schedule
+                      {t('updateIrrigationSchedule')}
                     </Button>
                   </Link>
                 </CardContent>
@@ -382,17 +382,17 @@ export default function Weather() {
             {/* Recommended Crops */}
             <div className="space-y-8 pt-8">
               <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-black tracking-tight">Weather-Adaptive Choice</h2>
+                <h2 className="text-3xl font-black tracking-tight">{t('weatherAdaptiveChoice')}</h2>
                 <Link to="/calendar">
-                  <Button variant="outline" className="rounded-xl font-bold px-6 border-emerald-200">View Planting Calendar</Button>
+                  <Button variant="outline" className="rounded-xl font-bold px-6 border-emerald-200">{t('viewPlantingCalendar')}</Button>
                 </Link>
               </div>
 
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {[
-                  { name: "Rice (Paddy)", key: "rice", suitability: weather.humidity > 60 ? "Excellent" : "Good", reason: "Current humidity and hydration levels are supportive." },
-                  { name: "Cotton", key: "cotton", suitability: weather.temp > 28 && weather.humidity < 70 ? "High" : "Medium", reason: "Good for moderate heat and light winds." },
-                  { name: "Vegetables", key: "tomato", suitability: "High", reason: "Moderate temperature supports diverse vegetable growth." },
+                  { name: t("ricePaddy"), key: "rice", suitability: weather.humidity > 60 ? t("excellent") : t("good"), reason: t("riceSuitabilityReason") },
+                  { name: t("cotton"), key: "cotton", suitability: weather.temp > 28 && weather.humidity < 70 ? t("high") : t("medium"), reason: t("cottonSuitabilityReason") },
+                  { name: t("vegetables"), key: "tomato", suitability: t("high"), reason: t("vegetablesSuitabilityReason") },
                 ].map((crop, i) => (
                   <Card key={i} className="rounded-[2.5rem] border-none shadow-lg hover:shadow-2xl transition-all group overflow-hidden bg-white">
                     <div className="h-2 bg-emerald-500 w-full" />
@@ -418,9 +418,9 @@ export default function Weather() {
         ) : (
           <div className="flex flex-col items-center justify-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
             <Navigation className="h-16 w-16 text-slate-300 mb-4 animate-bounce" />
-            <h3 className="text-2xl font-black text-slate-400">Location Access Required</h3>
-            <p className="text-muted-foreground mt-2 max-w-sm text-center">Please enable location access or search for your district manually to see personalized farming insights.</p>
-            <Button onClick={getLocationAndFetch} className="mt-8 rounded-full px-8 py-6 bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20">Enable Location</Button>
+            <h3 className="text-2xl font-black text-slate-400">{t('locationAccessRequired')}</h3>
+            <p className="text-muted-foreground mt-2 max-w-sm text-center">{t('locationAccessDesc')}</p>
+            <Button onClick={getLocationAndFetch} className="mt-8 rounded-full px-8 py-6 bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20">{t('enableLocation')}</Button>
           </div>
         )}
       </AnimatePresence>

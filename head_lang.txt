@@ -1,0 +1,5 @@
+﻿import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+
+export type Language = "English" | "Hindi" | "Telugu" | "Tamil" | "Marathi" | "Gujarati" | "Kannada" | "Malayalam" | "Punjabi" | "Bangla";
+
+interface LanguageContextType {

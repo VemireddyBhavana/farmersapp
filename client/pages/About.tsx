@@ -21,20 +21,48 @@ const coreValues = [
   {
     icon: Users,
     title: "Humility",
-    desc: "We listen, learn and grow — from farmers, from data, and from each other. Ego has no place at AgroStar.",
+    desc: "We listen, learn and grow — from farmers, from data, and from each other. Ego has no place at TeachSpark AI.",
     color: "bg-amber-500",
     bg: "from-amber-50 dark:from-amber-950/20",
   },
 ];
 
 const timeline = [
-  { year: "2013", event: "AgroStar founded in Pune by Shardul & Sitanshu Sheth with a vision to bring agri-tech to rural India." },
-  { year: "2015", event: "Launched the AgroStar Farmer App with crop advisory in Hindi and Gujarati — first 50,000 users." },
-  { year: "2017", event: "Reached 1 million farmers. Expanded advisory to 6 local languages. Launched the Saathi Store network." },
-  { year: "2019", event: "Crossed 2.5M farmer user milestone. Introduced AI-powered pest disease detection feature." },
-  { year: "2021", event: "Launched Kimaye — AgroStar's output brand — connecting farmers to premium global export markets." },
-  { year: "2022", event: "5M+ farmers served, 250K+ villages reached. Advisory now available in 11 local languages." },
-  { year: "2024", event: "Raised $30M to accelerate omnichannel expansion and AI investment. 10,000+ Saathi Stores nationwide." },
+  { 
+    year: "2013", 
+    event: "TeachSpark AI founded in Pune by Arjun Sharma & Sanjay Patel with a vision to bring agri-tech to rural India.",
+    image: "/history_2013.png"
+  },
+  { 
+    year: "2015", 
+    event: "Launched the TeachSpark AI Farmer App with crop advisory in Hindi and Gujarati — first 50,000 users.",
+    image: "/impact_digital.png"
+  },
+  { 
+    year: "2017", 
+    event: "Reached 1 million farmers. Expanded advisory to 6 local languages. Launched the Saathi Store network.",
+    image: "/saathi_store.png"
+  },
+  { 
+    year: "2019", 
+    event: "Crossed 2.5M farmer user milestone. Introduced AI-powered pest disease detection feature.",
+    image: "/soil_testing.png"
+  },
+  { 
+    year: "2021", 
+    event: "Launched Kimaye — TeachSpark's output brand — connecting farmers to premium global export markets.",
+    image: "/impact_processing.png"
+  },
+  { 
+    year: "2022", 
+    event: "5M+ farmers served, 250K+ villages reached. Advisory now available in 11 local languages.",
+    image: "/impact_community.png"
+  },
+  { 
+    year: "2024", 
+    event: "Raised $30M to accelerate omnichannel expansion and AI investment. 10,000+ Saathi Stores nationwide.",
+    image: "/vision_banner.png"
+  },
 ];
 
 export default function About() {
@@ -43,7 +71,11 @@ export default function About() {
   return (
     <div className="overflow-x-hidden">
       {/* Mission Banner */}
-      <section className="relative py-6 bg-emerald-600 overflow-hidden">
+      <motion.section 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative py-6 bg-emerald-600 overflow-hidden"
+      >
         <div className="absolute inset-0 opacity-10">
           <Leaf className="absolute top-0 right-10 h-24 w-24 rotate-45" />
           <Leaf className="absolute -bottom-4 left-20 h-16 w-16 -rotate-12" />
@@ -58,7 +90,7 @@ export default function About() {
           </motion.p>
           <p className="text-white/70 text-sm mt-1">Our mission, our identity, our promise — since 2013</p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Hero */}
       <div className="container mx-auto px-4 py-16 space-y-20">
@@ -67,7 +99,7 @@ export default function About() {
             {t('aboutTitle')}
           </h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            AgroStar was built on a belief that Indian farmers deserve better — better advice, better inputs, better prices, and better access to global markets. Founded in 2013, we've spent over a decade proving it's possible.
+            TeachSpark AI was built on a belief that Indian farmers deserve better — better advice, better inputs, better prices, and better access to global markets. Founded in 2013, we've spent over a decade proving it's possible.
           </p>
         </div>
 
@@ -101,48 +133,6 @@ export default function About() {
           </div>
         </div>
 
-        {/* What We Offer */}
-        <div className="glass p-12 rounded-[3rem] border-primary/5 space-y-8">
-          <div className="flex flex-col md:flex-row gap-12 items-center">
-            <div className="flex-1 space-y-6">
-              <h2 className="text-3xl font-black">{t('whyTechSpark')}</h2>
-              <div className="space-y-4">
-                {[
-                  t('aiCropDisease'),
-                  t('realtimeMarketPricing'),
-                  t('smartFarmingCalendar'),
-                  t('directGovAccess'),
-                  t('communityRental'),
-                  "Export-grade produce via Kimaye brand to 25+ countries",
-                  "Advisory in 11 regional languages for every Indian farmer",
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="h-6 w-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                    </div>
-                    <span className="font-medium">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex-1 relative">
-              <div className="aspect-square rounded-[2rem] overflow-hidden rotate-3 shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800"
-                  alt="Farming Tech"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="absolute -bottom-6 -left-6 aspect-square w-48 rounded-[2rem] overflow-hidden -rotate-6 shadow-2xl border-4 border-white dark:border-slate-900">
-                <img
-                  src="https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&q=80&w=400"
-                  alt="Tractor"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Timeline */}
         <div className="space-y-8">
@@ -166,8 +156,15 @@ export default function About() {
                   <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-emerald-500/20">
                     {item.year}
                   </div>
-                  <div className="flex-1 bg-white dark:bg-white/5 rounded-2xl p-5 border border-primary/5 shadow-sm">
-                    <p className="text-foreground leading-relaxed font-medium">{item.event}</p>
+                  <div className="flex-1 bg-white dark:bg-white/5 rounded-2xl p-5 border border-primary/5 shadow-sm flex flex-col md:flex-row gap-4 items-center">
+                    <div className="flex-1">
+                      <p className="text-foreground leading-relaxed font-medium">{item.event}</p>
+                    </div>
+                    {item.image && (
+                      <div className="w-full md:w-32 h-24 rounded-xl overflow-hidden shadow-md">
+                        <img src={item.image} alt={item.year} className="w-full h-full object-cover" />
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))}

@@ -301,7 +301,7 @@ export default function AgriSchemes() {
                       <p className="text-xs font-bold">{app.location}</p>
                     </div>
                     <div className="space-y-1 col-span-2">
-                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">Verification Status</p>
+                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("verificationStatus")}</p>
                       <p className="text-xs font-bold text-emerald-600">{app.verificationStep}</p>
                     </div>
                   </div>

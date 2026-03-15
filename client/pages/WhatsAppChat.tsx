@@ -5,7 +5,7 @@ import { Send, ArrowLeft, MoreVertical, Phone, Video, Search, Paperclip, Smile, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language } from "@/lib/LanguageContext";
+import { useLanguage, Language, translations } from "@/lib/LanguageContext";
 
 interface Message {
     id: string;
@@ -31,7 +31,8 @@ const languages: { name: Language; label: string }[] = [
 const WhatsAppChat = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { t, language, setLanguage } = useLanguage();
+    const { language: globalLanguage } = useLanguage();
+    const [localLanguage, setLocalLanguage] = useState<Language>(globalLanguage);
     const phone = searchParams.get("phone") || "User";
     const initialMessageParam = searchParams.get("initialMessage");
 
@@ -40,28 +41,32 @@ const WhatsAppChat = () => {
     const [isTyping, setIsTyping] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    const tl = (key: string) => {
+        return translations[localLanguage]?.[key] || translations["English"]?.[key] || key;
+    };
+
     useEffect(() => {
         // Initial greeting if coming from SeedsBuyer
         if (initialMessageParam === "true" && messages.length === 0) {
             const initialGreeting: Message = {
                 id: Date.now().toString(),
                 role: "bot",
-                content: `👋 ${t("botWelcome")}\n\nAsk me about:\n- 🚜 ${t("rentTractor")}\n- 🌾 ${t("cropAdvice")}\n- 📈 ${t("marketRatesLabel")}\n- 🐛 ${t("pestControl")}`,
+                content: `👋 ${tl("botWelcome")}\n\nAsk me about:\n- 🚜 ${tl("rentTractor")}\n- 🌾 ${tl("cropAdvice")}\n- 📈 ${tl("marketRatesLabel")}\n- 🐛 ${tl("pestControl")}`,
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             };
             setMessages([initialGreeting]);
         }
-    }, [initialMessageParam, phone, messages.length, t]);
+    }, [initialMessageParam, phone, messages.length, localLanguage]);
 
     // Update greeting retroactively if language changes and it was the only message
     useEffect(() => {
         if (messages.length === 1 && messages[0].role === "bot") {
             setMessages(prev => [{
                 ...prev[0],
-                content: `👋 ${t("botWelcome")}\n\nAsk me about:\n- 🚜 ${t("rentTractor")}\n- 🌾 ${t("cropAdvice")}\n- 📈 ${t("marketRatesLabel")}\n- 🐛 ${t("pestControl")}`,
+                content: `👋 ${tl("botWelcome")}\n\nAsk me about:\n- 🚜 ${tl("rentTractor")}\n- 🌾 ${tl("cropAdvice")}\n- 📈 ${tl("marketRatesLabel")}\n- 🐛 ${tl("pestControl")}`,
             }]);
         }
-    }, [language, t]);
+    }, [localLanguage]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -73,71 +78,26 @@ const WhatsAppChat = () => {
         const lowerText = userText.toLowerCase();
 
         if (lowerText.includes("rent") || lowerText.includes("tractor") || lowerText.includes("అద్దె") || lowerText.includes("किराया")) {
-            return `🚜 Equipment Rental Process:\n\n` +
-                `Renting equipment via TechSpark AI is designed to be simple and transparent.\n\n` +
-                `1. Find Equipment: Browse our marketplace to find tractors, harvesters, or implements near your location.\n` +
-                `2. Check Rates & Availability: You can view hourly or daily rates set directly by the owners. Availability calendars are updated in real-time.\n` +
-                `3. Book & Pay: Select your dates and confirm your booking. Payments are handled securely through our platform.\n` +
-                `4. Delivery/Pickup: Coordinate with the owner for delivery or pickup instructions.`;
+            return tl("botRentReply");
         }
         if (lowerText.includes("scheme") || lowerText.includes("ysr") || lowerText.includes("kisan") || lowerText.includes("పథకాలు") || lowerText.includes("योजना")) {
-            return `📋 Government Schemes Overview:\n\n` +
-                `As a farmer, you might be eligible for several financial assistance programs:\n\n` +
-                `• PM-KISAN: Provides ₹6000 per year in three equal installments to eligible farmer families. Ensure your Aadhaar is linked to your bank account.\n` +
-                `• PMFBY (Crop Insurance): Protects against crop loss due to natural calamities. Premiums are very low (1.5% - 2%).\n` +
-                `• State Specific (e.g., YSR Rythu Bharosa): Additional financial support provided state-by-state.\n\n` +
-                `You can track your application status directly in our 'Agri Schemes' portal.`;
+            return tl("botSchemeReply");
         }
-        if (lowerText.includes("tomato") || lowerText.includes("టమోటా") || lowerText.includes("टमाटर")) {
-            return `🍅 Detailed Tomato Growing Guide:\n\n` +
-                `• Soil & Climate: Tomatoes thrive in well-drained loamy soil with a pH of 6-7. They require plenty of sunlight and warm temperatures (20-30°C).\n` +
-                `• Sowing: Start seeds in a nursery bed. Transplant healthy 25-30 day-old seedlings into the main field.\n` +
-                `• Spacing & Support: Plant at a spacing of 60x45cm. Staking is recommended for indeterminate varieties to prevent fruit rot.\n` +
-                `• Common Issues: Watch out for 'Late Blight' (brown spots on leaves) and 'Fruit Borer' insects. Use neem oil preventatively or consult our disease scanner for specific treatment if spots appear.`;
-        }
-        if (lowerText.includes("paddy") || lowerText.includes("rice") || lowerText.includes("వరి") || lowerText.includes("धान") || lowerText.includes("చావడి")) {
-            return `🌾 Detailed Paddy (Rice) Growing Guide:\n\n` +
-                `• Soil Preparation: Paddy requires clayey soils that retain water well. The field must be ploughed and puddled with 5cm of standing water.\n` +
-                `• Seed Varieties: We recommend high-yield seeds like BPT-5204 or IR-64 depending on your local climate.\n` +
-                `• Water Management: Maintain a 5cm water level during the vegetative phase. Critical water requirement stages are tillering and flowering. Drain water 15 days before harvest.\n` +
-                `• Fertilizers: Apply Nitrogen in three split doses to ensure maximum absorption and yield.`;
-        }
-        if (lowerText.includes("cotton") || lowerText.includes("పత్తి") || lowerText.includes("कपास")) {
-            return `🌿 Detailed Cotton Growing Guide:\n\n` +
-                `• Ideal Conditions: Cotton grows best in deep black (Regur) soils that are well-draining but moisture retentive.\n` +
-                `• Seed Selection: Sowing Bt Cotton seeds is highly recommended for resistance against the destructive Pink Bollworm.\n` +
-                `• Sowing Time: Sow during the onset of the monsoon (May-June). Maintain a spacing of 90x60cm for optimal growth.\n` +
-                `• Care: Use pheromone traps to monitor pest activity. Cotton requires supplemental irrigation during the critical flowering and boll formation stages if rain is insufficient.`;
+        if (lowerText.includes("tomato") || lowerText.includes("టమోటా") || lowerText.includes("టమాటర్") || lowerText.includes("paddy") || lowerText.includes("rice") || lowerText.includes("వరి") || lowerText.includes("धान") || lowerText.includes("cotton") || lowerText.includes("పత్తి") || lowerText.includes("कपास")) {
+            return tl("botCropReply");
         }
         if (lowerText.includes("pest") || lowerText.includes("disease") || lowerText.includes("కీటకాలు") || lowerText.includes("कीट")) {
-            return `🦠 Pest and Disease Management:\n\n` +
-                `Identifying the exact disease is critical for effective treatment. Here is our recommended approach:\n\n` +
-                `1. AI Detection: Take a clear photo of the affected leaf using our built-in Disease Scanner. It will instantly diagnose the issue (e.g., Powdery Mildew, Leaf Blight).\n` +
-                `2. Organic First: We always recommend trying organic solutions first, such as Neem Oil sprays or Trichoderma, to protect soil health.\n` +
-                `3. Chemical Control: If the infestation is severe, the scanner will recommend specific safe chemical pesticides and exact dosages.`;
+            return tl("botPestReply");
         }
         if (lowerText.includes("price") || lowerText.includes("mandi") || lowerText.includes("rate") || lowerText.includes("ధరలు") || lowerText.includes("मार्केट")) {
-            return `📈 Understanding Market Prices:\n\n` +
-                `Selling at the right time and place significantly impacts your profit.\n\n` +
-                `• Live Mandi Rates: Our platform provides daily updated prices for crops like Paddy, Wheat, and Cotton across major regional Mandis.\n` +
-                `• Price EstimatorTool: We use AI to predict if prices will rise or fall in the coming weeks based on weather and harvest data.\n` +
-                `• Advice: Don't sell in haste. Check the app to see if neighboring Mandis are offering higher rates for your specific crop grade.`;
+            return tl("botMarketReply");
         }
         if (lowerText.includes("advice") || lowerText.includes("ಸಲಹೆ") || lowerText.includes("సలహా") || lowerText.includes("सलाह")) {
-            return `💡 Expert Agricultural Advice:\n\n` +
-                `I am your 24/7 AI agricultural assistant. I can provide detailed, step-by-step guidance on a wide variety of topics. \n\n` +
-                `Please ask me a specific question, for example:\n` +
-                `• "How do I control aphids on my tomato crop?"\n` +
-                `• "What is the best time to sow sweet corn?"\n` +
-                `• "Explain the PM-KISAN eligibility criteria."`;
+            return tl("botGuidanceReply");
         }
 
         // Default fallback
-        return `I am AgriAssistant, an advanced AI trained entirely on agricultural data. \n\n` +
-            `I am here to provide you with deeply detailed, actionable explanations. Please ask me specific questions about your farm, for example:\n\n` +
-            `- "Provide a detailed growing guide for sweet corn."\n` +
-            `- "Explain how the tractor rental system works in detail."\n` +
-            `- "What are the exact symptoms of late blight?"`;
+        return tl("botFallback");
     };
 
     const handleSend = () => {
@@ -183,7 +143,7 @@ const WhatsAppChat = () => {
                                 <div className="absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-[#128C7E]"></div>
                             </div>
                             <div className="flex flex-col">
-                                <span className="font-semibold text-lg leading-tight">{t("agriAssistant")}</span>
+                                <span className="font-semibold text-lg leading-tight">{tl("agriAssistant")}</span>
                                 <span className="text-xs text-emerald-100">{isTyping ? "typing..." : "online"}</span>
                             </div>
                         </div>
@@ -204,14 +164,14 @@ const WhatsAppChat = () => {
 
                 {/* Language Selection Bar (Integrated into header) */}
                 <div className="flex justify-start bg-[#00a884] px-4 py-2 text-[11px] sm:text-xs font-medium overflow-x-auto no-scrollbar gap-2 shadow-inner border-t border-white/10">
-                    <span className="flex items-center text-white/80 shrink-0 mr-1">{t("languageLabel")}:</span>
+                    <span className="flex items-center text-white/80 shrink-0 mr-1">{tl("languageLabel")}:</span>
                     {languages.map((lang) => (
                         <span
                             key={lang.name}
-                            onClick={() => setLanguage(lang.name)}
+                            onClick={() => setLocalLanguage(lang.name)}
                             className={cn(
                                 "cursor-pointer px-2.5 py-1 rounded-full transition-colors whitespace-nowrap shrink-0 border shadow-sm",
-                                language === lang.name ? "bg-white text-[#00a884] border-white font-bold" : "bg-[#128C7E] border-transparent hover:bg-[#128C7E]/80 text-white"
+                                localLanguage === lang.name ? "bg-white text-[#00a884] border-white font-bold" : "bg-[#128C7E] border-transparent hover:bg-[#128C7E]/80 text-white"
                             )}
                         >
                             {lang.label} ({lang.name})

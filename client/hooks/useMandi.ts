@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 
 export interface MandiPrice {
+    id: string;
     crop: string;
     rate: string;
     change: string;
     trend: 'up' | 'down' | 'neutral';
     mandi: string;
+    district: string;
     state: string;
     date: string;
 }
@@ -37,12 +39,15 @@ export const useMandi = () => {
             // For this project, we'll simulate a dynamic response based on current date
 
             const mockPrices: MandiPrice[] = [
-                { crop: "Paddy (Basmati)", rate: "₹4,250", change: "+50", trend: "up", mandi: "Karnal Mandi", state: "pb", date: new Date().toLocaleDateString() },
-                { crop: "Wheat", rate: "₹2,200", change: "+75", trend: "up", mandi: "Khanna Mandi", state: "pb", date: new Date().toLocaleDateString() },
-                { crop: "Tomato", rate: "₹1,950", change: "+150", trend: "up", mandi: "Azadpur Mandi", state: "dl", date: new Date().toLocaleDateString() },
-                { crop: "Onion", rate: "₹2,350", change: "-50", trend: "down", mandi: "Lasalgaon Mandi", state: "mh", date: new Date().toLocaleDateString() },
-                { crop: "Groundnut", rate: "₹6,900", change: "+100", trend: "up", mandi: "Gondal Mandi", state: "gj", date: new Date().toLocaleDateString() },
-                { crop: "Cotton", rate: "₹8,000", change: "-200", trend: "down", mandi: "Adoni Mandi", state: "ap", date: new Date().toLocaleDateString() },
+                { id: "mandi-ap-adoni", crop: "Cotton", rate: "₹8,000", change: "-200", trend: "down", mandi: "Adoni Mandi", district: "Kurnool", state: "ap", date: new Date().toLocaleDateString() },
+                { id: "mandi-ap-guntakal", crop: "Cotton", rate: "₹8,200", change: "+150", trend: "up", mandi: "Guntakal Mandi", district: "Anantapur", state: "ap", date: new Date().toLocaleDateString() },
+                { id: "mandi-ap-anantapur", crop: "Cotton", rate: "₹7,900", change: "-50", trend: "down", mandi: "Anantapur Mandi", district: "Anantapur", state: "ap", date: new Date().toLocaleDateString() },
+                { id: "mandi-dl-azadpur", crop: "Tomato", rate: "₹1,950", change: "+150", trend: "up", mandi: "Azadpur Mandi", district: "Delhi", state: "dl", date: new Date().toLocaleDateString() },
+                { id: "mandi-gj-gondal", crop: "Groundnut", rate: "₹6,900", change: "+100", trend: "up", mandi: "Gondal Mandi", district: "Rajkot", state: "gj", date: new Date().toLocaleDateString() },
+                { id: "mandi-mh-lasalgaon", crop: "Onion", rate: "₹2,350", change: "-50", trend: "down", mandi: "Lasalgaon Mandi", district: "Nashik", state: "mh", date: new Date().toLocaleDateString() },
+                { id: "mandi-mh-pimpalgaon", crop: "Onion", rate: "₹2,100", change: "0", trend: "neutral", mandi: "Pimpalgaon Mandi", district: "Nashik", state: "mh", date: new Date().toLocaleDateString() },
+                { id: "mandi-pb-karnal", crop: "Paddy (Basmati)", rate: "₹4,250", change: "+50", trend: "up", mandi: "Karnal Mandi", district: "Karnal", state: "pb", date: new Date().toLocaleDateString() },
+                { id: "mandi-pb-khanna", crop: "Wheat", rate: "₹2,200", change: "+75", trend: "up", mandi: "Khanna Mandi", district: "Ludhiana", state: "pb", date: new Date().toLocaleDateString() },
             ];
 
             setPrices(mockPrices);

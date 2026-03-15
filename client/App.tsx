@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import TractorRental from "./pages/TractorRental";
 import Auth from "./pages/Auth";
 import Layout from "./components/Layout";
 import OwnerDashboard from "./pages/OwnerDashboard";
@@ -23,6 +24,7 @@ import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
 import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
 import About from "./pages/About";
+import Vision from "./pages/Vision";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -33,10 +35,14 @@ import WhatsAppChat from "./pages/WhatsAppChat";
 import { FloatingChatbot } from "./components/FloatingChatbot";
 import AgriKnowledge from "./pages/AgriKnowledge";
 import Impact from "./pages/Impact";
-import Leadership from "./pages/Leadership";
+import Explore from "./pages/Explore";
+
+import TechSparkAI from "./pages/TechSparkAI";
 import MarketLinkage from "./pages/MarketLinkage";
 import Omnichannel from "./pages/Omnichannel";
 import JoinUs from "./pages/JoinUs";
+import MandiDetail from "./pages/MandiDetail";
+import { VoiceAssistant } from "./components/VoiceAssistant";
 
 const queryClient = new QueryClient();
 
@@ -49,12 +55,7 @@ const AppRoutes = () => {
       {/* Protected Routes */}
       <Route
         path="/"
-        element={
-          <>
-            <SignedIn><Index /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
-          </>
-        }
+        element={<Index />}
       />
       <Route
         path="/dashboard"
@@ -69,7 +70,7 @@ const AppRoutes = () => {
         path="/rent"
         element={
           <>
-            <SignedIn><Dashboard /></SignedIn>
+            <SignedIn><TractorRental /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
@@ -106,6 +107,15 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Market /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/mandi/:id"
+        element={
+          <>
+            <SignedIn><MandiDetail /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
@@ -212,6 +222,15 @@ const AppRoutes = () => {
 
       {/* AgroStar Corporate Pages */}
       <Route
+        path="/techspark"
+        element={
+          <>
+            <SignedIn><TechSparkAI /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
         path="/impact"
         element={
           <>
@@ -220,15 +239,7 @@ const AppRoutes = () => {
           </>
         }
       />
-      <Route
-        path="/leadership"
-        element={
-          <>
-            <SignedIn><Leadership /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
-          </>
-        }
-      />
+
       <Route
         path="/market-linkage"
         element={
@@ -263,6 +274,19 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><About /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/explore"
+        element={<Explore />}
+      />
+      <Route
+        path="/vision"
+        element={
+          <>
+            <SignedIn><Vision /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
@@ -321,6 +345,7 @@ const App = () => (
             <Layout>
               <AppRoutes />
             </Layout>
+            <VoiceAssistant />
             <FloatingChatbot />
           </BrowserRouter>
         </AuthProvider>

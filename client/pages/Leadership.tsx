@@ -4,21 +4,21 @@ import { Linkedin, ExternalLink } from "lucide-react";
 
 const founders = [
   {
-    name: "Shardul Sheth",
-    title: "Co-Founder & CEO",
-    bio: "Shardul's passion for agriculture and technology led him to co-found AgroStar in 2013. A graduate of Cornell University and IIM Ahmedabad, he has spent over a decade building India's most farmer-centric agri-tech platform.",
-    img: "https://api.dicebear.com/7.x/notionists/svg?seed=Shardul&backgroundColor=b6e3f4",
-    linkedin: "https://www.linkedin.com/in/shardulsheth/",
-    tags: ["CEO", "Strategy", "Agri-Tech"],
+    name: "Arjun Sharma",
+    title: "Founder & CEO",
+    bio: "Arjun's passion for agriculture and technology led him to found TeachSpark AI. A graduate of Cornell University and IIM Ahmedabad, he has spent years building India's most farmer-centric digital platform.",
+    img: "https://api.dicebear.com/7.x/notionists/svg?seed=Arjun&backgroundColor=b6e3f4",
+    linkedin: "#",
+    tags: ["Founder", "CEO", "Visionary"],
     color: "from-emerald-50 dark:from-emerald-950/20"
   },
   {
-    name: "Sitanshu Sheth",
-    title: "Co-Founder & COO",
-    bio: "Sitanshu brings deep expertise in supply chain and rural distribution. A graduate of IIT Bombay and Stanford GSB, he architected AgroStar's omnichannel Saathi Store network across India.",
-    img: "https://api.dicebear.com/7.x/notionists/svg?seed=Sitanshu&backgroundColor=c0aede",
-    linkedin: "https://www.linkedin.com/in/sitanshusheth/",
-    tags: ["COO", "Operations", "Supply Chain"],
+    name: "Sanjay Patel",
+    title: "Co-Founder & CTO",
+    bio: "Sanjay brings deep expertise in AI and rural technology. A graduate of IIT Bombay, he architected TeachSpark's intelligent ecosystem to empower farmers with real-time data.",
+    img: "https://api.dicebear.com/7.x/notionists/svg?seed=Sanjay&backgroundColor=c0aede",
+    linkedin: "#",
+    tags: ["Co-Founder", "CTO", "AI Expert"],
     color: "from-blue-50 dark:from-blue-950/20"
   },
 ];
@@ -43,7 +43,7 @@ export default function Leadership() {
       <section className="relative py-24 bg-gradient-to-br from-slate-900 to-slate-700 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600"
+            src="/impact_community.png"
             alt="Leadership team"
             className="w-full h-full object-cover opacity-10"
           />
@@ -108,8 +108,8 @@ export default function Leadership() {
         <div className="container mx-auto px-4">
           <div className="rounded-3xl overflow-hidden shadow-2xl aspect-[3/1]">
             <img
-              src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=1600"
-              alt="AgroStar team"
+              src="/history_2013.png"
+              alt="TeachSpark AI team"
               className="w-full h-full object-cover"
             />
           </div>

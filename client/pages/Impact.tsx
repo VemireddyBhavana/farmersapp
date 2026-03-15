@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Leaf, Globe, TrendingUp, Shield, Users, Cloud, BarChart2, Zap, Award } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const impactStats = [
   { valueKey: "impactStat1Value", labelKey: "impactStat1Label", color: "from-emerald-500 to-teal-600", icon: Users },
@@ -32,7 +33,7 @@ export default function Impact() {
       <section className="relative min-h-[60vh] flex items-center bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-700 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=1600"
+            src="/impact_community.png"
             alt="Farmers in field"
             className="w-full h-full object-cover opacity-20"
           />
@@ -121,14 +122,14 @@ export default function Impact() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=800"
+                  src="/impact_sustainability.png"
                   alt="Sustainable farming"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 w-48 h-36 rounded-2xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-900">
                 <img
-                  src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=400"
+                  src="/impact_digital.png"
                   alt="Farmer using mobile"
                   className="w-full h-full object-cover"
                 />
@@ -169,21 +170,27 @@ export default function Impact() {
           <h2 className="text-3xl font-black text-center mb-10">Farmers We Serve</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              "https://images.unsplash.com/photo-1595438571593-2d2db06c6b5c?auto=format&fit=crop&q=80&w=400",
-              "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=400",
-              "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=400",
-              "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&q=80&w=400",
-            ].map((src, idx) => (
+              { src: "/impact_processing.png", alt: "Worker in processing unit" },
+              { src: "/solar_pump.png", alt: "Solar irrigation pump" },
+              { src: "/hero_rice_field.png", alt: "Lush rice fields" },
+              { src: "/impact_digital.png", alt: "Farmer using digital insights" },
+              { src: "/impact_community.png", alt: "Farmers community meet" },
+              { src: "/tomato_farming.png", alt: "Harvested fresh tomatoes" },
+              { src: "/impact_livestock.png", alt: "Indigenous cow breeds" },
+              { src: "/organic_soil.png", alt: "Organic farming fertile soil" },
+            ].map((img, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.08 }}
-                className={`rounded-2xl overflow-hidden shadow-xl ${idx === 0 ? "row-span-2" : ""}`}
-                style={{ aspectRatio: idx === 0 ? "1/2" : "1/1" }}
+                className={cn(
+                  "rounded-2xl overflow-hidden shadow-xl",
+                  idx === 0 ? "md:col-span-2 md:row-span-2" : "aspect-square"
+                )}
               >
-                <img src={src} alt="Impact" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
               </motion.div>
             ))}
           </div>

@@ -6,22 +6,28 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language } from "@/lib/LanguageContext";
+import { useLanguage, Language, translations } from "@/lib/LanguageContext";
 
 export default function ChatPage() {
-  const { t, language, setLanguage } = useLanguage();
+  const { t, language: globalLanguage } = useLanguage();
+  const [chatLanguage, setChatLanguage] = useState<Language>(globalLanguage);
+
+  // Local helper for translations in chat
+  const ct = (key: string, data?: any) => {
+    return translations[chatLanguage]?.[key] || translations["English"]?.[key] || key;
+  };
 
   const suggestions = useMemo(() => [
-    t("suggestion1"),
-    t("suggestion2"),
-    t("suggestion3"),
-    t("suggestion4"),
-  ], [t]);
+    ct("suggestion1"),
+    ct("suggestion2"),
+    ct("suggestion3"),
+    ct("suggestion4"),
+  ], [chatLanguage]);
 
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      content: t("botWelcome"),
+      content: ct("botWelcome"),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -29,16 +35,16 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Update initial message when language changes if no other messages exist
+  // Update messages when chat language changes if only the welcome message exists
   useEffect(() => {
     if (messages.length === 1 && messages[0].role === "bot") {
       setMessages([{
         role: "bot",
-        content: t("botWelcome"),
+        content: ct("botWelcome"),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }]);
     }
-  }, [language, t]);
+  }, [chatLanguage]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -63,7 +69,7 @@ export default function ChatPage() {
     // Simulate bot response
     setTimeout(() => {
       setIsTyping(false);
-      let response = t("botDistrictQuestion");
+      let response = ct("botDistrictQuestion");
 
       const lowerContent = content.toLowerCase();
       if (lowerContent.includes("paddy") || lowerContent.includes("rice")) {
@@ -120,10 +126,10 @@ export default function ChatPage() {
           {languages.map((lang) => (
             <button
               key={lang.name}
-              onClick={() => setLanguage(lang.name)}
+              onClick={() => setChatLanguage(lang.name)}
               className={cn(
                 "px-6 py-2 rounded-xl text-sm font-black transition-all whitespace-nowrap",
-                language === lang.name
+                chatLanguage === lang.name
                   ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                   : "text-muted-foreground hover:text-foreground hover:bg-white/50"
               )}
@@ -188,10 +194,10 @@ export default function ChatPage() {
                   <BotIcon className="h-10 w-10" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black">{t("agriAssistant")}</h3>
+                  <h3 className="text-2xl font-black">{ct("agriAssistant")}</h3>
                   <div className="flex items-center gap-2 text-xs font-black text-white/80 uppercase tracking-widest mt-1">
                     <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
-                    {t("onlineStatus")}
+                    {ct("onlineStatus")}
                   </div>
                 </div>
               </div>
@@ -266,7 +272,7 @@ export default function ChatPage() {
                   <Input
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder={t("askMeAnything")}
+                    placeholder={ct("askMeAnything")}
                     className="h-14 rounded-[1.5rem] bg-slate-50 border-primary/5 pl-6 pr-14 focus-visible:ring-primary shadow-inner"
                   />
                   <div className="absolute right-4 top-1/2 -translate-y-1/2">

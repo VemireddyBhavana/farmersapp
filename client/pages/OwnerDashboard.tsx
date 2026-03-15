@@ -39,9 +39,9 @@ const ownerStats = [
 ];
 
 const myEquipment = [
-  { id: 1, name: "John Deere 5310 GearPro", status: "Available", price: 800, rentals: 42, image: "https://images.unsplash.com/photo-1594398044700-1482072f80c2?auto=format&fit=crop&q=80&w=400" },
-  { id: 2, name: "Mahindra 275 DI TU", status: "Rented", price: 600, rentals: 28, image: "https://images.unsplash.com/photo-1590682680395-03ad7e0b8609?auto=format&fit=crop&q=80&w=400" },
-  { id: 3, name: "Rotavator - 7 Feet", status: "Maintenance", price: 300, rentals: 15, image: "https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?auto=format&fit=crop&q=80&w=400" },
+  { id: 1, name: "John Deere 5310 GearPro", status: "Available", price: 800, rentals: 42, image: "/tractor_premium.png" },
+  { id: 2, name: "Mahindra 275 DI TU", status: "Rented", price: 600, rentals: 28, image: "/tractor_mahindra.png" },
+  { id: 3, name: "Rotavator - 7 Feet", status: "Maintenance", price: 300, rentals: 15, image: "/tractor_premium.png" },
 ];
 
 const pendingRequests = [

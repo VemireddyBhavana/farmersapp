@@ -12,7 +12,7 @@ const channels = [
     color: "from-emerald-500 to-teal-600",
     bg: "bg-emerald-50 dark:bg-emerald-950/20",
     borderColor: "border-emerald-200 dark:border-emerald-800",
-    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=600",
+    img: "/saathi_store.png",
     stats: [{ label: "Downloads", value: "5M+" }, { label: "Languages", value: "11" }, { label: "Rating", value: "4.7★" }],
     features: [
       "AI-powered crop disease detection via photo upload",
@@ -31,7 +31,7 @@ const channels = [
     color: "from-blue-500 to-indigo-600",
     bg: "bg-blue-50 dark:bg-blue-950/20",
     borderColor: "border-blue-200 dark:border-blue-800",
-    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=600",
+    img: "/vision_banner.png",
     stats: [{ label: "Experts", value: "200+" }, { label: "Calls/day", value: "10K" }, { label: "Languages", value: "11" }],
     features: [
       "Talk directly to an agri-expert in your language",
@@ -50,7 +50,7 @@ const channels = [
     color: "from-amber-500 to-orange-600",
     bg: "bg-amber-50 dark:bg-amber-950/20",
     borderColor: "border-amber-200 dark:border-amber-800",
-    img: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?auto=format&fit=crop&q=80&w=600",
+    img: "/impact_processing.png",
     stats: [{ label: "Stores", value: "10K+" }, { label: "States", value: "18" }, { label: "SKUs", value: "1500+" }],
     features: [
       "Physical stores run by trusted local entrepreneurs",
@@ -73,7 +73,7 @@ export default function Omnichannel() {
       <section className="relative py-24 bg-gradient-to-br from-slate-900 to-emerald-900 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&q=80&w=1600"
+            src="/impact_community.png"
             alt="Farmer with phone"
             className="w-full h-full object-cover opacity-20"
           />
