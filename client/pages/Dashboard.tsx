@@ -103,7 +103,7 @@ export default function Dashboard() {
                   </Link>
                   <Link to="/kisan-suvidha">
                     <button className="rounded bg-amber-500 text-slate-900 hover:bg-amber-400 h-12 px-6 font-black shadow-lg shadow-amber-500/20 border-none transition-all">
-                      {t('kisanSuvidhaTitle')}
+                      {t('kisanSevaTitle')}
                     </button>
                   </Link>
                 </div>

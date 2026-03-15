@@ -12,7 +12,8 @@ import {
   Leaf, 
   Flower2, 
   Dog, 
-  ArrowLeft 
+  ArrowLeft,
+  CheckCircle2
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -22,6 +23,7 @@ const services = [
   {
     id: "pm-kisan",
     titleKey: "pmKisan",
+    bulletKey: "pmKisanBullets",
     icon: Building2,
     color: "from-blue-500/20 to-indigo-500/20",
     iconColor: "text-blue-500",
@@ -31,6 +33,7 @@ const services = [
   {
     id: "mandi-prices",
     titleKey: "mandiPrices",
+    bulletKey: "mandiBullets",
     icon: TrendingUp,
     color: "from-emerald-500/20 to-teal-500/20",
     iconColor: "text-emerald-500",
@@ -40,6 +43,7 @@ const services = [
   {
     id: "fertilizers",
     titleKey: "fertilizers",
+    bulletKey: "fertilizerBullets",
     icon: FlaskConical,
     color: "from-amber-500/20 to-orange-500/20",
     iconColor: "text-amber-500",
@@ -49,6 +53,7 @@ const services = [
   {
     id: "crop-insurance",
     titleKey: "cropInsurance",
+    bulletKey: "insuranceBullets",
     icon: ShieldCheck,
     color: "from-purple-500/20 to-pink-500/20",
     iconColor: "text-purple-500",
@@ -58,6 +63,7 @@ const services = [
   {
     id: "farm-machinery",
     titleKey: "farmMachinery",
+    bulletKey: "machineryBullets",
     icon: Tractor,
     color: "from-red-500/20 to-rose-500/20",
     iconColor: "text-red-500",
@@ -67,6 +73,7 @@ const services = [
   {
     id: "seeds",
     titleKey: "seeds",
+    bulletKey: "seedBullets",
     icon: Sprout,
     color: "from-green-500/20 to-emerald-500/20",
     iconColor: "text-green-500",
@@ -76,6 +83,7 @@ const services = [
   {
     id: "soil-health",
     titleKey: "soilHealth",
+    bulletKey: "soilHealthBullets",
     icon: FlaskConical,
     color: "from-sky-500/20 to-blue-500/20",
     iconColor: "text-sky-500",
@@ -85,6 +93,7 @@ const services = [
   {
     id: "advisory",
     titleKey: "advisory",
+    bulletKey: "advisoryBullets",
     icon: CloudSun,
     color: "from-yellow-500/20 to-amber-500/20",
     iconColor: "text-yellow-500",
@@ -94,6 +103,7 @@ const services = [
   {
     id: "organic-farming",
     titleKey: "organicFarming",
+    bulletKey: "organicBullets",
     icon: Leaf,
     color: "from-lime-500/20 to-green-500/20",
     iconColor: "text-lime-500",
@@ -103,6 +113,7 @@ const services = [
   {
     id: "horticulture",
     titleKey: "horticulture",
+    bulletKey: "horticulture", // Same as title for now as fallback
     icon: Flower2,
     color: "from-fuchsia-500/20 to-purple-500/20",
     iconColor: "text-fuchsia-500",
@@ -112,6 +123,7 @@ const services = [
   {
     id: "animal-husbandry",
     titleKey: "animalHusbandry",
+    bulletKey: "husbandryBullets",
     icon: Dog,
     color: "from-orange-500/20 to-red-500/20",
     iconColor: "text-orange-500",
@@ -121,6 +133,7 @@ const services = [
   {
     id: "official-contacts",
     titleKey: "officialContacts",
+    bulletKey: "officialContacts", // Same name as title
     icon: PhoneCall,
     color: "from-slate-500/20 to-gray-500/20",
     iconColor: "text-slate-500",
@@ -129,7 +142,7 @@ const services = [
   }
 ];
 
-export default function KisanSuvidhaPortal() {
+export default function KisanSevaPortal() {
   const { t } = useLanguage();
 
   return (
@@ -153,10 +166,10 @@ export default function KisanSuvidhaPortal() {
               <span className="text-white text-sm font-bold uppercase tracking-wider">{t('navHome')}</span>
             </Link>
             <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-xl">
-              {t('kisanSuvidhaTitle')}
+              {t('kisanSevaTitle')}
             </h1>
             <p className="text-emerald-50 text-xl md:text-2xl font-medium max-w-2xl opacity-90 leading-relaxed italic">
-              — {t('kisanSuvidhaSubtitle')} —
+              — {t('kisanSevaSubtitle')} —
             </p>
           </motion.div>
         </div>
@@ -179,35 +192,47 @@ export default function KisanSuvidhaPortal() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="group relative h-[380px] bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 hover:shadow-emerald-900/10 transition-all duration-500 overflow-hidden border border-slate-100"
+              className="group relative h-[420px] bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 hover:shadow-emerald-900/10 transition-all duration-500 overflow-hidden border border-slate-100 flex flex-col"
             >
               {/* Image Background */}
               <div className="absolute inset-0 z-0">
                 <img 
                   src={service.image} 
                   alt={t(service.titleKey)} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-40 group-hover:opacity-60 grayscale-[50%] group-hover:grayscale-0"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-30 group-hover:opacity-50 grayscale-[50%] group-hover:grayscale-0"
                 />
                 <div className={cn("absolute inset-0 bg-gradient-to-b from-white via-white/80 to-transparent transition-opacity duration-500", service.color)}></div>
               </div>
 
               {/* Card Content */}
-              <div className="relative z-10 h-full p-8 flex flex-col items-center text-center">
-                <div className={cn(
-                  "w-16 h-16 rounded-[1.5rem] mb-6 flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:rotate-12",
-                  "bg-white border-2 border-slate-100",
-                  service.iconColor
-                )}>
-                  <service.icon className="w-8 h-8" />
+              <div className="relative z-10 p-8 flex flex-col h-full">
+                <div className="flex items-start justify-between mb-6">
+                  <div className={cn(
+                    "w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg transition-transform duration-500 group-hover:rotate-12",
+                    "bg-white border-2 border-slate-100",
+                    service.iconColor
+                  )}>
+                    <service.icon className="w-7 h-7" />
+                  </div>
+                  <div className="h-1 w-12 bg-emerald-500 rounded-full mt-6 group-hover:w-24 transition-all duration-500"></div>
                 </div>
 
                 <h3 className="text-2xl font-black text-slate-800 leading-tight mb-4 group-hover:text-emerald-700 transition-colors">
                   {t(service.titleKey)}
                 </h3>
+
+                {/* Sub-services / Bullets */}
+                <div className="space-y-2 mb-6">
+                  {t(service.bulletKey || service.titleKey).split('|').map((bullet, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-600 group-hover:text-slate-900 transition-colors">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
+                      <span>{bullet.replace('• ', '').trim()}</span>
+                    </div>
+                  ))}
+                </div>
                 
-                <div className="mt-auto w-full">
-                  <div className="h-1 w-12 bg-emerald-500 rounded-full mx-auto mb-6 group-hover:w-24 transition-all duration-500"></div>
-                  <button className="w-full py-4 rounded-2xl bg-slate-900 text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-slate-900/20 group-hover:bg-emerald-600 group-hover:shadow-emerald-600/30 transition-all">
+                <div className="mt-auto">
+                  <button className="w-full py-4 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-slate-900/20 group-hover:bg-emerald-600 group-hover:shadow-emerald-600/30 transition-all">
                     {t('applyNow')}
                   </button>
                 </div>
@@ -225,8 +250,8 @@ export default function KisanSuvidhaPortal() {
         <div className="bg-slate-900 rounded-[3rem] p-12 text-center relative overflow-hidden group">
           <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
           <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl font-black text-white">{t('readyToTransform')}</h2>
-            <p className="text-slate-400 max-w-xl mx-auto italic">
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight">{t('readyToTransform')}</h2>
+            <p className="text-slate-400 max-w-xl mx-auto italic font-medium">
               {t('sustainableFutureDesc')}
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
@@ -234,9 +259,9 @@ export default function KisanSuvidhaPortal() {
                 href="https://minagri.gov.in/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="px-8 py-4 bg-emerald-500 text-white font-black rounded-2xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20"
+                className="px-10 py-5 bg-emerald-500 text-white font-black rounded-2xl hover:bg-emerald-400 transition-all shadow-lg shadow-emerald-500/20 uppercase tracking-widest"
               >
-                GOVERNMENT OF INDIA
+                GOVERNMENT OF INDIA INFRASTRUCTURE
               </a>
             </div>
           </div>
