@@ -27,9 +27,9 @@ const KNOWLEDGE_SECTIONS = [
         cards: [
             { id: "aloe", titleKey: "aloeVeraTitle", image: "https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&q=80&w=800", bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
             { id: "curry", titleKey: "curryLeavesTitle", image: "https://images.unsplash.com/photo-1626139575936-78488221544c?auto=format&fit=crop&q=80&w=800", bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
-            { id: "rice", titleKey: "riceTitle", image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
+            { id: "rice", titleKey: "riceTitle", image: "https://images.unsplash.com/photo-1536644244474-51e0646be9f3?auto=format&fit=crop&q=80&w=800", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
             { id: "cotton", titleKey: "cottonTitle", image: "https://images.unsplash.com/photo-1594913785162-e6785b42dfdc?auto=format&fit=crop&q=80&w=800", bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 5 },
-            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?auto=format&fit=crop&q=80&w=800", bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 5 },
+            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800", bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 5 },
             { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://images.unsplash.com/photo-1508747703725-71977713d5ca?auto=format&fit=crop&q=80&w=800", bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 9 },
         ]
     },
@@ -38,7 +38,7 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionKnowledge",
         icon: BookOpen,
         cards: [
-            { id: "soilPh", titleKey: "soilPhTitle", image: "https://images.unsplash.com/photo-1615811361523-6bd03d7748e7?auto=format&fit=crop&q=80&w=800", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
+            { id: "soilPh", titleKey: "soilPhTitle", image: "https://images.unsplash.com/photo-1592185157642-d6fc706f9790?auto=format&fit=crop&q=80&w=800", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
             { id: "fertility", titleKey: "fertilityTitle", image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=800", bullets: ["fertilityBullet1", "fertilityBullet2", "fertilityBullet3"], category: "Soil Science" },
             { id: "drip", titleKey: "dripTitle", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=800", bullets: ["dripBullet1", "dripBullet2", "dripBullet3"], category: "Irrigation" },
             { id: "rotation", titleKey: "rotationTitle", image: "https://images.unsplash.com/photo-1500382017468-9049efa8c964?auto=format&fit=crop&q=80&w=800", bullets: ["rotationBullet1", "rotationBullet2", "rotationBullet3"], category: "Management" },
@@ -52,8 +52,8 @@ const KNOWLEDGE_SECTIONS = [
         cards: [
             { id: "egg", titleKey: "eggTitle", image: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800", bullets: ["eggBullet1", "eggBullet2", "eggBullet3", "eggBullet4"], category: "Poultry" },
             { id: "dairy", titleKey: "dairyTitle", image: "https://images.unsplash.com/photo-1543362906-acfc16c623a2?auto=format&fit=crop&q=80&w=800", bullets: ["dairyBullet1", "dairyBullet2", "dairyBullet3"], category: "Livestock" },
-            { id: "goat", titleKey: "goatTitle", image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800", bullets: ["goatBullet1", "goatBullet2", "goatBullet3"], category: "Livestock" },
-            { id: "fish", titleKey: "fishTitle", image: "https://images.unsplash.com/photo-1476144670005-78e722880126?auto=format&fit=crop&q=80&w=800", bullets: ["fishBullet1", "fishBullet2", "fishBullet3"], category: "Aquaculture" },
+            { id: "goat", titleKey: "goatTitle", image: "https://images.unsplash.com/photo-1524388664796-2555be56196a?auto=format&fit=crop&q=80&w=800", bullets: ["goatBullet1", "goatBullet2", "goatBullet3"], category: "Livestock" },
+            { id: "fish", titleKey: "fishTitle", image: "https://images.unsplash.com/photo-1522069150046-778971f16fab?auto=format&fit=crop&q=80&w=800", bullets: ["fishBullet1", "fishBullet2", "fishBullet3"], category: "Aquaculture" },
             { id: "bee", titleKey: "beeTitle", image: "https://images.unsplash.com/photo-1473973266408-ed4e27f35e73?auto=format&fit=crop&q=80&w=800", bullets: ["beeBullet1", "beeBullet2", "beeBullet3"], category: "Livestock" },
         ]
     },
