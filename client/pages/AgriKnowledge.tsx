@@ -142,7 +142,7 @@ const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: ()
                                         </div>
                                     </div>
                                     <h3 className="text-lg md:text-xl font-black text-white leading-tight">
-                                        {step.title
+                                        {idx + 1}. {step.title
                                             .replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "") // Strip emojis at start
                                             .replace(/^\d+[\s.]*\s*/, "") // Strip numbers and dots at start
                                             .replace(/^Step\s*\d+\s*[:.-]\s*/i, "") // Strip "Step X:" prefixes
