@@ -43,7 +43,7 @@ import Omnichannel from "./pages/Omnichannel";
 import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
 import { VoiceAssistant } from "./components/VoiceAssistant";
-import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
+import KisanSevaPortal from "./pages/KisanSevaPortal";
 
 const queryClient = new QueryClient();
 
@@ -224,7 +224,7 @@ const AppRoutes = () => {
         path="/kisan-suvidha"
         element={
           <>
-            <SignedIn><KisanSuvidhaPortal /></SignedIn>
+            <SignedIn><KisanSevaPortal /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
