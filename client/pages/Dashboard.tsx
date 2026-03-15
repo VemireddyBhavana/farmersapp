@@ -37,7 +37,11 @@ import {
   Fish,
   Bird,
   Tractor as TractorIcon,
-  Sun as SunIcon
+  Sun as SunIcon,
+  Stethoscope,
+  Lightbulb,
+  Calculator,
+  FlaskConical
 } from "lucide-react";
 import DiseaseDetection from "@/components/DiseaseDetection";
 import { Button } from "@/components/ui/button";
@@ -323,6 +327,81 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+      {/* Smart Farming Tools Section */}
+      <section className="space-y-6 pt-8 border-t border-slate-200">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
+              <Zap className="h-6 w-6 text-emerald-600" /> {t('smartFarmingTools')}
+            </h2>
+            <p className="text-sm font-medium text-slate-500">{t('scientificFarming')}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {[
+            { 
+              title: t('aiCropDoctor'), 
+              desc: t('aiCropDoctorDesc'), 
+              path: "/crop-doctor", 
+              icon: Stethoscope, 
+              color: "text-blue-600", 
+              bgColor: "bg-blue-50" 
+            },
+            { 
+              title: t('smartCropRecommendation'), 
+              desc: t('smartCropRecommendationDesc'), 
+              path: "/crop-recommendation", 
+              icon: Lightbulb, 
+              color: "text-amber-600", 
+              bgColor: "bg-amber-50" 
+            },
+            { 
+              title: t('farmProfitCalculator'), 
+              desc: t('farmProfitCalculatorDesc'), 
+              path: "/profit-calculator", 
+              icon: Calculator, 
+              color: "text-emerald-600", 
+              bgColor: "bg-emerald-50" 
+            },
+            { 
+              title: t('smartIrrigationCalculator'), 
+              desc: t('smartIrrigationCalculatorDesc'), 
+              path: "/irrigation-calculator", 
+              icon: Droplets, 
+              color: "text-cyan-600", 
+              bgColor: "bg-cyan-50" 
+            },
+            { 
+              title: t('fertilizerRequirement'), 
+              desc: t('fertilizerRequirementDesc'), 
+              path: "/fertilizer-recommendation", 
+              icon: FlaskConical, 
+              color: "text-purple-600", 
+              bgColor: "bg-purple-50" 
+            },
+          ].map((tool, i) => (
+            <Link key={i} to={tool.path} className="group">
+              <Card className="h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group-hover:border-emerald-500 overflow-hidden">
+                <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
+                  <div className={cn("p-4 rounded-2xl transition-transform duration-500 group-hover:scale-110", tool.bgColor)}>
+                    <tool.icon className={cn("h-8 w-8", tool.color)} />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-slate-800 group-hover:text-emerald-700 transition-colors uppercase tracking-tight text-sm">{tool.title}</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{tool.desc}</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="p-4 pt-0 justify-center">
+                   <div className="text-[10px] font-black text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                     OPEN TOOL <ArrowUpRight className="h-3 w-3" />
+                   </div>
+                </CardFooter>
+              </Card>
             </Link>
           ))}
         </div>

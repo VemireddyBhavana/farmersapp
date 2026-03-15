@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-    BookOpen, Leaf, Fish, Bird, Landmark, ArrowRight, 
-    Tractor as TractorIcon, Clock, Calendar, User, 
-    CheckCircle, Sprout, Droplets, Recycle, ShieldCheck, 
+import {
+    BookOpen, Leaf, Fish, Bird, Landmark, ArrowRight,
+    Tractor as TractorIcon, Clock, Calendar, User,
+    CheckCircle, Sprout, Droplets, Recycle, ShieldCheck,
     Activity, ClipboardList, Zap, Beef, Wind, Sun, X
 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -25,12 +25,12 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionCrops",
         icon: Sprout,
         cards: [
-            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&q=80&w=800", bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
-            { id: "curry", titleKey: "curryLeavesTitle", image: "https://images.unsplash.com/photo-1626139575936-78488221544c?auto=format&fit=crop&q=80&w=800", bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
-            { id: "rice", titleKey: "riceTitle", image: "https://images.unsplash.com/photo-1536644244474-51e0646be9f3?auto=format&fit=crop&q=80&w=800", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
-            { id: "cotton", titleKey: "cottonTitle", image: "https://images.unsplash.com/photo-1594913785162-e6785b42dfdc?auto=format&fit=crop&q=80&w=800", bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 5 },
+            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://planetdesert.com/cdn/shop/articles/587654299891.jpg?v=1772639438", bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
+            { id: "curry", titleKey: "curryLeavesTitle", image: "https://www.shutterstock.com/image-photo/fresh-organic-curry-leaves-tree-260nw-2593564315.jpg", bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
+            { id: "rice", titleKey: "riceTitle", image: "https://www.agrifarming.in/wp-content/uploads/2022/04/Boost-Rice-Yield2.jpg", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
+            { id: "cotton", titleKey: "cottonTitle", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggsehAILLPTBdlDWdULNE9Fsz3SEXjAHbcg&s", bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 5 },
             { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800", bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 5 },
-            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://images.unsplash.com/photo-1508747703725-71977713d5ca?auto=format&fit=crop&q=80&w=800", bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 9 },
+            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://static.wixstatic.com/media/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg/v1/fill/w_568,h_244,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg", bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 9 },
         ]
     },
     {
@@ -38,11 +38,11 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionKnowledge",
         icon: BookOpen,
         cards: [
-            { id: "soilPh", titleKey: "soilPhTitle", image: "https://images.unsplash.com/photo-1592185157642-d6fc706f9790?auto=format&fit=crop&q=80&w=800", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
-            { id: "fertility", titleKey: "fertilityTitle", image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=800", bullets: ["fertilityBullet1", "fertilityBullet2", "fertilityBullet3"], category: "Soil Science" },
-            { id: "drip", titleKey: "dripTitle", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=800", bullets: ["dripBullet1", "dripBullet2", "dripBullet3"], category: "Irrigation" },
-            { id: "rotation", titleKey: "rotationTitle", image: "https://images.unsplash.com/photo-1500382017468-9049efa8c964?auto=format&fit=crop&q=80&w=800", bullets: ["rotationBullet1", "rotationBullet2", "rotationBullet3"], category: "Management" },
-            { id: "organic", titleKey: "organicTitle", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=800", bullets: ["organicBullet1", "organicBullet2", "organicBullet3"], category: "Sustainable" },
+            { id: "soilPh", titleKey: "soilPhTitle", image: "https://bonnieplants.com/cdn/shop/articles/soil-in-hands_984a3870-c32e-444a-a4f1-6f4fe68223f6.jpg?v=1642541552", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
+            { id: "fertility", titleKey: "fertilityTitle", image: "https://eos.com/wp-content/uploads/2021/03/cover-crops-to-preserve-soil-fertility-loss.jpg.webp", bullets: ["fertilityBullet1", "fertilityBullet2", "fertilityBullet3"], category: "Soil Science" },
+            { id: "drip", titleKey: "dripTitle", image: "https://plus.unsplash.com/premium_photo-1661818305309-dd2145095cb2?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJpcCUyMGlycmlnYXRpb258ZW58MHx8MHx8fDA%3D", bullets: ["dripBullet1", "dripBullet2", "dripBullet3"], category: "Irrigation" },
+            { id: "rotation", titleKey: "rotationTitle", image: "https://www.csuchico.edu/regenerativeagriculture/_assets/images/ra101/crop-rotation.jpg", bullets: ["rotationBullet1", "rotationBullet2", "rotationBullet3"], category: "Management" },
+            { id: "organic", titleKey: "organicTitle", image: "https://media.istockphoto.com/id/1346744481/photo/anonymous-chef-harvesting-fresh-vegetables-on-a-farm.jpg?s=612x612&w=0&k=20&c=U9h4fAi68nwVndAJW8TF-f2lFFCO2Y-XrZWA2gah1Xw=", bullets: ["organicBullet1", "organicBullet2", "organicBullet3"], category: "Sustainable" },
         ]
     },
     {
@@ -51,10 +51,10 @@ const KNOWLEDGE_SECTIONS = [
         icon: Bird,
         cards: [
             { id: "egg", titleKey: "eggTitle", image: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800", bullets: ["eggBullet1", "eggBullet2", "eggBullet3", "eggBullet4"], category: "Poultry" },
-            { id: "dairy", titleKey: "dairyTitle", image: "https://images.unsplash.com/photo-1543362906-acfc16c623a2?auto=format&fit=crop&q=80&w=800", bullets: ["dairyBullet1", "dairyBullet2", "dairyBullet3"], category: "Livestock" },
-            { id: "goat", titleKey: "goatTitle", image: "https://images.unsplash.com/photo-1524388664796-2555be56196a?auto=format&fit=crop&q=80&w=800", bullets: ["goatBullet1", "goatBullet2", "goatBullet3"], category: "Livestock" },
-            { id: "fish", titleKey: "fishTitle", image: "https://images.unsplash.com/photo-1522069150046-778971f16fab?auto=format&fit=crop&q=80&w=800", bullets: ["fishBullet1", "fishBullet2", "fishBullet3"], category: "Aquaculture" },
-            { id: "bee", titleKey: "beeTitle", image: "https://images.unsplash.com/photo-1473973266408-ed4e27f35e73?auto=format&fit=crop&q=80&w=800", bullets: ["beeBullet1", "beeBullet2", "beeBullet3"], category: "Livestock" },
+            { id: "dairy", titleKey: "dairyTitle", image: "https://img.freepik.com/free-photo/cows-green-field_335224-509.jpg", bullets: ["dairyBullet1", "dairyBullet2", "dairyBullet3"], category: "Livestock" },
+            { id: "goat", titleKey: "goatTitle", image: "https://t3.ftcdn.net/jpg/05/85/46/90/360_F_585469003_4jgH57a56z5CeDIekZRZjQ2QqXgxZ2AK.jpg", bullets: ["goatBullet1", "goatBullet2", "goatBullet3"], category: "Livestock" },
+            { id: "fish", titleKey: "fishTitle", image: "https://static.vecteezy.com/system/resources/thumbnails/046/908/143/small/scoop-net-with-the-many-fresh-fish-photo.jpg", bullets: ["fishBullet1", "fishBullet2", "fishBullet3"], category: "Aquaculture" },
+            { id: "bee", titleKey: "beeTitle", image: "https://jaguzafarm.com/support/wp-content/uploads/2019/04/bee-farming.jpg", bullets: ["beeBullet1", "beeBullet2", "beeBullet3"], category: "Livestock" },
         ]
     },
     {
@@ -62,42 +62,42 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionSchemes",
         icon: Landmark,
         cards: [
-            { id: "pmKusum", titleKey: "solarSummary", image: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=800", bullets: ["pmKusumBullet1", "pmKusumBullet2", "pmKusumBullet3"], category: "Subsidy" },
-            { id: "pmKisan", titleKey: "pmKisanTitle", image: "https://images.unsplash.com/photo-1517594422361-5eeb8ae275a9?auto=format&fit=crop&q=80&w=800", bullets: ["pmKisanBullet1", "pmKisanBullet2"], category: "Direct Pay" },
-            { id: "pmFasal", titleKey: "pmFasalTitle", image: "https://images.unsplash.com/photo-1557234195-bd9f290f0e4d?auto=format&fit=crop&q=80&w=800", bullets: ["pmFasalBullet1", "pmFasalBullet2"], category: "Insurance" },
-            { id: "soilHealth", titleKey: "soilHealthTitle", image: "https://images.unsplash.com/photo-1592185157642-d6fc706f9790?auto=format&fit=crop&q=80&w=800", bullets: ["soilHealthBullet1", "soilHealthBullet2"], category: "Testing" },
+            { id: "pmKusum", titleKey: "solarSummary", image: "https://currentaffairs.adda247.com/wp-content/uploads/multisite/sites/5/2023/06/08123158/kusum-scheme.jpg", bullets: ["pmKusumBullet1", "pmKusumBullet2", "pmKusumBullet3"], category: "Subsidy" },
+            { id: "pmKisan", titleKey: "pmKisanTitle", image: "https://newsd.in/wp-content/uploads/cwv-webp-images/2023/11/PM-KISAN-scheme-When-will-Centre-release-16th-instalment-how-to-apply-and-more-1280x720.jpg.webp", bullets: ["pmKisanBullet1", "pmKisanBullet2"], category: "Direct Pay" },
+            { id: "pmFasal", titleKey: "pmFasalTitle", image: "https://akm-img-a-in.tosshub.com/aajtak/images/story/202106/farmers8999887_1-sixteen_nine.jpg?size=948:533", bullets: ["pmFasalBullet1", "pmFasalBullet2"], category: "Insurance" },
+            { id: "soilHealth", titleKey: "soilHealthTitle", image: "https://phycoterra.com/wp-content/uploads/2023/06/featuredimage_SoilHealthIndicators_82226407-1024x684.jpg", bullets: ["soilHealthBullet1", "soilHealthBullet2"], category: "Testing" },
         ]
     }
 ];
 
 const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: () => void }) => {
     const { t } = useLanguage();
-    
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => { document.body.style.overflow = "auto"; };
     }, []);
 
-    const steps = card.stepCount 
+    const steps = card.stepCount
         ? Array.from({ length: card.stepCount }, (_, i) => ({
             title: t(`${card.stepsPrefix}${i + 1}Title`) || `${t("step")} ${i + 1}`,
             body: t(`${card.stepsPrefix}${i + 1}Body`) || "Detailed guidance coming soon..."
-          }))
+        }))
         : card.bullets.map((bulletKey, i) => ({
-            title: t(bulletKey).replace(/^•\s*/, ""), 
+            title: t(bulletKey).replace(/^•\s*/, ""),
             body: t(bulletKey).includes("requirements") ? "Optimizing climate conditions is crucial for yield." : "Implement best practices for superior results."
-          }));
+        }));
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-8 overflow-hidden"
         >
             <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl" onClick={onBack} />
-            
-            <motion.div 
+
+            <motion.div
                 initial={{ scale: 0.9, y: 50, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 50, opacity: 0 }}
@@ -117,8 +117,8 @@ const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: ()
                             <p className="text-emerald-400 font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:text-xs mt-2 md:mt-3">Premium Learning Module</p>
                         </div>
                     </div>
-                    <button 
-                        onClick={onBack} 
+                    <button
+                        onClick={onBack}
                         className="bg-white/10 hover:bg-emerald-600 p-3 md:p-5 rounded-full transition-all border border-white/10 group shadow-xl"
                     >
                         <X className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:rotate-90 transition-transform" />
@@ -163,7 +163,7 @@ const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: ()
 
 const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: KnowledgeCard) => void }) => {
     const { t } = useLanguage();
-    
+
     return (
         <motion.div
             initial={{ y: 0 }}
@@ -178,12 +178,12 @@ const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: 
             className="group relative flex flex-col bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[2rem] md:rounded-[3rem] p-5 md:p-7 shadow-2xl shadow-emerald-900/5 hover:shadow-emerald-600/20 transition-all overflow-hidden h-full"
         >
             <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-30 pointer-events-none" />
-            
+
             <div className="relative h-40 md:h-48 w-full rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden mb-5 md:mb-7 shadow-inner">
-                <img 
-                    src={card.image} 
-                    alt={t(card.titleKey)} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                <img
+                    src={card.image}
+                    alt={t(card.titleKey)}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
                 />
                 <div className="absolute top-3 left-3">
                     <span className="bg-emerald-600/80 backdrop-blur-xl text-white text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1.5 rounded-full shadow-2xl border border-white/10">
@@ -196,7 +196,7 @@ const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: 
                 <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight leading-dense group-hover:text-emerald-700 transition-colors">
                     {t(card.titleKey)}
                 </h3>
-                
+
                 <ul className="space-y-2 md:space-y-4 flex-1">
                     {card.bullets.map((bulletKey, idx) => (
                         <li key={idx} className="flex items-start gap-3 md:gap-4">
@@ -208,7 +208,7 @@ const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: 
                     ))}
                 </ul>
 
-                <button 
+                <button
                     onClick={() => onOpen(card)}
                     className="w-full h-12 md:h-14 rounded-[1rem] md:rounded-[1.8rem] bg-slate-950 text-white font-black text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 active:scale-95 transition-all hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/30"
                 >
@@ -236,7 +236,7 @@ export default function AgriKnowledgeHub() {
             <div className="relative bg-white pt-12 md:pt-24 pb-20 md:pb-32 overflow-hidden border-b border-emerald-50">
                 <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-50/50 rounded-full blur-[100px] md:blur-[150px] animate-pulse" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
-                
+
                 <div className="container mx-auto px-4 relative z-10">
                     <div className="flex flex-col items-center text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
                         <motion.div
@@ -247,15 +247,15 @@ export default function AgriKnowledgeHub() {
                             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
                             <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.25em] md:tracking-[0.3em]">{t("agriHubSubtitle") || "Farmer Education Portal"}</span>
                         </motion.div>
-                        
-                        <motion.h1 
+
+                        <motion.h1
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="text-5xl md:text-9xl font-black text-slate-950 tracking-tighter leading-[0.9] md:leading-[0.8]"
                         >
                             AgriKnowledge<span className="text-emerald-600">Hub</span>
                         </motion.h1>
-                        
+
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -298,10 +298,10 @@ export default function AgriKnowledgeHub() {
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                     <div className="relative z-10 space-y-8 md:space-y-10">
                         <h2 className="text-4xl md:text-8xl font-black text-white leading-tight md:leading-none tracking-tighter">
-                            Grow Smarter. <br/>Harvest Better.
+                            Grow Smarter. <br />Harvest Better.
                         </h2>
                         <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                            <button 
+                            <button
                                 onClick={scrollToDashboard}
                                 className="px-10 md:px-16 py-4 md:py-6 bg-white text-emerald-900 font-black rounded-full text-lg md:text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all"
                             >
@@ -310,7 +310,7 @@ export default function AgriKnowledgeHub() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="mt-12 md:mt-20 text-center space-y-4">
                     <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] md:text-xs">AgriKnowledgeHub © 2026 Future Agriculture Labs</p>
                 </div>
@@ -318,9 +318,9 @@ export default function AgriKnowledgeHub() {
 
             <AnimatePresence>
                 {selectedCard && (
-                    <DetailModuleOverlay 
-                        card={selectedCard} 
-                        onBack={() => setSelectedCard(null)} 
+                    <DetailModuleOverlay
+                        card={selectedCard}
+                        onBack={() => setSelectedCard(null)}
                     />
                 )}
             </AnimatePresence>

@@ -44,6 +44,11 @@ import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
 import { VoiceAssistant } from "./components/VoiceAssistant";
 import KisanSevaPortal from "./pages/KisanSevaPortal";
+import CropDoctor from "./pages/CropDoctor";
+import CropRecommendation from "./pages/CropRecommendation";
+import ProfitCalculator from "./pages/ProfitCalculator";
+import IrrigationCalculator from "./pages/IrrigationCalculator";
+import FertilizerRecommendation from "./pages/FertilizerRecommendation";
 
 const queryClient = new QueryClient();
 
@@ -225,6 +230,53 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><KisanSevaPortal /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+
+      {/* Smart Farming Tools */}
+      <Route
+        path="/crop-doctor"
+        element={
+          <>
+            <SignedIn><CropDoctor /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/crop-recommendation"
+        element={
+          <>
+            <SignedIn><CropRecommendation /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/profit-calculator"
+        element={
+          <>
+            <SignedIn><ProfitCalculator /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/irrigation-calculator"
+        element={
+          <>
+            <SignedIn><IrrigationCalculator /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/fertilizer-recommendation"
+        element={
+          <>
+            <SignedIn><FertilizerRecommendation /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
