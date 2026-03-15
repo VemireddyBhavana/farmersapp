@@ -13,25 +13,25 @@ const produceCategories = [
   {
     name: "Pomegranate",
     destinations: "UAE, UK, Netherlands, Germany",
-    img: "https://images.unsplash.com/photo-1541344999736-83eca272f6fc?auto=format&fit=crop&q=80&w=600",
+    img: "/tomato_farming.png",
     color: "from-rose-500 to-pink-600"
   },
   {
     name: "Banana",
     destinations: "Middle East, Southeast Asia",
-    img: "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&q=80&w=600",
+    img: "/wheat_field.png",
     color: "from-yellow-400 to-amber-500"
   },
   {
     name: "Grapes",
     destinations: "Europe, Russia, Japan",
-    img: "https://images.unsplash.com/photo-1515778767554-195d4a26fd28?auto=format&fit=crop&q=80&w=600",
+    img: "/chili_plant.png",
     color: "from-purple-500 to-violet-600"
   },
   {
     name: "Fresh Vegetables",
     destinations: "Gulf, Singapore, Canada",
-    img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=600",
+    img: "/mustard_field.png",
     color: "from-emerald-500 to-teal-600"
   },
 ];
@@ -52,7 +52,7 @@ export default function MarketLinkage() {
       <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1589927986089-35812388d1f4?auto=format&fit=crop&q=80&w=1600"
+            src="/tractor_mahindra.png"
             alt="Export produce"
             className="w-full h-full object-cover"
           />

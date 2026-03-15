@@ -39,7 +39,7 @@ const seedsData = [
         unit: "100g",
         rating: 4.9,
         reviews: 128,
-        image: "https://images.unsplash.com/photo-1592841608241-949f6eb2bf78?q=80&w=800&auto=format&fit=crop",
+        image: "/tomato_farming.png",
         tags: ["High Yield", "Disease Resistant"],
         description: "Superior quality hybrid tomato seeds with 95% germination rate. High resistance to leaf curl virus."
     },
@@ -54,7 +54,7 @@ const seedsData = [
         unit: "10kg",
         rating: 4.8,
         reviews: 256,
-        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=800&auto=format&fit=crop",
+        image: "/hero_rice_field.png",
         tags: ["Aromatic", "Long Grain"],
         description: "Certified foundation seeds for premium long-grain Basmati rice. Ideal for kharif season."
     },
@@ -69,7 +69,7 @@ const seedsData = [
         unit: "40kg",
         rating: 4.7,
         reviews: 512,
-        image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop",
+        image: "/wheat_field.png",
         tags: ["Fast Growth", "Robust"],
         description: "High-protein wheat seeds with excellent drought tolerance. Best for Rabi sowing."
     },
@@ -84,7 +84,7 @@ const seedsData = [
         unit: "50g",
         rating: 5.0,
         reviews: 89,
-        image: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=800&auto=format&fit=crop",
+        image: "/chili_plant.png",
         tags: ["Hot Variety", "Heavy Bearing"],
         description: "Very spicy and high-yielding chili seeds. Prolific bearing throughout the season."
     },
@@ -99,7 +99,7 @@ const seedsData = [
         unit: "sapling",
         rating: 4.9,
         reviews: 42,
-        image: "https://images.unsplash.com/photo-1553334820-10550eeb5431?q=80&w=800&auto=format&fit=crop",
+        image: "/mango_orchard.png", // Updated image for Alphonso Mango
         tags: ["Premium Quality", "Fruitful"],
         description: "Healthy grafted Alphonso mango saplings. High survival rate and disease resistance."
     },
@@ -114,7 +114,7 @@ const seedsData = [
         unit: "1kg",
         rating: 4.8,
         reviews: 156,
-        image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?q=80&w=800&auto=format&fit=crop",
+        image: "/sweet_corn.png",
         tags: ["High Germination", "Sweet"],
         description: "Uniform cob size and excellent sweetness. Market leader in sweet corn seeds."
     },
@@ -129,7 +129,7 @@ const seedsData = [
         unit: "500g",
         rating: 4.7,
         reviews: 84,
-        image: "https://images.unsplash.com/photo-1626139868297-4001968137f8?q=80&w=800&auto=format&fit=crop",
+        image: "/mustard_field.png", // Updated image for Organic Mustard
         tags: ["Oil Rich", "Pure"],
         description: "Non-GMO organic black mustard seeds. High oil content and bold flavor."
     },
@@ -144,7 +144,7 @@ const seedsData = [
         unit: "10g",
         rating: 4.9,
         reviews: 112,
-        image: "https://images.unsplash.com/photo-1517282001574-fbf5215bc88a?q=80&w=800&auto=format&fit=crop",
+        image: "/papaya_tree.png", // Updated image for Papaya
         tags: ["Dwarf Variety", "High Yield"],
         description: "Productive dwarf papaya variety. Fruits are large, red-fleshed and very sweet."
     }
@@ -168,10 +168,8 @@ const SeedsBuyer = () => {
             return;
         }
 
-        // Native WhatsApp redirect to a dummy Business Bot Number
-        const DUMMY_BOT_NUMBER = "919876543210";
-        const message = encodeURIComponent(`Hi! Here is my registered phone number: ${mobileNumber}. I need farming advice.`);
-        window.open(`https://wa.me/${DUMMY_BOT_NUMBER}?text=${message}`, "_blank");
+        // Redirect to internal WhatsApp-like AI agent
+        navigate(`/whatsapp-bot?phone=${mobileNumber}&initialMessage=true`);
     };
 
     const filteredSeeds = seedsData.filter((seed) => {

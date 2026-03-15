@@ -4,15 +4,22 @@ import { MessageCircle, X, Send, User, Bot, Sparkles, ChevronDown } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language } from "@/lib/LanguageContext";
+import { useLanguage, Language, translations } from "@/lib/LanguageContext";
 
 const AIChat = () => {
-  const { t, language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
+  const [chatLanguage, setChatLanguage] = useState<Language>(language);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Local translation function for chat only
+  const ct = (key: string) => {
+    return (translations[chatLanguage] && translations[chatLanguage][key]) || (translations["English"] && translations["English"][key]) || key;
+  };
+
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      content: t("botWelcome"),
+      content: ct("botWelcome"),
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -20,16 +27,21 @@ const AIChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Update initial message when language changes if no other messages exist
+  // Sync initial chat language with site language once
+  useEffect(() => {
+    setChatLanguage(language);
+  }, [language]);
+
+  // Update initial message when chat language changes if no other messages exist
   useEffect(() => {
     if (messages.length === 1 && messages[0].role === "bot") {
       setMessages([{
         role: "bot",
-        content: t("botWelcome"),
+        content: ct("botWelcome"),
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }]);
     }
-  }, [language, t]);
+  }, [chatLanguage]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -54,7 +66,7 @@ const AIChat = () => {
     // Simulated bot response logic
     setTimeout(() => {
       setIsTyping(false);
-      let response = t("botSoilQuestion");
+      let response = ct("botSoilQuestion");
 
       const lowerContent = content.toLowerCase();
       if (lowerContent.includes("ysr") || lowerContent.includes("bharosa")) {
@@ -112,10 +124,10 @@ const AIChat = () => {
                   <Bot className="h-6 w-6" />
                 </div>
                 <div>
-                  <h3 className="font-semibold">{t("agriAssistant")}</h3>
+                  <h3 className="font-semibold">{ct("agriAssistant")}</h3>
                   <div className="flex items-center space-x-1 text-xs text-primary-foreground/80">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-400"></span>
-                    <span>{t("aiAssistantOnline")}</span>
+                    <span>{ct("aiAssistantOnline")}</span>
                   </div>
                 </div>
               </div>
@@ -134,10 +146,10 @@ const AIChat = () => {
               {languages.map((lang) => (
                 <span
                   key={lang.name}
-                  onClick={() => setLanguage(lang.name)}
+                  onClick={() => setChatLanguage(lang.name)}
                   className={cn(
                     "cursor-pointer px-1.5 py-1 rounded transition-colors whitespace-nowrap",
-                    language === lang.name ? "text-primary bg-primary/10" : "hover:text-primary"
+                    chatLanguage === lang.name ? "text-primary bg-primary/10" : "hover:text-primary"
                   )}
                 >
                   {lang.label}
@@ -190,22 +202,22 @@ const AIChat = () => {
             {/* Quick Actions */}
             <div className="flex gap-2 p-2 overflow-x-auto no-scrollbar border-t bg-muted/10">
               <button
-                onClick={() => handleSend(t("rentTractor"))}
+                onClick={() => handleSend(ct("rentTractor"))}
                 className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
               >
-                {t("rentTractor")}
+                {ct("rentTractor")}
               </button>
               <button
-                onClick={() => handleSend(t("cropAdvice"))}
+                onClick={() => handleSend(ct("cropAdvice"))}
                 className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
               >
-                {t("cropAdvice")}
+                {ct("cropAdvice")}
               </button>
               <button
-                onClick={() => handleSend(t("mandiRates"))}
+                onClick={() => handleSend(ct("mandiRates"))}
                 className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
               >
-                {t("mandiRates")}
+                {ct("mandiRates")}
               </button>
             </div>
 
@@ -221,7 +233,7 @@ const AIChat = () => {
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={t("askMeAnything Placeholder") || t("askMeAnything")}
+                  placeholder={ct("askMeAnything Placeholder") || ct("askMeAnything")}
                   className="rounded-full border-muted bg-muted/50 focus-visible:ring-primary"
                 />
                 <Button

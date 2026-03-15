@@ -23,16 +23,16 @@ class MockBackend {
   private bookings: Booking[] = [];
 
   constructor() {
-    const savedApps = localStorage.getItem("techspark_apps");
+    const savedApps = localStorage.getItem("teachspark_apps");
     if (savedApps) this.applications = JSON.parse(savedApps);
 
-    const savedBookings = localStorage.getItem("techspark_bookings");
+    const savedBookings = localStorage.getItem("teachspark_bookings");
     if (savedBookings) this.bookings = JSON.parse(savedBookings);
   }
 
   private save() {
-    localStorage.setItem("techspark_apps", JSON.stringify(this.applications));
-    localStorage.setItem("techspark_bookings", JSON.stringify(this.bookings));
+    localStorage.setItem("teachspark_apps", JSON.stringify(this.applications));
+    localStorage.setItem("teachspark_bookings", JSON.stringify(this.bookings));
   }
 
   getApplications(userId: string) {

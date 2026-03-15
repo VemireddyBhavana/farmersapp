@@ -1,348 +1,325 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "react-router-dom";
-import { BookOpen, Leaf, Fish, Bird, Landmark, ArrowRight, Tractor as TractorIcon, Clock, Calendar, User, X, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { 
+    BookOpen, Leaf, Fish, Bird, Landmark, ArrowRight, 
+    Tractor as TractorIcon, Clock, Calendar, User, 
+    CheckCircle, Sprout, Droplets, Recycle, ShieldCheck, 
+    Activity, ClipboardList, Zap, Beef, Wind, Sun, X
+} from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
+import { cn } from "@/lib/utils";
 
-interface Article {
-    title: string; summary: string; date: string; readTime: string; author: string; tags: string[];
-    fullContent: { heading: string; body: string }[];
+interface KnowledgeCard {
+    id: string;
+    titleKey: string;
+    image: string;
+    bullets: string[];
+    category: string;
+    stepsPrefix?: string;
+    stepCount?: number;
 }
 
-const KNOWLEDGE_DATA: Record<string, { title: string; icon: any; color: string; headerBg: string; desc: string; articles: Article[] }> = {
-    agriculture: {
-        title: "Agriculture & Cropping", icon: TractorIcon,
-        color: "bg-emerald-100 text-emerald-700 border-emerald-200", headerBg: "bg-emerald-700",
-        desc: "Detailed guides on crop cultivation, soil management, and modern farming techniques.",
-        articles: [
-            {
-                title: "Understanding Soil pH and Its Impact on Crop Yield",
-                summary: "Soil acidity affects nutrient availability. A pH of 6–7 is ideal. Discover how lime and sulfur can correct imbalances.",
-                date: "Dec 10, 2023", readTime: "5 min", author: "Agri Expert Team", tags: ["Soil Science", "Cropping"],
-                fullContent: [
-                    { heading: "What is Soil pH?", body: "Soil pH measures the hydrogen ion concentration on a scale of 0-14. A pH below 7 is acidic, above 7 is alkaline, and 7 is neutral. Most Indian crops prefer a slightly acidic to neutral range (6.0–7.0) for optimal nutrient uptake." },
-                    { heading: "Why pH Matters for Your Crop", body: "When soil pH is outside the ideal range, essential nutrients like Nitrogen, Phosphorus, and Potassium become 'locked up' and unavailable to plant roots even if you've applied plenty of fertilizer. This leads to deficiency symptoms and poor yields despite high fertilizer expenditure." },
-                    { heading: "How to Test Soil pH", body: "Get a soil testing kit from your nearest Krishi Vigyan Kendra (KVK) or use a digital pH meter. Collect samples from 15 cm depth, 5 spots per acre. Mix samples, dry, and test. Repeat every 2-3 years." },
-                    { heading: "Correcting Acidic Soil (pH below 6)", body: "Apply agricultural lime (calcium carbonate) at 1–2 tons per acre. Use dolomitic lime if magnesium is also needed. Apply 2–3 months before sowing to allow full integration. Wood ash is a low-cost organic alternative." },
-                    { heading: "Correcting Alkaline Soil (pH above 7.5)", body: "Apply elemental sulfur at 100–200 kg/acre. Gypsum (calcium sulfate) is effective for sodic soils. Incorporate organic matter like compost, which naturally lowers pH over time. Acidifying fertilizers like ammonium sulfate also help." },
-                    { heading: "Crop-wise Ideal pH Guide", body: "Rice: 5.5–6.5 | Wheat: 6.0–7.5 | Maize: 5.5–7.0 | Tomato: 5.5–7.0 | Potatoes: 4.8–5.5 | Soybean: 6.0–7.0 | Cotton: 5.5–8.0. Match your crop to your soil or amend accordingly." },
-                ]
-            },
-            {
-                title: "Drip Irrigation: Cost, Setup, and Benefits",
-                summary: "Drip irrigation reduces water consumption by up to 50%. This guide covers system costs, subsidies, and installation steps.",
-                date: "Nov 28, 2023", readTime: "8 min", author: "Dr. K. Reddy", tags: ["Irrigation", "Technology"],
-                fullContent: [
-                    { heading: "What is Drip Irrigation?", body: "Drip irrigation delivers water directly to the plant root zone through a network of pipes, tubes and emitters. It is the most water-efficient irrigation method available, reducing water use by 30–50% compared to flood irrigation." },
-                    { heading: "Cost of Installation", body: "For a 1-acre drip system: Main pipe (₹2,000–4,000), Sub-main pipes (₹1,500–3,000), Lateral pipes with drippers (₹3,000–6,000), Filter unit (₹2,000–4,000), Control valve & fittings (₹1,000–2,000). Total estimated cost: ₹10,000–20,000 per acre before subsidies." },
-                    { heading: "Government Subsidies Available", body: "Under PMKSY (Pradhan Mantri Krishi Sinchayee Yojana), small & marginal farmers receive 55% subsidy. Other farmers receive 45% subsidy. Subsidies are available through your State Horticulture Department. Apply via the National Agriculture Market portal or at your local agriculture office." },
-                    { heading: "Step-by-Step Installation Guide", body: "1. Design the layout mapping your field. 2. Install the pump and filtration unit at the water source. 3. Lay main and sub-main lines. 4. Connect lateral lines with drippers spaced at plant intervals (30–60 cm typically). 5. Test the system for pressure uniformity. 6. Set an automated timer for irrigation schedules." },
-                    { heading: "Key Benefits", body: "Water savings of 30–50% | Fertilizer savings via fertigation (20–30%) | Reduced weed growth | Lower labor costs | Up to 30–40% higher crop yields reported in trials | Suitable for irregular terrain." },
-                ]
-            },
-            {
-                title: "Integrated Pest Management (IPM): A Complete Guide",
-                summary: "IPM combines biological, cultural, and chemical methods to manage pests with the least environmental damage.",
-                date: "Sep 18, 2023", readTime: "12 min", author: "Dr. M. Sharma", tags: ["Pest Control", "IPM"],
-                fullContent: [
-                    { heading: "What is IPM?", body: "Integrated Pest Management (IPM) is a science-based, decision-making process that combines preventive tactics, biological controls, cultural practices, and targeted pesticide use to manage pest populations in an economically and environmentally sound manner." },
-                    { heading: "Step 1: Monitoring and Scouting", body: "Walk your fields every 3–5 days and record pest populations. Use sticky traps and pheromone traps to monitor adult insect populations. Set an Economic Threshold Level (ETL)—the pest density at which damage justifies control action. Act only when ETL is reached." },
-                    { heading: "Step 2: Biological Controls", body: "Introduce or conserve natural enemies: Trichogramma egg parasitoids control stem borers | Chrysoperla (lacewings) eat aphids and whiteflies | Bacillus thuringiensis (Bt) sprays control caterpillars | Neem-based formulations (Azadirachtin 0.03%) disrupt insect growth." },
-                    { heading: "Step 3: Cultural Controls", body: "Deep summer plowing (breaks pest life cycles) | Crop rotation (disrupts host-specific pests) | Removal and burning of infected crop debris | Resistant/tolerant variety selection | Light traps for nocturnal moths (1 trap per acre)." },
-                    { heading: "Step 4: Chemical Controls (Last Resort)", body: "Use narrow-spectrum, low-toxicity pesticides. Follow labels strictly. Rotate chemical groups to prevent resistance. Avoid spraying during flowering to protect pollinators. Use recommended dosages—more is not better and risks groundwater contamination." },
-                ]
-            },
+const KNOWLEDGE_SECTIONS = [
+    {
+        id: "crops",
+        titleKey: "sectionCrops",
+        icon: Sprout,
+        cards: [
+            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://images.unsplash.com/photo-1596272875729-ed2ff7d6d9c5?auto=format&fit=crop&q=80&w=800", bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
+            { id: "curry", titleKey: "curryLeavesTitle", image: "https://images.unsplash.com/photo-1626139575936-78488221544c?auto=format&fit=crop&q=80&w=800", bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
+            { id: "rice", titleKey: "riceTitle", image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=800", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
+            { id: "cotton", titleKey: "cottonTitle", image: "https://images.unsplash.com/photo-1594913785162-e6785b42dfdc?auto=format&fit=crop&q=80&w=800", bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 5 },
+            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1591857177580-dc82b9ac4e1e?auto=format&fit=crop&q=80&w=800", bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 5 },
+            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://images.unsplash.com/photo-1508747703725-71977713d5ca?auto=format&fit=crop&q=80&w=800", bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 9 },
         ]
     },
-    livestock: {
-        title: "Livestock & Dairy", icon: Bird,
-        color: "bg-amber-100 text-amber-700 border-amber-200", headerBg: "bg-amber-700",
-        desc: "Best practices for animal husbandry, milk production, and profitable dairy farming.",
-        articles: [
-            {
-                title: "Setting Up a Profitable 10-Cow Dairy Farm",
-                summary: "A complete financial model for starting a small dairy farm, covering shed costs, feed expenses, milk yield, and revenue projections.",
-                date: "Dec 08, 2023", readTime: "15 min", author: "Dairy Biz India", tags: ["Dairy Farming", "Business Plan"],
-                fullContent: [
-                    { heading: "Initial Investment Breakdown", body: "Land preparation & shed construction (1000 sq ft): ₹2,50,000 | 10 HF/Jersey cows @ ₹60,000 each: ₹6,00,000 | Milking equipment & storage: ₹80,000 | Water & electricity setup: ₹30,000 | Working capital (3 months feed): ₹1,20,000. Total: ~₹10,80,000. Expect 25–35% NABARD subsidy under Dairy Entrepreneurship Development Scheme (DEDS)." },
-                    { heading: "Daily Feed Requirements Per Cow", body: "Roughage (green fodder like Napier grass): 25–30 kg/day. Dry fodder (hay/straw): 5–7 kg/day. Concentrate feed (protein-rich pellets): 1 kg per 2.5 liters of milk produced. Salt & mineral mixture: 50–80 grams/day. Total feed cost per cow: ₹150–200/day." },
-                    { heading: "Expected Revenue", body: "A good HF cross cow produces 20–25 liters/day. At ₹35–40/liter (co-operative price), revenue per cow/day: ₹700–1,000. For 10 cows, total daily milk revenue: ₹7,000–10,000. Monthly milk revenue: ₹2,10,000–3,00,000. Subtract monthly operating costs (₹1,20,000–1,50,000). Net monthly profit: ₹60,000–1,50,000." },
-                    { heading: "Important Subsidies", body: "DEDS (Dairy Entrepreneurship Development Scheme) via NABARD: 25% subsidy for general, 33.33% for SC/ST. State Milk Federation support for cooperative registration. PM Kisan scheme for feed crop cultivation on your farm land." },
-                    { heading: "Key Success Factors", body: "Source quality cross-bred animals with high milk records. Maintain hygiene strictly—mastitis alone reduces yield by 20%. Ensure green fodder availability (cultivate Napier grass or Co-4 fodder). Join the nearest dairy cooperative for guaranteed price and veterinary support." },
-                ]
-            },
-            {
-                title: "Top 5 Indigenous Cow Breeds for High Milk Production",
-                summary: "Gir, Sahiwal, Red Sindhi, Rathi, and Tharparkar compared by yield, fat percentage, and climate adaptability.",
-                date: "Nov 20, 2023", readTime: "6 min", author: "NDDB Expert", tags: ["Cow Breeds", "Dairy"],
-                fullContent: [
-                    { heading: "1. Gir (Native to Gujarat)", body: "Average milk yield: 1,200–2,000 liters per lactation (6–7 liters/day). Fat content: 4.5–5.5%. Excellent for hot, arid conditions. Disease resistant. Exported globally—used in Brazil's cattle industry. Best for: Gujarat, Rajasthan, Maharashtra." },
-                    { heading: "2. Sahiwal (Native to Punjab/Pakistan border)", body: "Average milk yield: 2,000–3,000 liters per lactation (8–10 liters/day). Fat content: 4.5–5%. Most productive indigenous breed. Tick-resistant and heat-tolerant. Crosses with HF produce outstanding yields. Best for: Punjab, Haryana, UP." },
-                    { heading: "3. Red Sindhi (Originally from Sindh)", body: "Milk yield: 1,500–2,500 liters per lactation. Fat: 4.5–5%. Excellent adaptability to hot, humid conditions. Heavy milker for a zebu breed. Being promoted under conservation programs. Best for: Tamil Nadu, Kerala, Andhra Pradesh." },
-                    { heading: "4. Rathi (Native to Rajasthan)", body: "Milk yield: 1,062–1,800 liters per lactation. Fat: 4.5–5.2%. Dual-purpose (milk and draft). Excellent in semi-arid conditions. Known for easy calving and good maternal traits. Best for: Rajasthan, western India." },
-                    { heading: "5. Tharparkar (Desert breed)", body: "Milk yield: 1,400–1,800 liters per lactation. Fat: 4.5–5.5%. Supreme adaptability to extreme heat and scarce water. Long survival without water. Government conservation programs active. Best for: Rajasthan, Gujarat, Kutch region." },
-                ]
-            },
-            {
-                title: "Common Cattle Diseases and Prevention",
-                summary: "FMD, Brucellosis, and Black Quarter are major threats. Learn vaccination schedules and isolation protocols.",
-                date: "Oct 14, 2023", readTime: "7 min", author: "Dr. S. Nair (Vet)", tags: ["Animal Health", "Vaccination"],
-                fullContent: [
-                    { heading: "1. Foot and Mouth Disease (FMD)", body: "Symptoms: High fever, blisters on mouth, tongue, and hooves. Causes severe production loss. Vaccination: Mandatory vaccination every 6 months using trivalent FMD vaccine. Government provides free vaccination under National Animal Disease Control Programme (NADCP). Quarantine infected animals immediately." },
-                    { heading: "2. Brucellosis (Contagious Abortion)", body: "Symptoms: Abortions in last trimester, retained placenta, reduced fertility. Zoonotic—dangerous for humans handling infected animals. Control: Vaccinate all calves (4–8 months age) with Brucella abortus Strain 19 vaccine. Use gloves when handling aborted material. Report to veterinary authorities." },
-                    { heading: "3. Black Quarter (BQ)", body: "Symptoms: Sudden high fever, swelling in hind quarter muscles, severe lameness, crackling sound. Rapid death (24–48 hours). Prevention: Annual BQ vaccine before monsoon. No effective treatment once advanced. Bury/burn dead animals at least 2 meters deep with lime." },
-                    { heading: "4. Mastitis (Udder Infection)", body: "Symptoms: Hard, hot, swollen udder, clots or watery milk, cow refusing milking. Causes 20–30% milk production loss. Prevention: Clean udder before milking, teat disinfection, dry cow therapy with antibiotics. Treatment: Intra-mammary antibiotic tubes (consult vet)." },
-                    { heading: "Vaccination Calendar", body: "January: FMD vaccine | March: HS (Hemorrhagic Septicemia) | May: BQ vaccine | July: FMD booster | September: Brucellosis (calves) | November: Theileriosis vaccine in endemic areas." },
-                ]
-            },
+    {
+        id: "knowledge",
+        titleKey: "sectionKnowledge",
+        icon: BookOpen,
+        cards: [
+            { id: "soilPh", titleKey: "soilPhTitle", image: "https://images.unsplash.com/photo-1615811361523-6bd03d7748e7?auto=format&fit=crop&q=80&w=800", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
+            { id: "fertility", titleKey: "fertilityTitle", image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=800", bullets: ["fertilityBullet1", "fertilityBullet2", "fertilityBullet3"], category: "Soil Science" },
+            { id: "drip", titleKey: "dripTitle", image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=800", bullets: ["dripBullet1", "dripBullet2", "dripBullet3"], category: "Irrigation" },
+            { id: "rotation", titleKey: "rotationTitle", image: "https://images.unsplash.com/photo-1500382017468-9049efa8c964?auto=format&fit=crop&q=80&w=800", bullets: ["rotationBullet1", "rotationBullet2", "rotationBullet3"], category: "Management" },
+            { id: "organic", titleKey: "organicTitle", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=800", bullets: ["organicBullet1", "organicBullet2", "organicBullet3"], category: "Sustainable" },
         ]
     },
-    aquaculture: {
-        title: "Aquaculture & Fishing", icon: Fish,
-        color: "bg-blue-100 text-blue-700 border-blue-200", headerBg: "bg-blue-700",
-        desc: "Expert advice on fish farming, shrimp breeding, and pond management.",
-        articles: [
-            {
-                title: "Biofloc Fish Farming: A Complete Step-by-Step Setup Guide",
-                summary: "Biofloc technology uses beneficial microbes to clean water and provide supplemental feed, reducing costs by up to 30%.",
-                date: "Dec 01, 2023", readTime: "12 min", author: "Aqua Research India", tags: ["Biofloc", "Technology"],
-                fullContent: [
-                    { heading: "What is Biofloc Technology (BFT)?", body: "Biofloc technology creates a controlled environment where beneficial microorganisms (bacteria, algae, fungi) aggregate into dense 'flocs.' These flocs serve as a biological water treatment system AND a supplemental feed source rich in protein (25–40%), significantly reducing feed costs and water exchange needs." },
-                    { heading: "Pond/Tank Setup", body: "Can be set up in earthen ponds OR Round tanks (HDPE). Optimal depth: 1-1.5 meters. Aeration is critical: Install paddlewheel aerators or air blowers at 1 HP per 1,000 sqm. Maintain dissolved oxygen above 5 mg/L at all times. Shade 30–40% of water surface in summer to reduce algae overgrowth." },
-                    { heading: "Carbon-to-Nitrogen Ratio (C:N)", body: "BFT works by maintaining a C:N ratio of 15:1 or higher. Feed provides Nitrogen; add Carbon sources (molasses, tapioca flour, jaggery) to balance. Rule: For every 1 kg of feed given, add 200–250g of molasses (80% C) to maintain the ratio and promote healthy biofloc formation." },
-                    { heading: "Stocking and Species", body: "Best species for BFT: Tilapia (Oreochromis niloticus) – 1.5–3 kg/m³. Catfish – 2–4 kg/m³. Vannamei shrimp – 300–400 PL/m². Harvest tilapia at 500–700g (5–6 months). Perform partial water exchange (10–20%) only when TAN (Total Ammonia Nitrogen) exceeds 3 ppm." },
-                    { heading: "Economics (Per 1 Acre)", body: "Setup cost: ₹3–5 lakhs. Feed cost reduction: 20–30% vs. traditional. Production: 6,000–10,000 kg tilapia/crop. Revenue (₹80–100/kg): ₹4.8–10 lakhs. Profit per crop: ₹1.5–3 lakhs. Payback period: 2–3 crops (1–1.5 years)." },
-                ]
-            },
-            {
-                title: "Vannamei Shrimp Farming: Complete Beginner's Guide",
-                summary: "Litopenaeus Vannamei is India's most profitable shrimp. Learn pond prep, stocking, and achieving 3 crops per year.",
-                date: "Nov 15, 2023", readTime: "10 min", author: "Dr. P. Coastal Labs", tags: ["Shrimp", "Vannamei"],
-                fullContent: [
-                    { heading: "Why Vannamei?", body: "Pacific White Shrimp (Vannamei) accounts for 85% of India's shrimp exports. Fast growth (harvest in 90–100 days), euryhaline (tolerates 0.5–45 ppt salinity), high FCR efficiency (1.3–1.5:1), and resistance to most local shrimp diseases make it ideal for coastal Andhra Pradesh, Tamil Nadu, Odisha, and Gujarat." },
-                    { heading: "Pond Preparation", body: "Drain and dry pond for 10–15 days. Remove organic sludge and apply agricultural lime at 500–1000 kg/ha. Fill to 1–1.5m with filtered seawater (15–25 ppt salinity). Fertilize with urea (25 kg/ha) + single super phosphate (50 kg/ha) for plankton bloom. Check phytoplankton bloom (Secchi disc reading 30–40cm) before stocking." },
-                    { heading: "Stocking Density & PL Quality", body: "Semi-intensive: 40–60 PL/m². Intensive: 80–120 PL/m². Source SPF (Specific Pathogen Free) certified post-larvae from licensed hatcheries only. Conduct acclimatization to pond water temperature and salinity over 30–60 minutes before release." },
-                    { heading: "Feeding Management", body: "Use 4-tray feeding method: Install 4 check trays per acre. Feed what disappears from trays in 90 minutes. Feed 5–6 times/day. Use quality 35% protein pellets. Reduce feed if trays have leftover—prevents water fouling." },
-                    { heading: "Water Quality Targets", body: "DO > 5 ppm | pH 7.5–8.5 | Salinity 15–25 ppt | Temperature 28–32°C | Ammonia < 0.1 ppm | Nitrite < 0.1 ppm. Maintain with aeration, probiotics (weekly), and water exchange (max 20%/week) only for correction." },
-                    { heading: "Harvest & Revenue", body: "Harvest at 90–100 days @ 20–25g/shrimp. Expected yield: 5,000–8,000 kg/ha per crop. At ₹350–400/kg (count-30), revenue: ₹17.5–32 lakhs/ha per crop. 3 crops/year possible in warm coastal areas. Net profit after expenses: ₹6–12 lakhs/crop." },
-                ]
-            },
-            {
-                title: "White Spot Syndrome Virus (WSSV): Prevention & Response",
-                summary: "WSSV can wipe out an entire crop in days. Learn biosecurity measures and emergency response protocols.",
-                date: "Sep 22, 2023", readTime: "7 min", author: "Coastal Disease Lab", tags: ["Shrimp Disease", "Biosecurity"],
-                fullContent: [
-                    { heading: "What is WSSV?", body: "White Spot Syndrome Virus is the most devastating shrimp pathogen globally. Infected shrimp show white spots on the shell (calcium deposits), reddish coloration, and stop eating. Mortality can reach 100% within 3–10 days. There is NO effective treatment—only prevention." },
-                    { heading: "How WSSV Spreads", body: "Infected live feed (wild artemia, copepods) | Wild crustaceans entering ponds (crabs, wild shrimp) | Contaminated pond water or equipment | Infected post-larvae from poor-quality hatcheries | Birds carrying infected shrimp between ponds." },
-                    { heading: "Biosecurity Measures (Prevention)", body: "1. Source only SPF-certified PL from reputable hatcheries. 2. Install bird netting over all ponds. 3. Screen intake water through 60–100 micron filter mesh. 4. Disinfect all equipment (nets, buckets) with 200 ppm chlorine before use. 5. Restrict farm access—use footbaths with 5% lime at entry. 6. Test water source for viral load periodically via PCR test." },
-                    { heading: "Early Warning Signs", body: "Shrimp gathering at pond edges (unusual behavior). Reduction in feed consumption by >30% overnight. Reddish coloration of affected shrimp. White spots visible under the carapace. If these appear, immediately stop feeding and collect samples for PCR testing." },
-                    { heading: "Emergency Response Protocol", body: "1. Stop all water exchange immediately. 2. Harvest whatever you can if shrimp exceed 12g (even at distress sale price). 3. Treat remaining pond with Saponin (100 ppm) to destroy all crustaceans. 4. Drain, dry, and apply lime (2,000 kg/ha). 5. Do NOT drain infected water into canals/sea—disinfect first with bleach (25 ppm chlorine, 30 min contact time). 6. Report to State Fisheries Department." },
-                ]
-            },
+    {
+        id: "livestock",
+        titleKey: "sectionLivestock",
+        icon: Bird,
+        cards: [
+            { id: "egg", titleKey: "eggTitle", image: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800", bullets: ["eggBullet1", "eggBullet2", "eggBullet3", "eggBullet4"], category: "Poultry" },
+            { id: "dairy", titleKey: "dairyTitle", image: "https://images.unsplash.com/photo-1543362906-acfc16c623a2?auto=format&fit=crop&q=80&w=800", bullets: ["dairyBullet1", "dairyBullet2", "dairyBullet3"], category: "Livestock" },
+            { id: "goat", titleKey: "goatTitle", image: "https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?auto=format&fit=crop&q=80&w=800", bullets: ["goatBullet1", "goatBullet2", "goatBullet3"], category: "Livestock" },
+            { id: "fish", titleKey: "fishTitle", image: "https://images.unsplash.com/photo-1476144670005-78e722880126?auto=format&fit=crop&q=80&w=800", bullets: ["fishBullet1", "fishBullet2", "fishBullet3"], category: "Aquaculture" },
+            { id: "bee", titleKey: "beeTitle", image: "https://images.unsplash.com/photo-1473973266408-ed4e27f35e73?auto=format&fit=crop&q=80&w=800", bullets: ["beeBullet1", "beeBullet2", "beeBullet3"], category: "Livestock" },
         ]
     },
-    horticulture: {
-        title: "Horticulture & Gardening", icon: Leaf,
-        color: "bg-lime-100 text-lime-700 border-lime-200", headerBg: "bg-lime-700",
-        desc: "Insights into growing fruits, vegetables, flowers, and ornamental plants using modern horticultural techniques.",
-        articles: [
-            {
-                title: "High-Density Apple Orchards: Profitability Guide",
-                summary: "High-density orchards using M-9 rootstocks yield 60–80 tons/ha vs 20–25 tons traditionally. Understand the setup cost and payback period.",
-                date: "Dec 05, 2023", readTime: "10 min", author: "HPKV Orchard Experts", tags: ["Apple", "High Density"],
-                fullContent: [
-                    { heading: "Traditional vs. High-Density System", body: "Traditional orchards plant 100–200 trees/ha using vigorous rootstocks. They start producing at 8–10 years and yield 20–25 tons/ha. High-density orchards plant 1,250–3,300 trees/ha on dwarfing rootstocks (M-9, M-26). Production begins at year 3–4 and yields 60–80+ tons/ha. Premium quality, uniform-size fruit commands higher market prices." },
-                    { heading: "Best Varieties for India", body: "Himachali: Fuji, Gala, Red Delicious. Kashmir: Ambri, Razakwadi. Cold-zone HD systems: Gala Must, Brookfield Gala, Fuji Kiku. Choose self-fertile varieties or plant pollinizers (1:8 ratio) to ensure fruit set." },
-                    { heading: "Rootstock Selection", body: "M-9: Most dwarfing, highest density possible, requires full trellising support, best production. M-26: Semi-dwarfing, less support needed, good for hillsides. MM-106: Semi-vigorous, useful in poorer soils. Select based on soil depth and water availability." },
-                    { heading: "Trellis and Training System", body: "Install wooden or concrete posts at 6m intervals, 3m tall. Use 3 lines of 12-gauge galvanized wire at 60cm, 120cm, 180cm heights. Train trees in a vertical axis or tall spindle shape. Annual pruning to maintain light penetration is critical for color and quality." },
-                    { heading: "Investment and Returns", body: "Setup cost (per acre): Plants + rootstocks: ₹2,00,000 | Trellis system: ₹1,50,000 | Irrigation: ₹80,000 | Labor: ₹50,000/year. Total 5-yr investment: ~₹8 lakhs. From year 4, revenue at 15 tons/acre × ₹50/kg = ₹7.5 lakhs/yr. Break even by year 6–7. Steady profit ₹3–5 lakhs/acre/year thereafter." },
-                ]
-            },
-            {
-                title: "Indoor Saffron Farming: Costs, Profit, and Training",
-                summary: "Indoor saffron grows in 500 sq ft. At ₹300–500/gram, 300–500 grams per season is achievable.",
-                date: "Nov 08, 2023", readTime: "9 min", author: "AgriTech Magazine", tags: ["Saffron", "Indoor Farming"],
-                fullContent: [
-                    { heading: "Why Indoor Saffron?", body: "Traditional Kashmiri saffron cultivation is constrained by geography. Indoor hydroponic saffron farming allows anyone to grow this incredibly valuable spice (₹2–3 lakh/kg retail) using vertical shelf systems in climate-controlled rooms, with 2 crops per year instead of 1." },
-                    { heading: "Setup Requirements", body: "Room size: 500–1000 sqft (controlled). LED grow lights: Full-spectrum, 12–16 hrs during vegetative; short day (8 hrs) to trigger flowering. Temperature: 15–20°C for vegetative; 6–12°C for flowering trigger (simulates winter). Humidity: 60–80%. Trays with coconut coir substrate." },
-                    { heading: "Corm Sourcing and Planting", body: "Source Crocus sativus corms from Pampore (Kashmir) or certified suppliers. Use corms of 10g+ weight for best yield. Plant dense: 50–60 corms per sqft in trays. Spacing: 4–5cm. Plant at 5–7cm depth. Expect flowers in 6–8 weeks." },
-                    { heading: "Harvesting Saffron", body: "Flowers bloom for just 1–2 days. Each flower has 3 red stigmas. Harvest flowers in morning before they fully open. Pluck stigmas by hand carefully. Dry immediately at 40°C for 30–45 min. One corm yields 1 flower with just 0.006g of dried saffron." },
-                    { heading: "Economics", body: "500 sqft with 25,000 corms → ~25,000 flowers → 150g saffron (year 1). Improves as corms multiply. Retail price: ₹300–500/g. Revenue: ₹45,000–75,000 per crop. Setup cost: ₹1.5–2 lakh. Break-even: 2–3 crops. From year 2 (corms multiply 3–5x), revenue potential: ₹2–5 lakhs/year." },
-                ]
-            },
-            {
-                title: "Protected Cultivation: Build a Low-Cost Polyhouse Under ₹5 Lakhs",
-                summary: "A 500 sqm naturally-ventilated polyhouse can be built for ₹1–2 lakhs under 50% government subsidy.",
-                date: "Oct 02, 2023", readTime: "11 min", author: "NCADEN Extension Team", tags: ["Polyhouse", "Protected Farming"],
-                fullContent: [
-                    { heading: "What is Protected Cultivation?", body: "Protected cultivation involves growing crops inside structures (polyhouses, net houses, shade houses) that provide a controlled microclimate. This allows off-season production, year-round cultivation, 30–50% water savings, and near-elimination of external pest pressure." },
-                    { heading: "Polyhouse Types and Costs", body: "Naturally ventilated polyhouse (NVP): ₹700–900 per sqm. Fan-and-pad cooled: ₹1,200–1,500 per sqm. Low-cost bamboo polyhouse: ₹350–500 per sqm (short lifespan). For 500 sqm NVP before subsidy: ₹3.5–4.5 lakhs. After 50% NHM/MIDH subsidy: ₹1.75–2.25 lakhs." },
-                    { heading: "Subsidy Application Process", body: "1. Apply to your State Horticulture Department (online or district office). 2. Get site inspection from a horticulture officer. 3. Receive approved estimate. 4. Construct structure through empanelled agency. 5. Claim subsidy after photo documentation. Schemes: NHM, MIDH, RKVY. National Horticulture Board also provides assistance for commercial ventures." },
-                    { heading: "Best Crops for Polyhouse", body: "Cucumber (off-season): 20–25 kg/sqm/crop. Capsicum: 8–12 kg/sqm/crop. Tomato: 18–25 kg/sqm/crop. Gerbera (floriculture): 100–150 flowers/sqm/year. Rose: 100–200 stems/sqm/year. Floriculture in polyhouses is highly profitable for export markets." },
-                    { heading: "Return on Investment", body: "For 500 sqm polyhouse: Running cost (seeds, fertilizer, labor): ₹1.5 lakhs/year. Revenue from 2 tomato crops: ₹3–4 lakhs/year. Net annual profit: ₹1.5–2.5 lakhs. Payback period: 2–3 years. Structure lifespan: 8–12 years providing a long-term stable income stream." },
-                ]
-            },
+    {
+        id: "schemes",
+        titleKey: "sectionSchemes",
+        icon: Landmark,
+        cards: [
+            { id: "pmKusum", titleKey: "solarSummary", image: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=800", bullets: ["pmKusumBullet1", "pmKusumBullet2", "pmKusumBullet3"], category: "Subsidy" },
+            { id: "pmKisan", titleKey: "pmKisanTitle", image: "https://images.unsplash.com/photo-1517594422361-5eeb8ae275a9?auto=format&fit=crop&q=80&w=800", bullets: ["pmKisanBullet1", "pmKisanBullet2"], category: "Direct Pay" },
+            { id: "pmFasal", titleKey: "pmFasalTitle", image: "https://images.unsplash.com/photo-1557234195-bd9f290f0e4d?auto=format&fit=crop&q=80&w=800", bullets: ["pmFasalBullet1", "pmFasalBullet2"], category: "Insurance" },
+            { id: "soilHealth", titleKey: "soilHealthTitle", image: "https://images.unsplash.com/photo-1592185157642-d6fc706f9790?auto=format&fit=crop&q=80&w=800", bullets: ["soilHealthBullet1", "soilHealthBullet2"], category: "Testing" },
         ]
-    },
-    business: {
-        title: "Agri Business & Project Reports", icon: Landmark,
-        color: "bg-purple-100 text-purple-700 border-purple-200", headerBg: "bg-purple-700",
-        desc: "Comprehensive business plans, subsidy details, loan applications, and financial strategies for agri-entrepreneurs.",
-        articles: [
-            {
-                title: "PM KUSUM Solar Pump Subsidy: Apply Online & Eligibility",
-                summary: "Under PM-KUSUM Component B, farmers get 60% subsidy on solar pumps. Learn how to apply and required documents.",
-                date: "Dec 12, 2023", readTime: "8 min", author: "Govt. Yojana Team", tags: ["PM-KUSUM", "Subsidy"],
-                fullContent: [
-                    { heading: "Scheme Overview", body: "PM-KUSUM (Pradhan Mantri Kisan Urja Suraksha evam Utthaan Mahabhiyan) was launched to help 25 lakh farmers shift to solar-powered irrigation. Component B: Standalone solar agriculture pumps of 2–7.5 HP capacity." },
-                    { heading: "Subsidy Breakdown", body: "Central government subsidy: 30% of benchmark cost. State government subsidy: 30% of benchmark cost. Farmer contribution: 40% (can avail bank loan for this). Effective out-of-pocket: Only 10% if bank loan taken for farmer's share. Example: 3 HP pump benchmark cost ₹2.5 lakhs → Farmer pays ₹25,000 only." },
-                    { heading: "Eligibility Criteria", body: "Individual farmer with cultivable land | Should not have existing grid-connected electricity for pump | Farmer whose DISCOM area has announced the scheme | Priority to small & marginal farmers, SC/ST farmers, and women farmers. Banks prefer collateral of land documents." },
-                    { heading: "Documents Required", body: "Aadhaar Card | Land ownership documents (7/12 or Patta) | Bank account linked to Aadhaar | Caste certificate (for SC/ST priority) | Photograph | Electricity bill (showing no existing agricultural connection)." },
-                    { heading: "How to Apply", body: "1. Visit your State Nodal Agency website (e.g., upnedasolar.com for UP, mahaurja.com for Maharashtra). 2. Register online with Aadhaar. 3. Select pump capacity needed. 4. Upload documents. 5. Get registration number and wait for approval. 6. After approval, empanelled vendors install the pump. 7. Subsidy released directly to vendor. Alternatively, visit your local Krishi Vigyan Kendra or District Collector's office for offline assistance." },
-                ]
-            },
-            {
-                title: "NABARD Loans for Agriculture: Types, Eligibility & How to Apply",
-                summary: "NABARD offers KCC, Agricultural Term Loans, and Warehouse Receipt Financing at 7% per annum.",
-                date: "Oct 28, 2023", readTime: "9 min", author: "NABARD Finance Cell", tags: ["NABARD", "Agri Loans"],
-                fullContent: [
-                    { heading: "About NABARD", body: "National Bank for Agriculture and Rural Development (NABARD) is India's apex development bank for agriculture. NABARD doesn't lend directly to farmers—it refinances loans given by Cooperative Banks, Regional Rural Banks (RRBs), and Commercial Banks, making credit accessible in rural areas at subsidized rates." },
-                    { heading: "Kisan Credit Card (KCC)", body: "Provides short-term (12-month) revolving credit for crop production expenses. Limit based on land holding and crop type. Interest rate: 7% per annum (4% effective with Government's interest subvention). No collateral required up to ₹1.6 lakh. Apply at nearest PACS, RRB, or nationalized bank. Linked to a RuPay debit card for easy access." },
-                    { heading: "Short-Term Crop Loans", body: "For seasonal crops from sowing to harvest. Amount: ₹50,000–5 lakhs per acre depending on crop. Duration: Up to 12 months. Interest: 7% with subvention (2% prompt repayment rebate = effective 5%). Apply with land records, sowing certificate, and village survey data." },
-                    { heading: "Agricultural Term Loans", body: "For capital expenditure: borewell, tractor, polyhouse, cold storage, orchard development. Duration: 3–15 years. Loan amount: Up to ₹50 lakhs for individuals. Collateral: Land, assets, or third-party guarantee. Interest rate: 8.5–10.5%. Under DEDS, ABF, and NHM, subsidy amounts reduce effective principal." },
-                    { heading: "Step-by-Step Application", body: "1. Visit nearest branch of your cooperative bank or RRB. 2. Get KCC/Term Loan application form. 3. Submit land documents (7/12, Aadhaar, recent bank statement). 4. Bank officer does field visit + land valuation. 5. Loan sanctioned typically in 15–30 days. 6. For subsidy-linked schemes, bank submits subsidy claim to NABARD on your behalf after completion of the investment." },
-                ]
-            },
-            {
-                title: "Small-Scale Mushroom Farming Income: A Realistic Guide",
-                summary: "500 sq ft controlled mushroom room produces 80–120 kg/month, generating ₹10,000–18,000/month.",
-                date: "Oct 05, 2023", readTime: "7 min", author: "Mushroom Biz India", tags: ["Mushroom", "Low-Investment"],
-                fullContent: [
-                    { heading: "Why Mushroom Farming?", body: "Mushrooms require no sunlight, minimal water, and can be grown in unused buildings, garages, or sheds. The crop cycle is just 45–60 days and profit margins are excellent. Button mushrooms sell at ₹80–150/kg wholesale and ₹200–300/kg retail in urban markets. Oyster mushrooms are even easier to grow organically." },
-                    { heading: "Types of Mushrooms to Grow", body: "Button Mushroom (Agaricus bisporus): Most popular, requires 12–18°C. Oyster Mushroom (Pleurotus): Grows on paddy straw, easier, good for beginners, 20–28°C. Milky Mushroom (Calocybe indica): Ideal for South India, tropical, 25–35°C. Shiitake: Premium variety, higher price (₹500–800/kg), more complex. Start with Oyster or Milky mushrooms." },
-                    { heading: "500 sqft Button Mushroom Setup", body: "Spawn (seed): ₹5,000/cycle | Compost (wheat straw/paddy): ₹3,000/cycle | Polythene bags: ₹1,000 | Fumigation chemicals: ₹500 | Cooling/heater for temp control: ₹15,000 (one-time). Total recurring cost per 45-day cycle: ₹10,000–12,000." },
-                    { heading: "Expected Income", body: "500 sqft room can hold approx 500 kg of compost in bags. Biological efficiency of button mushroom: 18–22%. Expected yield per cycle: 90–110 kg. Revenue at ₹150/kg (wholesale): ₹13,500–16,500. Net profit per cycle: ₹3,500–6,500. Running 6 cycles/year = ₹21,000–39,000 net profit per year from one room. Scale up for more rooms." },
-                    { heading: "Marketing Your Mushrooms", body: "Local hotel and restaurant direct supply (best price). Vegetable market vendor tie-ups. Zomato/Swiggy supplier connection for daily delivery. Dry mushroom export (Oyster and Shiitake): ₹800–1,500/kg dry weight. Join Farmer Producer Organizations (FPO) for collective bargaining. Online selling via WhatsApp Business is very effective for home-based setups." },
-                ]
-            },
-        ]
-    },
-};
+    }
+];
 
-type CategoryKey = keyof typeof KNOWLEDGE_DATA;
+const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: () => void }) => {
+    const { t } = useLanguage();
+    
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => { document.body.style.overflow = "auto"; };
+    }, []);
 
-const AgriKnowledge = () => {
-    const [searchParams] = useSearchParams();
-    const [expandedArticle, setExpandedArticle] = useState<number | null>(null);
-    const categoryKey = (searchParams.get("category") || "agriculture") as CategoryKey;
-    const data = KNOWLEDGE_DATA[categoryKey] || KNOWLEDGE_DATA.agriculture;
-    const Icon = data.icon;
-
-    const handleToggle = (idx: number) => {
-        setExpandedArticle(expandedArticle === idx ? null : idx);
-    };
+    const steps = card.stepCount 
+        ? Array.from({ length: card.stepCount }, (_, i) => ({
+            title: t(`${card.stepsPrefix}${i + 1}Title`) || `${t("step")} ${i + 1}`,
+            body: t(`${card.stepsPrefix}${i + 1}Body`) || "Detailed guidance coming soon..."
+          }))
+        : card.bullets.map((bulletKey, i) => ({
+            title: t(bulletKey).replace(/^•\s*/, ""), 
+            body: t(bulletKey).includes("requirements") ? "Optimizing climate conditions is crucial for yield." : "Implement best practices for superior results."
+          }));
 
     return (
-        <div className="min-h-screen bg-slate-50 py-10 px-4">
-            <div className="container mx-auto max-w-5xl space-y-8">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-8 overflow-hidden"
+        >
+            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl" onClick={onBack} />
+            
+            <motion.div 
+                initial={{ scale: 0.9, y: 50, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 50, opacity: 0 }}
+                className="relative bg-white/10 border border-white/20 p-6 md:p-12 rounded-[2rem] md:rounded-[3.5rem] w-full max-w-7xl h-[95vh] md:h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+            >
+                <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
 
-                {/* Page Header */}
-                <motion.div key={categoryKey} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-                    className={`rounded-xl p-8 text-white flex items-start gap-6 ${data.headerBg}`}>
-                    <div className="p-4 bg-white/20 rounded-xl shrink-0">
-                        <Icon className="h-10 w-10" />
+                <div className="flex justify-between items-start mb-8 md:mb-12 relative z-10">
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <div className="bg-emerald-600 p-3 md:p-5 rounded-[1.2rem] md:rounded-[2rem] shadow-2xl shadow-emerald-500/40">
+                            <Leaf className="w-6 h-6 md:w-10 md:h-10 text-white" />
+                        </div>
+                        <div>
+                            <h2 className="text-2xl md:text-5xl font-black text-white tracking-tighter leading-none pr-12 md:pr-0">
+                                {t(card.titleKey)}
+                            </h2>
+                            <p className="text-emerald-400 font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:text-xs mt-2 md:mt-3">Premium Learning Module</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 className="text-4xl font-black tracking-tight">{data.title}</h1>
-                        <p className="mt-2 text-lg opacity-90 max-w-2xl">{data.desc}</p>
-                    </div>
-                </motion.div>
-
-                {/* Category Quick Nav */}
-                <div className="flex flex-wrap gap-2">
-                    {(Object.keys(KNOWLEDGE_DATA) as CategoryKey[]).map((key) => {
-                        const cat = KNOWLEDGE_DATA[key];
-                        const CatIcon = cat.icon;
-                        const isActive = key === categoryKey;
-                        return (
-                            <a key={key} href={`/knowledge?category=${key}`}
-                                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold border transition-all duration-200 ${isActive ? cat.color + " shadow" : "border-slate-200 bg-white text-slate-600 hover:border-emerald-300 hover:text-emerald-700"}`}>
-                                <CatIcon className="h-4 w-4" /> {cat.title}
-                            </a>
-                        );
-                    })}
+                    <button 
+                        onClick={onBack} 
+                        className="bg-white/10 hover:bg-emerald-600 p-3 md:p-5 rounded-full transition-all border border-white/10 group shadow-xl"
+                    >
+                        <X className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:rotate-90 transition-transform" />
+                    </button>
                 </div>
 
-                {/* Articles */}
-                <div className="space-y-4">
-                    <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2 border-b border-slate-200 pb-3">
-                        <BookOpen className="h-5 w-5 text-emerald-600" /> Latest Insights
-                    </h2>
-                    {data.articles.map((article, idx) => (
-                        <motion.div key={`${categoryKey}-${idx}`}
-                            initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.07 }}
-                            className="bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md hover:border-emerald-400 transition-all overflow-hidden">
-                            {/* Article Header */}
-                            <div className="p-6 flex flex-col md:flex-row gap-4">
-                                <div className="flex-1 space-y-3">
-                                    <div className="flex flex-wrap gap-2">
-                                        {article.tags.map((tag) => (
-                                            <span key={tag} className={`px-2 py-0.5 rounded text-[10px] font-black tracking-widest uppercase ${data.color}`}>{tag}</span>
-                                        ))}
-                                    </div>
-                                    <h3 className="text-lg font-black text-slate-800 leading-snug">{article.title}</h3>
-                                    <p className="text-sm text-slate-500 leading-relaxed">{article.summary}</p>
-                                    <div className="flex items-center gap-4 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-400">
-                                        <span className="flex items-center gap-1"><User className="h-3 w-3" /> {article.author}</span>
-                                        <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {article.date}</span>
-                                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {article.readTime} read</span>
-                                    </div>
-                                </div>
-                                <div className="flex items-start shrink-0">
-                                    <Button
-                                        onClick={() => handleToggle(idx)}
-                                        className={`flex items-center gap-2 text-sm font-bold px-5 py-2 rounded-lg transition-all ${expandedArticle === idx ? "bg-slate-700 hover:bg-slate-800 text-white" : "bg-emerald-600 hover:bg-emerald-700 text-white"}`}>
-                                        {expandedArticle === idx ? (<><X className="h-4 w-4" /> Close</>) : (<>Read Full Guide <ArrowRight className="h-4 w-4" /></>)}
-                                    </Button>
-                                </div>
-                            </div>
-
-                            {/* Full Article Content */}
-                            <AnimatePresence>
-                                {expandedArticle === idx && (
-                                    <motion.div
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: "auto" }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                                        className="overflow-hidden"
-                                    >
-                                        <div className="px-6 pb-6 border-t border-slate-100 space-y-6 pt-6 bg-slate-50/50">
-                                            {article.fullContent.map((section, sIdx) => (
-                                                <motion.div key={sIdx}
-                                                    initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: sIdx * 0.08 }}
-                                                    className="flex gap-4">
-                                                    <div className={`mt-1 h-8 w-8 rounded-full flex items-center justify-center font-black text-sm shrink-0 ${data.color}`}>
-                                                        {sIdx + 1}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <h4 className="font-black text-slate-800 mb-1 flex items-center gap-2">
-                                                            <CheckCircle className="h-4 w-4 text-emerald-500" /> {section.heading}
-                                                        </h4>
-                                                        <p className="text-sm text-slate-600 leading-relaxed">{section.body}</p>
-                                                    </div>
-                                                </motion.div>
-                                            ))}
+                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                        {steps.map((step, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] hover:bg-white/20 transition-all group shadow-lg flex flex-col h-full"
+                            >
+                                <div className="space-y-4 md:space-y-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="h-8 w-8 md:h-12 md:w-12 rounded-[0.8rem] md:rounded-2xl bg-emerald-500/20 flex items-center justify-center">
+                                            <CheckCircle className="w-4 h-4 md:w-7 md:w-7 text-emerald-500" />
                                         </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-                    ))}
+                                    </div>
+                                    <h3 className="text-lg md:text-xl font-black text-white leading-tight">
+                                        {step.title.includes(':') ? step.title.split(':').slice(1).join(':').trim() : step.title}
+                                    </h3>
+                                    <p className="text-emerald-50/80 text-sm font-semibold leading-relaxed">
+                                        {step.body}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
-export default AgriKnowledge;
+const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: KnowledgeCard) => void }) => {
+    const { t } = useLanguage();
+    
+    return (
+        <motion.div
+            initial={{ y: 0 }}
+            animate={{ y: [0, -10, 0] }}
+            transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: Math.random() * 2
+            }}
+            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+            className="group relative flex flex-col bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[2rem] md:rounded-[3rem] p-5 md:p-7 shadow-2xl shadow-emerald-900/5 hover:shadow-emerald-600/20 transition-all overflow-hidden h-full"
+        >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-30 pointer-events-none" />
+            
+            <div className="relative h-40 md:h-48 w-full rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden mb-5 md:mb-7 shadow-inner">
+                <img 
+                    src={card.image} 
+                    alt={t(card.titleKey)} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" 
+                />
+                <div className="absolute top-3 left-3">
+                    <span className="bg-emerald-600/80 backdrop-blur-xl text-white text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1.5 rounded-full shadow-2xl border border-white/10">
+                        {card.category}
+                    </span>
+                </div>
+            </div>
+
+            <div className="relative space-y-4 md:space-y-5 flex flex-col flex-1">
+                <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight leading-dense group-hover:text-emerald-700 transition-colors">
+                    {t(card.titleKey)}
+                </h3>
+                
+                <ul className="space-y-2 md:space-y-4 flex-1">
+                    {card.bullets.map((bulletKey, idx) => (
+                        <li key={idx} className="flex items-start gap-3 md:gap-4">
+                            <div className="mt-1.5 md:mt-2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.9)] flex-shrink-0" />
+                            <span className="text-[13px] md:text-sm font-bold text-slate-600 leading-tight">
+                                {t(bulletKey)}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+
+                <button 
+                    onClick={() => onOpen(card)}
+                    className="w-full h-12 md:h-14 rounded-[1rem] md:rounded-[1.8rem] bg-slate-950 text-white font-black text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 active:scale-95 transition-all hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/30"
+                >
+                    {t("viewCultivationGuide") || "View Cultivation Guide"}
+                    <ArrowRight className="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1.5 transition-transform" />
+                </button>
+            </div>
+            <div className="absolute -bottom-10 -right-10 w-24 md:w-32 h-24 md:h-32 bg-emerald-100 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
+        </motion.div>
+    );
+};
+
+export default function AgriKnowledgeHub() {
+    const { t } = useLanguage();
+    const [selectedCard, setSelectedCard] = useState<KnowledgeCard | null>(null);
+    const dashboardRef = useRef<HTMLDivElement>(null);
+
+    const scrollToDashboard = () => {
+        dashboardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    return (
+        <div className="min-h-screen bg-[#F8FAF9] pb-24 md:pb-40 selection:bg-emerald-100 selection:text-emerald-900">
+            {/* Header / Hero Section */}
+            <div className="relative bg-white pt-12 md:pt-24 pb-20 md:pb-32 overflow-hidden border-b border-emerald-50">
+                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-50/50 rounded-full blur-[100px] md:blur-[150px] animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
+                
+                <div className="container mx-auto px-4 relative z-10">
+                    <div className="flex flex-col items-center text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="inline-flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2 md:py-2.5 bg-white border border-emerald-100 rounded-full text-emerald-700 shadow-xl shadow-emerald-900/5 backdrop-blur-sm"
+                        >
+                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.25em] md:tracking-[0.3em]">{t("agriHubSubtitle") || "Farmer Education Portal"}</span>
+                        </motion.div>
+                        
+                        <motion.h1 
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-5xl md:text-9xl font-black text-slate-950 tracking-tighter leading-[0.9] md:leading-[0.8]"
+                        >
+                            AgriKnowledge<span className="text-emerald-600">Hub</span>
+                        </motion.h1>
+                        
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-lg md:text-2xl text-slate-600 font-bold max-w-2xl leading-relaxed px-4"
+                        >
+                            Modern agricultural excellence and innovative learning for sustainable prosperity.
+                        </motion.p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Dashboard Sections */}
+            <div ref={dashboardRef} className="container mx-auto px-4 mt-12 md:mt-24 space-y-24 md:space-y-40">
+                {KNOWLEDGE_SECTIONS.map((section) => (
+                    <section key={section.id} className="relative">
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-10 md:mb-16">
+                            <div className="h-16 w-16 md:h-24 md:w-24 rounded-[1.25rem] md:rounded-[2rem] bg-slate-950 flex items-center justify-center shadow-2xl shrink-0">
+                                <section.icon className="h-7 w-7 md:h-10 md:w-10 text-emerald-400" />
+                            </div>
+                            <div className="space-y-1">
+                                <h2 className="text-3xl md:text-6xl font-black text-slate-950 tracking-tight leading-none uppercase italic">
+                                    {t(section.titleKey)}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                            {section.cards.map((card) => (
+                                <FloatingGlassCard key={card.id} card={card} onOpen={setSelectedCard} />
+                            ))}
+                        </div>
+                    </section>
+                ))}
+            </div>
+
+            {/* Platform Branding */}
+            <div className="container mx-auto px-4 mt-40 md:mt-60">
+                <div className="bg-emerald-600 rounded-[3rem] md:rounded-[4rem] p-10 md:p-32 text-center relative overflow-hidden shadow-2xl">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                    <div className="relative z-10 space-y-8 md:space-y-10">
+                        <h2 className="text-4xl md:text-8xl font-black text-white leading-tight md:leading-none tracking-tighter">
+                            Grow Smarter. <br/>Harvest Better.
+                        </h2>
+                        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+                            <button 
+                                onClick={scrollToDashboard}
+                                className="px-10 md:px-16 py-4 md:py-6 bg-white text-emerald-900 font-black rounded-full text-lg md:text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                            >
+                                Get Started
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="mt-12 md:mt-20 text-center space-y-4">
+                    <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] md:text-xs">AgriKnowledgeHub © 2026 Future Agriculture Labs</p>
+                </div>
+            </div>
+
+            <AnimatePresence>
+                {selectedCard && (
+                    <DetailModuleOverlay 
+                        card={selectedCard} 
+                        onBack={() => setSelectedCard(null)} 
+                    />
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}

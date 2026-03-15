@@ -1,4 +1,4 @@
-import { Phone, Mail, Globe, CloudSun, ShieldCheck, ChevronDown } from "lucide-react";
+import { Phone, Mail, Globe, ShieldCheck, ChevronDown } from "lucide-react";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import {
     DropdownMenu,
@@ -9,14 +9,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const GovHeader = () => {
-    const { language, setLanguage } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
 
     const languages: { name: Language; native: string }[] = [
         { name: "English", native: "English" },
         { name: "Hindi", native: "हिन्दी" },
         { name: "Telugu", native: "తెలుగు" },
         { name: "Tamil", native: "தமிழ்" },
-        { name: "Marathi", native: "मराठी" },
+        { name: "Marathi", native: "मરાਠী" },
         { name: "Gujarati", native: "ગુજરાતી" },
         { name: "Kannada", native: "ಕನ್ನಡ" },
         { name: "Malayalam", native: "മലയാളം" },
@@ -30,15 +30,15 @@ export const GovHeader = () => {
             <div className="container mx-auto px-4 py-1.5 flex flex-col sm:flex-row items-center justify-between text-xs font-medium border-b border-emerald-800/50">
                 <div className="flex items-center gap-4 text-emerald-100/90">
                     <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-                        <Globe className="w-3.5 h-3.5" /> ભારત સરકાર | Government of India
+                        <Globe className="w-3.5 h-3.5" /> {t("govIndia")}
                     </span>
                     <span className="hidden md:flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer">
-                        <ShieldCheck className="w-3.5 h-3.5" /> Ministry of Agriculture & Farmers Welfare
+                        <ShieldCheck className="w-3.5 h-3.5" /> {t("ministryAgri")}
                     </span>
                 </div>
                 <div className="flex items-center gap-6 mt-2 sm:mt-0">
                     <span className="flex items-center gap-1.5 text-emerald-100 hover:text-white cursor-pointer transition-colors">
-                        <Phone className="w-3.5 h-3.5" /> Kisan Helpline: 1800-180-1551
+                        <Phone className="w-3.5 h-3.5" /> {t("kisanHelpline")}: 1800-180-1551
                     </span>
                     <span className="flex items-center gap-1.5 text-emerald-100 hover:text-white cursor-pointer transition-colors">
                         <Mail className="w-3.5 h-3.5" /> support@agri.gov.in
@@ -70,24 +70,24 @@ export const GovHeader = () => {
             {/* Live Pricing Marquee (e-NAM style) */}
             <div className="bg-[#0A4A28] border-b border-[#0A4A28] flex items-center h-10 overflow-hidden relative">
                 <div className="bg-[#B46A14] text-white text-xs font-bold px-4 h-full flex items-center uppercase tracking-wider shrink-0 z-10 shadow-lg">
-                    Live Mandi Rates
+                    {t("liveMandiRates")}
                 </div>
                 {/* Marquee Container */}
                 <div className="flex-1 overflow-hidden relative h-full flex items-center">
                     <div className="animate-marquee whitespace-nowrap flex items-center gap-8 text-sm font-semibold text-emerald-100">
                         {/* Dummy Data for Marquee */}
-                        <span className="flex items-center gap-2">🌾 Wheat (Delhi): <span className="text-[#34D399]">₹2,125/q</span> <span className="text-[10px] text-[#34D399]">↑₹12</span></span>
-                        <span className="flex items-center gap-2">🍅 Tomato (Azadpur): <span className="text-[#F87171]">₹1,850/q</span> <span className="text-[10px] text-[#F87171]">↓₹40</span></span>
-                        <span className="flex items-center gap-2">🌱 Soya Bean (Indore): <span className="text-[#34D399]">₹4,600/q</span> <span className="text-[10px] text-[#34D399]">↑₹25</span></span>
-                        <span className="flex items-center gap-2">🧅 Onion (Lasalgaon): <span className="text-[#34D399]">₹1,200/q</span> <span className="text-[10px] text-[#34D399]">↑₹10</span></span>
-                        <span className="flex items-center gap-2">🥔 Potato (Agra): <span className="text-white">₹850/q</span> <span className="text-[10px] text-white">-</span></span>
+                        <span className="flex items-center gap-2">🌾 {t("wheat")} (Delhi): <span className="text-[#34D399]">₹2,125/q</span> <span className="text-[10px] text-[#34D399]">↑₹12</span></span>
+                        <span className="flex items-center gap-2">🍅 {t("tomato")} (Azadpur): <span className="text-[#F87171]">₹1,850/q</span> <span className="text-[10px] text-[#F87171]">↓₹40</span></span>
+                        <span className="flex items-center gap-2">🌱 {t("soybean")} (Indore): <span className="text-[#34D399]">₹4,600/q</span> <span className="text-[10px] text-[#34D399]">↑₹25</span></span>
+                        <span className="flex items-center gap-2">🧅 {t("onion")} (Lasalgaon): <span className="text-[#34D399]">₹1,200/q</span> <span className="text-[10px] text-[#34D399]">↑₹10</span></span>
+                        <span className="flex items-center gap-2">🥔 {t("potato")} (Agra): <span className="text-white">₹850/q</span> <span className="text-[10px] text-white">-</span></span>
 
                         {/* Duplicated for seamless scrolling */}
-                        <span className="flex items-center gap-2">🌾 Wheat (Delhi): <span className="text-[#34D399]">₹2,125/q</span> <span className="text-[10px] text-[#34D399]">↑₹12</span></span>
-                        <span className="flex items-center gap-2">🍅 Tomato (Azadpur): <span className="text-[#F87171]">₹1,850/q</span> <span className="text-[10px] text-[#F87171]">↓₹40</span></span>
-                        <span className="flex items-center gap-2">🌱 Soya Bean (Indore): <span className="text-[#34D399]">₹4,600/q</span> <span className="text-[10px] text-[#34D399]">↑₹25</span></span>
-                        <span className="flex items-center gap-2">🧅 Onion (Lasalgaon): <span className="text-[#34D399]">₹1,200/q</span> <span className="text-[10px] text-[#34D399]">↑₹10</span></span>
-                        <span className="flex items-center gap-2">🥔 Potato (Agra): <span className="text-white">₹850/q</span> <span className="text-[10px] text-white">-</span></span>
+                        <span className="flex items-center gap-2">🌾 {t("wheat")} (Delhi): <span className="text-[#34D399]">₹2,125/q</span> <span className="text-[10px] text-[#34D399]">↑₹12</span></span>
+                        <span className="flex items-center gap-2">🍅 {t("tomato")} (Azadpur): <span className="text-[#F87171]">₹1,850/q</span> <span className="text-[10px] text-[#F87171]">↓₹40</span></span>
+                        <span className="flex items-center gap-2">🌱 {t("soybean")} (Indore): <span className="text-[#34D399]">₹4,600/q</span> <span className="text-[10px] text-[#34D399]">↑₹25</span></span>
+                        <span className="flex items-center gap-2">🧅 {t("onion")} (Lasalgaon): <span className="text-[#34D399]">₹1,200/q</span> <span className="text-[10px] text-[#34D399]">↑₹10</span></span>
+                        <span className="flex items-center gap-2">🥔 {t("potato")} (Agra): <span className="text-white">₹850/q</span> <span className="text-[10px] text-white">-</span></span>
                     </div>
                 </div>
             </div>

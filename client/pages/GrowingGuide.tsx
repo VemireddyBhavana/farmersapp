@@ -9,7 +9,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 const cropData: Record<string, any> = {
   rice: {
     name: "Rice (Paddy)",
-    image: "https://images.unsplash.com/photo-1536633310979-b864bad0f287?auto=format&fit=crop&q=80&w=800",
+    image: "/hero_rice_field.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -45,7 +45,7 @@ const cropData: Record<string, any> = {
   },
   cotton: {
     name: "Cotton",
-    image: "https://images.unsplash.com/photo-1594904351111-a072f80b1a71?auto=format&fit=crop&q=80&w=800",
+    image: "/cotton_field.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -81,7 +81,7 @@ const cropData: Record<string, any> = {
   },
   tomato: { // Using tomato as the representative vegetable key
     name: "Vegetables (Tomato)",
-    image: "https://images.unsplash.com/photo-1592841608241-949f6eb2bf78?q=80&w=800&auto=format&fit=crop",
+    image: "/tomato_farming.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -117,7 +117,7 @@ const cropData: Record<string, any> = {
   },
   pulses: {
     name: "Pulses (Red Gram/Moong)",
-    image: "https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&q=80&w=800",
+    image: "/pulses_farm.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -153,7 +153,7 @@ const cropData: Record<string, any> = {
   },
   wheat: {
     name: "Wheat",
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop",
+    image: "/wheat_field.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -189,7 +189,7 @@ const cropData: Record<string, any> = {
   },
   chili: {
     name: "Chili",
-    image: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?q=80&w=800&auto=format&fit=crop",
+    image: "/chili_plant.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -225,7 +225,7 @@ const cropData: Record<string, any> = {
   },
   mango: {
     name: "Mango",
-    image: "https://images.unsplash.com/photo-1553334820-10550eeb5431?q=80&w=800&auto=format&fit=crop",
+    image: "/mango_orchard.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -261,7 +261,7 @@ const cropData: Record<string, any> = {
   },
   sweetcorn: {
     name: "Sweet Corn",
-    image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?q=80&w=800&auto=format&fit=crop",
+    image: "/sweet_corn.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -297,7 +297,7 @@ const cropData: Record<string, any> = {
   },
   mustard: {
     name: "Mustard",
-    image: "https://images.unsplash.com/photo-1626139868297-4001968137f8?q=80&w=800&auto=format&fit=crop",
+    image: "/mustard_field.png",
     sections: [
       {
         title: "Soil Preparation",
@@ -333,7 +333,7 @@ const cropData: Record<string, any> = {
   },
   papaya: {
     name: "Papaya",
-    image: "https://images.unsplash.com/photo-1517282001574-fbf5215bc88a?q=80&w=800&auto=format&fit=crop",
+    image: "/papaya_tree.png",
     sections: [
       {
         title: "Soil Preparation",

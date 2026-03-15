@@ -53,24 +53,26 @@ const Navbar = () => {
 
   // "More" items inside a dropdown
   const moreLinks = [
-    { name: "Seeds Store",      path: "/seeds",        icon: Sprout        },
+    { name: t("seedsStore"),    path: "/seeds",        icon: Sprout        },
     { name: t("calendar"),      path: "/calendar",     icon: Calendar      },
     { name: t("security"),      path: "/pests",        icon: Shield        },
     { name: t("supportPortal"), path: "/support",      icon: HeartHandshake},
-    { name: "Agri Knowledge",   path: "/knowledge",    icon: ScrollText    },
+    { name: t("agriKnowledge"), path: "/knowledge",    icon: ScrollText    },
+    { name: t("rentTractor"),   path: "/rent",         icon: Store         },
   ];
 
   const ourSolutionsLinks = [
-    { name: "Farm Advisory",  path: "/chat",          icon: Bot,           desc: t("solutionAdvisoryDesc") },
-    { name: "Agri Inputs",    path: "/seeds",         icon: Sprout,        desc: t("solutionInputsDesc")   },
-    { name: "Omnichannel",    path: "/omnichannel",   icon: Store,         desc: t("solutionOmniDesc")     },
-    { name: "Market Linkage", path: "/market-linkage",icon: TrendingUp,    desc: t("solutionMarketDesc")   },
+    { name: t("farmAdvisory"),  path: "/chat",          icon: Bot,           desc: t("solutionAdvisoryDesc") },
+    { name: t("agriInputs"),    path: "/seeds",         icon: Sprout,        desc: t("solutionInputsDesc")   },
+    { name: t("omnichannel"),   path: "/omnichannel",   icon: Store,         desc: t("solutionOmniDesc")     },
+    { name: t("marketLinkage"), path: "/market-linkage",icon: TrendingUp,    desc: t("solutionMarketDesc")   },
   ];
 
-  const insideAgroStarLinks = [
-    { name: t("aboutUs"),       path: "/about",      icon: Target,        desc: "#HelpingFarmersWin since 2013" },
-    { name: "Leadership",       path: "/leadership", icon: Users,         desc: t("leadershipDesc")             },
+  const aboutTeachSparkLinks = [
+    { name: t("aboutUs"),       path: "/about",      icon: Target,        desc: t("aboutUsDesc") },
+    { name: t("ourVision"),     path: "/vision", icon: Target,        desc: t("visionDesc")                 },
     { name: t("ourImpact"),     path: "/impact",     icon: Zap,           desc: t("impactDesc")                 },
+    { name: "TechSpark AI",     path: "/techspark",  icon: Bot,           desc: "Technology & Innovation"      },
     { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake,desc: t("joinUsDesc")                 },
   ];
 
@@ -85,7 +87,7 @@ const Navbar = () => {
               <Leaf className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block">
-              TechSpark AI
+              TeachSpark AI
             </span>
           </Link>
 
@@ -150,15 +152,15 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Inside AgroStar dropdown */}
+              {/* TeachSpark AI dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1">
-                    {t("insideAgroStar")} <ChevronDown className="h-3 w-3" />
+                    {t("aboutTeachSpark")} <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
-                  {insideAgroStarLinks.map((item) => (
+                  {aboutTeachSparkLinks.map((item) => (
                     <DropdownMenuItem key={item.path} asChild>
                       <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 group">
                         <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center flex-shrink-0">
@@ -286,8 +288,8 @@ const Navbar = () => {
               </div>
 
               <div className="pt-2 border-t">
-                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600">{t("insideAgroStar")}</p>
-                {insideAgroStarLinks.map((link) => (
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600">{t("aboutTeachSpark")}</p>
+                {aboutTeachSparkLinks.map((link) => (
                   <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted-foreground hover:bg-muted transition-colors">
                     <link.icon className="h-4 w-4 flex-shrink-0 text-blue-600" /> {link.name}

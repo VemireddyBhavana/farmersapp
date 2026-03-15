@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play, Globe, Store, X } from "lucide-react";
+import { Tractor, Shield, Clock, MapPin, ArrowRight, Star, TrendingUp, Cloud, Leaf, Play, Globe, Store, X, Bot, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "../lib/LanguageContext";
 
@@ -53,8 +53,8 @@ export default function Index() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&q=80&w=2000"
-            alt="Farming Grains"
+            src="/hero_rice_field.png"
+            alt="Rice Field"
             className="w-full h-full object-cover scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
@@ -91,69 +91,47 @@ export default function Index() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-              <Link to="/rent">
-                <Button className="rounded-full px-10 py-7 text-lg bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-900/40 border-none transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
-                  <Play className="h-4 w-4 fill-current" />
-                  {t('getStarted')}
-                </Button>
+              <Link 
+                to="/explore"
+                className="inline-flex h-16 items-center justify-center rounded-2xl bg-white px-10 text-lg font-black text-emerald-600 shadow-xl transition-all hover:bg-emerald-50 hover:scale-105 active:scale-95 border-none"
+              >
+                {t('getStartedToday')}
               </Link>
-              <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
+              <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" className="rounded-full px-10 py-7 text-lg text-white hover:bg-white/10 glass-dark border-white/20 transition-all">
-                    {t('watchDemo')} <ArrowRight className="ml-2 h-5 w-5 opacity-70" />
+                  <Button variant="outline" className="h-16 rounded-2xl border-white/30 bg-white/10 px-10 text-lg font-black text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-105 active:scale-95">
+                    <Play className="mr-3 h-6 w-6 stroke-[3]" /> {t('watchDemo')}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-4xl p-0 overflow-hidden bg-black border-slate-800">
-                  <div className="relative pt-[56.25%] w-full h-0">
-                    <iframe
-                      className="absolute top-0 left-0 w-full h-full"
-                      src="https://www.youtube.com/embed/ZzE4-W46Gk0?autoplay=1"
-                      title="Modern Farming from Scratch"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-3xl border-none shadow-2xl">
+                  <div className="aspect-video bg-black">
+                    <iframe 
+                      width="100%" 
+                      height="100%" 
+                      src="https://www.youtube.com/embed/Y6p9XF_N7_8?autoplay=1&mute=1&rel=0" 
+                      title="TeachSpark AI Farming Demo" 
+                      frameBorder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                       allowFullScreen
                     ></iframe>
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="absolute top-4 right-4 z-50 rounded-full bg-black/50 text-white hover:bg-black/80 w-10 h-10 border border-white/10" 
-                    onClick={() => setIsVideoOpen(false)}
-                  >
-                    <X className="h-5 w-5" />
-                  </Button>
                 </DialogContent>
               </Dialog>
             </div>
           </motion.div>
         </div>
 
-        {/* Floating Decorative Elements */}
-        <div className="absolute bottom-10 left-10 hidden lg:block">
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="glass-dark p-4 rounded-2xl border border-white/10"
-          >
-            <div className="flex items-center space-x-3 text-white">
-              <div className="h-8 w-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <TrendingUp className="h-4 w-4" />
-              </div>
-              <p className="text-sm font-bold">{t('farmersJoined')}</p>
-            </div>
-          </motion.div>
-        </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-muted/30 py-24">
+      <section id="features" className="bg-muted/30 py-24">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto mb-16 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl uppercase tracking-widest text-primary/60 text-sm mb-2">
               {t('ourEcosystem')}
             </h2>
             <h3 className="text-4xl lg:text-5xl font-black text-foreground">
-              {t('whyChooseTechSpark')}
+              {t('whyChooseTeachSpark')}
             </h3>
             <p className="text-muted-foreground text-lg">
               {t('whyChooseDesc')}
@@ -376,7 +354,7 @@ export default function Index() {
             >
               <div className="aspect-video rounded-[3rem] bg-primary/10 border border-primary/10 shadow-2xl overflow-hidden relative group">
                 <img
-                  src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800"
+                  src="/vision_banner.png"
                   alt="Farmer using tablet"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -391,31 +369,78 @@ export default function Index() {
         </div>
       </section>
 
-      {/* How it Works */}
-      <section className="py-24">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto mb-16 space-y-4">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-4xl">
+      {/* How it Works Redesign */}
+      <section className="py-24 bg-white dark:bg-slate-950/50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-20 space-y-4">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-5xl font-black italic">
               {t('howItWorks')}
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-lg italic">
               {t('howItWorksDesc')}
             </p>
           </div>
-          <div className="grid gap-12 md:grid-cols-3">
-            {[
-              { step: "01", title: t('browseSelect'), desc: t('browseSelectDesc') },
-              { step: "02", title: t('bookInstantly'), desc: t('bookInstantlyDesc') },
-              { step: "03", title: t('happyFarming'), desc: t('happyFarmingDesc') },
-            ].map((step, idx) => (
-              <div key={idx} className="relative group">
-                <div className="mb-6 text-8xl font-black text-primary/5 group-hover:text-primary/10 transition-colors absolute -top-10 left-1/2 -translate-x-1/2">
-                  {step.step}
-                </div>
-                <h3 className="text-2xl font-bold mb-4 relative z-10">{step.title}</h3>
-                <p className="text-muted-foreground relative z-10">{step.desc}</p>
-              </div>
-            ))}
+          
+          <div className="relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-emerald-100 to-transparent -translate-y-1/2" />
+            
+            <div className="grid gap-8 md:grid-cols-3 relative z-10">
+              {[
+                { 
+                  step: "01", 
+                  title: t('browseSelect'), 
+                  desc: t('browseSelectDesc'),
+                  icon: Bot,
+                  color: "bg-blue-500",
+                  shadow: "shadow-blue-200"
+                },
+                { 
+                  step: "02", 
+                  title: t('bookInstantly'), 
+                  desc: t('bookInstantlyDesc'),
+                  icon: Sprout,
+                  color: "bg-emerald-500",
+                  shadow: "shadow-emerald-200"
+                },
+                { 
+                  step: "03", 
+                  title: t('happyFarming'), 
+                  desc: t('happyFarmingDesc'),
+                  icon: TrendingUp,
+                  color: "bg-amber-500",
+                  shadow: "shadow-amber-200"
+                },
+              ].map((step, idx) => (
+                <motion.div 
+                  key={idx} 
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.2 }}
+                  className="flex flex-col items-center text-center group"
+                >
+                  <div className="relative mb-8">
+                    {/* Step Number Background */}
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 text-8xl font-black text-slate-100 dark:text-slate-800/20 -z-10 group-hover:text-emerald-50 transition-colors">
+                      {step.step}
+                    </div>
+                    {/* Icon Circle */}
+                    <div className={cn(
+                      "w-24 h-24 rounded-3xl flex items-center justify-center text-white transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 shadow-2xl",
+                      step.color,
+                      step.shadow
+                    )}>
+                      <step.icon className="h-10 w-10" />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-black mb-3 text-slate-900 dark:text-white">{step.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-[280px]">
+                    {step.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

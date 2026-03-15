@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { TrendingUp, TrendingDown, IndianRupee, MapPin, Search, Filter, ArrowUpRight, ArrowLeft, Leaf, LayoutGrid, RefreshCw, Calculator, Navigation, ChevronDown, Info, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,6 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -38,6 +47,34 @@ export default function Market() {
   const [estimate, setEstimate] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedState, setSelectedState] = useState("all");
+  const [selectedDistrict, setSelectedDistrict] = useState("all");
+  const [selectedMarket, setSelectedMarket] = useState("all");
+
+  // Derived data for filters based on available mandiRates
+  const states = useMemo(() => {
+    const s = new Set<string>();
+    mandiRates.forEach(item => s.add(item.state));
+    return Array.from(s).sort();
+  }, [mandiRates]);
+
+  const districts = useMemo(() => {
+    const d = new Set<string>();
+    mandiRates
+      .filter(item => selectedState === "all" || item.state === selectedState)
+      .forEach(item => d.add(item.district));
+    return Array.from(d).sort();
+  }, [mandiRates, selectedState]);
+
+  const markets = useMemo(() => {
+    const m = new Set<string>();
+    mandiRates
+      .filter(item => 
+        (selectedState === "all" || item.state === selectedState) && 
+        (selectedDistrict === "all" || item.district === selectedDistrict)
+      )
+      .forEach(item => m.add(item.mandi));
+    return Array.from(m).sort();
+  }, [mandiRates, selectedState, selectedDistrict]);
 
   const calculateEstimate = () => {
     const basePrice = cropPrices[selectedCrop] || 0;
@@ -50,12 +87,18 @@ export default function Market() {
 
   const filteredMandiRates = useMemo(() => {
     return mandiRates.filter(item => {
-      const matchesSearch = item.crop.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.mandi.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = 
+        item.crop.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.mandi.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.district.toLowerCase().includes(searchQuery.toLowerCase());
+      
       const matchesState = selectedState === "all" || item.state === selectedState;
-      return matchesSearch && matchesState;
+      const matchesDistrict = selectedDistrict === "all" || item.district === selectedDistrict;
+      const matchesMarket = selectedMarket === "all" || item.mandi === selectedMarket;
+      
+      return matchesSearch && matchesState && matchesDistrict && matchesMarket;
     });
-  }, [mandiRates, searchQuery, selectedState]);
+  }, [mandiRates, searchQuery, selectedState, selectedDistrict, selectedMarket]);
 
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -143,7 +186,9 @@ export default function Market() {
               onClick={calculateEstimate}
               className="rounded-xl bg-emerald-600 hover:bg-emerald-700 h-14 font-black text-lg flex items-center gap-2 shadow-xl shadow-emerald-500/20"
             >
-              <TrendingUp className="h-6 w-6" />
+              <div className="bg-white/20 p-1 rounded-md">
+                <TrendingUp className="h-5 w-5" />
+              </div>
               {t("analyzeValue")}
             </Button>
           </div>
@@ -160,7 +205,7 @@ export default function Market() {
                     <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-2">{t("estimatedMarketValue")}</p>
                     <h3 className="text-5xl font-black flex items-center gap-2">
                       ₹{estimate.toLocaleString(language === "English" ? "en-IN" : undefined)}
-                      <Badge className="bg-white/20 text-white border-none text-xs align-middle">{t("currentMarketAvg")}</Badge>
+                      <Badge className="bg-white/20 text-white border-none text-xs align-middle font-bold lowercase">{t("currentMarketAvg")}</Badge>
                     </h3>
                   </div>
                   <div className="flex gap-4">
@@ -180,67 +225,169 @@ export default function Market() {
         </CardContent>
       </Card>
 
-      {/* Search and Filters */}
-      <div className="flex flex-col md:flex-row gap-4 items-center pt-10">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-          <Input
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t("searchCommodities")}
-            className="pl-12 rounded-xl border-primary/5 h-14 bg-white shadow-sm font-medium"
-          />
+      {/* Agmarknet Mandi Filters */}
+      <Card className="rounded-[2.5rem] border-primary/5 bg-white shadow-xl">
+        <CardHeader className="p-8 pb-4">
+          <CardTitle className="text-2xl font-black flex items-center gap-3">
+            <div className="bg-blue-600 p-2 rounded-xl shadow-lg">
+              <Filter className="h-6 w-6 text-white" />
+            </div>
+            {t("mandiFilters")}
+          </CardTitle>
+          <CardDescription className="text-muted-foreground font-bold">{t("selectLocationForMandiRates")}</CardDescription>
+        </CardHeader>
+        <CardContent className="p-8 pb-10">
+          <div className="grid gap-6 md:grid-cols-4 items-end">
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase text-muted-foreground tracking-widest">{t("state")}</label>
+              <Select value={selectedState} onValueChange={(val) => { setSelectedState(val); setSelectedDistrict("all"); setSelectedMarket("all"); }}>
+                <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white font-bold text-lg">
+                  <SelectValue placeholder={t("selectState")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("allStates")}</SelectItem>
+                  {states.map(s => (
+                    <SelectItem key={s} value={s}>{t(s) || s.toUpperCase()}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase text-muted-foreground tracking-widest">{t("district")}</label>
+              <Select value={selectedDistrict} onValueChange={(val) => { setSelectedDistrict(val); setSelectedMarket("all"); }} disabled={selectedState === "all"}>
+                <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white font-bold text-lg">
+                  <SelectValue placeholder={t("selectDistrict")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("allDistricts")}</SelectItem>
+                  {districts.map(d => (
+                    <SelectItem key={d} value={d}>{d}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase text-muted-foreground tracking-widest">{t("market")}</label>
+              <Select value={selectedMarket} onValueChange={setSelectedMarket} disabled={selectedDistrict === "all"}>
+                <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white font-bold text-lg">
+                  <SelectValue placeholder={t("selectMarket")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("allMarkets")}</SelectItem>
+                  {markets.map(m => (
+                    <SelectItem key={m} value={m}>{m}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="relative w-full">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t("searchCommodities")}
+                className="pl-12 rounded-xl border-primary/10 h-14 bg-white font-bold text-lg"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Bulletins Section */}
+      <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 flex items-center gap-4 overflow-hidden">
+        <div className="bg-amber-500 text-white px-3 py-1 rounded-lg text-xs font-black uppercase whitespace-nowrap animate-pulse">
+          {t("whatsNew")}
         </div>
-        <Select value={selectedState} onValueChange={setSelectedState}>
-          <SelectTrigger className="w-full md:w-64 rounded-xl border-primary/5 h-14 bg-white shadow-sm font-bold">
-            <SelectValue placeholder={t("filterByState")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("allStates")}</SelectItem>
-            <SelectItem value="ap">{t("ap")}</SelectItem>
-            <SelectItem value="pb">{t("pb")}</SelectItem>
-            <SelectItem value="dl">{t("dl")}</SelectItem>
-            <SelectItem value="mh">{t("mh")}</SelectItem>
-            <SelectItem value="gj">{t("gj")}</SelectItem>
-            <SelectItem value="up">{t("up")}</SelectItem>
-            <SelectItem value="mp">{t("mp")}</SelectItem>
-            <SelectItem value="rj">{t("rj")}</SelectItem>
-            <SelectItem value="br">{t("br")}</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button variant="outline" className="rounded-xl border-emerald-200 h-14 px-8 flex items-center gap-2 font-black text-emerald-600 bg-emerald-50/50 hover:bg-emerald-100 transition-all shadow-sm">
-          <Navigation className="h-5 w-5 fill-emerald-600" />
-          {t("liveLocalPrices")}
-        </Button>
+        <div className="flex-1 overflow-hidden whitespace-nowrap">
+          <p className="inline-block animate-marquee font-bold text-amber-900">
+            • {t("mandiBull1")} 
+            <span className="mx-8">•</span>
+            • {t("mandiBull2")}
+            <span className="mx-8">•</span>
+            • {t("mandiBull3")}
+          </p>
+        </div>
       </div>
 
-      {/* Full Mandi Rates Grid */}
+      {/* Market Wise Price & Arrival Table */}
       <div className="space-y-8 pt-6">
         <div className="flex items-center justify-between">
-          <h3 className="text-3xl font-black tracking-tight">{t("marketRateFeed")}</h3>
-          <Badge variant="outline" className="rounded-full px-4 py-2 font-bold bg-white text-emerald-700 border-emerald-100 uppercase tracking-widest text-[10px]">Updated 5m ago</Badge>
+          <h3 className="text-3xl font-black tracking-tight">{t("marketWiseReport")}</h3>
+          <Badge variant="outline" className="rounded-full px-4 py-2 font-bold bg-white text-emerald-700 border-emerald-100 uppercase tracking-widest text-[10px]">{t("updated")} 5m ago</Badge>
         </div>
 
-        {filteredMandiRates.length > 0 ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredMandiRates.map((item, idx) => (
-              <motion.div
-                key={idx}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-              >
-                <Card className="rounded-[2.5rem] border-primary/5 hover:border-emerald-300 transition-all hover:shadow-2xl group cursor-pointer h-full bg-white relative overflow-hidden">
-                  <div className={cn(
-                    "absolute top-0 left-0 w-2 h-full",
-                    item.trend === "up" ? "bg-emerald-500" : item.trend === "down" ? "bg-red-500" : "bg-slate-300"
-                  )} />
-                  <CardContent className="p-8 space-y-6">
-                    <div className="flex justify-between items-start">
-                      <div className="h-14 w-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm">
-                        <Leaf className="h-7 w-7" />
+        <div className="rounded-[2.5rem] border border-primary/5 bg-white shadow-xl overflow-hidden">
+          <Table>
+            <TableHeader className="bg-slate-50">
+              <TableRow>
+                <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8">{t("commodityVarietyGrade")}</TableHead>
+                <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8">{t("market")}</TableHead>
+                <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8 text-right">{t("arrivalMT")}</TableHead>
+                <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8 text-center">{t("mandiRates")} (₹/Qtl)</TableHead>
+                <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8 text-right">{t("priceTrend")}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredMandiRates.length > 0 ? (
+                filteredMandiRates.map((item, idx) => (
+                  <TableRow key={idx} className="hover:bg-slate-50 transition-colors">
+                    <TableCell className="py-6 px-8">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                          <Leaf className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-black text-lg">{item.crop}</p>
+                          <p className="text-xs text-muted-foreground font-bold">Standard / Grade A</p>
+                        </div>
                       </div>
+                    </TableCell>
+                    <TableCell className="py-6 px-8">
+                      <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-start">
+                          <Link to={`/mandi/${encodeURIComponent(item.id)}`}>
+                            <Button 
+                              variant="link" 
+                              className="p-0 h-auto font-bold text-emerald-600 hover:text-emerald-700 decoration-emerald-600"
+                            >
+                              {item.mandi}
+                            </Button>
+                          </Link>
+                          <a 
+                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mandi + ", " + item.district + ", " + item.state)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center text-[10px] text-emerald-500 hover:text-emerald-700 font-bold transition-colors"
+                          >
+                            <MapPin className="h-3 w-3 mr-1" />
+                            View on Maps
+                          </a>
+                        </div>
+                        <Badge variant="secondary" className="text-[10px] font-black uppercase bg-slate-100">{item.state.toUpperCase()}</Badge>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-6 px-8 text-right">
+                      <span className="font-black text-slate-700">{(Math.random() * 50 + 10).toFixed(2)}</span>
+                    </TableCell>
+                    <TableCell className="py-6 px-8">
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="text-center">
+                          <p className="text-[10px] uppercase font-black text-muted-foreground">{t("min")}</p>
+                          <p className="font-bold text-slate-500">{(parseInt(item.rate.replace(/[^0-9]/g, '')) - 200).toLocaleString()}</p>
+                        </div>
+                        <div className="h-8 w-px bg-slate-200" />
+                        <div className="text-center">
+                          <p className="text-[10px] uppercase font-black text-emerald-600">{t("modalPrice")}</p>
+                          <p className="font-black text-xl text-emerald-600">{item.rate}</p>
+                        </div>
+                        <div className="h-8 w-px bg-slate-200" />
+                        <div className="text-center">
+                          <p className="text-[10px] uppercase font-black text-muted-foreground">{t("max")}</p>
+                          <p className="font-bold text-slate-500">{(parseInt(item.rate.replace(/[^0-9]/g, '')) + 300).toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-6 px-8 text-right">
                       <Badge className={cn(
                         "rounded-full px-4 py-1.5 font-black text-[10px] uppercase tracking-wider border-none",
                         item.trend === "up" ? "bg-emerald-100 text-emerald-700" :
@@ -250,54 +397,21 @@ export default function Market() {
                         {item.trend === "up" ? <TrendingUp className="h-3 w-3 mr-1.5" /> : item.trend === "down" ? <TrendingDown className="h-3 w-3 mr-1.5" /> : null}
                         {item.change !== "0" ? item.change : t("stable")}
                       </Badge>
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="text-2xl font-black text-foreground group-hover:text-emerald-700 transition-colors">{item.crop}</h4>
-                      <div className="flex items-center gap-2">
-                        <a
-                          href={`https://maps.google.com/?q=${encodeURIComponent(item.mandi)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-xs text-muted-foreground font-bold flex items-center gap-1 hover:text-emerald-600 transition-colors relative z-10"
-                        >
-                          <MapPin className="h-3.5 w-3.5 text-emerald-500" /> {item.mandi}
-                        </a>
-                        <span className="text-muted-foreground/30">•</span>
-                        <Badge variant="secondary" className="text-[9px] font-black uppercase py-0 px-2 bg-slate-100">{item.state.toUpperCase()}</Badge>
-                        <span className="text-muted-foreground/30">•</span>
-                        <p className="text-[9px] text-muted-foreground font-medium">{item.date}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-end justify-between border-t border-dashed border-emerald-100 pt-5">
-                      <div>
-                        <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.1em] mb-1">{t("marketPriceQtl")}</p>
-                        <p className="text-3xl font-black text-emerald-600">{item.rate}</p>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:translate-x-1 group-hover:bg-emerald-600 group-hover:text-white transition-all"
-                        onClick={() => {
-                          setSelectedCrop(item.crop.toLowerCase().split(' ')[0]);
-                          calculateEstimate();
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      >
-                        <ArrowUpRight className="h-6 w-6" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 glass rounded-[2.5rem] border-dashed border-primary/10">
-            <Search className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-xl font-bold text-muted-foreground">{t("noMandiFound")}</p>
-            <Button variant="link" onClick={() => { setSearchQuery(""); setSelectedState("all"); }} className="text-emerald-600 font-bold">{t("clearAllFilters")}</Button>
-          </div>
-        )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="py-20 text-center">
+                    <Search className="h-12 w-12 text-muted-foreground/30 mx-auto mb-4" />
+                    <p className="text-xl font-bold text-muted-foreground">{t("noMandiDataFound")}</p>
+                    <Button variant="link" onClick={() => { setSearchQuery(""); setSelectedState("all"); }} className="text-emerald-600 font-bold">{t("clearAllFilters")}</Button>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   );

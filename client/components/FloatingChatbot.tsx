@@ -1,46 +1,87 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, X, MessageCircle } from "lucide-react";
+import { useLanguage, Language, translations } from "../lib/LanguageContext";
+
+const languageLabelMap: Record<string, Language> = {
+    "En": "English",
+    "తె": "Telugu",
+    "हि": "Hindi",
+    "த": "Tamil",
+    "ಕ": "Kannada",
+    "മല": "Malayalam",
+    "म": "Marathi",
+    "ગુ": "Gujarati",
+    "ਪੰ": "Punjabi",
+    "ব": "Bangla"
+};
+
+const labelReverseMap: Record<Language, string> = Object.entries(languageLabelMap).reduce((acc, [label, lang]) => {
+    acc[lang] = label;
+    return acc;
+}, {} as Record<Language, string>);
+
 
 export const FloatingChatbot = () => {
+    const { language: globalLanguage, setLanguage: setGlobalLanguage } = useLanguage();
+    const [localLanguage, setLocalLanguage] = useState<Language>(globalLanguage);
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState<{ id: number; text: string; sender: 'bot' | 'user'; time: string }[]>([
-        {
-            id: 1,
-            text: "Namaste! I am your AI Farming Assistant.\nHow can I help you today? I can help with tractor booking, crop advice, or market rates.",
-            sender: "bot",
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-    ]);
-    const [input, setInput] = useState("");
-    const [selectedLang, setSelectedLang] = useState("En");
 
-    const languages = ["En", "తె", "हि", "த", "ಕ", "മല", "म", "ગુ", "ਪੰ", "ব"];
+    // Sync local language with global language changes
+    useEffect(() => {
+        setLocalLanguage(globalLanguage);
+    }, [globalLanguage]);
+
+    const tl = (key: string) => {
+        return translations[localLanguage]?.[key] || translations["English"]?.[key] || key;
+    };
+    const [messages, setMessages] = useState<{ id: number; text: string; sender: 'bot' | 'user'; time: string }[]>([]);
+    const [input, setInput] = useState("");
+
+    // Effect to handle language change in the bot's perspective
+    useEffect(() => {
+        if (messages.length === 0) {
+            setMessages([{
+                id: 1,
+                text: tl("botWelcome") + "\n" + tl("botOffer"),
+                sender: "bot",
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }]);
+        } else if (messages.length === 1 && messages[0].sender === "bot") {
+            // Update the initial greeting if it's the only message
+            setMessages(prev => [{
+                ...prev[0],
+                text: tl("botWelcome") + "\n" + tl("botOffer"),
+            }]);
+        }
+    }, [localLanguage]);
+
+    const languages = Object.keys(languageLabelMap);
 
     const generateBotResponse = (userText: string) => {
         const lowerText = userText.toLowerCase();
 
-        if (lowerText.includes("farmer guidance") || lowerText.includes("guidance") || lowerText.includes("advice")) {
-            return "It's great to hear that you're looking for farming guidance. I can help you with crop planting schedules, disease management, and getting the best prices at local Mandis. What specific area do you need help with?";
+        if (lowerText.includes("guidance") || lowerText.includes("advice")) {
+            return tl("botGuidanceReply");
         }
         if (lowerText.includes("rent") || lowerText.includes("tractor")) {
-            return `🚜 Equipment Rental Process:\n1. Find Equipment: Browse our marketplace.\n2. Check Rates & Availability.\n3. Book & Pay securely.\n4. Coordinate Delivery/Pickup.`;
+            return tl("botRentReply");
         }
         if (lowerText.includes("scheme") || lowerText.includes("ysr") || lowerText.includes("kisan")) {
-            return `📋 Government Schemes Overview:\n• PM-KISAN: ₹6000 per year.\n• PMFBY (Crop Insurance).\n• State Specific (e.g., YSR Rythu Bharosa).`;
+            return tl("botSchemeReply");
         }
         if (lowerText.includes("tomato") || lowerText.includes("paddy") || lowerText.includes("cotton")) {
-            return `Please check out our "Detailed Blueprint" in the Seeds Store for in-depth growing guides on specific crops!`;
+            return tl("botCropReply");
         }
         if (lowerText.includes("pest") || lowerText.includes("disease")) {
-            return `🦠 Identifying the disease is critical. Take a clear photo of the leaf using our built-in Disease Scanner on the home page for an instant diagnosis.`;
+            return tl("botPestReply");
         }
         if (lowerText.includes("price") || lowerText.includes("mandi")) {
-            return `📈 Check the Live Mandi Rates section on your dashboard. We provide daily updated prices for Paddy, Wheat, and Cotton across major regional Mandis.`;
+            return tl("botMarketReply");
         }
 
         // Default fallback
-        return `I am Agri Assistant, your AI farming companion. Please ask me specific questions about your farm, for example: "How does the tractor rental work?" or "Tell me about PM-KISAN."`;
+        return tl("botFallback");
     };
 
     const handleSend = () => {
@@ -88,10 +129,10 @@ export const FloatingChatbot = () => {
                                         <Bot className="w-7 h-7 text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-[19px] leading-tight flex items-center gap-2">Agri Assistant</h3>
+                                        <h3 className="font-bold text-[19px] leading-tight flex items-center gap-2">{tl("aiAssistantTitle")}</h3>
                                         <div className="flex items-center gap-1.5 mt-0.5">
                                             <div className="w-2 h-2 rounded-full bg-[#34D399]"></div>
-                                            <p className="text-emerald-100 text-xs font-medium tracking-wide">AI Assistant Online</p>
+                                            <p className="text-emerald-100 text-xs font-medium tracking-wide">{tl("aiAssistantOnline")}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -104,14 +145,18 @@ export const FloatingChatbot = () => {
                             </div>
 
                             {/* Language Selector */}
-                            <div className="flex items-center overflow-x-auto gap-1 no-scrollbar pb-1 -mx-2 px-2">
+                            <div className="flex items-center overflow-x-auto gap-1 no-scrollbar pb-1 -mx-2 px-2 scroll-smooth">
                                 {languages.map((lang) => (
                                     <button
                                         key={lang}
-                                        onClick={() => setSelectedLang(lang)}
-                                        className={`shrink-0 px-3 py-1.5 rounded-lg text-sm font-bold transition-all ${selectedLang === lang
-                                            ? 'bg-[#82A992] text-[#0A4A28]'
-                                            : 'text-emerald-100/70 hover:bg-white/5 hover:text-white'
+                                        onClick={() => {
+                                            const newLang = languageLabelMap[lang];
+                                            setLocalLanguage(newLang);
+                                            setGlobalLanguage(newLang); // Sync to global as well
+                                        }}
+                                        className={`shrink-0 min-w-[36px] px-2 py-1.5 rounded-lg text-sm font-bold transition-all border ${labelReverseMap[localLanguage] === lang
+                                            ? 'bg-white text-[#106A3A] border-white shadow-sm'
+                                            : 'text-emerald-100/70 border-transparent hover:bg-white/10 hover:text-white'
                                             }`}
                                     >
                                         {lang}
@@ -148,7 +193,7 @@ export const FloatingChatbot = () => {
                             <div className="relative flex items-center">
                                 <input
                                     type="text"
-                                    placeholder="Ask me anything..."
+                                    placeholder={tl("chatPlaceholder")}
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={handleKeyPress}

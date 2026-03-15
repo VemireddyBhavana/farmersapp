@@ -37,7 +37,7 @@ export default function JoinUs() {
       <section className="relative py-32 bg-gradient-to-br from-emerald-800 to-slate-900 overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1600"
+            src="/saathi_store.png"
             alt="Team working"
             className="w-full h-full object-cover opacity-20"
           />
@@ -59,14 +59,14 @@ export default function JoinUs() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-3 gap-4 rounded-3xl overflow-hidden">
             <div className="col-span-2 aspect-[4/3]">
-              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800" alt="Office culture" className="w-full h-full object-cover" />
+              <img src="/history_2013.png" alt="Office culture" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col gap-4">
               <div className="flex-1">
-                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=400" alt="Team" className="w-full h-full object-cover" />
+                <img src="/impact_community.png" alt="Team" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
-                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=400" alt="Collaboration" className="w-full h-full object-cover" />
+                <img src="/saathi_store.png" alt="Collaboration" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
