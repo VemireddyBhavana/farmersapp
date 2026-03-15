@@ -101,6 +101,11 @@ export default function Dashboard() {
                       {t('seedPortal')}
                     </button>
                   </Link>
+                  <Link to="/kisan-suvidha">
+                    <button className="rounded bg-amber-500 text-slate-900 hover:bg-amber-400 h-12 px-6 font-black shadow-lg shadow-amber-500/20 border-none transition-all">
+                      {t('kisanSuvidhaTitle')}
+                    </button>
+                  </Link>
                 </div>
               </div>
               <div className="absolute right-0 top-0 w-64 h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
