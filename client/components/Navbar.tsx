@@ -267,10 +267,10 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors",
+                    "flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm font-bold transition-all group shrink-0 whitespace-nowrap",
                     location.pathname === link.path
-                      ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:bg-muted"
+                      ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20"
+                      : "text-muted-foreground hover:bg-emerald-50 hover:text-emerald-600"
                   )}
                 >
                   <link.icon className="h-4 w-4 flex-shrink-0" />
