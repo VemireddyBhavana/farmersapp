@@ -15,7 +15,6 @@ const Layout = ({ children }: LayoutProps) => {
   const { isSignedIn, isLoaded } = useUser();
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
 
-  // Strictly show nothing except the children (login form) if not signed in or on auth pages
   const showUI = isLoaded && isSignedIn && !isAuthPage;
 
   return (

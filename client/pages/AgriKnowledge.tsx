@@ -67,6 +67,96 @@ const KNOWLEDGE_SECTIONS = [
             { id: "pmFasal", titleKey: "pmFasalTitle", image: "https://akm-img-a-in.tosshub.com/aajtak/images/story/202106/farmers8999887_1-sixteen_nine.jpg?size=948:533", bullets: ["pmFasalBullet1", "pmFasalBullet2"], category: "Insurance" },
             { id: "soilHealth", titleKey: "soilHealthTitle", image: "https://phycoterra.com/wp-content/uploads/2023/06/featuredimage_SoilHealthIndicators_82226407-1024x684.jpg", bullets: ["soilHealthBullet1", "soilHealthBullet2"], category: "Testing" },
         ]
+    },
+    {
+        id: "smartFarming",
+        titleKey: "sectionSmartFarming",
+        icon: Zap,
+        cards: [
+            { 
+                id: "seasonal", 
+                titleKey: "seasonalCropGuide", 
+                image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", 
+                bullets: ["kharifCrops", "rabiCrops", "zaidCrops"], 
+                category: "Seasonal",
+                stepsPrefix: "seasonalStep",
+                stepCount: 3
+            },
+            { 
+                id: "water", 
+                titleKey: "waterManagementGuide", 
+                image: "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", 
+                bullets: ["dripIrrigation", "sprinklerIrrigation", "rainwaterHarvesting"], 
+                category: "Irrigation",
+                stepsPrefix: "waterStep",
+                stepCount: 3
+            },
+            { 
+                id: "fertilizer", 
+                titleKey: "fertilizerNutrientGuide", 
+                image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", 
+                bullets: ["npkBalance", "nutrientDeficiency"], 
+                category: "Nutrition",
+                stepsPrefix: "fertilizerStep",
+                stepCount: 2
+            },
+            { 
+                id: "machinery", 
+                titleKey: "farmMachineryGuide", 
+                image: "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80", 
+                bullets: ["seedDrillInstr", "harvesterInstr", "sprayerInstr"], 
+                category: "Machinery",
+                stepsPrefix: "machineryStep",
+                stepCount: 3
+            },
+            { 
+                id: "storage", 
+                titleKey: "storagePostHarvest", 
+                image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", 
+                bullets: ["grainStorage", "coldStorage"], 
+                category: "Storage",
+                stepsPrefix: "storageStep",
+                stepCount: 2
+            },
+        ]
+    },
+    {
+        id: "sustainability",
+        titleKey: "sectionSustainability",
+        icon: Recycle,
+        cards: [
+            { id: "sustainable", titleKey: "sustainableFarming", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", bullets: ["cropRotation", "coverCrops", "noTill"], category: "Eco" },
+            { id: "organic", titleKey: "organicFarming", image: "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?w=800&q=80", bullets: ["composting", "bioFertilizers"], category: "Eco" },
+            { id: "precision", titleKey: "precisionAg", image: "https://images.unsplash.com/photo-1594894512411-e6ce14de72b3?w=800&q=80", bullets: ["droneMonitoring", "iotSoilSensors"], category: "Smart" },
+        ]
+    },
+    {
+        id: "protection",
+        titleKey: "sectionProtection",
+        icon: ShieldCheck,
+        cards: [
+            { id: "integrated", titleKey: "integratedPest", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&q=80", bullets: ["biologicalControl", "culturalControl"], category: "Protection" },
+            { id: "diseases", titleKey: "diseaseMgmt", image: "https://images.unsplash.com/photo-1530836361253-efad5cb2fe17?w=800&q=80", bullets: ["fungalDiseases", "viralDiseases"], category: "Protection" },
+        ]
+    },
+    {
+        id: "resources",
+        titleKey: "sectionResourceCenter",
+        icon: BookOpen,
+        cards: [
+            { id: "fertilizerGuide", titleKey: "fertilizerUsage", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", bullets: ["applicationMethods", "timingGuide"], category: "Nutrition" },
+        ]
+    },
+    {
+        id: "livestock_plus",
+        titleKey: "sectionLivestockPlus",
+        icon: Bird,
+        cards: [
+            { id: "poultry", titleKey: "poultryTitle", image: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?w=800&q=80", bullets: ["broilerMgmt", "layerMgmt"], category: "Livestock" },
+            { id: "dairy_mgmt", titleKey: "dairyMgmtTitle", image: "https://img.freepik.com/free-photo/cows-green-field_335224-509.jpg", bullets: ["milkProduction", "fodderMgmt"], category: "Livestock" },
+            { id: "mushroom", titleKey: "mushroomTitle", image: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&q=80", bullets: ["buttonMushroom", "oysterMushroom"], category: "Specialized" },
+            { id: "hydroponics", titleKey: "hydroponicsTitle", image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80", bullets: ["nutrientFilm", "deepWaterCulture"], category: "Specialized" },
+        ]
     }
 ];
 

@@ -1,0 +1,6 @@
+[
+  {"id": 1, "stateId": 1, "name": "Guntur"},
+  {"id": 2, "stateId": 1, "name": "Chittoor"},
+  {"id": 3, "stateId": 4, "name": "Fresno"},
+  {"id": 4, "stateId": 4, "name": "Tulare"}
+]

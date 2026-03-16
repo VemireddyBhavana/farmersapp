@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
-  ShoppingBag,
   Filter,
   Tractor,
   Cloud,
@@ -38,11 +37,7 @@ import {
   Fish,
   Bird,
   Tractor as TractorIcon,
-  Sun as SunIcon,
-  Stethoscope,
-  Lightbulb,
-  Calculator,
-  FlaskConical
+  Sun as SunIcon
 } from "lucide-react";
 import DiseaseDetection from "@/components/DiseaseDetection";
 import { Button } from "@/components/ui/button";
@@ -108,7 +103,7 @@ export default function Dashboard() {
                   </Link>
                   <Link to="/kisan-suvidha">
                     <button className="rounded bg-amber-500 text-slate-900 hover:bg-amber-400 h-12 px-6 font-black shadow-lg shadow-amber-500/20 border-none transition-all">
-                      {t('kisanSevaTitle')}
+                      {t('kisanSuvidhaTitle')}
                     </button>
                   </Link>
                 </div>
@@ -170,12 +165,11 @@ export default function Dashboard() {
           {/* Quick Access Grid */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold tracking-tight text-slate-800 border-b-2 border-emerald-600 pb-2 inline-block">{t('portalServices')}</h2>
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { name: t('cropCalendar'), path: "/calendar", icon: Calendar, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
                 { name: t('pestAdvisory'), path: "/pests", icon: Bug, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: t('aiChat'), path: "/chat", icon: MessageCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: t('agriMarketplace'), path: "/marketplace", icon: ShoppingBag, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: t('kisanSupport'), path: "/chat", icon: MessageCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
                 { name: t('mandiPrices'), path: "/market", icon: IndianRupee, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
               ].map((item, i) => (
                 <Link key={i} to={item.path}>
@@ -251,37 +245,6 @@ export default function Dashboard() {
             </div>
           </div>
         </aside>
-      </section>
-
-      {/* Agriculture Marketplace Teaser */}
-      <section className="space-y-6 pt-8 border-t border-slate-200">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800">{t('agriMarketplace')}</h2>
-            <p className="text-sm font-medium text-slate-500">{t('buySellPlatformDesc')}</p>
-          </div>
-          <Link to="/marketplace">
-            <button className="border border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-bold h-12 px-6 rounded-lg transition-colors flex items-center justify-center">
-              {t('viewMarketplace')} <ArrowUpRight className="ml-2 h-4 w-4" />
-            </button>
-          </Link>
-        </div>
-
-        <div className="bg-[#106A3A] text-white rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 shadow-inner relative group overflow-hidden">
-          <div className="flex-1 space-y-4 relative z-10">
-            <Badge className="bg-white/20 text-white border-none">{t('tagNew')}</Badge>
-            <h3 className="text-3xl font-black text-white leading-tight">{t('connectLocalBuyers')}</h3>
-            <p className="text-emerald-100 font-medium">{t('skipMiddlemen')}</p>
-            <Link to="/marketplace" className="block pt-2">
-              <button className="bg-white text-emerald-900 hover:bg-emerald-50 rounded-xl h-12 px-8 font-black transition-all shadow-lg flex items-center">
-                {t('viewMarketplace')} <ArrowRight className="ml-2 h-4 w-4" />
-              </button>
-            </Link>
-          </div>
-          <div className="w-full md:w-1/2 aspect-video rounded-xl overflow-hidden shadow-2xl relative z-10 border-4 border-white/20">
-            <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Marketplace" />
-          </div>
-        </div>
       </section>
 
       {/* Tractor Rental Teaser */}
@@ -362,193 +325,6 @@ export default function Dashboard() {
               </div>
             </Link>
           ))}
-        </div>
-      </section>
-      {/* Smart Farming Tools Section */}
-      <section className="space-y-6 pt-8 border-t border-slate-200">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
-              <Zap className="h-6 w-6 text-emerald-600" /> {t('smartFarmingTools')}
-            </h2>
-            <p className="text-sm font-medium text-slate-500">{t('scientificFarming')}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-          {[
-            { 
-              title: t('aiCropDoctor'), 
-              desc: t('aiCropDoctorDesc'), 
-              path: "/crop-doctor", 
-              icon: Stethoscope, 
-              color: "text-blue-600", 
-              bgColor: "bg-blue-50" 
-            },
-            { 
-              title: t('smartCropRecommendation'), 
-              desc: t('smartCropRecommendationDesc'), 
-              path: "/crop-recommendation", 
-              icon: Lightbulb, 
-              color: "text-amber-600", 
-              bgColor: "bg-amber-50" 
-            },
-            { 
-              title: t('farmProfitCalculator'), 
-              desc: t('farmProfitCalculatorDesc'), 
-              path: "/profit-calculator", 
-              icon: Calculator, 
-              color: "text-emerald-600", 
-              bgColor: "bg-emerald-50" 
-            },
-            { 
-              title: t('smartIrrigationCalculator'), 
-              desc: t('smartIrrigationCalculatorDesc'), 
-              path: "/irrigation-calculator", 
-              icon: Droplets, 
-              color: "text-cyan-600", 
-              bgColor: "bg-cyan-50" 
-            },
-            { 
-              title: t('fertilizerRequirement'), 
-              desc: t('fertilizerRequirementDesc'), 
-              path: "/fertilizer-recommendation", 
-              icon: FlaskConical, 
-              color: "text-purple-600", 
-              bgColor: "bg-purple-50" 
-            },
-          ].map((tool, i) => (
-            <Link key={i} to={tool.path} className="group">
-              <Card className="h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group-hover:border-emerald-500 overflow-hidden">
-                <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
-                  <div className={cn("p-4 rounded-2xl transition-transform duration-500 group-hover:scale-110", tool.bgColor)}>
-                    <tool.icon className={cn("h-8 w-8", tool.color)} />
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-slate-800 group-hover:text-emerald-700 transition-colors uppercase tracking-tight text-sm">{tool.title}</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{tool.desc}</p>
-                  </div>
-                </CardContent>
-                <CardFooter className="p-4 pt-0 justify-center">
-                   <div className="text-[10px] font-black text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                     OPEN TOOL <ArrowUpRight className="h-3 w-3" />
-                   </div>
-                </CardFooter>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
-      {/* Market & Learning Section */}
-      <section className="space-y-6 pt-8 border-t border-slate-200">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
-              <Landmark className="h-6 w-6 text-emerald-600" /> {t('marketAndSupport')}
-            </h2>
-            <p className="text-sm font-medium text-slate-500">{t('governmentAndLearning')}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link to="/msp-info" className="group">
-            <Card className="h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group-hover:border-emerald-500 overflow-hidden">
-               <div className="h-32 bg-emerald-700 p-6 flex flex-col justify-end relative">
-                 <IndianRupee className="absolute top-4 right-4 h-16 w-16 text-white/10" />
-                 <h3 className="text-white font-black text-xl uppercase tracking-tighter">{t('mspInfo')}</h3>
-               </div>
-               <CardContent className="p-6">
-                 <p className="text-sm text-slate-600 font-medium leading-relaxed">{t('mspInfoDesc')}</p>
-                 <div className="mt-4 flex items-center text-emerald-600 font-bold text-xs">
-                   {t('viewCurrentRates')} <ArrowRight className="ml-1 h-3 w-3" />
-                 </div>
-               </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/subsidy-tracker" className="group">
-            <Card className="h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group-hover:border-emerald-500 overflow-hidden">
-               <div className="h-32 bg-blue-700 p-6 flex flex-col justify-end relative">
-                 <CheckCircle2 className="absolute top-4 right-4 h-16 w-16 text-white/10" />
-                 <h3 className="text-white font-black text-xl uppercase tracking-tighter">{t('subsidyTracker')}</h3>
-               </div>
-               <CardContent className="p-6">
-                 <p className="text-sm text-slate-600 font-medium leading-relaxed">{t('subsidyTrackerDesc')}</p>
-                 <div className="mt-4 flex items-center text-blue-600 font-bold text-xs">
-                   {t('checkApplicationStatus')} <ArrowRight className="ml-1 h-3 w-3" />
-                 </div>
-               </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/video-learning" className="group">
-            <Card className="h-full border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 group-hover:border-emerald-500 overflow-hidden">
-               <div className="h-32 bg-amber-600 p-6 flex flex-col justify-end relative">
-                 <Zap className="absolute top-4 right-4 h-16 w-16 text-white/10" />
-                 <h3 className="text-white font-black text-xl uppercase tracking-tighter">{t('agriVideoLearning')}</h3>
-               </div>
-               <CardContent className="p-6">
-                 <p className="text-sm text-slate-600 font-medium leading-relaxed">{t('agriVideoLearningDesc')}</p>
-                 <div className="mt-4 flex items-center text-amber-600 font-bold text-xs">
-                   {t('watchTutorials')} <ArrowRight className="ml-1 h-3 w-3" />
-                 </div>
-               </CardContent>
-            </Card>
-          </Link>
-        </div>
-      </section>
-
-      {/* Alerts & Safety Section */}
-      <section className="space-y-6 pt-8 border-t border-slate-200">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
-              <AlertTriangle className="h-6 w-6 text-red-600" /> {t('alertsAndSafety')}
-            </h2>
-            <p className="text-sm font-medium text-slate-500">{t('regionalRiskMonitoring')}</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-red-100 bg-red-50/50">
-            <CardHeader>
-              <div className="flex justify-between items-center text-red-700 font-black uppercase tracking-widest text-xs">
-                <span>{t('extremeWeatherAlerts')}</span>
-                <div className="h-2 w-2 rounded-full bg-red-600 animate-pulse" />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-4 items-start">
-                <div className="h-12 w-12 rounded-xl bg-red-600 flex items-center justify-center shrink-0">
-                  <Cloud className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900">{t('highWindWarning')}</h4>
-                  <p className="text-sm text-slate-600 mt-1">{t('highWindWarningDesc')}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-amber-100 bg-amber-50/50">
-            <CardHeader>
-              <div className="flex justify-between items-center text-amber-700 font-black uppercase tracking-widest text-xs">
-                <span>{t('regionalPestAlerts')}</span>
-                <div className="h-2 w-2 rounded-full bg-amber-600 animate-pulse" />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex gap-4 items-start">
-                <div className="h-12 w-12 rounded-xl bg-amber-600 flex items-center justify-center shrink-0">
-                  <Bug className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-900">{t('pestOutbreakAlert')}</h4>
-                  <p className="text-sm text-slate-600 mt-1">{t('pestOutbreakAlertDesc')}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </section>
     </div>
