@@ -49,6 +49,10 @@ import CropRecommendation from "./pages/CropRecommendation";
 import ProfitCalculator from "./pages/ProfitCalculator";
 import IrrigationCalculator from "./pages/IrrigationCalculator";
 import FertilizerRecommendation from "./pages/FertilizerRecommendation";
+import MSPInfo from "./pages/MSPInfo";
+import SubsidyTracker from "./pages/SubsidyTracker";
+import VideoLearning from "./pages/VideoLearning";
+import Marketplace from "./pages/Marketplace";
 
 const queryClient = new QueryClient();
 
@@ -376,6 +380,45 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Terms /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+
+      {/* New Pages */}
+      <Route
+        path="/msp-info"
+        element={
+          <>
+            <SignedIn><MSPInfo /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/subsidy-tracker"
+        element={
+          <>
+            <SignedIn><SubsidyTracker /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+      <Route
+        path="/video-learning"
+        element={
+          <>
+            <SignedIn><VideoLearning /></SignedIn>
+            <SignedOut><RedirectToSignIn /></SignedOut>
+          </>
+        }
+      />
+
+      <Route
+        path="/marketplace"
+        element={
+          <>
+            <SignedIn><Marketplace /></SignedIn>
             <SignedOut><RedirectToSignIn /></SignedOut>
           </>
         }
