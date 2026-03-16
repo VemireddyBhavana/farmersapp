@@ -44,6 +44,7 @@ import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
 import { VoiceAssistant } from "./components/VoiceAssistant";
 import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
+import { LocationProvider } from "./lib/LocationContext";
 
 const queryClient = new QueryClient();
 
@@ -348,17 +349,19 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <LanguageProvider>
-        <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <Layout>
-              <AppRoutes />
-            </Layout>
-            <VoiceAssistant />
-            <FloatingChatbot />
-          </BrowserRouter>
-        </AuthProvider>
+        <LocationProvider>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <Layout>
+                <AppRoutes />
+              </Layout>
+              <VoiceAssistant />
+              <FloatingChatbot />
+            </BrowserRouter>
+          </AuthProvider>
+        </LocationProvider>
       </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
