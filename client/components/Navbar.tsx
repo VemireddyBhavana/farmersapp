@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu, X, Sun, Moon, ChevronDown, Leaf, CloudSun, TrendingUp, Shield, Bot,
   ScrollText, HeartHandshake, Sprout, Globe, Users, Zap, Target, Grid, Calendar,
-  Store
+  Store, ShoppingBag
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -53,6 +53,7 @@ const Navbar = () => {
 
   // "More" items inside a dropdown
   const moreLinks = [
+    { name: t("agriMarketplace"),path: "/marketplace", icon: ShoppingBag   },
     { name: t("seedsStore"),    path: "/seeds",        icon: Sprout        },
     { name: t("calendar"),      path: "/calendar",     icon: Calendar      },
     { name: t("security"),      path: "/pests",        icon: Shield        },
