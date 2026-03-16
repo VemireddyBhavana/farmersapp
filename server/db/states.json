@@ -1,0 +1,7 @@
+[
+  {"id": 1, "countryId": 1, "name": "Andhra Pradesh"},
+  {"id": 2, "countryId": 1, "name": "Punjab"},
+  {"id": 3, "countryId": 1, "name": "Maharashtra"},
+  {"id": 4, "countryId": 2, "name": "California"},
+  {"id": 5, "countryId": 2, "name": "Iowa"}
+]

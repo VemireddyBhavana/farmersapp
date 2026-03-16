@@ -79,6 +79,30 @@ export function VoiceAssistant() {
     } else if (matches('navKnowledge')) {
       speakText(t('replyKnowledge'), language);
       navigate('/knowledge');
+    } else if (matches('navSeasonal')) {
+      speakText(t('replySeasonal'), language);
+      navigate('/knowledge'); // Navigate to knowledge then user can open seasonal
+    } else if (matches('navWater')) {
+      speakText(t('replyWater'), language);
+      navigate('/knowledge');
+    } else if (matches('navFertilizer')) {
+      speakText(t('replyFertilizer'), language);
+      navigate('/knowledge');
+    } else if (matches('navMachinery')) {
+      speakText(t('replyMachinery'), language);
+      navigate('/knowledge');
+    } else if (matches('navStorage')) {
+      speakText(t('replyStorage'), language);
+      navigate('/knowledge');
+    } else if (matches('navSubsidy')) {
+      speakText(t('replySubsidy'), language);
+      navigate('/subsidy-tracker');
+    } else if (matches('navMSP')) {
+      speakText(t('replyMSP'), language);
+      navigate('/msp-info');
+    } else if (matches('navVideos')) {
+      speakText(t('replyVideos'), language);
+      navigate('/video-learning');
     } else {
       speakText(t('replyError'), language);
     }

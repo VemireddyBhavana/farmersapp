@@ -21,12 +21,19 @@ export default function Auth() {
             <ArrowLeft className="h-4 w-4" />
             <span className="text-sm font-medium">{t('backToHome')}</span>
           </Link>
-          <div className="mx-auto h-16 w-16 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/20">
-            <Leaf className="h-10 w-10 text-white" />
+          <div className="mx-auto h-24 w-24 rounded-full overflow-hidden border-4 border-white shadow-2xl shadow-emerald-500/20 bg-white">
+            <img 
+              src="file:///C:/Users/bhava/.gemini/antigravity/brain/c6c98881-80ff-4c81-910d-2b2ddbf6a392/agriverse_circle_logo_1773663028809.png" 
+              alt="AgriVerse Logo" 
+              className="w-full h-full object-cover"
+            />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-emerald-600">
-            AgriPath
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Welcome to AgriVerse
           </h1>
+          <p className="text-sm text-muted-foreground font-medium">
+            Sign in to continue
+          </p>
         </div>
 
         {isRegister ? (

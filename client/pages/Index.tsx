@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "../lib/LanguageContext";
+import SmartInsights from "@/components/SmartInsights";
 
 export default function Index() {
   const { t } = useLanguage();
@@ -123,7 +124,11 @@ export default function Index() {
 
       </section>
 
+      {/* Smart Farming Insights */}
+      <SmartInsights />
+
       {/* Features Section */}
+
       <section id="features" className="bg-muted/30 py-24">
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-2xl mx-auto mb-16 space-y-4">

@@ -1,15 +1,47 @@
-import { useSearchParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, Tractor, Calendar, Phone, Star, ShieldCheck, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+    ArrowLeft, MapPin, Tractor, ShieldCheck, Clock, 
+    Globe, Landmark, Navigation2, Search, CheckCircle2,
+    Phone, Star
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
+import { useFarmerLocation } from "@/lib/LocationContext";
+import { cn } from "@/lib/utils";
+
+const COUNTRIES = ["India", "USA", "Brazil", "Vietnam"];
+const STATES: Record<string, string[]> = {
+    "India": ["Andhra Pradesh", "Punjab", "Maharashtra", "Gujarat", "Karnataka"],
+    "USA": ["California", "Iowa", "Texas", "Nebraska"],
+    "Brazil": ["Mato Grosso", "Paraná", "Rio Grande do Sul"],
+    "Vietnam": ["Đồng Bằng Sông Cửu Long", "Tây Nguyên"]
+};
+const DISTRICTS: Record<string, string[]> = {
+    "Andhra Pradesh": ["Guntur", "Chittoor", "Kurnool", "Anantapur"],
+    "Punjab": ["Ludhiana", "Amritsar", "Patiala"],
+    "California": ["Fresno", "Tulare", "Monterey", "Kern"],
+    "Iowa": ["Des Moines", "Cedar Rapids", "Davenport"]
+};
 
 export default function LocationPage() {
-    const [searchParams] = useSearchParams();
-    const area = searchParams.get("area") || "Chittoor";
     const { t } = useLanguage();
+    const { location: farmerLocation, setLocation, detectLocation, isLoading: isDetecting } = useFarmerLocation();
+    
+    const [selectedCountry, setSelectedCountry] = useState(farmerLocation.country);
+    const [selectedState, setSelectedState] = useState(farmerLocation.state);
+    const [selectedDistrict, setSelectedDistrict] = useState(farmerLocation.district);
+
+    const handleSaveLocation = () => {
+        setLocation({
+            country: selectedCountry,
+            state: selectedState,
+            district: selectedDistrict
+        });
+    };
 
     const mockTractorOwners = [
         {
@@ -31,62 +63,141 @@ export default function LocationPage() {
             verified: true,
             equipment: ["Mahindra 275 DI", "Seeder"],
             rating: 4.7,
-        },
-        {
-            id: 3,
-            name: "Suresh Babu",
-            distance: "4.0 km away",
-            mobile: "+91 9123X XXXXX",
-            experience: "12 years",
-            verified: true,
-            equipment: ["Swaraj 855 FE"],
-            rating: 4.8,
         }
     ];
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-5xl">
-            <div className="flex items-center gap-4 mb-8">
-                <Link to="/dashboard">
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                        <ArrowLeft className="h-5 w-5" />
-                    </Button>
-                </Link>
-                <div>
-                    <h1 className="text-4xl font-black tracking-tight">{area} Rental Hub</h1>
-                    <p className="text-muted-foreground font-medium flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-red-500" /> Nearby Tractor Owners & Service Centers
-                    </p>
+        <div className="min-h-screen bg-[#F8FAF9] pb-20">
+            {/* Header */}
+            <div className="bg-white border-b border-emerald-100 pt-8 pb-12">
+                <div className="container mx-auto px-4 max-w-6xl">
+                    <div className="flex items-center gap-4 mb-6">
+                        <Link to="/dashboard">
+                            <Button variant="ghost" size="icon" className="rounded-full bg-muted/50">
+                                <ArrowLeft className="h-5 w-5" />
+                            </Button>
+                        </Link>
+                        <div>
+                            <h1 className="text-3xl font-black tracking-tight flex items-center gap-3">
+                                <MapPin className="h-8 w-8 text-emerald-600" />
+                                {t("globalLocationSystem") || "Global Location System"}
+                            </h1>
+                            <p className="text-muted-foreground font-bold italic">
+                                {t("locationDesc") || "Adapting agriculture intelligence to your region"}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        {/* Location Selection */}
+                        <Card className="rounded-[2.5rem] border-emerald-100 shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+                            <CardContent className="p-8 space-y-8">
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 px-1">Country</label>
+                                            <select 
+                                                value={selectedCountry}
+                                                onChange={(e) => {
+                                                    setSelectedCountry(e.target.value);
+                                                    setSelectedState("");
+                                                    setSelectedDistrict("");
+                                                }}
+                                                className="w-full h-14 rounded-2xl border-emerald-100 bg-emerald-50/30 px-4 font-bold focus:ring-2 focus:ring-emerald-500 outline-none appearance-none cursor-pointer"
+                                            >
+                                                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+                                            </select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 px-1">State / Province</label>
+                                            <select 
+                                                value={selectedState}
+                                                onChange={(e) => {
+                                                    setSelectedState(e.target.value);
+                                                    setSelectedDistrict("");
+                                                }}
+                                                className="w-full h-14 rounded-2xl border-emerald-100 bg-emerald-50/30 px-4 font-bold focus:ring-2 focus:ring-emerald-500 outline-none appearance-none cursor-pointer"
+                                                disabled={!selectedCountry}
+                                            >
+                                                <option value="">Select State</option>
+                                                {(STATES[selectedCountry] || []).map(s => <option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black uppercase tracking-widest text-emerald-600 px-1">District / Region</label>
+                                            <select 
+                                                value={selectedDistrict}
+                                                onChange={(e) => setSelectedDistrict(e.target.value)}
+                                                className="w-full h-14 rounded-2xl border-emerald-100 bg-emerald-50/30 px-4 font-bold focus:ring-2 focus:ring-emerald-500 outline-none appearance-none cursor-pointer"
+                                                disabled={!selectedState}
+                                            >
+                                                <option value="">Select District</option>
+                                                {(DISTRICTS[selectedState] || []).map(d => <option key={d} value={d}>{d}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col md:flex-row gap-4">
+                                    <Button 
+                                        onClick={handleSaveLocation}
+                                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl py-7 font-black text-lg shadow-lg shadow-emerald-500/20"
+                                        disabled={!selectedDistrict}
+                                    >
+                                        <CheckCircle2 className="mr-2 h-5 w-5" />
+                                        Update Local Agriculture Data
+                                    </Button>
+                                    <Button 
+                                        onClick={() => detectLocation()}
+                                        variant="outline"
+                                        className="rounded-2xl py-7 font-bold border-emerald-200 hover:bg-emerald-50"
+                                        disabled={isDetecting}
+                                    >
+                                        <Navigation2 className={cn("mr-2 h-5 w-5", isDetecting && "animate-spin")} />
+                                        {isDetecting ? "Detecting..." : "Auto Detect"}
+                                    </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Visual Pulse */}
+                        <div className="hidden lg:flex flex-col items-center justify-center p-8 space-y-6">
+                            <div className="relative">
+                                <div className="h-32 w-32 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                                    <Globe className="h-16 w-16 animate-[spin_10s_linear_infinite]" />
+                                </div>
+                                <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-20" />
+                            </div>
+                            <div className="text-center space-y-2">
+                                <h3 className="text-xl font-black text-slate-900 leading-none">Global Smart Farming</h3>
+                                <p className="text-sm font-medium text-muted-foreground max-w-xs mx-auto leading-relaxed">
+                                    Your agricultural intelligence is now being synced with the climate, soil, and market data of <span className="text-emerald-600 font-bold">{farmerLocation.district || "your selected region"}</span>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-3">
-                {/* Map Visualization (Placeholder) */}
-                <div className="lg:col-span-2">
-                    <Card className="rounded-[3rem] border-primary/10 overflow-hidden h-[400px] shadow-2xl relative bg-slate-100">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="text-center space-y-4">
-                                <div className="h-16 w-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto text-primary animate-pulse">
-                                    <MapPin className="h-8 w-8" />
-                                </div>
-                                <p className="font-black text-xl text-primary/40 uppercase tracking-widest">Live Map Visualization</p>
-                                <p className="text-muted-foreground text-sm max-w-xs">{area} District Hub - Active Connections Loaded</p>
-                            </div>
+            {/* Localized Insights */}
+            <div className="container mx-auto px-4 max-w-6xl mt-12 grid gap-8 lg:grid-cols-3">
+                <main className="lg:col-span-2 space-y-12">
+                    {/* Active Hub */}
+                    <section className="space-y-6">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-2xl font-black flex items-center gap-3">
+                                <Landmark className="h-6 w-6 text-emerald-600" />
+                                {farmerLocation.district} Rental Hub
+                            </h2>
+                            <Badge className="bg-emerald-100 text-emerald-700 font-bold border-none">Active Connections</Badge>
                         </div>
-                        {/* Simulated map points */}
-                        <div className="absolute top-1/4 left-1/3 h-4 w-4 bg-primary rounded-full shadow-lg shadow-primary/50" />
-                        <div className="absolute top-1/2 right-1/4 h-4 w-4 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50" />
-                        <div className="absolute bottom-1/3 left-1/2 h-4 w-4 bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/50" />
-                    </Card>
-
-                    <div className="mt-8 space-y-6">
-                        <h3 className="text-2xl font-black">{t("availableOwners") || "Available Owners"}</h3>
-                        <div className="grid gap-4">
+                        
+                        <div className="grid gap-6">
                             {mockTractorOwners.map((owner) => (
-                                <Card key={owner.id} className="rounded-3xl border-primary/5 hover:border-primary/20 transition-all hover:shadow-xl group overflow-hidden bg-white">
+                                <Card key={owner.id} className="rounded-3xl border-none shadow-sm hover:shadow-md transition-all group overflow-hidden bg-white">
                                     <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                                         <div className="flex items-center gap-6">
-                                            <div className="h-16 w-16 rounded-2xl bg-muted flex items-center justify-center text-primary font-black text-xl">
+                                            <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 font-black text-xl">
                                                 {owner.name[0]}
                                             </div>
                                             <div className="space-y-1">
@@ -95,63 +206,65 @@ export default function LocationPage() {
                                                     {owner.verified && <ShieldCheck className="h-4 w-4 text-emerald-500" />}
                                                 </div>
                                                 <div className="flex items-center gap-3 text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                                                    <span className="flex items-center gap-1 text-primary"><Star className="h-3 w-3 fill-primary" /> {owner.rating}</span>
+                                                    <span className="flex items-center gap-1 text-emerald-600"><Star className="h-3 w-3 fill-emerald-600" /> {owner.rating}</span>
                                                     <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {owner.experience} Exp.</span>
                                                     <span className="flex items-center gap-1 text-red-500"><MapPin className="h-3 w-3" /> {owner.distance}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex gap-2 w-full md:w-auto">
-                                            <Button variant="outline" className="flex-1 md:flex-none rounded-xl font-bold py-6">
-                                                <Phone className="h-4 w-4 mr-2" /> {owner.mobile}
+                                            <Button variant="outline" className="flex-1 md:flex-none rounded-xl font-bold h-12">
+                                                <Phone className="h-4 w-4 mr-2" /> Contact
                                             </Button>
-                                            <Button className="flex-1 md:flex-none rounded-xl font-bold py-6 px-8 shadow-lg shadow-primary/20">
-                                                View Details
+                                            <Button className="flex-1 md:flex-none rounded-xl font-bold h-12 bg-slate-900 border-none">
+                                                View Equipment
                                             </Button>
                                         </div>
                                     </CardContent>
                                 </Card>
                             ))}
                         </div>
-                    </div>
-                </div>
+                    </section>
+                </main>
 
-                {/* Sidebar Info */}
                 <aside className="space-y-8">
-                    <Card className="rounded-[2.5rem] bg-primary text-white p-8 border-none overflow-hidden relative shadow-2xl">
-                        <div className="relative z-10 space-y-4">
+                    <Card className="rounded-[2.5rem] bg-emerald-600 text-white p-8 border-none overflow-hidden relative shadow-2xl">
+                        <div className="relative z-10 space-y-6">
                             <Tractor className="h-12 w-12 opacity-30" />
-                            <h3 className="text-2xl font-black">Booking Assistance</h3>
-                            <p className="opacity-80 text-sm font-medium leading-relaxed">
-                                Call our local district coordinator for direct assistance with multiple equipment bookings in {area}.
-                            </p>
-                            <Button className="w-full bg-white text-primary hover:bg-white/90 rounded-2xl py-6 font-black text-lg">
-                                Talk to Coordinator
+                            <div className="space-y-2">
+                                <h3 className="text-2xl font-black">Regional Coordinator</h3>
+                                <p className="opacity-80 text-sm font-medium leading-relaxed">
+                                    Need help with bookings in {farmerLocation.district}? Our local expert is available 24/7.
+                                </p>
+                            </div>
+                            <Button className="w-full bg-white text-emerald-900 hover:bg-white/90 rounded-2xl py-6 font-black text-lg">
+                                Call Coordinator
                             </Button>
                         </div>
                         <div className="absolute -bottom-10 -right-10 h-64 w-64 bg-white opacity-5 rounded-full blur-3xl pointer-events-none" />
                     </Card>
 
-                    <Card className="rounded-[2.5rem] border-primary/10 p-8 space-y-4 shadow-sm bg-muted/20">
+                    <Card className="rounded-[2.5rem] border-emerald-100 p-8 space-y-6 shadow-sm bg-white">
                         <h4 className="font-black text-lg flex items-center gap-2">
-                            <ShieldCheck className="h-5 w-5 text-emerald-600" /> Safety Standards
+                            <Navigation2 className="h-5 w-5 text-emerald-600" /> Nearby Hubs
                         </h4>
-                        <ul className="space-y-4">
-                            {[
-                                "Verified equipment quality",
-                                "Background checked owners",
-                                "Secure digital transactions",
-                                "On-site support available"
-                            ].map((item, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm font-medium text-muted-foreground">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-2 flex-shrink-0" />
-                                    {item}
-                                </li>
+                        <div className="space-y-4">
+                            {["Service Center", "Seed Bank", "Mandi"].map((item, i) => (
+                                <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 group cursor-pointer hover:bg-emerald-50 hover:border-emerald-100 transition-all">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center text-emerald-600 shadow-sm">
+                                            <Landmark className="h-5 w-5" />
+                                        </div>
+                                        <p className="font-bold text-sm">{item}</p>
+                                    </div>
+                                    <ArrowLeft className="h-4 w-4 rotate-180 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </Card>
                 </aside>
             </div>
         </div>
     );
 }
+

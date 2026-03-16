@@ -69,19 +69,26 @@ export default function ChatPage() {
     // Simulate bot response
     setTimeout(() => {
       setIsTyping(false);
-      let response = ct("botDistrictQuestion");
+      
+      const matchKeywords = (keywordKey: string) => {
+        const keywords = ct(keywordKey).split(',').map((k: string) => k.trim().toLowerCase());
+        return keywords.some((k: string) => content.toLowerCase().includes(k));
+      };
 
-      const lowerContent = content.toLowerCase();
-      if (lowerContent.includes("paddy") || lowerContent.includes("rice")) {
-        response = "For Paddy (Rice), sowing should ideally happen in June-July for the Kharif season. Ensure your nursery is 25-30 days old before transplanting. Maintain 5cm standing water in the field. You can follow the full day-by-day guide in our Growing Guide section: /growing-guide?crop=rice";
-      } else if (lowerContent.includes("tractor") || lowerContent.includes("rent") || lowerContent.includes("soil")) {
-        response = "For wet or clayey soil, the Mahindra 275 DI or John Deere 5310 are excellent due to their high torque and puddling capabilities. We have several available near Chittoor and Tirupati starting at ₹600/hour. You can view them on the Dashboard.";
-      } else if (lowerContent.includes("tomato") || lowerContent.includes("trend") || lowerContent.includes("price")) {
-        response = "Tomato prices are currently trending UP at ₹1,800/quintal in local mandis like Madanapalle. For the best yield, ensure staking for indeterminate varieties and regular NPK application. Demand is expected to stay strong for the next 3 weeks.";
-      } else if (lowerContent.includes("seed") || lowerContent.includes("variety") || lowerContent.includes("recommend")) {
-        response = "I recommend high-yielding seeds like BPT-5204 (Samba Mahsuri) for Rice or hybrid varieties from Nuziveedu for Maize. Treat seeds with Carbendazim (2g/kg) before sowing to prevent soil-borne diseases.";
-      } else if (lowerContent.includes("chittoor")) {
-        response = "Chittoor district is currently seeing good weather for groundnut and tomato. Local rental hubs are active near the MRO office in Chittoor and Bangarupalem. I can show you specific equipment available there on the Dashboard.";
+      let response = ct("botFallback");
+
+      if (matchKeywords("guidanceKeywords")) {
+        response = ct("botGuidanceReply");
+      } else if (matchKeywords("rentKeywords")) {
+        response = ct("botRentReply");
+      } else if (matchKeywords("schemeKeywords")) {
+        response = ct("botSchemeReply");
+      } else if (matchKeywords("cropKeywords")) {
+        response = ct("botCropReply");
+      } else if (matchKeywords("pestKeywords")) {
+        response = ct("botPestReply");
+      } else if (matchKeywords("marketKeywords")) {
+        response = ct("botMarketReply");
       }
 
       setMessages((prev) => [
@@ -152,10 +159,10 @@ export default function ChatPage() {
             <CardContent className="p-8 pt-0 space-y-4">
               {/* These could be translated or kept as is if they represent real history */}
               {[
-                { text: "Paddy Sowing advice", path: "/growing-guide?crop=rice" },
-                { text: "Tractor rates near Chittoor", path: "/dashboard?search=chittoor" },
-                { text: "Market trends for Tomato", path: "/market?crop=tomato" },
-                { text: "Seed recommendation", path: "/growing-guide?crop=rice" }
+                { text: ct("historyCropAdvice"), path: "/growing-guide?crop=rice" },
+                { text: ct("historyTractorRates"), path: "/dashboard?search=chittoor" },
+                { text: ct("historyMarketTrends"), path: "/market?crop=tomato" },
+                { text: ct("historySeedRecommendation"), path: "/growing-guide?crop=rice" }
               ].map((h, i) => (
                 <Link to={h.path} key={i}>
                   <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/50 transition-all cursor-pointer group">

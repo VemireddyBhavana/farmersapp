@@ -61,22 +61,27 @@ export const FloatingChatbot = () => {
     const generateBotResponse = (userText: string) => {
         const lowerText = userText.toLowerCase();
 
-        if (lowerText.includes("guidance") || lowerText.includes("advice")) {
+        const matchKeywords = (keywordKey: string) => {
+            const keywords = tl(keywordKey).split(',').map(k => k.trim().toLowerCase());
+            return keywords.some(k => lowerText.includes(k));
+        };
+
+        if (matchKeywords("guidanceKeywords")) {
             return tl("botGuidanceReply");
         }
-        if (lowerText.includes("rent") || lowerText.includes("tractor")) {
+        if (matchKeywords("rentKeywords")) {
             return tl("botRentReply");
         }
-        if (lowerText.includes("scheme") || lowerText.includes("ysr") || lowerText.includes("kisan")) {
+        if (matchKeywords("schemeKeywords")) {
             return tl("botSchemeReply");
         }
-        if (lowerText.includes("tomato") || lowerText.includes("paddy") || lowerText.includes("cotton")) {
+        if (matchKeywords("cropKeywords")) {
             return tl("botCropReply");
         }
-        if (lowerText.includes("pest") || lowerText.includes("disease")) {
+        if (matchKeywords("pestKeywords")) {
             return tl("botPestReply");
         }
-        if (lowerText.includes("price") || lowerText.includes("mandi")) {
+        if (matchKeywords("marketKeywords")) {
             return tl("botMarketReply");
         }
 
@@ -152,7 +157,6 @@ export const FloatingChatbot = () => {
                                         onClick={() => {
                                             const newLang = languageLabelMap[lang];
                                             setLocalLanguage(newLang);
-                                            setGlobalLanguage(newLang); // Sync to global as well
                                         }}
                                         className={`shrink-0 min-w-[36px] px-2 py-1.5 rounded-lg text-sm font-bold transition-all border ${labelReverseMap[localLanguage] === lang
                                             ? 'bg-white text-[#106A3A] border-white shadow-sm'
