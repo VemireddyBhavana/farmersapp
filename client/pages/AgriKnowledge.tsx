@@ -17,6 +17,12 @@ interface KnowledgeCard {
     id: string;
     titleKey: string;
     image: string;
+    summary?: {
+        climate: string;
+        water: string;
+        harvest: string;
+        profit: string;
+    };
     bullets: string[];
     category: string;
     stepsPrefix?: string;
@@ -31,6 +37,38 @@ interface StepCard {
     accent: string;
 }
 
+function getStepImage(stepIndex: number, cropId: string): string {
+    const images: Record<string, string[]> = {
+        aloe: [
+            "https://images.unsplash.com/photo-1596547609652-9cf5d8d76ae8?w=800&q=80", // Climate
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", // Material
+            "https://images.unsplash.com/photo-1592321675774-3de57f3ee0dc?w=800&q=80", // Preparation
+            "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80", // Method
+            "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", // Irrigation
+            "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", // Fertilizers
+            "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&q=80", // Pest
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", // Harvesting
+            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", // Post
+            "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80", // Market
+        ],
+        // Default falling back to meaningful category images
+        default: [
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", // Climate
+            "https://images.unsplash.com/photo-1530836361253-efad5cb2fe17?w=800&q=80", // Material
+            "https://images.unsplash.com/photo-1592321675774-3de57f3ee0dc?w=800&q=80", // Preparation
+            "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80", // Method
+            "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", // Irrigation
+            "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", // Fertilizers
+            "https://images.unsplash.com/photo-1530133532239-eda0f515f187?w=800&q=80", // Pest
+            "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&q=80", // Harvesting
+            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", // Post
+            "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80"  // Market
+        ]
+    };
+    const cropImages = images[cropId] || images.default;
+    return cropImages[stepIndex % 10];
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Data — unchanged
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,12 +78,12 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionCrops",
         icon: Sprout,
         cards: [
-            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://planetdesert.com/cdn/shop/articles/587654299891.jpg?v=1772639438", bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
-            { id: "curry", titleKey: "curryLeavesTitle", image: "https://www.shutterstock.com/image-photo/fresh-organic-curry-leaves-tree-260nw-2593564315.jpg", bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
-            { id: "rice", titleKey: "riceTitle", image: "https://www.agrifarming.in/wp-content/uploads/2022/04/Boost-Rice-Yield2.jpg", bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 5 },
-            { id: "cotton", titleKey: "cottonTitle", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggsehAILLPTBdlDWdULNE9Fsz3SEXjAHbcg&s", bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 5 },
-            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800", bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 5 },
-            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://static.wixstatic.com/media/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg/v1/fill/w_568,h_244,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg", bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 9 },
+            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://planetdesert.com/cdn/shop/articles/587654299891.jpg?v=1772639438", summary: { climate: "hotDry", water: "low", harvest: "10-12 Months", profit: "high" }, bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
+            { id: "curry", titleKey: "curryLeavesTitle", image: "https://www.shutterstock.com/image-photo/fresh-organic-curry-leaves-tree-260nw-2593564315.jpg", summary: { climate: "warmHumid", water: "medium", harvest: "12-15 Months", profit: "medium" }, bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
+            { id: "rice", titleKey: "riceTitle", image: "https://www.agrifarming.in/wp-content/uploads/2022/04/Boost-Rice-Yield2.jpg", summary: { climate: "warmHumid", water: "high", harvest: "4 Months", profit: "medium" }, bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 10 },
+            { id: "cotton", titleKey: "cottonTitle", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggsehAILLPTBdlDWdULNE9Fsz3SEXjAHbcg&s", summary: { climate: "warmHumid", water: "medium", harvest: "6 Months", profit: "high" }, bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 10 },
+            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800", summary: { climate: "warmHumid", water: "medium", harvest: "3-4 Months", profit: "veryHigh" }, bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 10 },
+            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://static.wixstatic.com/media/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg/v1/fill/w_568,h_244,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg", summary: { climate: "coolDry", water: "low", harvest: "1 Year", profit: "veryHigh" }, bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 10 },
         ]
     },
     {
@@ -219,115 +257,118 @@ const StepCardItem = ({
     index,
     expanded,
     onToggle,
+    cropId,
 }: {
     step: StepCard;
     index: number;
     expanded: boolean;
     onToggle: () => void;
+    cropId: string;
 }) => {
     const Icon = step.icon;
 
     return (
         <motion.div
+            layout
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.3 }}
             className={cn(
-                "rounded-2xl border transition-all duration-300 overflow-hidden",
+                "rounded-[2rem] border transition-all duration-500 overflow-hidden bg-white",
                 expanded
-                    ? "border-emerald-300 shadow-md shadow-emerald-100"
-                    : "border-slate-100 shadow-sm hover:border-emerald-200 hover:shadow-md",
-                step.color
+                    ? "border-emerald-200 shadow-xl shadow-emerald-50 scale-[1.02] z-10"
+                    : "border-slate-100 shadow-sm hover:border-emerald-100 hover:shadow-lg translate-y-0",
             )}
         >
-            {/* Card header — always visible, clickable */}
             <button
                 onClick={onToggle}
-                className="w-full text-left p-5 flex items-start gap-4 group"
+                className="w-full text-left p-6 md:p-8 flex items-center gap-5 group relative"
             >
-                {/* Icon */}
-                <div className={cn("p-2.5 rounded-2xl flex-shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110", step.accent)}>
-                    <Icon className="w-5 h-5" />
+                <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:rotate-6", step.accent)}>
+                    <Icon className="w-7 h-7" />
                 </div>
 
-                {/* Text */}
                 <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                        Step {index + 1}
-                    </span>
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                            Step {index + 1}
+                        </span>
+                    </div>
                     <h3 className={cn(
-                        "text-base font-black leading-tight mt-0.5 transition-colors",
-                        expanded ? "text-emerald-700" : "text-slate-900 group-hover:text-emerald-700"
+                        "text-xl font-black leading-tight transition-colors",
+                        expanded ? "text-emerald-800" : "text-slate-900 group-hover:text-emerald-700"
                     )}>
-                        {step.title
-                            .replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "")
-                            .replace(/^\d+[\s.]*\s*/, "")
-                            .replace(/^Step\s*\d+\s*[:.-]\s*/i, "")
-                            .trim()}
+                        {step.title}
                     </h3>
-
-                    {/* Preview when collapsed */}
-                    {!expanded && (
-                        <p className="text-slate-500 text-[13px] font-medium leading-snug mt-1.5 line-clamp-2">
-                            {step.body.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "").trim()}
-                        </p>
-                    )}
                 </div>
 
-                {/* Chevron */}
                 <div className={cn(
-                    "flex-shrink-0 p-1.5 rounded-full transition-all duration-300",
-                    expanded ? "bg-emerald-100 rotate-180" : "bg-white/80"
+                    "h-10 w-10 rounded-full flex items-center justify-center transition-all duration-500",
+                    expanded ? "bg-emerald-600 rotate-180" : "bg-slate-50"
                 )}>
-                    <ChevronDown className={cn("w-4 h-4 transition-colors", expanded ? "text-emerald-600" : "text-slate-400")} />
+                    <ChevronDown className={cn("w-5 h-5", expanded ? "text-white" : "text-slate-400")} />
                 </div>
             </button>
 
-            {/* Expanded content — inline below the header */}
             <AnimatePresence initial={false}>
                 {expanded && (
                     <motion.div
-                        key="expanded"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
+                        transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                     >
-                        <div className="px-5 pb-5 space-y-4 border-t border-white/60">
-                            {/* Full explanation */}
-                            <div className="pt-4">
-                                <p className="text-slate-700 font-semibold leading-relaxed text-[14px]">
+                        <div className="px-8 pb-8 pt-2 space-y-8">
+                            <div className="aspect-[16/9] rounded-3xl overflow-hidden shadow-inner bg-slate-100 border border-slate-100">
+                                <img 
+                                    src={getStepImage(index, cropId)} 
+                                    alt={step.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+
+                            <div className="prose prose-slate max-w-none">
+                                <p className="text-slate-600 font-bold text-lg leading-relaxed">
                                     {step.body}
                                 </p>
                             </div>
 
-                            {/* Farmer Tip */}
-                            <div className="rounded-xl bg-emerald-600 p-4">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Leaf className="w-4 h-4 text-white flex-shrink-0" />
-                                    <span className="text-xs font-black text-white uppercase tracking-wider">
-                                        Farmer Tip
-                                    </span>
+                            <div className="grid gap-6 md:grid-cols-2">
+                                <div className="rounded-3xl bg-emerald-600 p-6 shadow-lg shadow-emerald-200/50 text-white relative overflow-hidden group/tip">
+                                    <Leaf className="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 group-hover/tip:rotate-12 transition-transform duration-700" />
+                                    <div className="flex items-center gap-2 mb-3 relative z-10">
+                                        <div className="h-8 w-8 rounded-xl bg-white/20 flex items-center justify-center">
+                                            <Leaf className="w-4 h-4 text-white" />
+                                        </div>
+                                        <span className="text-xs font-black uppercase tracking-widest text-emerald-100">
+                                            Farmer Tip
+                                        </span>
+                                    </div>
+                                    <p className="text-base font-bold leading-relaxed relative z-10">
+                                        {getFarmerTip(index)}
+                                    </p>
                                 </div>
-                                <p className="text-emerald-50 text-[13px] font-semibold leading-relaxed">
-                                    {getFarmerTip(index)}
-                                </p>
-                            </div>
 
-                            {/* Best Practices */}
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2.5">
-                                    Best Practices
-                                </p>
-                                <ul className="space-y-2">
-                                    {getBestPractices(index).map((tip, i) => (
-                                        <li key={i} className="flex items-start gap-2.5">
-                                            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                                            <span className="text-[13px] text-slate-600 font-medium leading-snug">{tip}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <div className="rounded-3xl bg-slate-50 p-6 border border-slate-100">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <div className="h-8 w-8 rounded-xl bg-emerald-100 flex items-center justify-center">
+                                            <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                        </div>
+                                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                                            Best Practices
+                                        </span>
+                                    </div>
+                                    <ul className="space-y-3">
+                                        {getBestPractices(index).map((tip, i) => (
+                                            <li key={i} className="flex items-start gap-3">
+                                                <div className="h-5 w-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                    <ArrowRight className="w-3 h-3 text-emerald-600" />
+                                                </div>
+                                                <span className="text-sm text-slate-700 font-bold leading-snug">{tip}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </motion.div>
@@ -348,14 +389,13 @@ const DetailModuleOverlay = ({
     onBack: () => void;
 }) => {
     const { t } = useLanguage();
-    const [expandedStep, setExpandedStep] = useState<number | null>(null);
+    const [expandedStep, setExpandedStep] = useState<number | null>(0); // Default open first step
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => { document.body.style.overflow = "auto"; };
     }, []);
 
-    // Build step cards
     const steps: StepCard[] = card.stepCount
         ? Array.from({ length: card.stepCount }, (_, i) => {
             const m = STEP_ICONS[i % STEP_ICONS.length];
@@ -377,6 +417,8 @@ const DetailModuleOverlay = ({
     const toggleStep = (idx: number) =>
         setExpandedStep(prev => (prev === idx ? null : idx));
 
+    const progress = expandedStep !== null ? ((expandedStep + 1) / steps.length) * 100 : 0;
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -384,73 +426,170 @@ const DetailModuleOverlay = ({
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6 overflow-hidden"
         >
-            {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-slate-950/70 backdrop-blur-2xl"
+                className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
                 onClick={onBack}
             />
 
-            {/* Modal */}
             <motion.div
-                initial={{ scale: 0.95, y: 30, opacity: 0 }}
+                initial={{ scale: 0.9, y: 100, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.95, y: 30, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                className="relative bg-white rounded-3xl w-full max-w-5xl h-[92vh] md:h-[88vh] overflow-hidden flex flex-col shadow-2xl"
+                exit={{ scale: 0.9, y: 100, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 240, damping: 24 }}
+                className="relative bg-[#F8FAFC] rounded-[3rem] w-full max-w-6xl h-[94vh] md:h-[90vh] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/20"
             >
                 {/* ── Hero Image Banner ── */}
-                <div className="relative h-52 md:h-64 flex-shrink-0 overflow-hidden">
+                <div className="relative h-64 md:h-80 flex-shrink-0 overflow-hidden">
                     <img
                         src={card.image}
                         alt={t(card.titleKey)}
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/40 to-transparent" />
 
-                    {/* Title on image */}
-                    <div className="absolute bottom-0 left-0 right-0 px-6 md:px-10 pb-6 md:pb-7">
-                        <span className="inline-block text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-2 bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
-                            {card.category}
-                        </span>
-                        <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
-                            {t(card.titleKey)}
-                        </h2>
-                        <p className="text-emerald-300 text-sm font-semibold mt-1">
-                            Complete Cultivation Guide
-                        </p>
+                    <div className="absolute top-6 left-6 md:top-10 md:left-10 z-20">
+                         <motion.button
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            onClick={onBack}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-white/90 backdrop-blur-md rounded-2xl text-slate-900 font-black text-xs uppercase tracking-widest shadow-lg hover:bg-white transition-all active:scale-95 border border-white"
+                        >
+                            <ArrowRight className="w-4 h-4 rotate-180" />
+                            {t('backToHome') || 'Back'}
+                        </motion.button>
                     </div>
 
-                    {/* Close button */}
+                    <div className="absolute bottom-0 left-0 right-0 px-6 md:px-12 pb-10">
+                        <motion.div 
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="space-y-4"
+                        >
+                            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-emerald-600 text-white shadow-lg">
+                                {card.category}
+                            </span>
+                            <h2 className="text-4xl md:text-6xl font-black text-slate-950 leading-tight tracking-tighter">
+                                {t(card.titleKey)}
+                            </h2>
+                            <div className="flex items-center gap-2">
+                                <div className="h-1 w-12 rounded-full bg-emerald-500" />
+                                <p className="text-emerald-700 text-sm font-black uppercase tracking-widest">
+                                    {t('completeCultivationGuide') || 'Complete Cultivation Guide'}
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
+
                     <button
                         onClick={onBack}
-                        className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2.5 rounded-full transition-all border border-white/20 group"
+                        className="absolute top-6 right-6 md:top-10 md:right-10 bg-slate-950/20 hover:bg-slate-950/40 backdrop-blur-md p-3 rounded-2xl transition-all border border-white/20 group z-20"
                     >
-                        <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-200" />
+                        <X className="w-6 h-6 text-white group-hover:rotate-90 transition-transform duration-300" />
                     </button>
                 </div>
 
-                {/* ── Step Cards (scrollable) ── */}
-                <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 md:py-8">
-                    {/* Sub-header */}
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="h-1 w-8 rounded-full bg-emerald-500" />
-                        <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">
-                            Step-by-Step Guide
-                        </span>
-                        <div className="flex-1 h-px bg-slate-100" />
-                    </div>
+                <div className="flex-1 overflow-y-auto custom-scrollbar">
+                    <div className="px-6 md:px-12 py-10 space-y-12">
+                        
+                        {/* ── Quick Summary Section ── */}
+                        {card.summary && (
+                            <section className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-white flex items-center justify-center shadow-lg border border-slate-100">
+                                        <BarChart3 className="w-5 h-5 md:w-6 md:h-6 text-emerald-600" />
+                                    </div>
+                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase italic">{t('quickSummary')}</h3>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    {[
+                                        { label: t('climateLabel'), value: t(card.summary.climate), icon: Thermometer, color: "text-amber-600", bg: "bg-amber-50" },
+                                        { label: t('waterRequirementLabel'), value: t(card.summary.water), icon: Droplets, color: "text-blue-600", bg: "bg-blue-50" },
+                                        { label: t('harvestTimeLabel'), value: card.summary.harvest, icon: Sprout, color: "text-emerald-600", bg: "bg-emerald-50" },
+                                        { label: t('profitLevelLabel'), value: t(card.summary.profit), icon: Zap, color: "text-violet-600", bg: "bg-violet-50" },
+                                    ].map((item, i) => (
+                                        <motion.div 
+                                            key={i}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.3 + i * 0.1 }}
+                                            className={cn("p-6 rounded-[2rem] border border-white shadow-sm flex flex-col items-center text-center gap-3", item.bg)}
+                                        >
+                                            <div className="h-12 w-12 rounded-2xl bg-white flex items-center justify-center shadow-md">
+                                                <item.icon className={cn("w-6 h-6", item.color)} />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{item.label}</p>
+                                                <p className="text-base font-black text-slate-900">{item.value}</p>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
 
-                    {/* Grid — 2 columns on md+, 1 column on mobile */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
-                        {steps.map((step, idx) => (
-                            <StepCardItem
-                                key={idx}
-                                step={step}
-                                index={idx}
-                                expanded={expandedStep === idx}
-                                onToggle={() => toggleStep(idx)}
-                            />
-                        ))}
+                        {/* ── Step-by-Step Guide ── */}
+                        <section className="space-y-8">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 md:h-12 md:w-12 rounded-2xl bg-white flex items-center justify-center shadow-lg border border-slate-100">
+                                        <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-emerald-600" />
+                                    </div>
+                                    <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase italic">{t('agriKnowledge')}</h3>
+                                </div>
+                                
+                                <div className="flex-1 max-w-md bg-white p-4 rounded-[2rem] shadow-sm border border-slate-100">
+                                    <div className="flex justify-between items-center mb-2 px-2">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                            {t('stepXofY').replace('{current}', String(expandedStep !== null ? expandedStep + 1 : 0)).replace('{total}', String(steps.length))}
+                                        </span>
+                                        <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{Math.round(progress)}% Complete</span>
+                                    </div>
+                                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <motion.div 
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${progress}%` }}
+                                            className="h-full bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-6 pb-12">
+                                {steps.map((step, idx) => (
+                                    <StepCardItem
+                                        key={idx}
+                                        step={step}
+                                        index={idx}
+                                        expanded={expandedStep === idx}
+                                        onToggle={() => toggleStep(idx)}
+                                        cropId={card.id}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* ── Final Actions ── */}
+                        <section className="bg-slate-950 rounded-[3rem] p-8 md:p-12 relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all duration-700" />
+                            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                                <div className="text-center md:text-left space-y-2">
+                                    <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight">{t('readyToStart') || 'Ready to start planting?'}</h3>
+                                    <p className="text-slate-400 font-bold text-sm md:text-base">{t('takeTheNextStep') || 'Take the next step in your farming journey with our advanced tools.'}</p>
+                                </div>
+                                <div className="flex flex-wrap justify-center gap-4">
+                                     <button className="px-8 py-4 bg-white text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 hover:text-white transition-all active:scale-95 shadow-xl">
+                                        {t('checkMarketPrices')}
+                                    </button>
+                                    <button className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl">
+                                        {t('calculateProfit')}
+                                    </button>
+                                    <button className="px-8 py-4 bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95">
+                                        {t('askAiExpert')}
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </motion.div>
