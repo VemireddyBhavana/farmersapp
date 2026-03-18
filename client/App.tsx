@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import TractorRental from "./pages/TractorRental";
-import Auth from "./pages/Auth";
+import LoginPage from "./pages/LoginPage";
 import Layout from "./components/Layout";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -22,7 +22,7 @@ import GrowingGuide from "./pages/GrowingGuide";
 import Support from "./pages/Support";
 import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import About from "./pages/About";
 import Vision from "./pages/Vision";
 import Contact from "./pages/Contact";
@@ -51,20 +51,33 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Auth />} />
-      <Route path="/register" element={<Auth />} />
+      <Route
+        path="/login"
+        element={
+          <>
+            <SignedIn><Navigate to="/dashboard" replace /></SignedIn>
+            <SignedOut><LoginPage /></SignedOut>
+          </>
+        }
+      />
+      <Route path="/register" element={<Navigate to="/login" replace />} />
 
       {/* Protected Routes */}
       <Route
         path="/"
-        element={<Index />}
+        element={
+          <>
+            <SignedIn><Index /></SignedIn>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
+          </>
+        }
       />
       <Route
         path="/dashboard"
         element={
           <>
             <SignedIn><Dashboard /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -73,7 +86,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><TractorRental /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -82,7 +95,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><OwnerDashboard /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -91,7 +104,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><AdminDashboard /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -100,7 +113,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Weather /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -109,7 +122,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Market /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -118,7 +131,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><MandiDetail /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -127,7 +140,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Calendar /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -136,7 +149,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Pests /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -145,7 +158,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Chat /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -154,7 +167,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><AgriKnowledge /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -163,7 +176,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><AgriSchemes /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -172,7 +185,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><HelpCenter /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -181,7 +194,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><GrowingGuide /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -190,7 +203,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Support /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -199,7 +212,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><SeedsBuyer /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -208,7 +221,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><WhatsAppChat /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -217,7 +230,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Location /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -226,7 +239,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><KisanSuvidhaPortal /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -237,7 +250,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><TechSparkAI /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -246,7 +259,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Impact /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -256,7 +269,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><MarketLinkage /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -265,7 +278,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Omnichannel /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -274,7 +287,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><JoinUs /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -285,7 +298,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><About /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -298,7 +311,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Vision /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -307,7 +320,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Contact /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -316,7 +329,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Privacy /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
@@ -325,7 +338,7 @@ const AppRoutes = () => {
         element={
           <>
             <SignedIn><Terms /></SignedIn>
-            <SignedOut><RedirectToSignIn /></SignedOut>
+            <SignedOut><Navigate to="/login" replace /></SignedOut>
           </>
         }
       />
