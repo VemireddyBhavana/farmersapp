@@ -136,8 +136,26 @@ const Navbar = () => {
                 <DropdownMenuContent align="start" className="w-52 rounded-xl shadow-xl p-1.5 mt-1">
                   {moreLinks.map((l) => (
                     <DropdownMenuItem key={l.path} asChild>
-                      <Link to={l.path} className="flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg cursor-pointer">
-                        <l.icon className="h-4 w-4 text-emerald-600" /> {l.name}
+                      <Link
+                        to={l.path}
+                        className={cn(
+                          "relative flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-lg cursor-pointer transition-all z-10 dropdown-item-hover",
+                          location.pathname === l.path ? "text-primary" : "text-foreground"
+                        )}
+                      >
+                        {/* Vertical Sliding Indicator */}
+                        {location.pathname === l.path && (
+                          <motion.div
+                            layoutId="more-indicator"
+                            className="nav-indicator-pill-vertical"
+                            transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                          />
+                        )}
+                        <l.icon className={cn(
+                          "h-4 w-4 transition-colors",
+                          location.pathname === l.path ? "text-primary" : "text-emerald-600"
+                        )} />
+                        {l.name}
                       </Link>
                     </DropdownMenuItem>
                   ))}
@@ -154,12 +172,26 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
                   {ourSolutionsLinks.map((item) => (
                     <DropdownMenuItem key={item.path} asChild>
-                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group dropdown-item-hover">
+                      <Link to={item.path} className={cn(
+                        "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                        location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10" : "hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                      )}>
+                        {/* Vertical Sliding Indicator */}
+                        {location.pathname === item.path && (
+                          <motion.div
+                            layoutId="solutions-indicator"
+                            className="nav-indicator-pill-vertical"
+                            transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                          />
+                        )}
                         <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-foreground group-hover:text-emerald-600 transition-colors">{item.name}</p>
+                          <p className={cn(
+                            "text-sm font-bold transition-colors",
+                            location.pathname === item.path ? "text-emerald-700" : "text-foreground group-hover:text-emerald-600"
+                          )}>{item.name}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
                         </div>
                       </Link>
@@ -178,12 +210,26 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
                   {aboutTeachSparkLinks.map((item) => (
                     <DropdownMenuItem key={item.path} asChild>
-                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 group dropdown-item-hover">
+                      <Link to={item.path} className={cn(
+                        "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                        location.pathname === item.path ? "bg-blue-50/50 dark:bg-blue-900/10" : "hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                      )}>
+                        {/* Vertical Sliding Indicator */}
+                        {location.pathname === item.path && (
+                          <motion.div
+                            layoutId="about-indicator"
+                            className="nav-indicator-pill-vertical border-blue-500 bg-blue-50/50 dark:bg-blue-900/20"
+                            transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                          />
+                        )}
                         <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-foreground group-hover:text-blue-600 transition-colors">{item.name}</p>
+                          <p className={cn(
+                            "text-sm font-bold transition-colors",
+                            location.pathname === item.path ? "text-blue-700" : "text-foreground group-hover:text-blue-600"
+                          )}>{item.name}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
                         </div>
                       </Link>
