@@ -60,118 +60,124 @@ export default function LoginPage() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute -top-20 -left-20 w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -80, 0],
-            y: [0, 120, 0],
+            x: [0, 80, 0],
+            y: [0, -100, 0],
             scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 25,
+            duration: 35,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
+            ease: [0.4, 0, 0.2, 1],
           }}
-          className="absolute -bottom-40 -right-20 w-[600px] h-[600px] bg-purple-600/20 rounded-full blur-[140px]"
+          className="absolute -top-40 -left-20 w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-[120px]"
         />
         <motion.div
           animate={{
-            x: [0, 40, 0],
-            y: [0, 60, 0],
-            scale: [1, 1.3, 1],
+            x: [0, -100, 0],
+            y: [0, 80, 0],
+            scale: [1, 1.15, 1],
           }}
           transition={{
-            duration: 18,
+            duration: 40,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 5,
+            ease: [0.4, 0, 0.2, 1],
+            delay: 3,
           }}
-          className="absolute top-1/2 left-1/3 w-[400px] h-[400px] bg-green-500/15 rounded-full blur-[100px]"
+          className="absolute -bottom-60 -right-20 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[140px]"
+        />
+        <motion.div
+          animate={{
+            x: [0, 50, 0],
+            y: [0, 40, 0],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 32,
+            repeat: Infinity,
+            ease: [0.4, 0, 0.2, 1],
+            delay: 6,
+          }}
+          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px]"
         />
       </div>
 
       {/* ── Glassmorphism Login Card ── */}
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
         className="relative z-10 w-full max-w-md px-8"
       >
-        <div className="relative overflow-hidden rounded-[3rem] bg-white/[0.03] backdrop-blur-[40px] border border-white/10 p-10 md:p-14 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] group">
-          {/* Subtle reflection effect */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
-          
-          <div className="relative z-10 space-y-10 text-center">
-            <div className="space-y-3">
-              <motion.h1
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-5xl font-black text-white tracking-tighter"
+        <div className="glow-card shadow-[0_32px_80px_-16px_rgba(0,0,0,0.8)]">
+          <div className="glow-card-inner">
+            {/* Subtle reflection effect */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
+            
+            <div className="relative z-10 space-y-12 text-center">
+              <div className="space-y-4">
+                <motion.h1
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 1, ease: [0.4, 0, 0.2, 1] }}
+                  className="text-5xl font-black text-white tracking-tighter"
+                >
+                  {t("loginWelcome")}
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 1, ease: [0.4, 0, 0.2, 1] }}
+                  className="text-slate-400 text-lg font-medium tracking-tight"
+                >
+                  {t("loginSubtitle")}
+                </motion.p>
+              </div>
+
+              <div className="space-y-5">
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                  whileHover={{ scale: 1.02, backgroundColor: "#f8fafc", boxShadow: "0 0 30px rgba(255,255,255,0.15)" }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleGoogleLogin}
+                  disabled={!isLoaded}
+                  className="w-full h-16 flex items-center justify-center gap-4 bg-white text-slate-950 rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-shadow disabled:opacity-50 group/google"
+                >
+                  <div className="group-hover/google:scale-110 transition-transform duration-500 ease-[0.4, 0, 0.2, 1]">
+                    <GoogleIcon />
+                  </div>
+                  {t("loginGoogle")}
+                </motion.button>
+
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.1, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                  whileHover={{ scale: 1.02, backgroundColor: "#1e1e24", borderColor: "rgba(255,255,255,0.2)" }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleAppleLogin}
+                  disabled={!isLoaded}
+                  className="w-full h-16 flex items-center justify-center gap-4 bg-[#121216]/80 border border-white/10 text-white rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-all disabled:opacity-50 group/apple"
+                >
+                  <div className="group-hover/apple:scale-110 transition-transform duration-500 ease-[0.4, 0, 0.2, 1]">
+                    <AppleIcon />
+                  </div>
+                  {t("loginApple")}
+                </motion.button>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 1 }}
+                className="pt-4"
               >
-                {t("loginWelcome")}
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-slate-400 text-lg font-medium"
-              >
-                {t("loginSubtitle")}
-              </motion.p>
+                <p className="text-[10px] uppercase font-bold tracking-[0.5em] text-white/20">
+                  {t("loginSecured")}
+                </p>
+              </motion.div>
             </div>
-
-            <div className="space-y-4 pt-4">
-              <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
-                onClick={handleGoogleLogin}
-                disabled={!isLoaded}
-                className="w-full h-16 flex items-center justify-center gap-4 bg-white text-slate-950 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] disabled:opacity-50 group/google"
-              >
-                <div className="group-hover/google:scale-110 transition-transform duration-300">
-                  <GoogleIcon />
-                </div>
-                {t("loginGoogle")}
-              </motion.button>
-
-              <motion.button
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
-                onClick={handleAppleLogin}
-                disabled={!isLoaded}
-                className="w-full h-16 flex items-center justify-center gap-4 bg-[#121216] border border-white/5 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-[#1a1a20] transition-all active:scale-[0.98] disabled:opacity-50 group/apple"
-              >
-                <div className="group-hover/apple:scale-110 transition-transform duration-300">
-                  <AppleIcon />
-                </div>
-                {t("loginApple")}
-              </motion.button>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="pt-6"
-            >
-              <p className="text-[10px] uppercase font-black tracking-[0.4em] text-white/20">
-                {t("loginSecured")}
-              </p>
-            </motion.div>
           </div>
         </div>
       </motion.div>
