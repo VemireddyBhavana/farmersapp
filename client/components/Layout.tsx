@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import Navbar from "./Navbar";
+import ModernNavbar from "./ModernNavbar";
 import Footer from "./Footer";
 import { useUser } from "@clerk/clerk-react";
 import { GovHeader } from "./GovHeader";
@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">
       {showUI && <GovHeader />}
-      {showUI && <Navbar />}
+      {showUI && <ModernNavbar />}
       <main className="flex-1">
         <AnimatePresence mode="wait">
           <motion.div
