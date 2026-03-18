@@ -274,39 +274,39 @@ const StepCardItem = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05, duration: 0.3 }}
             className={cn(
-                "rounded-[2rem] border transition-all duration-500 overflow-hidden bg-white",
+                "rounded-[2.5rem] border transition-all duration-500 overflow-hidden bg-white",
                 expanded
-                    ? "border-emerald-200 shadow-xl shadow-emerald-50 scale-[1.02] z-10"
+                    ? "border-emerald-200 shadow-2xl shadow-emerald-50/50 scale-[1.01] z-10"
                     : "border-slate-100 shadow-sm hover:border-emerald-100 hover:shadow-lg translate-y-0",
             )}
         >
             <button
                 onClick={onToggle}
-                className="w-full text-left p-6 md:p-8 flex items-center gap-5 group relative"
+                className="w-full text-left p-6 md:p-8 flex items-center gap-6 group relative"
             >
-                <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:rotate-6", step.accent)}>
-                    <Icon className="w-7 h-7" />
+                <div className={cn("h-16 w-16 rounded-[1.5rem] flex items-center justify-center flex-shrink-0 transition-all duration-500 group-hover:rotate-6 shadow-sm", step.accent)}>
+                    <Icon className="w-8 h-8" />
                 </div>
 
                 <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                    <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100/50">
                             Step {index + 1}
                         </span>
                     </div>
                     <h3 className={cn(
-                        "text-xl font-black leading-tight transition-colors",
-                        expanded ? "text-emerald-800" : "text-slate-900 group-hover:text-emerald-700"
+                        "text-xl md:text-2xl font-black leading-tight transition-colors",
+                        expanded ? "text-emerald-900" : "text-slate-900 group-hover:text-emerald-700"
                     )}>
                         {step.title}
                     </h3>
                 </div>
 
                 <div className={cn(
-                    "h-10 w-10 rounded-full flex items-center justify-center transition-all duration-500",
-                    expanded ? "bg-emerald-600 rotate-180" : "bg-slate-50"
+                    "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-500",
+                    expanded ? "bg-emerald-600 rotate-180 shadow-lg" : "bg-slate-50"
                 )}>
-                    <ChevronDown className={cn("w-5 h-5", expanded ? "text-white" : "text-slate-400")} />
+                    <ChevronDown className={cn("w-6 h-6", expanded ? "text-white" : "text-slate-400")} />
                 </div>
             </button>
 
@@ -318,53 +318,52 @@ const StepCardItem = ({
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                     >
-                        <div className="px-8 pb-8 pt-2 space-y-8">
-                            <div className="aspect-[16/9] rounded-3xl overflow-hidden shadow-inner bg-slate-100 border border-slate-100">
-                                <img 
-                                    src={getStepImage(index, cropId)} 
-                                    alt={step.title}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-
-                            <div className="prose prose-slate max-w-none">
-                                <p className="text-slate-600 font-bold text-lg leading-relaxed">
+                        <div className="px-8 pb-10 pt-2 space-y-10">
+                            {/* Description - Now at the top */}
+                            <div className="max-w-3xl">
+                                <p className="text-slate-600 font-bold text-lg leading-relaxed border-l-4 border-emerald-500 pl-6 py-1">
                                     {step.body}
                                 </p>
                             </div>
 
-                            <div className="grid gap-6 md:grid-cols-2">
-                                <div className="rounded-3xl bg-emerald-600 p-6 shadow-lg shadow-emerald-200/50 text-white relative overflow-hidden group/tip">
-                                    <Leaf className="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 group-hover/tip:rotate-12 transition-transform duration-700" />
-                                    <div className="flex items-center gap-2 mb-3 relative z-10">
-                                        <div className="h-8 w-8 rounded-xl bg-white/20 flex items-center justify-center">
-                                            <Leaf className="w-4 h-4 text-white" />
+                            {/* Structured Content - 2 Column Grid */}
+                            <div className="grid gap-6 md:grid-cols-2 items-stretch">
+                                {/* Farmer Tip - Left */}
+                                <div className="rounded-[2rem] bg-emerald-600 p-8 shadow-xl shadow-emerald-200/40 text-white relative overflow-hidden group/tip flex flex-col min-h-[220px]">
+                                    <Leaf className="absolute -right-6 -bottom-6 w-32 h-32 text-white/10 group-hover/tip:rotate-12 transition-transform duration-700 pointer-events-none" />
+                                    
+                                    <div className="flex items-center gap-3 mb-5 relative z-10">
+                                        <div className="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center border border-white/20 backdrop-blur-sm">
+                                            <Leaf className="w-5 h-5 text-white" />
                                         </div>
-                                        <span className="text-xs font-black uppercase tracking-widest text-emerald-100">
+                                        <span className="text-xs font-black uppercase tracking-[0.2em] text-emerald-50">
                                             Farmer Tip
                                         </span>
                                     </div>
-                                    <p className="text-base font-bold leading-relaxed relative z-10">
-                                        {getFarmerTip(index)}
+                                    
+                                    <p className="text-lg font-bold leading-relaxed relative z-10 text-emerald-50/90 italic">
+                                        "{getFarmerTip(index)}"
                                     </p>
                                 </div>
 
-                                <div className="rounded-3xl bg-slate-50 p-6 border border-slate-100">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <div className="h-8 w-8 rounded-xl bg-emerald-100 flex items-center justify-center">
-                                            <CheckCircle className="w-4 h-4 text-emerald-600" />
+                                {/* Best Practices - Right */}
+                                <div className="rounded-[2rem] bg-slate-50 p-8 border border-slate-100 flex flex-col min-h-[220px] shadow-sm">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="h-10 w-10 rounded-2xl bg-emerald-100 flex items-center justify-center border border-emerald-200/50">
+                                            <CheckCircle className="w-5 h-5 text-emerald-600" />
                                         </div>
-                                        <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                                        <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">
                                             Best Practices
                                         </span>
                                     </div>
-                                    <ul className="space-y-3">
+                                    
+                                    <ul className="space-y-4">
                                         {getBestPractices(index).map((tip, i) => (
-                                            <li key={i} className="flex items-start gap-3">
-                                                <div className="h-5 w-5 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                            <li key={i} className="flex items-start gap-4">
+                                                <div className="h-6 w-6 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                                                     <ArrowRight className="w-3 h-3 text-emerald-600" />
                                                 </div>
-                                                <span className="text-sm text-slate-700 font-bold leading-snug">{tip}</span>
+                                                <span className="text-[15px] text-slate-700 font-bold leading-tight">{tip}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -439,15 +438,17 @@ const DetailModuleOverlay = ({
                 className="relative bg-[#F8FAFC] rounded-[3rem] w-full max-w-6xl h-[94vh] md:h-[90vh] overflow-hidden flex flex-col shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/20"
             >
                 {/* ── Hero Image Banner ── */}
-                <div className="relative h-64 md:h-80 flex-shrink-0 overflow-hidden">
+                <div className="relative h-56 md:h-64 flex-shrink-0 overflow-hidden">
                     <img
                         src={card.image}
                         alt={t(card.titleKey)}
                         className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/40 to-transparent" />
+                    {/* Stronger, more refined gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#F8FAFC]/40 to-transparent" />
 
-                    <div className="absolute top-6 left-6 md:top-10 md:left-10 z-20">
+                    <div className="absolute top-6 left-6 md:top-8 md:left-10 z-20">
                          <motion.button
                             initial={{ x: -20, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
@@ -459,31 +460,31 @@ const DetailModuleOverlay = ({
                         </motion.button>
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 px-6 md:px-12 pb-10">
+                    <div className="absolute bottom-0 left-0 right-0 px-6 md:px-12 pb-8">
                         <motion.div 
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="space-y-4"
+                            className="space-y-3"
                         >
-                            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-emerald-600 text-white shadow-lg">
-                                {card.category}
-                            </span>
-                            <h2 className="text-4xl md:text-6xl font-black text-slate-950 leading-tight tracking-tighter">
-                                {t(card.titleKey)}
-                            </h2>
-                            <div className="flex items-center gap-2">
-                                <div className="h-1 w-12 rounded-full bg-emerald-500" />
-                                <p className="text-emerald-700 text-sm font-black uppercase tracking-widest">
+                            <div className="flex items-center gap-3">
+                                <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full bg-emerald-600 text-white shadow-lg">
+                                    {card.category}
+                                </span>
+                                <div className="h-1 w-8 rounded-full bg-emerald-500/30" />
+                                <p className="text-emerald-700 text-[10px] font-black uppercase tracking-widest">
                                     {t('completeCultivationGuide') || 'Complete Cultivation Guide'}
                                 </p>
                             </div>
+                            <h2 className="text-4xl md:text-5xl font-black text-slate-950 leading-none tracking-tighter">
+                                {t(card.titleKey)}
+                            </h2>
                         </motion.div>
                     </div>
 
                     <button
                         onClick={onBack}
-                        className="absolute top-6 right-6 md:top-10 md:right-10 bg-slate-950/20 hover:bg-slate-950/40 backdrop-blur-md p-3 rounded-2xl transition-all border border-white/20 group z-20"
+                        className="absolute top-6 right-6 md:top-8 md:right-10 bg-slate-950/10 hover:bg-slate-950/20 backdrop-blur-md p-3 rounded-2xl transition-all border border-white/20 group z-20"
                     >
                         <X className="w-6 h-6 text-white group-hover:rotate-90 transition-transform duration-300" />
                     </button>
