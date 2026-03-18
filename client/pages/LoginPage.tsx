@@ -10,7 +10,7 @@ export default function LoginPage() {
     await signIn.authenticateWithRedirect({
       strategy: "oauth_google",
       redirectUrl: "/sso-callback",
-      redirectUrlComplete: "/dashboard",
+      redirectUrlComplete: "/",
     });
   };
 
@@ -19,7 +19,7 @@ export default function LoginPage() {
     await signIn.authenticateWithRedirect({
       strategy: "oauth_apple",
       redirectUrl: "/sso-callback",
-      redirectUrlComplete: "/dashboard",
+      redirectUrlComplete: "/",
     });
   };
 
