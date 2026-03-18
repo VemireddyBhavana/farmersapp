@@ -1,0 +1,16 @@
+[
+  {
+    "pest_id": "locust",
+    "pest_name": "Locust",
+    "affected_crop": "All",
+    "symptoms": "Complete defoliation",
+    "treatment": "Aerial spraying, localized chemical control"
+  },
+  {
+    "pest_id": "fall_armyworm",
+    "pest_name": "Fall Armyworm",
+    "affected_crop": "Maize",
+    "symptoms": "Ragged holes in leaves",
+    "treatment": "Integrated pest management, specific bio-insecticides"
+  }
+]

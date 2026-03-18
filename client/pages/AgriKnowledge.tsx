@@ -1,14 +1,18 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    BookOpen, Leaf, Fish, Bird, Landmark, ArrowRight,
-    Tractor as TractorIcon, Clock, Calendar, User,
+    BookOpen, Leaf, Bird, Landmark, ArrowRight,
     CheckCircle, Sprout, Droplets, Recycle, ShieldCheck,
-    Activity, ClipboardList, Zap, Beef, Wind, Sun, X
+    Zap, X, Thermometer, FlaskConical,
+    Shovel, Wheat, Bug, PackageOpen, ChevronDown,
+    Flower2, Star, BarChart3
 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────────────────
 interface KnowledgeCard {
     id: string;
     titleKey: string;
@@ -19,6 +23,17 @@ interface KnowledgeCard {
     stepCount?: number;
 }
 
+interface StepCard {
+    title: string;
+    body: string;
+    icon: React.ElementType;
+    color: string;
+    accent: string;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Data — unchanged
+// ─────────────────────────────────────────────────────────────────────────────
 const KNOWLEDGE_SECTIONS = [
     {
         id: "crops",
@@ -73,51 +88,11 @@ const KNOWLEDGE_SECTIONS = [
         titleKey: "sectionSmartFarming",
         icon: Zap,
         cards: [
-            { 
-                id: "seasonal", 
-                titleKey: "seasonalCropGuide", 
-                image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", 
-                bullets: ["kharifCrops", "rabiCrops", "zaidCrops"], 
-                category: "Seasonal",
-                stepsPrefix: "seasonalStep",
-                stepCount: 3
-            },
-            { 
-                id: "water", 
-                titleKey: "waterManagementGuide", 
-                image: "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", 
-                bullets: ["dripIrrigation", "sprinklerIrrigation", "rainwaterHarvesting"], 
-                category: "Irrigation",
-                stepsPrefix: "waterStep",
-                stepCount: 3
-            },
-            { 
-                id: "fertilizer", 
-                titleKey: "fertilizerNutrientGuide", 
-                image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", 
-                bullets: ["npkBalance", "nutrientDeficiency"], 
-                category: "Nutrition",
-                stepsPrefix: "fertilizerStep",
-                stepCount: 2
-            },
-            { 
-                id: "machinery", 
-                titleKey: "farmMachineryGuide", 
-                image: "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80", 
-                bullets: ["seedDrillInstr", "harvesterInstr", "sprayerInstr"], 
-                category: "Machinery",
-                stepsPrefix: "machineryStep",
-                stepCount: 3
-            },
-            { 
-                id: "storage", 
-                titleKey: "storagePostHarvest", 
-                image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", 
-                bullets: ["grainStorage", "coldStorage"], 
-                category: "Storage",
-                stepsPrefix: "storageStep",
-                stepCount: 2
-            },
+            { id: "seasonal", titleKey: "seasonalCropGuide", image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", bullets: ["kharifCrops", "rabiCrops", "zaidCrops"], category: "Seasonal", stepsPrefix: "seasonalStep", stepCount: 3 },
+            { id: "water", titleKey: "waterManagementGuide", image: "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", bullets: ["dripIrrigation", "sprinklerIrrigation", "rainwaterHarvesting"], category: "Irrigation", stepsPrefix: "waterStep", stepCount: 3 },
+            { id: "fertilizer", titleKey: "fertilizerNutrientGuide", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", bullets: ["npkBalance", "nutrientDeficiency"], category: "Nutrition", stepsPrefix: "fertilizerStep", stepCount: 2 },
+            { id: "machinery", titleKey: "farmMachineryGuide", image: "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80", bullets: ["seedDrillInstr", "harvesterInstr", "sprayerInstr"], category: "Machinery", stepsPrefix: "machineryStep", stepCount: 3 },
+            { id: "storage", titleKey: "storagePostHarvest", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", bullets: ["grainStorage", "coldStorage"], category: "Storage", stepsPrefix: "storageStep", stepCount: 2 },
         ]
     },
     {
@@ -126,7 +101,7 @@ const KNOWLEDGE_SECTIONS = [
         icon: Recycle,
         cards: [
             { id: "sustainable", titleKey: "sustainableFarming", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", bullets: ["cropRotation", "coverCrops", "noTill"], category: "Eco" },
-            { id: "organic", titleKey: "organicFarming", image: "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?w=800&q=80", bullets: ["composting", "bioFertilizers"], category: "Eco" },
+            { id: "organic2", titleKey: "organicFarming", image: "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?w=800&q=80", bullets: ["composting", "bioFertilizers"], category: "Eco" },
             { id: "precision", titleKey: "precisionAg", image: "https://images.unsplash.com/photo-1594894512411-e6ce14de72b3?w=800&q=80", bullets: ["droneMonitoring", "iotSoilSensors"], category: "Smart" },
         ]
     },
@@ -160,89 +135,321 @@ const KNOWLEDGE_SECTIONS = [
     }
 ];
 
-const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: () => void }) => {
+// Step icon palette
+const STEP_ICONS: Array<{ icon: React.ElementType; color: string; accent: string }> = [
+    { icon: Thermometer,    color: "bg-amber-50",   accent: "text-amber-600 bg-amber-100" },
+    { icon: Shovel,         color: "bg-orange-50",  accent: "text-orange-600 bg-orange-100" },
+    { icon: Flower2,        color: "bg-pink-50",    accent: "text-pink-600 bg-pink-100" },
+    { icon: Sprout,         color: "bg-green-50",   accent: "text-green-600 bg-green-100" },
+    { icon: Droplets,       color: "bg-blue-50",    accent: "text-blue-600 bg-blue-100" },
+    { icon: FlaskConical,   color: "bg-violet-50",  accent: "text-violet-600 bg-violet-100" },
+    { icon: Bug,            color: "bg-red-50",     accent: "text-red-600 bg-red-100" },
+    { icon: Wheat,          color: "bg-yellow-50",  accent: "text-yellow-700 bg-yellow-100" },
+    { icon: PackageOpen,    color: "bg-teal-50",    accent: "text-teal-600 bg-teal-100" },
+    { icon: Star,           color: "bg-indigo-50",  accent: "text-indigo-600 bg-indigo-100" },
+];
+
+// Category badge colours
+const CATEGORY_COLORS: Record<string, string> = {
+    Horticulture: "bg-pink-100 text-pink-700",
+    Agriculture:  "bg-green-100 text-green-700",
+    Gardening:    "bg-lime-100 text-lime-700",
+    "New Age":    "bg-violet-100 text-violet-700",
+    "Soil Science":"bg-orange-100 text-orange-700",
+    Irrigation:   "bg-blue-100 text-blue-700",
+    Management:   "bg-teal-100 text-teal-700",
+    Sustainable:  "bg-emerald-100 text-emerald-700",
+    Poultry:      "bg-yellow-100 text-yellow-700",
+    Livestock:    "bg-amber-100 text-amber-700",
+    Aquaculture:  "bg-cyan-100 text-cyan-700",
+    Subsidy:      "bg-purple-100 text-purple-700",
+    "Direct Pay": "bg-indigo-100 text-indigo-700",
+    Insurance:    "bg-rose-100 text-rose-700",
+    Testing:      "bg-slate-100 text-slate-700",
+    Seasonal:     "bg-green-100 text-green-700",
+    Nutrition:    "bg-lime-100 text-lime-700",
+    Machinery:    "bg-gray-100 text-gray-700",
+    Storage:      "bg-stone-100 text-stone-700",
+    Eco:          "bg-emerald-100 text-emerald-700",
+    Smart:        "bg-sky-100 text-sky-700",
+    Protection:   "bg-red-100 text-red-700",
+    Specialized:  "bg-fuchsia-100 text-fuchsia-700",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helpers for inline expanded content
+// ─────────────────────────────────────────────────────────────────────────────
+function getFarmerTip(stepIndex: number): string {
+    const tips = [
+        "Monitor temperature daily during early growth. Simple thermometers placed in the field can save your entire crop.",
+        "Always test your soil before adding amendments. A soil test card costs very little but saves thousands in wasted inputs.",
+        "Use certified planting material from government nurseries to ensure disease-free, high-yield varieties.",
+        "Plant in the evening hours to reduce transplanting shock and improve seedling survival by up to 30%.",
+        "Install moisture sensors or use the finger-test: push your finger 2 inches into soil — if dry, irrigate.",
+        "Apply fertilizers in splits — never all at once. Split applications improve uptake by 40% and reduce waste.",
+        "Inspect crops at dawn for pest activity. Early detection allows lower-cost organic interventions.",
+        "Harvest in cool morning hours to preserve quality. Avoid harvesting after rain to prevent post-harvest rots.",
+        "Dry produce to proper moisture levels before storage. Wet grain in storage leads to total loss.",
+        "Keep records of every input and output. Farmers who maintain records earn 20–30% more over time.",
+    ];
+    return tips[stepIndex % tips.length];
+}
+
+function getBestPractices(stepIndex: number): string[] {
+    const practices = [
+        ["Record daily temperature extremes", "Use shade nets during extreme heat", "Plant wind-breaks on the field border"],
+        ["Plough to 20–25 cm depth for aeration", "Add organic matter before each season", "Avoid compaction by limiting heavy machinery"],
+        ["Purchase only certified planting material", "Inspect for diseases before planting", "Store material in cool, dry conditions"],
+        ["Maintain uniform row spacing for machinery", "Inoculate legume seeds with Rhizobium", "Use transplanting tools for uniform depth"],
+        ["Water early morning or late evening only", "Mulch to retain moisture", "Check irrigation pipes weekly"],
+        ["Follow soil test recommendations strictly", "Prefer organic over chemical fertilizers", "Apply micronutrients as foliar spray"],
+        ["Use yellow sticky traps for monitoring", "Release biological agents like Trichogramma", "Rotate pesticides to avoid resistance"],
+        ["Test grain moisture before harvest (ideal 14–18%)", "Use sharp blades to minimise crop damage", "Harvest before rains to avoid field losses"],
+        ["Clean storage units before use", "Use hermetically sealed bags for grain", "Monitor stored produce weekly"],
+        ["Keep field diary of all operations", "Take photos of pest symptoms", "Share knowledge with neighbouring farmers"],
+    ];
+    return practices[stepIndex % practices.length];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inline expandable step card (used inside DetailModuleOverlay)
+// ─────────────────────────────────────────────────────────────────────────────
+const StepCardItem = ({
+    step,
+    index,
+    expanded,
+    onToggle,
+}: {
+    step: StepCard;
+    index: number;
+    expanded: boolean;
+    onToggle: () => void;
+}) => {
+    const Icon = step.icon;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05, duration: 0.3 }}
+            className={cn(
+                "rounded-2xl border transition-all duration-300 overflow-hidden",
+                expanded
+                    ? "border-emerald-300 shadow-md shadow-emerald-100"
+                    : "border-slate-100 shadow-sm hover:border-emerald-200 hover:shadow-md",
+                step.color
+            )}
+        >
+            {/* Card header — always visible, clickable */}
+            <button
+                onClick={onToggle}
+                className="w-full text-left p-5 flex items-start gap-4 group"
+            >
+                {/* Icon */}
+                <div className={cn("p-2.5 rounded-2xl flex-shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110", step.accent)}>
+                    <Icon className="w-5 h-5" />
+                </div>
+
+                {/* Text */}
+                <div className="flex-1 min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                        Step {index + 1}
+                    </span>
+                    <h3 className={cn(
+                        "text-base font-black leading-tight mt-0.5 transition-colors",
+                        expanded ? "text-emerald-700" : "text-slate-900 group-hover:text-emerald-700"
+                    )}>
+                        {step.title
+                            .replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "")
+                            .replace(/^\d+[\s.]*\s*/, "")
+                            .replace(/^Step\s*\d+\s*[:.-]\s*/i, "")
+                            .trim()}
+                    </h3>
+
+                    {/* Preview when collapsed */}
+                    {!expanded && (
+                        <p className="text-slate-500 text-[13px] font-medium leading-snug mt-1.5 line-clamp-2">
+                            {step.body.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "").trim()}
+                        </p>
+                    )}
+                </div>
+
+                {/* Chevron */}
+                <div className={cn(
+                    "flex-shrink-0 p-1.5 rounded-full transition-all duration-300",
+                    expanded ? "bg-emerald-100 rotate-180" : "bg-white/80"
+                )}>
+                    <ChevronDown className={cn("w-4 h-4 transition-colors", expanded ? "text-emerald-600" : "text-slate-400")} />
+                </div>
+            </button>
+
+            {/* Expanded content — inline below the header */}
+            <AnimatePresence initial={false}>
+                {expanded && (
+                    <motion.div
+                        key="expanded"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                    >
+                        <div className="px-5 pb-5 space-y-4 border-t border-white/60">
+                            {/* Full explanation */}
+                            <div className="pt-4">
+                                <p className="text-slate-700 font-semibold leading-relaxed text-[14px]">
+                                    {step.body}
+                                </p>
+                            </div>
+
+                            {/* Farmer Tip */}
+                            <div className="rounded-xl bg-emerald-600 p-4">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Leaf className="w-4 h-4 text-white flex-shrink-0" />
+                                    <span className="text-xs font-black text-white uppercase tracking-wider">
+                                        Farmer Tip
+                                    </span>
+                                </div>
+                                <p className="text-emerald-50 text-[13px] font-semibold leading-relaxed">
+                                    {getFarmerTip(index)}
+                                </p>
+                            </div>
+
+                            {/* Best Practices */}
+                            <div>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2.5">
+                                    Best Practices
+                                </p>
+                                <ul className="space-y-2">
+                                    {getBestPractices(index).map((tip, i) => (
+                                        <li key={i} className="flex items-start gap-2.5">
+                                            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                                            <span className="text-[13px] text-slate-600 font-medium leading-snug">{tip}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Detail Modal — hero image header + inline expandable step cards
+// ─────────────────────────────────────────────────────────────────────────────
+const DetailModuleOverlay = ({
+    card,
+    onBack,
+}: {
+    card: KnowledgeCard;
+    onBack: () => void;
+}) => {
     const { t } = useLanguage();
+    const [expandedStep, setExpandedStep] = useState<number | null>(null);
 
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => { document.body.style.overflow = "auto"; };
     }, []);
 
-    const steps = card.stepCount
-        ? Array.from({ length: card.stepCount }, (_, i) => ({
-            title: t(`${card.stepsPrefix}${i + 1}Title`) || `${t("step")} ${i + 1}`,
-            body: t(`${card.stepsPrefix}${i + 1}Body`) || "Detailed guidance coming soon..."
-        }))
-        : card.bullets.map((bulletKey, i) => ({
-            title: t(bulletKey).replace(/^•\s*/, ""),
-            body: t(bulletKey).includes("requirements") ? "Optimizing climate conditions is crucial for yield." : "Implement best practices for superior results."
-        }));
+    // Build step cards
+    const steps: StepCard[] = card.stepCount
+        ? Array.from({ length: card.stepCount }, (_, i) => {
+            const m = STEP_ICONS[i % STEP_ICONS.length];
+            return {
+                title: t(`${card.stepsPrefix}${i + 1}Title`) || `Step ${i + 1}`,
+                body:  t(`${card.stepsPrefix}${i + 1}Body`)  || "Detailed guidance coming soon.",
+                icon: m.icon, color: m.color, accent: m.accent,
+            };
+        })
+        : card.bullets.map((bulletKey, i) => {
+            const m = STEP_ICONS[i % STEP_ICONS.length];
+            return {
+                title: t(bulletKey).replace(/^•\s*/, "").trim(),
+                body:  t(bulletKey).replace(/^•\s*/, "").trim(),
+                icon: m.icon, color: m.color, accent: m.accent,
+            };
+        });
+
+    const toggleStep = (idx: number) =>
+        setExpandedStep(prev => (prev === idx ? null : idx));
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-8 overflow-hidden"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6 overflow-hidden"
         >
-            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl" onClick={onBack} />
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-slate-950/70 backdrop-blur-2xl"
+                onClick={onBack}
+            />
 
+            {/* Modal */}
             <motion.div
-                initial={{ scale: 0.9, y: 50, opacity: 0 }}
+                initial={{ scale: 0.95, y: 30, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.9, y: 50, opacity: 0 }}
-                className="relative bg-white/10 border border-white/20 p-6 md:p-12 rounded-[2rem] md:rounded-[3.5rem] w-full max-w-7xl h-[95vh] md:h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+                exit={{ scale: 0.95, y: 30, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                className="relative bg-white rounded-3xl w-full max-w-5xl h-[92vh] md:h-[88vh] overflow-hidden flex flex-col shadow-2xl"
             >
-                <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                {/* ── Hero Image Banner ── */}
+                <div className="relative h-52 md:h-64 flex-shrink-0 overflow-hidden">
+                    <img
+                        src={card.image}
+                        alt={t(card.titleKey)}
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/40 to-transparent" />
 
-                <div className="flex justify-between items-start mb-8 md:mb-12 relative z-10">
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <div className="bg-emerald-600 p-3 md:p-5 rounded-[1.2rem] md:rounded-[2rem] shadow-2xl shadow-emerald-500/40">
-                            <Leaf className="w-6 h-6 md:w-10 md:h-10 text-white" />
-                        </div>
-                        <div>
-                            <h2 className="text-2xl md:text-5xl font-black text-white tracking-tighter leading-none pr-12 md:pr-0">
-                                {t(card.titleKey)}
-                            </h2>
-                            <p className="text-emerald-400 font-black tracking-[0.2em] md:tracking-[0.3em] uppercase text-[10px] md:text-xs mt-2 md:mt-3">Premium Learning Module</p>
-                        </div>
+                    {/* Title on image */}
+                    <div className="absolute bottom-0 left-0 right-0 px-6 md:px-10 pb-6 md:pb-7">
+                        <span className="inline-block text-[9px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full mb-2 bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 backdrop-blur-sm">
+                            {card.category}
+                        </span>
+                        <h2 className="text-2xl md:text-4xl font-black text-white leading-tight">
+                            {t(card.titleKey)}
+                        </h2>
+                        <p className="text-emerald-300 text-sm font-semibold mt-1">
+                            Complete Cultivation Guide
+                        </p>
                     </div>
+
+                    {/* Close button */}
                     <button
                         onClick={onBack}
-                        className="bg-white/10 hover:bg-emerald-600 p-3 md:p-5 rounded-full transition-all border border-white/10 group shadow-xl"
+                        className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-sm p-2.5 rounded-full transition-all border border-white/20 group"
                     >
-                        <X className="w-6 h-6 md:w-8 md:h-8 text-white group-hover:rotate-90 transition-transform" />
+                        <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-200" />
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                {/* ── Step Cards (scrollable) ── */}
+                <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 md:py-8">
+                    {/* Sub-header */}
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="h-1 w-8 rounded-full bg-emerald-500" />
+                        <span className="text-xs font-black uppercase tracking-[0.25em] text-slate-400">
+                            Step-by-Step Guide
+                        </span>
+                        <div className="flex-1 h-px bg-slate-100" />
+                    </div>
+
+                    {/* Grid — 2 columns on md+, 1 column on mobile */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-8">
                         {steps.map((step, idx) => (
-                            <motion.div
+                            <StepCardItem
                                 key={idx}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: idx * 0.05 }}
-                                className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] hover:bg-white/20 transition-all group shadow-lg flex flex-col h-full"
-                            >
-                                <div className="space-y-4 md:space-y-6">
-                                    <div className="flex items-center justify-between">
-                                        <div className="h-8 w-8 md:h-12 md:w-12 rounded-[0.8rem] md:rounded-2xl bg-emerald-500/20 flex items-center justify-center">
-                                            <CheckCircle className="w-4 h-4 md:w-7 md:w-7 text-emerald-500" />
-                                        </div>
-                                    </div>
-                                    <h3 className="text-lg md:text-xl font-black text-white leading-tight">
-                                        {idx + 1}. {step.title
-                                            .replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}]*\s*/u, "") // Strip emojis at start
-                                            .replace(/^\d+[\s.]*\s*/, "") // Strip numbers and dots at start
-                                            .replace(/^Step\s*\d+\s*[:.-]\s*/i, "") // Strip "Step X:" prefixes
-                                            .trim()}
-                                    </h3>
-                                    <p className="text-emerald-50/80 text-sm font-semibold leading-relaxed">
-                                        {step.body}
-                                    </p>
-                                </div>
-                            </motion.div>
+                                step={step}
+                                index={idx}
+                                expanded={expandedStep === idx}
+                                onToggle={() => toggleStep(idx)}
+                            />
                         ))}
                     </div>
                 </div>
@@ -251,97 +458,138 @@ const DetailModuleOverlay = ({ card, onBack }: { card: KnowledgeCard, onBack: ()
     );
 };
 
-const FloatingGlassCard = ({ card, onOpen }: { card: KnowledgeCard, onOpen: (c: KnowledgeCard) => void }) => {
+// ─────────────────────────────────────────────────────────────────────────────
+// Crop card on the main hub page
+// ─────────────────────────────────────────────────────────────────────────────
+const KnowledgeCardItem = ({
+    card,
+    onOpen,
+    delay = 0,
+}: {
+    card: KnowledgeCard;
+    onOpen: (c: KnowledgeCard) => void;
+    delay?: number;
+}) => {
     const { t } = useLanguage();
+    const categoryClass = CATEGORY_COLORS[card.category] || "bg-slate-100 text-slate-700";
 
     return (
         <motion.div
-            initial={{ y: 0 }}
-            animate={{ y: [0, -10, 0] }}
-            transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: Math.random() * 2
-            }}
-            whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-            className="group relative flex flex-col bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[2rem] md:rounded-[3rem] p-5 md:p-7 shadow-2xl shadow-emerald-900/5 hover:shadow-emerald-600/20 transition-all overflow-hidden h-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay, duration: 0.4 }}
+            whileHover={{ y: -6, scale: 1.01 }}
+            className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 hover:border-emerald-200 h-full"
         >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/60 via-transparent to-transparent opacity-30 pointer-events-none" />
-
-            <div className="relative h-40 md:h-48 w-full rounded-[1.5rem] md:rounded-[2.2rem] overflow-hidden mb-5 md:mb-7 shadow-inner">
+            {/* Image */}
+            <div className="relative h-48 overflow-hidden">
                 <img
                     src={card.image}
                     alt={t(card.titleKey)}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent" />
                 <div className="absolute top-3 left-3">
-                    <span className="bg-emerald-600/80 backdrop-blur-xl text-white text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1.5 rounded-full shadow-2xl border border-white/10">
+                    <span className={cn("text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1.5 rounded-full", categoryClass)}>
                         {card.category}
                     </span>
                 </div>
+
             </div>
 
-            <div className="relative space-y-4 md:space-y-5 flex flex-col flex-1">
-                <h3 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight leading-dense group-hover:text-emerald-700 transition-colors">
+            {/* Body */}
+            <div className="flex flex-col flex-1 p-5">
+                <h3 className="text-lg font-black text-slate-900 mb-3 group-hover:text-emerald-700 transition-colors leading-tight">
                     {t(card.titleKey)}
                 </h3>
-
-                <ul className="space-y-2 md:space-y-4 flex-1">
+                <ul className="space-y-2 flex-1 mb-5">
                     {card.bullets.map((bulletKey, idx) => (
-                        <li key={idx} className="flex items-start gap-3 md:gap-4">
-                            <div className="mt-1.5 md:mt-2 h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.9)] flex-shrink-0" />
-                            <span className="text-[13px] md:text-sm font-bold text-slate-600 leading-tight">
+                        <li key={idx} className="flex items-start gap-2.5">
+                            <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 shadow-[0_0_8px_rgba(16,185,129,0.7)]" />
+                            <span className="text-[13px] font-semibold text-slate-600 leading-snug">
                                 {t(bulletKey)}
                             </span>
                         </li>
                     ))}
                 </ul>
-
                 <button
                     onClick={() => onOpen(card)}
-                    className="w-full h-12 md:h-14 rounded-[1rem] md:rounded-[1.8rem] bg-slate-950 text-white font-black text-xs md:text-sm tracking-widest uppercase flex items-center justify-center gap-2 md:gap-3 active:scale-95 transition-all hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/30"
+                    className="w-full h-12 rounded-2xl bg-slate-950 text-white font-black text-xs tracking-widest uppercase flex items-center justify-center gap-2 transition-all hover:bg-emerald-700 hover:shadow-lg hover:shadow-emerald-600/25 active:scale-95"
                 >
                     {t("viewCultivationGuide") || "View Cultivation Guide"}
-                    <ArrowRight className="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1.5 transition-transform" />
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </button>
             </div>
-            <div className="absolute -bottom-10 -right-10 w-24 md:w-32 h-24 md:h-32 bg-emerald-100 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
         </motion.div>
     );
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Stats bar in hero
+// ─────────────────────────────────────────────────────────────────────────────
+const StatsBar = () => (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+            { icon: Leaf,       value: "50+",  label: "Crop Guides",      color: "text-emerald-600", bg: "bg-emerald-50" },
+            { icon: BookOpen,   value: "200+", label: "Farming Articles", color: "text-blue-600",    bg: "bg-blue-50" },
+            { icon: Bug,        value: "30+",  label: "Pest Solutions",   color: "text-red-600",     bg: "bg-red-50" },
+            { icon: BarChart3,  value: "10+",  label: "Govt. Schemes",    color: "text-violet-600",  bg: "bg-violet-50" },
+        ].map((stat, i) => {
+            const Icon = stat.icon;
+            return (
+                <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className={cn("rounded-2xl p-4 flex items-center gap-3", stat.bg)}
+                >
+                    <div className="p-2.5 rounded-xl bg-white shadow-sm">
+                        <Icon className={cn("w-5 h-5", stat.color)} />
+                    </div>
+                    <div>
+                        <p className="text-xl font-black text-slate-900">{stat.value}</p>
+                        <p className="text-[11px] font-bold text-slate-500">{stat.label}</p>
+                    </div>
+                </motion.div>
+            );
+        })}
+    </div>
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Page
+// ─────────────────────────────────────────────────────────────────────────────
 export default function AgriKnowledgeHub() {
     const { t } = useLanguage();
     const [selectedCard, setSelectedCard] = useState<KnowledgeCard | null>(null);
-    const dashboardRef = useRef<HTMLDivElement>(null);
-
-    const scrollToDashboard = () => {
-        dashboardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
 
     return (
-        <div className="min-h-screen bg-[#F8FAF9] pb-24 md:pb-40 selection:bg-emerald-100 selection:text-emerald-900">
-            {/* Header / Hero Section */}
-            <div className="relative bg-white pt-12 md:pt-24 pb-20 md:pb-32 overflow-hidden border-b border-emerald-50">
-                <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-emerald-50/50 rounded-full blur-[100px] md:blur-[150px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/40 rounded-full blur-[120px]" />
+        <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 pb-24 md:pb-40 selection:bg-emerald-100 selection:text-emerald-900">
+
+            {/* ── Hero ── */}
+            <div className="relative bg-white border-b border-emerald-50 overflow-hidden pt-12 md:pt-20 pb-16 md:pb-24">
+                <div className="absolute top-[-20%] left-[-10%] w-[55%] h-[55%] bg-emerald-50/80 rounded-full blur-[120px] animate-pulse pointer-events-none" />
+                <div className="absolute bottom-[-15%] right-[-10%] w-[40%] h-[40%] bg-blue-50/60 rounded-full blur-[100px] pointer-events-none" />
 
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="flex flex-col items-center text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
+                    <div className="flex flex-col items-center text-center gap-6 md:gap-8 max-w-4xl mx-auto">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
+                            initial={{ opacity: 0, scale: 0.85 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="inline-flex items-center gap-3 md:gap-4 px-4 md:px-6 py-2 md:py-2.5 bg-white border border-emerald-100 rounded-full text-emerald-700 shadow-xl shadow-emerald-900/5 backdrop-blur-sm"
+                            className="inline-flex items-center gap-3 px-5 py-2.5 bg-white border border-emerald-100 rounded-full text-emerald-700 shadow-lg"
                         >
                             <div className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.25em] md:tracking-[0.3em]">{t("agriHubSubtitle") || "Farmer Education Portal"}</span>
+                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">
+                                {t("agriHubSubtitle") || "Farmer Education Portal"}
+                            </span>
                         </motion.div>
 
                         <motion.h1
-                            initial={{ opacity: 0, y: 30 }}
+                            initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-5xl md:text-9xl font-black text-slate-950 tracking-tighter leading-[0.9] md:leading-[0.8]"
+                            transition={{ delay: 0.1 }}
+                            className="text-5xl md:text-8xl font-black text-slate-950 tracking-tighter leading-[0.88]"
                         >
                             AgriKnowledge<span className="text-emerald-600">Hub</span>
                         </motion.h1>
@@ -349,63 +597,91 @@ export default function AgriKnowledgeHub() {
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="text-lg md:text-2xl text-slate-600 font-bold max-w-2xl leading-relaxed px-4"
+                            transition={{ delay: 0.25 }}
+                            className="text-lg md:text-xl text-slate-500 font-semibold max-w-2xl leading-relaxed"
                         >
-                            Modern agricultural excellence and innovative learning for sustainable prosperity.
+                            Modern agricultural excellence — structured guides, step-by-step instructions, and expert knowledge for every farmer.
                         </motion.p>
+
+                        <div className="w-full mt-2">
+                            <StatsBar />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Dashboard Sections */}
-            <div ref={dashboardRef} className="container mx-auto px-4 mt-12 md:mt-24 space-y-24 md:space-y-40">
-                {KNOWLEDGE_SECTIONS.map((section) => (
-                    <section key={section.id} className="relative">
-                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-10 md:mb-16">
-                            <div className="h-16 w-16 md:h-24 md:w-24 rounded-[1.25rem] md:rounded-[2rem] bg-slate-950 flex items-center justify-center shadow-2xl shrink-0">
-                                <section.icon className="h-7 w-7 md:h-10 md:w-10 text-emerald-400" />
+            {/* ── Sections ── */}
+            <div className="container mx-auto px-4 mt-12 md:mt-20 space-y-20 md:space-y-32">
+                {KNOWLEDGE_SECTIONS.map((section, sectionIdx) => (
+                    <motion.section
+                        key={section.id}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: sectionIdx * 0.08, duration: 0.5 }}
+                        className="relative"
+                    >
+                        {/* Section header */}
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 mb-8 md:mb-12">
+                            <div className="h-14 w-14 md:h-16 md:w-16 rounded-2xl bg-slate-950 flex items-center justify-center shadow-xl flex-shrink-0">
+                                <section.icon className="h-6 w-6 md:h-8 md:w-8 text-emerald-400" />
                             </div>
-                            <div className="space-y-1">
-                                <h2 className="text-3xl md:text-6xl font-black text-slate-950 tracking-tight leading-none uppercase italic">
+                            <div>
+                                <h2 className="text-2xl md:text-5xl font-black text-slate-950 tracking-tight leading-none uppercase italic">
                                     {t(section.titleKey)}
                                 </h2>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <div className="h-1 w-10 rounded-full bg-emerald-500" />
+                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                        {section.cards.length} {section.cards.length === 1 ? "guide" : "guides"}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                            {section.cards.map((card) => (
-                                <FloatingGlassCard key={card.id} card={card} onOpen={setSelectedCard} />
+                        {/* Cards grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                            {section.cards.map((card, cardIdx) => (
+                                <KnowledgeCardItem
+                                    key={card.id}
+                                    card={card}
+                                    onOpen={setSelectedCard}
+                                    delay={sectionIdx * 0.05 + cardIdx * 0.07}
+                                />
                             ))}
                         </div>
-                    </section>
+                    </motion.section>
                 ))}
             </div>
 
-            {/* Platform Branding */}
-            <div className="container mx-auto px-4 mt-40 md:mt-60">
-                <div className="bg-emerald-600 rounded-[3rem] md:rounded-[4rem] p-10 md:p-32 text-center relative overflow-hidden shadow-2xl">
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
-                    <div className="relative z-10 space-y-8 md:space-y-10">
-                        <h2 className="text-4xl md:text-8xl font-black text-white leading-tight md:leading-none tracking-tighter">
-                            Grow Smarter. <br />Harvest Better.
+            {/* ── CTA Banner ── */}
+            <div className="container mx-auto px-4 mt-28 md:mt-40">
+                <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-3xl p-10 md:p-20 text-center relative overflow-hidden shadow-2xl">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+                    <div className="absolute -top-16 -left-16 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute -bottom-16 -right-16 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none" />
+                    <div className="relative z-10 space-y-6 md:space-y-8">
+                        <h2 className="text-3xl md:text-7xl font-black text-white leading-tight tracking-tighter">
+                            Grow Smarter. <br className="hidden md:block" />Harvest Better.
                         </h2>
-                        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-                            <button
-                                onClick={scrollToDashboard}
-                                className="px-10 md:px-16 py-4 md:py-6 bg-white text-emerald-900 font-black rounded-full text-lg md:text-2xl shadow-2xl hover:scale-105 active:scale-95 transition-all"
-                            >
-                                Get Started
-                            </button>
-                        </div>
+                        <p className="text-emerald-100 text-base md:text-xl font-semibold max-w-xl mx-auto">
+                            Access 50+ cultivation guides, step-by-step instructions, and government scheme details — all in one place.
+                        </p>
+                        <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                            className="px-8 md:px-12 py-3.5 md:py-5 bg-white text-emerald-900 font-black rounded-full text-base md:text-lg shadow-2xl hover:scale-105 active:scale-95 transition-all"
+                        >
+                            Explore All Guides
+                        </button>
                     </div>
                 </div>
-
-                <div className="mt-12 md:mt-20 text-center space-y-4">
-                    <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px] md:text-xs">AgriKnowledgeHub © 2026 Future Agriculture Labs</p>
+                <div className="mt-8 text-center">
+                    <p className="text-slate-400 font-bold tracking-widest uppercase text-[10px]">
+                        AgriKnowledgeHub © 2026 Future Agriculture Labs
+                    </p>
                 </div>
             </div>
 
+            {/* ── Detail Modal ── */}
             <AnimatePresence>
                 {selectedCard && (
                     <DetailModuleOverlay
