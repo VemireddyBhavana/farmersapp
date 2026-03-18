@@ -22,7 +22,7 @@ import GrowingGuide from "./pages/GrowingGuide";
 import Support from "./pages/Support";
 import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 import About from "./pages/About";
 import Vision from "./pages/Vision";
 import Contact from "./pages/Contact";
@@ -51,298 +51,38 @@ const queryClient = new QueryClient();
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={
-          <>
-            <SignedIn><Navigate to="/dashboard" replace /></SignedIn>
-            <SignedOut><LoginPage /></SignedOut>
-          </>
-        }
-      />
-      <Route path="/register" element={<Navigate to="/login" replace />} />
-
-      {/* Protected Routes */}
-      <Route
-        path="/"
-        element={
-          <>
-            <SignedIn><Index /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <>
-            <SignedIn><Dashboard /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/rent"
-        element={
-          <>
-            <SignedIn><TractorRental /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/owner"
-        element={
-          <>
-            <SignedIn><OwnerDashboard /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/admin"
-        element={
-          <>
-            <SignedIn><AdminDashboard /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/weather"
-        element={
-          <>
-            <SignedIn><Weather /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/market"
-        element={
-          <>
-            <SignedIn><Market /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/mandi/:id"
-        element={
-          <>
-            <SignedIn><MandiDetail /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/calendar"
-        element={
-          <>
-            <SignedIn><Calendar /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/pests"
-        element={
-          <>
-            <SignedIn><Pests /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <>
-            <SignedIn><Chat /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/knowledge"
-        element={
-          <>
-            <SignedIn><AgriKnowledge /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/agri-schemes"
-        element={
-          <>
-            <SignedIn><AgriSchemes /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/help-center"
-        element={
-          <>
-            <SignedIn><HelpCenter /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/growing-guide"
-        element={
-          <>
-            <SignedIn><GrowingGuide /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/support"
-        element={
-          <>
-            <SignedIn><Support /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/seeds"
-        element={
-          <>
-            <SignedIn><SeedsBuyer /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/whatsapp-bot"
-        element={
-          <>
-            <SignedIn><WhatsAppChat /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/location"
-        element={
-          <>
-            <SignedIn><Location /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/kisan-suvidha"
-        element={
-          <>
-            <SignedIn><KisanSuvidhaPortal /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-
-      {/* AgroStar Corporate Pages */}
-      <Route
-        path="/techspark"
-        element={
-          <>
-            <SignedIn><TechSparkAI /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/impact"
-        element={
-          <>
-            <SignedIn><Impact /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-
-      <Route
-        path="/market-linkage"
-        element={
-          <>
-            <SignedIn><MarketLinkage /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/omnichannel"
-        element={
-          <>
-            <SignedIn><Omnichannel /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/join-us"
-        element={
-          <>
-            <SignedIn><JoinUs /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-
-      {/* Company Pages */}
-      <Route
-        path="/about"
-        element={
-          <>
-            <SignedIn><About /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/explore"
-        element={<Explore />}
-      />
-      <Route
-        path="/vision"
-        element={
-          <>
-            <SignedIn><Vision /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <>
-            <SignedIn><Contact /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/privacy"
-        element={
-          <>
-            <SignedIn><Privacy /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-      <Route
-        path="/terms"
-        element={
-          <>
-            <SignedIn><Terms /></SignedIn>
-            <SignedOut><Navigate to="/login" replace /></SignedOut>
-          </>
-        }
-      />
-
+      <Route path="/" element={<Index />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/rent" element={<TractorRental />} />
+      <Route path="/owner" element={<OwnerDashboard />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/weather" element={<Weather />} />
+      <Route path="/market" element={<Market />} />
+      <Route path="/mandi/:id" element={<MandiDetail />} />
+      <Route path="/calendar" element={<Calendar />} />
+      <Route path="/pests" element={<Pests />} />
+      <Route path="/chat" element={<Chat />} />
+      <Route path="/knowledge" element={<AgriKnowledge />} />
+      <Route path="/agri-schemes" element={<AgriSchemes />} />
+      <Route path="/help-center" element={<HelpCenter />} />
+      <Route path="/growing-guide" element={<GrowingGuide />} />
+      <Route path="/support" element={<Support />} />
+      <Route path="/seeds" element={<SeedsBuyer />} />
+      <Route path="/whatsapp-bot" element={<WhatsAppChat />} />
+      <Route path="/location" element={<Location />} />
+      <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
+      <Route path="/techspark" element={<TechSparkAI />} />
+      <Route path="/impact" element={<Impact />} />
+      <Route path="/market-linkage" element={<MarketLinkage />} />
+      <Route path="/omnichannel" element={<Omnichannel />} />
+      <Route path="/join-us" element={<JoinUs />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/vision" element={<Vision />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/explore" element={<Explore />} />
+      
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
       <Route path="/Weather" element={<Navigate to="/weather" replace />} />
@@ -367,11 +107,20 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <Layout>
-                <AppRoutes />
-              </Layout>
-              <VoiceAssistant />
-              <FloatingChatbot />
+              <SignedIn>
+                <Layout>
+                  <AppRoutes />
+                </Layout>
+                <VoiceAssistant />
+                <FloatingChatbot />
+              </SignedIn>
+              <SignedOut>
+                <Routes>
+                  <Route path="/sso-callback" element={<AuthenticateWithRedirectCallback />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="*" element={<Navigate to="/login" replace />} />
+                </Routes>
+              </SignedOut>
             </BrowserRouter>
           </AuthProvider>
         </LocationProvider>
