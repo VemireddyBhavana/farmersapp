@@ -81,12 +81,12 @@ const Navbar = () => {
       <div className="container mx-auto px-3 lg:px-6">
         <div className="flex h-14 items-center justify-between gap-2">
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
-            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-md shadow-emerald-500/30">
+          {/* Logo with hover scale and glow */}
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0 group transition-all duration-300 hover:scale-105">
+            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-md shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-all">
               <Leaf className="h-5 w-5 text-white" />
             </div>
-            <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block">
+            <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block group-hover:text-emerald-500 transition-colors">
               TeachSpark AI
             </span>
           </Link>
@@ -99,13 +99,29 @@ const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide transition-all whitespace-nowrap",
+                    "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide transition-all whitespace-nowrap z-10 nav-link-item",
                     location.pathname === link.path
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                      ? "text-primary-foreground nav-glow-active"
+                      : "text-muted-foreground hover:text-primary"
                   )}
                 >
-                  <link.icon className="h-3.5 w-3.5 flex-shrink-0" />
+                  {/* Sliding Indicator Pill */}
+                  {location.pathname === link.path && (
+                    <motion.div
+                      layoutId="nav-indicator"
+                      className="nav-indicator-pill"
+                      transition={{ 
+                        type: "spring", 
+                        bounce: 0.2, 
+                        duration: 0.5,
+                        ease: [0.4, 0, 0.2, 1] 
+                      }}
+                    />
+                  )}
+                  <link.icon className={cn(
+                    "h-3.5 w-3.5 flex-shrink-0 transition-colors",
+                    location.pathname === link.path ? "text-primary-foreground" : "text-emerald-600"
+                  )} />
                   {link.name}
                 </Link>
               ))}
@@ -138,12 +154,12 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
                   {ourSolutionsLinks.map((item) => (
                     <DropdownMenuItem key={item.path} asChild>
-                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group">
-                        <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group dropdown-item-hover">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-foreground">{item.name}</p>
+                          <p className="text-sm font-bold text-foreground group-hover:text-emerald-600 transition-colors">{item.name}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
                         </div>
                       </Link>
@@ -162,12 +178,12 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-72 rounded-xl shadow-xl p-2 mt-1 bg-white dark:bg-slate-900">
                   {aboutTeachSparkLinks.map((item) => (
                     <DropdownMenuItem key={item.path} asChild>
-                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 group">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center flex-shrink-0">
+                      <Link to={item.path} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 group dropdown-item-hover">
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-foreground">{item.name}</p>
+                          <p className="text-sm font-bold text-foreground group-hover:text-blue-600 transition-colors">{item.name}</p>
                           <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
                         </div>
                       </Link>
