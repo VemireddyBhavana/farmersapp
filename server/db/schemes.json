@@ -1,0 +1,16 @@
+[
+  {
+    "scheme_id": "pm_kisan",
+    "scheme_name": "PM-Kisan",
+    "country": "India",
+    "benefits": "₹6000 per year",
+    "eligibility": "Small and marginal farmers"
+  },
+  {
+    "scheme_id": "usda_eqip",
+    "scheme_name": "USDA EQIP",
+    "country": "USA",
+    "benefits": "Financial and technical assistance",
+    "eligibility": "Agricultural producers and non-industrial private forestland owners"
+  }
+]

@@ -59,7 +59,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { useLanguage } from "@/lib/LanguageContext";
 import { useWeather } from "@/hooks/useWeather";
 import { useMandi } from "@/hooks/useMandi";
-import { AccessibleDashboard } from "@/components/AccessibleDashboard";
+
 import { speakText } from "@/components/VoiceAssistant";
 
 export default function Dashboard() {
@@ -71,9 +71,7 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
-      <AccessibleDashboard />
-
-      {/* Main Dashboard Features (Weather, Mandi, etc.) - Moved to top */}
+      {/* Main Dashboard Features (Weather, Mandi, etc.) */}
       <section className="grid gap-10 lg:grid-cols-4 pt-8">
         <div className="lg:col-span-3 space-y-12">
           {/* Welcome & Weather Mixed */}
@@ -266,11 +264,11 @@ export default function Dashboard() {
             <Badge className="bg-emerald-600 text-white border-none">{t('tagNew')}</Badge>
             <h3 className="text-3xl font-black text-emerald-900">{t('premiumEquipmentDesc')}</h3>
             <p className="text-emerald-700 font-medium">{t('browseSelectDesc')}</p>
-              <Link to="/rent" className="block pt-2">
-                <button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-8 font-black transition-all shadow-lg shadow-emerald-600/20 flex items-center">
-                  {t('bookTractor')} <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
-              </Link>
+            <Link to="/rent" className="block pt-2">
+              <button className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl h-12 px-8 font-black transition-all shadow-lg shadow-emerald-600/20 flex items-center">
+                {t('bookTractor')} <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
+            </Link>
           </div>
           <div className="w-full md:w-1/2 aspect-video rounded-xl overflow-hidden shadow-2xl relative z-10 border-4 border-white/20">
             <img src="/tractor_premium.png" className="w-full h-full object-cover" alt="Premium Tractor" />
@@ -297,12 +295,12 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: t('indoorSaffronTitle'), category: t('agricultureCategory'), catKey: "agriculture", tag: t('tagNew'), icon: TractorIcon, color: "bg-emerald-100 text-emerald-700", img: "/images/saffron_guide.png" },
+            { title: t('indoorSaffronTitle'), category: t('agricultureCategory'), catKey: "agriculture", tag: t('tagNew'), icon: TractorIcon, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s" },
             { title: t('eggProductionTitle'), category: t('poultryCategory'), catKey: "livestock", tag: t('tagGuide'), icon: Bird, color: "bg-emerald-100 text-emerald-700", img: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800" },
-            { title: t('shrimpFarmingTitle'), category: t('aquacultureCategory'), catKey: "aquaculture", tag: t('tagExpert'), icon: Fish, color: "bg-emerald-100 text-emerald-700", img: "https://images.unsplash.com/photo-1580193424172-c51631405c92?auto=format&fit=crop&q=80&w=800" },
-            { title: t('solarPumpTitle'), category: t('subsidiesCategory'), catKey: "business", tag: t('tagScheme'), icon: Landmark, color: "bg-emerald-100 text-emerald-700", img: "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=800" },
-            { title: t('aloeVeraTitle'), category: t('horticultureCategory'), catKey: "horticulture", tag: t('tagBusiness'), icon: Sprout, color: "bg-emerald-100 text-emerald-700", img: "/images/aloe_vera_guide.jpg" },
-            { title: t('curryLeavesTitle'), category: t('gardeningCategory'), catKey: "horticulture", tag: t('tagTips'), icon: SunIcon, color: "bg-emerald-100 text-emerald-700", img: "/images/curry_leaves_guide.png" }
+            { title: t('shrimpFarmingTitle'), category: t('aquacultureCategory'), catKey: "aquaculture", tag: t('tagExpert'), icon: Fish, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrho1VB3WThsItYUa1WLYOugvC4LCfv7mAg&s" },
+            { title: t('solarPumpTitle'), category: t('subsidiesCategory'), catKey: "business", tag: t('tagScheme'), icon: Landmark, color: "bg-emerald-100 text-emerald-700", img: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg" },
+            { title: t('aloeVeraTitle'), category: t('horticultureCategory'), catKey: "horticulture", tag: t('tagBusiness'), icon: Sprout, color: "bg-emerald-100 text-emerald-700", img: "https://pbs.twimg.com/media/FMLdOWGXsAUOIkY.jpg" },
+            { title: t('curryLeavesTitle'), category: t('gardeningCategory'), catKey: "horticulture", tag: t('tagTips'), icon: SunIcon, color: "bg-emerald-100 text-emerald-700", img: "https://blog.suvie.com/wp-content/uploads/2021/08/kadipatta-2701445_1920-1360x907.jpg" }
           ].map((post, idx) => (
             <Link key={idx} to={`/knowledge?category=${post.catKey}`} className="block group">
               <div className="rounded overflow-hidden border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-lg transition-all flex flex-col h-full">

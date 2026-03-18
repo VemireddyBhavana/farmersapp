@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "../lib/LanguageContext";
-import SmartInsights from "@/components/SmartInsights";
+
 
 export default function Index() {
   const { t } = useLanguage();
@@ -124,8 +124,6 @@ export default function Index() {
 
       </section>
 
-      {/* Smart Farming Insights */}
-      <SmartInsights />
 
       {/* Features Section */}
 

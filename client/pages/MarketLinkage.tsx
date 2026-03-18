@@ -13,25 +13,25 @@ const produceCategories = [
   {
     name: "Pomegranate",
     destinations: "UAE, UK, Netherlands, Germany",
-    img: "/tomato_farming.png",
+    img: "https://media.istockphoto.com/id/1395136631/photo/a-lot-of-ripe-red-pomegranates-with-a-cut-off-top-close-up-background.jpg?s=612x612&w=0&k=20&c=wvucQj6z-U4XRiKzohgfBaFJZxLXzg3ZHVwjZ2b76QQ=",
     color: "from-rose-500 to-pink-600"
   },
   {
     name: "Banana",
     destinations: "Middle East, Southeast Asia",
-    img: "/wheat_field.png",
+    img: "https://media.istockphoto.com/id/174959827/photo/banana.jpg?s=612x612&w=0&k=20&c=rx4zQuWlGafwqqIjF_z4wEGh0BzSxiZcMxFjtwFxUXU=",
     color: "from-yellow-400 to-amber-500"
   },
   {
     name: "Grapes",
     destinations: "Europe, Russia, Japan",
-    img: "/chili_plant.png",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJxA3GsfZ_SRNDqK-0Icohn2c5hTu2EV_s3w&s",
     color: "from-purple-500 to-violet-600"
   },
   {
     name: "Fresh Vegetables",
     destinations: "Gulf, Singapore, Canada",
-    img: "/mustard_field.png",
+    img: "https://media.istockphoto.com/id/2163456407/photo/fresh-vegetables-and-fruits-for-sale-in-asian-farmer-market-stall.jpg?s=612x612&w=0&k=20&c=LNl7GM00YQPHNzCZlKTG9-M6v8zEG9Fg0tSWM9mIxGY=",
     color: "from-emerald-500 to-teal-600"
   },
 ];

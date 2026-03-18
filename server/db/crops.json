@@ -1,0 +1,20 @@
+[
+  {
+    "crop_id": "rice",
+    "crop_name": "Rice",
+    "crop_category": "Cereals",
+    "description": "Stall diet for half of humanity."
+  },
+  {
+    "crop_id": "corn",
+    "crop_name": "Corn (Maize)",
+    "crop_category": "Cereals",
+    "description": "High yield grain widely grown in USA and Brazil."
+  },
+  {
+    "crop_id": "coffee",
+    "crop_name": "Coffee",
+    "crop_category": "Cash Crop",
+    "description": "Grown in high altitudes, sensitive to frost."
+  }
+]
