@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/clerk-react";
 import { Chrome } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function LoginPage() {
   const { signIn, isLoaded } = useSignIn();
+  const { t } = useLanguage();
 
   const handleGoogleLogin = async () => {
     if (!isLoaded) return;
@@ -118,7 +120,7 @@ export default function LoginPage() {
                 transition={{ delay: 0.3 }}
                 className="text-5xl font-black text-white tracking-tighter"
               >
-                Welcome
+                {t("loginWelcome")}
               </motion.h1>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -126,7 +128,7 @@ export default function LoginPage() {
                 transition={{ delay: 0.4 }}
                 className="text-slate-400 text-lg font-medium"
               >
-                Sign in to continue
+                {t("loginSubtitle")}
               </motion.p>
             </div>
 
@@ -142,7 +144,7 @@ export default function LoginPage() {
                 <div className="group-hover/google:scale-110 transition-transform duration-300">
                   <GoogleIcon />
                 </div>
-                Continue with Google
+                {t("loginGoogle")}
               </motion.button>
 
               <motion.button
@@ -156,7 +158,7 @@ export default function LoginPage() {
                 <div className="group-hover/apple:scale-110 transition-transform duration-300">
                   <AppleIcon />
                 </div>
-                Continue with Apple
+                {t("loginApple")}
               </motion.button>
             </div>
 
@@ -167,7 +169,7 @@ export default function LoginPage() {
               className="pt-6"
             >
               <p className="text-[10px] uppercase font-black tracking-[0.4em] text-white/20">
-                Secured by Clerk
+                {t("loginSecured")}
               </p>
             </motion.div>
           </div>

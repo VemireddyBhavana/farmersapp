@@ -13,6 +13,11 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const translations: Record<Language, Record<string, string>> = {
 
   English: {
+    loginWelcome: "Welcome",
+    loginSubtitle: "Sign in to continue",
+    loginGoogle: "Continue with Google",
+    loginApple: "Continue with Apple",
+    loginSecured: "Secured by Clerk",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "Empowering the backbone of our nation with cutting-edge technology and AI-driven agricultural solutions.",
     aboutTeachSpark: "About TeachSpark",
@@ -1215,6 +1220,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Hindi: {
+    loginWelcome: "नमस्ते",
+    loginSubtitle: "जारी रखने के लिए साइन इन करें",
+    loginGoogle: "गूगल के साथ जारी रखें",
+    loginApple: "एप्पल के साथ जारी रखें",
+    loginSecured: "Clerk द्वारा सुरक्षित",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "अत्याधुनिक तकनीक और AI-संचालित कृषि समाधानों के साथ हमारे देश की आधारशिला को सशक्त बनाना।",
     aboutTeachSpark: "TeachSpark AI के बारे में",
@@ -2417,6 +2427,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Telugu: {
+    loginWelcome: "స్వాగతం",
+    loginSubtitle: "కొనసాగించడానికి సైన్ ఇన్ చేయండి",
+    loginGoogle: "గూగుల్ తో కొనసాగించండి",
+    loginApple: "ఆపిల్ తో కొనసాగించండి",
+    loginSecured: "Clerk ద్వారా సురಕ್ಷితం",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "అత్యాధునిక సాంకేతికత మరియు AI-ఆధారిత వ్యవసాయ పరిష్కారాలతో మా దేశ వెన్నెముకకు శక్తినిస్తోంది.",
     aboutTeachSpark: "TeachSpark AI గురించి",
@@ -3619,6 +3634,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Tamil: {
+    loginWelcome: "வரவேற்பு",
+    loginSubtitle: "தொடர உள்நுழைக",
+    loginGoogle: "கூக்டனுடன் தொடரவும்",
+    loginApple: "ஆப்பிளுடன் தொடரவும்",
+    loginSecured: "Clerk மூலம் பாதுகாக்கப்பட்டது",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "நவீன தொழில்நுட்பம் மற்றும் AI-இயங்கும் விவசாய தீர்வுகளுடன் எங்கள் தேசத்தின் முதுகெலும்பை மேம்படுத்துதல்.",
     aboutTeachSpark: "டெக்ஸ்பார்க் AI பற்றி",
@@ -4821,6 +4841,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Marathi: {
+    loginWelcome: "स्वागत आहे",
+    loginSubtitle: "सुरू ठेवण्यासाठी साइन इन करा",
+    loginGoogle: "गुगलसह सुरू ठेवा",
+    loginApple: "अ‍ॅपलसह सुरू ठेवा",
+    loginSecured: "Clerk द्वारे सुरक्षित",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "Empowering the backbone of our nation with cutting-edge technology and AI-driven agricultural solutions.",
     aboutTeachSpark: "About TeachSpark",
@@ -6023,6 +6048,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Gujarati: {
+    loginWelcome: "સ્વાગત",
+    loginSubtitle: "આગળ વધવા માટે સાઇન ઇન કરો",
+    loginGoogle: "Google સાથે ચાલુ રાખો",
+    loginApple: "Apple સાથે ચાલુ રાખો",
+    loginSecured: "Clerk દ્વારા સુરક્ષિત",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "અદ્યતન ટેકનોલોજી અને AI-સંચાલિત કૃષિ ઉકેલો સાથે આપણા દેશના પાયાને સશક્ત બનાવવો.",
     aboutTeachSpark: "ટેકસ્પાર્ક AI વિશે",
@@ -7225,6 +7255,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Kannada: {
+    loginWelcome: "ಸ್ವಾಗತ",
+    loginSubtitle: "ಮುಂದುವರಿಯಲು ಸೈನ್ ಇನ್ ಮಾಡಿ",
+    loginGoogle: "Google ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ",
+    loginApple: "Apple ನೊಂದಿಗೆ ಮುಂದುವರಿಯಿರಿ",
+    loginSecured: "Clerk ನಿಂದ ಸುರಕ್ಷಿತವಾಗಿದೆ",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "ಅತ್ಯಾಧುನಿಕ ತಂತ್ರಜ್ಞಾನ ಮತ್ತು AI- ಚಾಲಿತ ಕೃಷಿ ಪರಿಹಾರಗಳೊಂದಿಗೆ ನಮ್ಮ ರಾಷ್ಟ್ರದ ಬೆನ್ನೆಲುಬನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು.",
     aboutTeachSpark: "ಟೆಕ್‌ಸ್ಪಾರ್ಕ್ AI ಬಗ್ಗೆ",
@@ -8427,6 +8462,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Malayalam: {
+    loginWelcome: "സ്വാഗതം",
+    loginSubtitle: "തുടരുന്നതിന് സൈൻ ഇൻ ചെയ്യുക",
+    loginGoogle: "Google ഉപയോഗിച്ച് തുടരുക",
+    loginApple: "Apple ഉപയോഗിച്ച് തുടരുക",
+    loginSecured: "Clerk വഴി സുരക്ഷിതമാക്കി",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "നൂതന സാങ്കേതികവിദ്യയും AI അധിഷ്ഠിത കാർഷിക പരിഹാരങ്ങളും ഉപയോഗിച്ച് കർഷകരെ ശാക്തീകരിക്കുന്നു.",
     aboutTeachSpark: "ടെക്സ്പാർക്ക് AI-യെക്കുറിച്ച്",
@@ -9629,6 +9669,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Punjabi: {
+    loginWelcome: "ਸਵਾਗਤ ਹੈ",
+    loginSubtitle: "ਜਾਰੀ ਰੱਖਣ ਲਈ ਸਾਈਨ ಇನ್ ਕਰੋ",
+    loginGoogle: "Google ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    loginApple: "Apple ਨਾਲ ਜਾਰੀ ਰੱਖੋ",
+    loginSecured: "Clerk ਦੁਆરા ਸੁਰੱਖਿਅત",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "ਆਧੁਨਿਕ ਤਕਨਾਲੋਜੀ ਅਤੇ AI-ਸੰਚਾਲਿਤ ਖੇਤੀਬਾੜੀ ਹੱਲਾਂ ਨਾਲ ਸਾਡੇ ਦੇਸ਼ ਦੀ ਰੀੜ੍ਹ ਦੀ ਹੱਡੀ ਨੂੰ ਸਸ਼ਕਤ ਬਣਾਉਣਾ।",
     aboutTeachSpark: "ਟੈਕਸਪਾਰਕ AI ਬਾਰੇ",
@@ -10831,6 +10876,11 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   Bangla: {
+    loginWelcome: "স্বাগত",
+    loginSubtitle: "চালিয়ে যেতে সাইন ইন করুন",
+    loginGoogle: "Google এর সাথে চালিয়ে যান",
+    loginApple: "Apple এর সাথে চালিয়ে যান",
+    loginSecured: "Clerk দ্বারা সুরক্ষিত",
     TeachSparkNetwork: "TeachSpark Network",
     aboutDesc: "অত্যাধুনিক প্রযুক্তি এবং AI-চালিত কৃষি সমাধানের মাধ্যমে আমাদের দেশের মেরুদণ্ডকে সশক্ত করা।",
     aboutTeachSpark: "টেকস্পার্ক এআই সম্পর্কে",
