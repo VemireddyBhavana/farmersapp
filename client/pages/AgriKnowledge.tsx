@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     BookOpen, Leaf, Bird, Landmark, ArrowRight,
@@ -388,6 +389,7 @@ const DetailModuleOverlay = ({
     onBack: () => void;
 }) => {
     const { t } = useLanguage();
+    const navigate = useNavigate();
     const [expandedStep, setExpandedStep] = useState<number | null>(0); // Default open first step
 
     useEffect(() => {
@@ -579,13 +581,22 @@ const DetailModuleOverlay = ({
                                     <p className="text-slate-400 font-bold text-sm md:text-base">{t('takeTheNextStep') || 'Take the next step in your farming journey with our advanced tools.'}</p>
                                 </div>
                                 <div className="flex flex-wrap justify-center gap-4">
-                                     <button className="px-8 py-4 bg-white text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 hover:text-white transition-all active:scale-95 shadow-xl">
+                                     <button 
+                                        onClick={() => navigate('/market')}
+                                        className="px-8 py-4 bg-white text-slate-950 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 hover:text-white transition-all active:scale-95 shadow-xl"
+                                    >
                                         {t('checkMarketPrices')}
                                     </button>
-                                    <button className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl">
+                                    <button 
+                                        onClick={() => navigate('/market')}
+                                        className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95 shadow-xl"
+                                    >
                                         {t('calculateProfit')}
                                     </button>
-                                    <button className="px-8 py-4 bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95">
+                                    <button 
+                                        onClick={() => navigate('/chat')}
+                                        className="px-8 py-4 bg-white/10 text-white border border-white/10 backdrop-blur-md rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95"
+                                    >
                                         {t('askAiExpert')}
                                     </button>
                                 </div>
