@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu, X, Sun, Moon, ChevronDown, Leaf, CloudSun, TrendingUp, Shield, Bot,
   ScrollText, HeartHandshake, Sprout, Globe, Users, Zap, Target, Grid, Calendar,
-  Store, FileText, User, Truck, Microscope, Calculator
+  Store, FileText, User, Truck, Microscope, Calculator, Wallet, BarChart3, ShoppingBag, Navigation
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -108,6 +108,10 @@ const Navbar = () => {
     { name: t('p2pToolSharingTitle'),   path: "/tool-sharing",       icon: Truck, desc: t('p2pToolSharingDesc') },
     { name: t('soilLabTitle'),          path: "/soil-lab-locator",   icon: Microscope, desc: t('soilLabDesc') },
     { name: t('loanCalcTitle'),         path: "/agri-loan-calculator", icon: Calculator, desc: t('loanCalcDesc') },
+    { name: t('financeTitle'),          path: "/farmer-finance",     icon: Wallet, desc: t('financeDesc') },
+    { name: t('predictPriceTitle'),     path: "/price-predictor",    icon: BarChart3, desc: t('predictPriceDesc') },
+    { name: t('d2cTitle'),              path: "/d2c-marketplace",    icon: ShoppingBag, desc: t('d2cDesc') },
+    { name: t('droneTitle'),            path: "/drone-booking",      icon: Navigation, desc: t('droneDesc') },
   ];
 
   const ourSolutionsLinks = [

@@ -1248,4 +1248,14 @@ export const pa = {
     soilLabDesc: "Find nearby certified soil testing labs and get AI recommendations.",
     loanCalcTitle: "Agri-Loan Calculator",
     loanCalcDesc: "Calculate EMIs for equipment and find the best insurance schemes.",
+
+    // Advanced Agri Tools
+    financeTitle: "Digital Khata (Farm Ledger)",
+    financeDesc: "Track daily expenses, crop sales, and calculate true net profit.",
+    predictPriceTitle: "Mandi Price Predictor AI",
+    predictPriceDesc: "AI predictions to decide whether to sell or hold your harvest.",
+    d2cTitle: "D2C Marketplace",
+    d2cDesc: "Sell your premium produce directly to consumers and businesses.",
+    droneTitle: "Drone Spraying Booking",
+    droneDesc: "Book precision agri-drones for fast and safe chemical spraying.",
 };

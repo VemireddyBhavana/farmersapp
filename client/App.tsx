@@ -44,6 +44,10 @@ import SubsidyFinder from "./pages/SubsidyFinder";
 import ToolSharing from "./pages/ToolSharing";
 import SoilLabLocator from "./pages/SoilLabLocator";
 import AgriLoanCalculator from "./pages/AgriLoanCalculator";
+import FarmerFinance from "./pages/FarmerFinance";
+import PricePredictor from "./pages/PricePredictor";
+import D2CMarketplace from "./pages/D2CMarketplace";
+import DroneBooking from "./pages/DroneBooking";
 
 import TechSparkAI from "./pages/TechSparkAI";
 import MarketLinkage from "./pages/MarketLinkage";
@@ -55,7 +59,6 @@ import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
 import { LocationProvider } from "./lib/LocationContext";
 import IrrigationStats from "./pages/IrrigationStats";
 import FarmMapper from "./pages/FarmMapper";
-import FarmerFinance from "./pages/FarmerFinance";
 import FarmerMarket from "./pages/FarmerMarket";
 import VoiceNotes from "./pages/VoiceNotes";
 
@@ -108,6 +111,10 @@ const AppRoutes = () => {
       <Route path="/tool-sharing" element={<ToolSharing />} />
       <Route path="/soil-lab-locator" element={<SoilLabLocator />} />
       <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
+      <Route path="/farmer-finance" element={<FarmerFinance />} />
+      <Route path="/price-predictor" element={<PricePredictor />} />
+      <Route path="/d2c-marketplace" element={<D2CMarketplace />} />
+      <Route path="/drone-booking" element={<DroneBooking />} />
       
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
