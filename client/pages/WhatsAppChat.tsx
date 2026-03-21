@@ -5,7 +5,8 @@ import { Send, ArrowLeft, MoreVertical, Phone, Video, Search, Paperclip, Smile, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language, translations } from "@/lib/LanguageContext";
+import { useLanguage, Language } from "@/lib/LanguageContext";
+import { translations } from "@/lib/translations";
 
 interface Message {
     id: string;

@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "node --max-old-space-size=4096 node_modules/vite/bin/vite.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
@@ -22,8 +22,19 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/nodemailer": "^7.0.11",
+    "axios": "^1.13.6",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "jspdf": "^4.2.1",
+    "mongoose": "^9.3.1",
+    "nodemailer": "^8.0.3",
+    "razorpay": "^2.9.6",
+    "stripe": "^20.4.1",
     "zod": "^3.25.76"
   },
   "devDependencies": {

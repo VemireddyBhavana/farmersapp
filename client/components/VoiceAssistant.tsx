@@ -5,32 +5,7 @@ import { useLanguage } from "../lib/LanguageContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Helper to speak text
-export const speakText = (text: string, language: string) => {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  
-  const utterance = new SpeechSynthesisUtterance(text);
-  
-  // Mapping of languages to BCP-47 codes
-  const langMap: Record<string, string> = {
-    'English': 'en-IN',
-    'Hindi': 'hi-IN',
-    'Telugu': 'te-IN',
-    'Tamil': 'ta-IN',
-    'Marathi': 'mr-IN',
-    'Gujarati': 'gu-IN',
-    'Kannada': 'kn-IN',
-    'Malayalam': 'ml-IN',
-    'Punjabi': 'pa-IN',
-    'Bangla': 'bn-IN'
-  };
-  
-  utterance.lang = langMap[language] || 'en-IN';
-  utterance.rate = 0.9;
-  
-  window.speechSynthesis.speak(utterance);
-};
+import { speakText } from "../lib/speech";
 
 export function VoiceAssistant() {
   const [isListening, setIsListening] = useState(false);

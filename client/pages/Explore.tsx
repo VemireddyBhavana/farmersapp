@@ -4,14 +4,18 @@ import {
   LayoutDashboard, 
   Truck, 
   LineChart, 
-  MessageSquare, 
   BookOpen, 
   AlertTriangle, 
   ArrowRight,
   ChevronRight,
   Sprout,
   ShieldCheck,
-  Zap
+  Zap,
+  Globe,
+  MessageSquare,
+  User,
+  TrendingUp,
+  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -69,6 +73,54 @@ const Explore = () => {
       color: "bg-red-500/10 text-red-600",
       link: "/pests",
       image: "/explore_pests.png"
+    },
+    {
+      title: t('satelliteAnalysisTitle'),
+      description: t('satelliteAnalysisDesc'),
+      icon: Globe,
+      color: "bg-emerald-500/10 text-emerald-600",
+      link: "/satellite-analysis",
+      image: "/satellite_farm_health.png"
+    },
+    {
+      title: t('communityHubTitle'),
+      description: t('communityHubDesc'),
+      icon: MessageSquare,
+      color: "bg-blue-500/10 text-blue-600",
+      link: "/community",
+      image: "/community_hub.png"
+    },
+    {
+      title: t('expertConsultTitle'),
+      description: t('expertConsultDesc'),
+      icon: User,
+      color: "bg-purple-500/10 text-purple-600",
+      link: "/expert-consult",
+      image: "/expert_pfp.png"
+    },
+    {
+      title: t('yieldPredictionTitle'),
+      description: t('yieldPredictionDesc'),
+      icon: TrendingUp,
+      color: "bg-amber-500/10 text-amber-600",
+      link: "/yield-prediction",
+      image: "/yield_prediction.png"
+    },
+    {
+      title: t('subsidyFinderTitle'),
+      description: t('subsidyFinderDesc'),
+      icon: FileText,
+      color: "bg-emerald-500/10 text-emerald-600",
+      link: "/subsidy-finder",
+      image: "/subsidy_finder.png"
+    },
+    {
+      title: t('p2pToolSharingTitle'),
+      description: t('p2pToolSharingDesc'),
+      icon: Truck,
+      color: "bg-blue-500/10 text-blue-600",
+      link: "/tool-sharing",
+      image: "/tool_sharing.png"
     }
   ];
 

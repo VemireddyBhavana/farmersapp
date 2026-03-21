@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Cloud, Wheat, IndianRupee, Sprout } from "lucide-react";
-import { speakText } from "./VoiceAssistant";
+import { speakText } from "../lib/speech";
 import { useLanguage } from "../lib/LanguageContext";
 
 export function AccessibleDashboard() {

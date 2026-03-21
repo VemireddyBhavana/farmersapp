@@ -4,7 +4,8 @@ import { MessageCircle, X, Send, User, Bot, Sparkles, ChevronDown } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language, translations } from "@/lib/LanguageContext";
+import { useLanguage, Language } from "@/lib/LanguageContext";
+import { translations } from "@/lib/translations";
 
 const AIChat = () => {
   const { language } = useLanguage();

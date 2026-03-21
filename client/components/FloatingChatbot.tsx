@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, X, MessageCircle } from "lucide-react";
-import { useLanguage, Language, translations } from "../lib/LanguageContext";
+import { useLanguage, Language } from "../lib/LanguageContext";
+import { translations } from "../lib/translations";
 
 const languageLabelMap: Record<string, Language> = {
     "En": "English",
