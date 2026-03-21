@@ -119,6 +119,39 @@ export default function DiseaseDetection() {
                     t('bacterialLeafSpotTreat2'),
                     t('bacterialLeafSpotTreat3')
                 ]
+            },
+            {
+                name: t('aphids'),
+                confidence: "96.5%",
+                description: t('aphidsDesc'),
+                causes: t('aphidsCauses'),
+                prevention: [
+                    t('aphidsPrev1'),
+                    t('aphidsPrev2')
+                ],
+                fertilizers: [
+                    t('aphidsFert1')
+                ],
+                treatment: [
+                    t('aphidsTreat1'),
+                    t('aphidsTreat2')
+                ]
+            },
+            {
+                name: t('nitrogenDeficiency'),
+                confidence: "98.2%",
+                description: t('nitrogenDeficiencyDesc'),
+                causes: t('nitrogenDeficiencyCauses'),
+                prevention: [
+                    t('nitrogenDeficiencyPrev1')
+                ],
+                fertilizers: [
+                    t('nitrogenDeficiencyFert1'),
+                    t('nitrogenDeficiencyFert2')
+                ],
+                treatment: [
+                    t('nitrogenDeficiencyTreat1')
+                ]
             }
         ];
 

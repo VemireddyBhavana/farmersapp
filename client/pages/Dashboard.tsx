@@ -60,7 +60,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 import { useWeather } from "@/hooks/useWeather";
 import { useMandi } from "@/hooks/useMandi";
 
-import { speakText } from "@/components/VoiceAssistant";
+import { speakText } from "@/lib/speech";
 
 export default function Dashboard() {
   const { user } = useAuth();

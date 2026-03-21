@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language, translations } from "@/lib/LanguageContext";
+import { useLanguage, Language } from "@/lib/LanguageContext";
+import { translations } from "@/lib/translations";
 
 export default function ChatPage() {
   const { t, language: globalLanguage } = useLanguage();

@@ -36,6 +36,14 @@ import { FloatingChatbot } from "./components/FloatingChatbot";
 import AgriKnowledge from "./pages/AgriKnowledge";
 import Impact from "./pages/Impact";
 import Explore from "./pages/Explore";
+import SatelliteAnalysis from "./pages/SatelliteAnalysis";
+import Community from "./pages/Community";
+import ExpertConsult from "./pages/ExpertConsult";
+import YieldPrediction from "./pages/YieldPrediction";
+import SubsidyFinder from "./pages/SubsidyFinder";
+import ToolSharing from "./pages/ToolSharing";
+import SoilLabLocator from "./pages/SoilLabLocator";
+import AgriLoanCalculator from "./pages/AgriLoanCalculator";
 
 import TechSparkAI from "./pages/TechSparkAI";
 import MarketLinkage from "./pages/MarketLinkage";
@@ -45,6 +53,11 @@ import MandiDetail from "./pages/MandiDetail";
 import { VoiceAssistant } from "./components/VoiceAssistant";
 import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
 import { LocationProvider } from "./lib/LocationContext";
+import IrrigationStats from "./pages/IrrigationStats";
+import FarmMapper from "./pages/FarmMapper";
+import FarmerFinance from "./pages/FarmerFinance";
+import FarmerMarket from "./pages/FarmerMarket";
+import VoiceNotes from "./pages/VoiceNotes";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +83,11 @@ const AppRoutes = () => {
       <Route path="/seeds" element={<SeedsBuyer />} />
       <Route path="/whatsapp-bot" element={<WhatsAppChat />} />
       <Route path="/location" element={<Location />} />
+      <Route path="/irrigation" element={<IrrigationStats />} />
+      <Route path="/farm-mapper" element={<FarmMapper />} />
+      <Route path="/finance" element={<FarmerFinance />} />
+      <Route path="/market-place" element={<FarmerMarket />} />
+      <Route path="/voice-notes" element={<VoiceNotes />} />
       <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
       <Route path="/techspark" element={<TechSparkAI />} />
       <Route path="/impact" element={<Impact />} />
@@ -82,6 +100,14 @@ const AppRoutes = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/explore" element={<Explore />} />
+      <Route path="/satellite-analysis" element={<SatelliteAnalysis />} />
+      <Route path="/community" element={<Community />} />
+      <Route path="/expert-consult" element={<ExpertConsult />} />
+      <Route path="/yield-prediction" element={<YieldPrediction />} />
+      <Route path="/subsidy-finder" element={<SubsidyFinder />} />
+      <Route path="/tool-sharing" element={<ToolSharing />} />
+      <Route path="/soil-lab-locator" element={<SoilLabLocator />} />
+      <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
       
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
