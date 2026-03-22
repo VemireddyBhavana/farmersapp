@@ -100,18 +100,15 @@ const Navbar = () => {
   ];
 
   const premiumLinks = [
-    { name: t('satelliteAnalysisTitle'), path: "/satellite-analysis", icon: Globe, desc: t('satelliteAnalysisDesc') },
-    { name: t('communityHubTitle'),     path: "/community",          icon: Users, desc: t('communityHubDesc') },
-    { name: t('expertConsultTitle'),    path: "/expert-consult",     icon: User,  desc: t('expertConsultDesc') },
-    { name: t('yieldPredictionTitle'),  path: "/yield-prediction",   icon: TrendingUp, desc: t('yieldPredictionDesc') },
-    { name: t('subsidyFinderTitle'),    path: "/subsidy-finder",     icon: FileText, desc: t('subsidyFinderDesc') },
-    { name: t('p2pToolSharingTitle'),   path: "/tool-sharing",       icon: Truck, desc: t('p2pToolSharingDesc') },
-    { name: t('soilLabTitle'),          path: "/soil-lab-locator",   icon: Microscope, desc: t('soilLabDesc') },
-    { name: t('loanCalcTitle'),         path: "/agri-loan-calculator", icon: Calculator, desc: t('loanCalcDesc') },
-    { name: t('financeTitle'),          path: "/farmer-finance",     icon: Wallet, desc: t('financeDesc') },
-    { name: t('predictPriceTitle'),     path: "/price-predictor",    icon: BarChart3, desc: t('predictPriceDesc') },
-    { name: t('d2cTitle'),              path: "/d2c-marketplace",    icon: ShoppingBag, desc: t('d2cDesc') },
-    { name: t('droneTitle'),            path: "/drone-booking",      icon: Navigation, desc: t('droneDesc') },
+    { name: "Crop Health Monitor", path: "/satellite-analysis", icon: Globe, desc: "Track crop health using satellite data." },
+    { name: "Farmer Community",    path: "/community",          icon: Users, desc: "Connect with farmers and share knowledge." },
+    { name: "Expert Help",         path: "/expert-consult",     icon: User,  desc: "Talk to certified agriculture experts." },
+    { name: "Yield Forecast",      path: "/yield-prediction",   icon: TrendingUp, desc: "Estimate your crop production using AI." },
+    { name: "Subsidy Checker",     path: "/subsidy-finder",     icon: FileText, desc: "Find government schemes easily." },
+    { name: "Tool Sharing",        path: "/tool-sharing",       icon: Truck, desc: "Share and rent farming tools nearby." },
+    { name: "Soil Test Finder",    path: "/soil-lab-locator",   icon: Microscope, desc: "Locate soil testing labs near you." },
+    { name: "Loan & EMI Calculator", path: "/agri-loan-calculator", icon: Calculator, desc: "Plan loans and calculate EMI easily." },
+    { name: "Farm Ledger",         path: "/farmer-finance",     icon: Wallet, desc: "Track expenses, sales, and profits." },
   ];
 
   const ourSolutionsLinks = [
@@ -146,7 +143,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1 flex-1 mx-4">
-            <div className="flex items-center bg-muted/40 rounded-2xl px-1.5 py-1 gap-0.5 flex-wrap">
+            <div className="flex items-center bg-muted/40 rounded-2xl px-1.5 py-1 gap-0.5 flex-nowrap overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
               {primaryLinks.map((link) => (
                 <motion.div
                   key={link.path}
@@ -347,44 +344,49 @@ const Navbar = () => {
                 </AnimatePresence>
               </DropdownMenu>
 
-              {/* Agri Intel (New features, last as requested) */}
+              {/* Smart Farming Tools (Original Layout Style) */}
               <DropdownMenu open={premiumOpen} onOpenChange={setPremiumOpen}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    ✨ Agri Intel <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
+                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap">
+                    Smart Farming Tools <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
                   </Button>
                 </DropdownMenuTrigger>
                 <AnimatePresence>
                   {premiumOpen && (
                     <DropdownMenuContent asChild forceMount align="end" sideOffset={10}>
                       <motion.div
-                        className="w-80 rounded-[2rem] p-3 dropdown-glass border-emerald-500/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
+                        className="w-72 rounded-2xl p-2 dropdown-glass border-emerald-500/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
                         initial="hidden"
                         animate="visible"
                         exit="exit"
                         variants={dropdownContainerVariants}
                       >
-                        <p className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic mb-2">Advanced Agricultural Intel</p>
-                        <div className="grid grid-cols-1 gap-1">
-                          {premiumLinks.map((item) => (
-                            <motion.div key={item.path} variants={dropdownItemVariants}>
-                              <DropdownMenuItem asChild>
-                                <Link to={item.path} className={cn(
-                                  "relative flex items-start gap-4 p-3 rounded-2xl cursor-pointer transition-all group dropdown-item-hover z-10",
-                                  location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10" : "hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
-                                )}>
-                                  <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                                    <item.icon className="h-5 w-5" />
-                                  </div>
-                                  <div className="flex-1 text-left">
-                                    <p className={cn("text-xs font-black uppercase tracking-tighter transition-colors", location.pathname === item.path ? "text-emerald-700" : "text-slate-900 dark:text-white group-hover:text-emerald-600")}>{item.name}</p>
-                                    <p className="text-[10px] font-bold text-slate-400 group-hover:text-slate-500 transition-colors uppercase tracking-tight">{item.desc}</p>
-                                  </div>
-                                </Link>
-                              </DropdownMenuItem>
-                            </motion.div>
-                          ))}
-                        </div>
+                        {premiumLinks.map((item) => (
+                          <motion.div key={item.path} variants={dropdownItemVariants}>
+                            <DropdownMenuItem asChild>
+                              <Link to={item.path} className={cn(
+                                "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10" : "hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                              )}>
+                                {location.pathname === item.path && (
+                                  <motion.div
+                                    layoutId="premium-indicator"
+                                    className="nav-indicator-pill-vertical"
+                                    initial={false}
+                                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
+                                  >
+                                    <div className="absolute inset-0 bg-emerald-500/10 rounded-lg" />
+                                  </motion.div>
+                                )}
+                                <item.icon className="h-4 w-4 text-emerald-600 mt-0.5" />
+                                <div>
+                                  <p className={cn("text-sm font-bold", location.pathname === item.path ? "text-emerald-700" : "text-foreground group-hover:text-emerald-600")}>{item.name}</p>
+                                  <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                                </div>
+                              </Link>
+                            </DropdownMenuItem>
+                          </motion.div>
+                        ))}
                       </motion.div>
                     </DropdownMenuContent>
                   )}
@@ -466,7 +468,7 @@ const Navbar = () => {
               ))}
 
               <div className="pt-2 border-t">
-                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic">✨ Agri Intel Features</p>
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic">Smart Farming Tools</p>
                 {premiumLinks.map((link) => (
                   <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
                     className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-emerald-100 text-emerald-700" : "text-muted-foreground hover:bg-muted")}>

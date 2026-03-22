@@ -1,0 +1,147 @@
+{
+  "English": {
+    "missing": [],
+    "untranslated": []
+  },
+  "Hindi": {
+    "missing": [],
+    "untranslated": []
+  },
+  "Telugu": {
+    "missing": [],
+    "untranslated": []
+  },
+  "Tamil": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Marathi": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Gujarati": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Kannada": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Malayalam": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Punjabi": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  },
+  "Bangla": {
+    "missing": [
+      "farmDetails",
+      "enterFarmData",
+      "district",
+      "selectDistrict",
+      "waitingForDetails",
+      "fillFormDesc",
+      "productionCosts",
+      "costInputDesc",
+      "expectedReturns",
+      "readyToCalculate",
+      "calcInstruction",
+      "needFunding",
+      "loanAdvisoryDesc",
+      "irrigationParameters"
+    ],
+    "untranslated": []
+  }
+}

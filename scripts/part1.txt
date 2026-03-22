@@ -1,0 +1,155 @@
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    BookOpen, Leaf, Bird, Landmark, ArrowRight,
+    CheckCircle, Sprout, Droplets, Recycle, ShieldCheck,
+    Zap, X, Thermometer, FlaskConical,
+    Shovel, Wheat, Bug, PackageOpen, ChevronDown,
+    Flower2, Star, BarChart3, Search, MessageSquare, TrendingUp,
+    LayoutDashboard, MapPin, Globe, Sparkles
+} from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
+import { cn } from "@/lib/utils";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Types
+// ─────────────────────────────────────────────────────────────────────────────
+interface KnowledgeCard {
+    id: string;
+    titleKey: string;
+    image: string;
+    summary?: {
+        climate: string;
+        water: string;
+        harvest: string;
+        profit: string;
+    };
+    bullets: string[];
+    category: string;
+    stepsPrefix?: string;
+    stepCount?: number;
+}
+
+interface StepCard {
+    title: string;
+    body: string;
+    icon: React.ElementType;
+    color: string;
+    accent: string;
+}
+
+function getStepImage(stepIndex: number, cropId: string): string {
+    const images: Record<string, string[]> = {
+        aloe: [
+            "https://images.unsplash.com/photo-1596547609652-9cf5d8d76ae8?w=800&q=80", 
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", 
+            "https://images.unsplash.com/photo-1592321675774-3de57f3ee0dc?w=800&q=80", 
+            "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80", 
+            "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", 
+            "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", 
+            "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&q=80", 
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", 
+            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", 
+            "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80", 
+        ],
+        default: [
+            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=800&q=80", 
+            "https://images.unsplash.com/photo-1530836361253-efad5cb2fe17?w=800&q=80", 
+            "https://images.unsplash.com/photo-1592321675774-3de57f3ee0dc?w=800&q=80", 
+            "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80", 
+            "https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=800&q=80", 
+            "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&q=80", 
+            "https://images.unsplash.com/photo-1530133532239-eda0f515f187?w=800&q=80", 
+            "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&q=80", 
+            "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=800&q=80", 
+            "https://images.unsplash.com/photo-1473976339452-16f057d3c019?w=800&q=80"  
+        ]
+    };
+    const cropImages = images[cropId] || images.default;
+    return cropImages[stepIndex % 10];
+}
+
+const KNOWLEDGE_SECTIONS = [
+    {
+        id: "crops",
+        titleKey: "sectionCrops",
+        icon: Sprout,
+        cards: [
+            { id: "aloe", titleKey: "aloeVeraTitle", image: "https://planetdesert.com/cdn/shop/articles/587654299891.jpg?v=1772639438", summary: { climate: "hotDry", water: "low", harvest: "10-12 Months", profit: "high" }, bullets: ["aloeBullet1", "aloeBullet2", "aloeBullet3", "aloeBullet4"], category: "Horticulture", stepsPrefix: "aloeStep", stepCount: 10 },
+            { id: "curry", titleKey: "curryLeavesTitle", image: "https://www.shutterstock.com/image-photo/fresh-organic-curry-leaves-tree-260nw-2593564315.jpg", summary: { climate: "warmHumid", water: "medium", harvest: "12-15 Months", profit: "medium" }, bullets: ["curryBullet1", "curryBullet2", "curryBullet3", "curryBullet4"], category: "Gardening", stepsPrefix: "curryStep", stepCount: 10 },
+            { id: "rice", titleKey: "riceTitle", image: "https://www.agrifarming.in/wp-content/uploads/2022/04/Boost-Rice-Yield2.jpg", summary: { climate: "warmHumid", water: "high", harvest: "4 Months", profit: "medium" }, bullets: ["riceBullet1", "riceBullet2", "riceBullet3", "riceBullet4"], category: "Agriculture", stepsPrefix: "riceStep", stepCount: 10 },
+            { id: "cotton", titleKey: "cottonTitle", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggsehAILLPTBdlDWdULNE9Fsz3SEXjAHbcg&s", summary: { climate: "warmHumid", water: "medium", harvest: "6 Months", profit: "high" }, bullets: ["cottonBullet1", "cottonBullet2", "cottonBullet3", "cottonBullet4"], category: "Agriculture", stepsPrefix: "cottonStep", stepCount: 10 },
+            { id: "tomato", titleKey: "tomatoTitle", image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=800", summary: { climate: "warmHumid", water: "medium", harvest: "3-4 Months", profit: "veryHigh" }, bullets: ["tomatoBullet1", "tomatoBullet2", "tomatoBullet3", "tomatoBullet4"], category: "Horticulture", stepsPrefix: "tomatoStep", stepCount: 10 },
+            { id: "saffron", titleKey: "indoorSaffronTitle", image: "https://static.wixstatic.com/media/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg/v1/fill/w_568,h_244,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/d4401d_9ee5e3f41e20438fb58c739fda508240~mv2.jpg", summary: { climate: "coolDry", water: "low", harvest: "1 Year", profit: "veryHigh" }, bullets: ["saffronBullet1", "saffronBullet2", "saffronBullet3", "saffronBullet4"], category: "New Age", stepsPrefix: "saffronStep", stepCount: 10 },
+        ]
+    },
+    {
+        id: "knowledge",
+        titleKey: "sectionKnowledge",
+        icon: BookOpen,
+        cards: [
+            { id: "soilPh", titleKey: "soilPhTitle", image: "https://bonnieplants.com/cdn/shop/articles/soil-in-hands_984a3870-c32e-444a-a4f1-6f4fe68223f6.jpg?v=1642541552", bullets: ["soilPhBullet1", "soilPhBullet2", "soilPhBullet3", "soilPhBullet4"], category: "Soil Science" },
+            { id: "fertility", titleKey: "fertilityTitle", image: "https://eos.com/wp-content/uploads/2021/03/cover-crops-to-preserve-soil-fertility-loss.jpg.webp", bullets: ["fertilityBullet1", "fertilityBullet2", "fertilityBullet3"], category: "Soil Science" },
+            { id: "drip", titleKey: "dripTitle", image: "https://plus.unsplash.com/premium_photo-1661818305309-dd2145095cb2?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJpcCUyMGlycmlnYXRpb258ZW58MHx8MHx8fDA%3D", bullets: ["dripBullet1", "dripBullet2", "dripBullet3"], category: "Irrigation" },
+            { id: "rotation", titleKey: "rotationTitle", image: "https://www.csuchico.edu/regenerativeagriculture/_assets/images/ra101/crop-rotation.jpg", bullets: ["rotationBullet1", "rotationBullet2", "rotationBullet3"], category: "Management" },
+            { id: "organic", titleKey: "organicTitle", image: "https://media.istockphoto.com/id/1346744481/photo/anonymous-chef-harvesting-fresh-vegetables-on-a-farm.jpg?s=612x612&w=0&k=20&c=U9h4fAi68nwVndAJW8TF-f2lFFCO2Y-XrZWA2gah1Xw=", bullets: ["organicBullet1", "organicBullet2", "organicBullet3"], category: "Sustainable" },
+        ]
+    },
+];
+
+const STEP_ICONS: Array<{ icon: React.ElementType; color: string; accent: string }> = [
+    { icon: Thermometer,    color: "bg-amber-50",   accent: "text-amber-600 bg-amber-100" },
+    { icon: Shovel,         color: "bg-orange-50",  accent: "text-orange-600 bg-orange-100" },
+    { icon: Flower2,        color: "bg-pink-50",    accent: "text-pink-600 bg-pink-100" },
+    { icon: Sprout,         color: "bg-green-50",   accent: "text-green-600 bg-green-100" },
+    { icon: Droplets,       color: "bg-blue-50",    accent: "text-blue-600 bg-blue-100" },
+    { icon: FlaskConical,   color: "bg-violet-50",  accent: "text-violet-600 bg-violet-100" },
+    { icon: Bug,            color: "bg-red-50",     accent: "text-red-600 bg-red-100" },
+    { icon: Wheat,          color: "bg-yellow-50",  accent: "text-yellow-700 bg-yellow-100" },
+    { icon: PackageOpen,    color: "bg-teal-50",    accent: "text-teal-600 bg-teal-100" },
+    { icon: Star,           color: "bg-indigo-50",  accent: "text-indigo-600 bg-indigo-100" },
+];
+
+const CATEGORY_COLORS: Record<string, string> = {
+    Horticulture: "bg-pink-100 text-pink-700",
+    Agriculture:  "bg-green-100 text-green-700",
+    Gardening:    "bg-lime-100 text-lime-700",
+    "New Age":    "bg-violet-100 text-violet-700",
+    "Soil Science":"bg-orange-100 text-orange-700",
+    Irrigation:   "bg-blue-100 text-blue-700",
+    Management:   "bg-teal-100 text-teal-700",
+    Sustainable:  "bg-emerald-100 text-emerald-700",
+};
+
+function getFarmerTip(stepIndex: number): string {
+    const tips = [
+        "Monitor temperature daily during early growth. Simple thermometers placed in the field can save your entire crop.",
+        "Always test your soil before adding amendments. A soil test card costs very little but saves thousands in wasted inputs.",
+        "Use certified planting material from government nurseries to ensure disease-free, high-yield varieties.",
+        "Plant in the evening hours to reduce transplanting shock and improve survival by up to 30%.",
+        "Install moisture sensors or use the finger-test: push your finger 2 inches into soil — if dry, irrigate.",
+        "Apply fertilizers in splits — never all at once. Split applications improve uptake by 40% and reduce waste.",
+        "Inspect crops at dawn for pest activity. Early detection allows lower-cost organic interventions.",
+        "Harvest in cool morning hours to preserve quality. Avoid harvesting after rain to prevent post-harvest rots.",
+        "Dry produce to proper moisture levels before storage. Wet grain in storage leads to total loss.",
+        "Keep records of every input and output. Farmers who maintain records earn 20–30% more over time.",
+    ];
+    return tips[stepIndex % tips.length];
+}
+
+function getBestPractices(stepIndex: number): string[] {
+    const practices = [
+        ["Record daily temperature extremes", "Use shade nets during extreme heat", "Plant wind-breaks on the field border"],
+        ["Plough to 20–25 cm depth for aeration", "Add organic matter before each season", "Avoid compaction by limiting heavy machinery"],
+        ["Purchase only certified planting material", "Inspect for diseases before planting", "Store material in cool, dry conditions"],
+        ["Maintain uniform row spacing for machinery", "Inoculate legume seeds with Rhizobium", "Use transplanting tools for uniform depth"],
+        ["Water early morning or late evening only", "Mulch to retain moisture", "Check irrigation pipes weekly"],
+        ["Follow soil test recommendations strictly", "Prefer organic over chemical fertilizers", "Apply micronutrients as foliar spray"],
+        ["Use yellow sticky traps for monitoring", "Release biological agents like Trichogramma", "Rotate pesticides to avoid resistance"],
+        ["Test grain moisture before harvest (ideal 14–18%)", "Use sharp blades to minimise crop damage", "Harvest before rains to avoid field losses"],
+        ["Clean storage units before use", "Use hermetically sealed bags for grain", "Monitor stored produce weekly"],
+        ["Keep field diary of all operations", "Take photos of pest symptoms", "Share knowledge with neighbouring farmers"],
+    ];
+    return practices[stepIndex % practices.length];
+}
