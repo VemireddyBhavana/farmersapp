@@ -54,7 +54,7 @@ new_keys = {
         "mspGovtPrice": "MSP & Govt Price Info",
         "mspGovtPriceDesc": "Current Minimum Support Prices for your crops.",
         "mspWheat": "MSP Wheat (2024-25)",
-        "mspPaddy": "MSP Paddy (2024-25)",
+        "mspPaddy: "MSP Paddy (2024-25)",
         "mspCotton": "MSP Cotton (2024-25)",
         "agriVideoLearning": "Agri Video Learning Center",
         "agriVideoDesc": "Master farming with expert video tutorials.",
@@ -110,7 +110,7 @@ new_keys = {
         "cropVarietyDatabase": "फसल किस्म डेटाबेस",
         "cropVarietyDesc": "उच्च उपज वाली फसल किस्मों का विस्तृत डेटाबेस।",
         "farmTaskManager": "कृषि कार्य प्रबंधक",
-        "farmTaskDesc": "अपनी दैनिक और मौসमी कृषि गतिविधियों को व्यवस्थित करें।",
+        "farmTaskDesc": "अपनी दैनिक और मौसमी कृषि गतिविधियों को व्यवस्थित करें।",
         "mspGovtPrice": "एमएसपी एवं सरकारी मूल्य जानकारी",
         "mspGovtPriceDesc": "आपकी फसलों के लिए वर्तमान न्यूनतम समर्थन मूल्य।",
         "mspWheat": "एमएसपी गेहूं (2024-25)",
@@ -159,7 +159,7 @@ new_keys = {
         "weatherAlertTitle": "చర్య అవసరం!",
         "heatwaveWarning": "తీవ్రమైన ఎండల హెచ్చరిక: నేలను తేమగా ఉంచండి.",
         "frostWarning": "మంచు హెచ్చరిక: చిన్న మొక్కలను రక్షించండి.",
-        "storagePostHarvest": "నిల్వ & కోత అనంతర గೈడ్",
+        "storagePostHarvest": "నిల్వ & కోత అనంతర గైడ్",
         "storagePostHarvestDesc": "సరైన నిల్వతో లాభాలను పెంచుకోండి.",
         "grainStorage": "ధాన్యపు నిల్వ",
         "grainStorageDesc": "పురుగుల నుండి రక్షించడానికి ఆధునిక గిడ్డంగులు.",
@@ -239,7 +239,7 @@ new_keys = {
         "agriVideoLearning": "விவசாய வீடியோ கற்றல் மையம்",
         "agriVideoDesc": "நிபுணர் வீடியோக்கள் மூலம் விவசாயத்தில் தேர்ச்சி பெறுங்கள்.",
         "subsidyTracker": "விவசாய மானிய கண்காணிப்பு",
-        "subsidyTrackerDesc": "உங்கள் விண்ணப்பம் এবং கட்டண நிலையைத் தெரிந்துகொள்ளுங்கள்.",
+        "subsidyTrackerDesc": "உங்கள் விண்ணப்பம் மற்றும் கட்டண நிலையைத் தெரிந்துகொள்ளுங்கள்.",
         "applicationStatus": "விண்ணப்ப நிலை",
         "paymentReceived": "கட்டணம் பெறப்பட்டது"
     },
@@ -273,7 +273,7 @@ new_keys = {
         "harvesterInstr": "हार्वेस्टर सूचना",
         "harvesterDesc": "एकाच टप्प्यात कार्यक्षम कापणी आणि मळणी.",
         "sprayerInstr": "स्प्रेअर सूचना",
-        "sprayerDesc": "कीटकनाशके आणि खतांची समान फવારणी.",
+        "sprayerDesc": "कीटकनाशके आणि खतांची समान फवारणी.",
         "extremeWeatherAlerts": "हवामान इशारा",
         "extremeWeatherDesc": "वादळ, उष्णतेची लाट आणि थंडीसाठी रिअल-टाइम अलर्ट.",
         "weatherAlertTitle": "कारवाई आवश्यक!",
@@ -290,7 +290,7 @@ new_keys = {
         "cropVarietyDatabase": "पीक वाण डेटाबेस",
         "cropVarietyDesc": "जास्त उत्पन्न देणाऱ्या पीक वाणांची माहिती.",
         "farmTaskManager": "शेती कार्य व्यवस्थापक",
-        "farmTaskDesc": "तुमच्या दैनंदিন आणि हंगामाच्या शेती कार्यांचे नियोजन करा.",
+        "farmTaskDesc": "तुमच्या दैनंदिन आणि हंगामाच्या शेती कार्यांचे नियोजन करा.",
         "mspGovtPrice": "MSP आणि सरकारी दर माहिती",
         "mspGovtPriceDesc": "तुमच्या पिकांसाठी सध्याचे किमान आधारभूत दर.",
         "mspWheat": "MSP गहू (2024-25)",
@@ -433,13 +433,13 @@ new_keys = {
         "zaidCrops": "സെയ്ദ് വിളകൾ",
         "zaidCropsDesc": "മാർച്ച്-ജൂൺ മാസങ്ങളിൽ കൃഷി ചെയ്യുന്ന വേനൽക്കാല വിളകൾ. (ഉദാ: തണ്ണിമത്തൻ, വെള്ളരിക്ക)",
         "waterManagementGuide": "ജല പരിപാലന ഗൈഡ്",
-        "waterManagementDesc": "നവീന ജലസേചന രീതികളും ജലസംരക്ഷണ വിദ്യകളും.",
+        "waterManagementDesc": "നவீன ജലസേചന രീതികളും ജലസംരക്ഷണ വിദ്യകളും.",
         "dripIrrigation": "തുള്ളി നന",
         "dripIrrigationDesc": "വേരുകളിൽ നേരിട്ട് നനയ്ക്കുന്നു, 50% വരെ ജലം ലാഭിക്കാം.",
         "sprinklerIrrigation": "സ്പ്രിംഗ്ലർ നന",
         "sprinklerIrrigationDesc": "മഴ പോലെ നനയ്ക്കുന്നു, ഒരേപോലെ വെള്ളം ലഭിക്കാൻ ഉത്തമം.",
         "rainwaterHarvesting": "മഴവെള്ള സംഭരണം",
-        "rainwaterHarvestingDesc": "കാർഷിക ആവശ്യങ്ങൾക്കായി മഴവെള്ളം ശേഖരിക്കുന്നു.",
+        "rainwaterHarvestingDesc": "കൃഷി ആവശ്യങ്ങൾക്കായി മഴവെള്ളം ശേഖരിക്കുന്നു.",
         "fertilizerNutrientGuide": "വളവും പോഷകങ്ങളും ഗൈഡ്",
         "fertilizerNutrientDesc": "മെച്ചപ്പെട്ട വിളവിനായി ശരിയായ പോഷണം.",
         "npkBalance": "NPK സന്തുലിതാവസ്ഥ",
@@ -447,7 +447,7 @@ new_keys = {
         "nutrientDeficiency": "പോഷക കുറവ്",
         "nutrientDeficiencyDesc": "പോഷക കുറവുകൾ തിരിച്ചറിയുകയും പരിഹരിക്കുകയും ചെയ്യാം.",
         "farmMachineryGuide": "കാർഷിക യന്ത്ര ഗൈഡ്",
-        "farmMachineryDesc": "നവീന കാർഷിക യന്ത്രങ്ങൾ പ്രവർത്തിപ്പിക്കാനുള്ള നിർദ്ദേശങ്ങൾ.",
+        "farmMachineryDesc": "നவீன കാർഷിക യന്ത്രങ്ങൾ പ്രവർത്തിപ്പിക്കാനുള്ള നിർദ്ദേശങ്ങൾ.",
         "seedDrillInstr": "സീഡ് ഡ്രിൽ നിർദ്ദേശങ്ങൾ",
         "seedDrillDesc": "കൃത്യമായ ആഴത്തിൽ വിത്ത് പാകാൻ സഹായിക്കുന്നു.",
         "harvesterInstr": "ഹാർവെസ്റ്റർ നിർദ്ദേശങ്ങൾ",
@@ -479,7 +479,7 @@ new_keys = {
         "agriVideoLearning": "അഗ്രി വീഡിയോ ലേണിംഗ് സെന്റർ",
         "agriVideoDesc": "വീഡിയോ ട്യൂട്ടോറിയലിലൂടെ കൃഷി പഠിക്കാം.",
         "subsidyTracker": "സബ്സിഡി ട്രാക്കർ",
-        "subsidyTrackerDesc": "അപേക്ഷയുടെയും പെയ്മെന്റത്തിന്റെയും നില അറിയാം.",
+        "subsidyTrackerDesc": "അപേക്ഷയുടെയും പെയ്മെന്റിന്റെയും നില അറിയാം.",
         "applicationStatus": "അപേക്ഷയുടെ നില",
         "paymentReceived": "പെയ്മെന്റ് ലഭിച്ചു"
     },
@@ -502,7 +502,7 @@ new_keys = {
         "rainwaterHarvestingDesc": "ਭਵਿੱਖ ਦੀ ਖੇਤੀ ਲਈ ਮੀਂਹ ਦੇ ਪਾਣੀ ਨੂੰ ਇਕੱਠਾ ਕਰਨਾ।",
         "fertilizerNutrientGuide": "ਖਾਦ ਅਤੇ ਪੋਸ਼ਟਿਕ ਤੱਤ ਗਾਈਡ",
         "fertilizerNutrientDesc": "ਵਧੀਆ ਝਾੜ ਲਈ ਸਹੀ ਪੋਸ਼ਣ।",
-        "npkBalance": "NPK ਸੰਤੁલਨ",
+        "npkBalance": "NPK ਸੰਤੁਲਨ",
         "npkBalanceDesc": "ਨਾਈਟ੍ਰੋਜਨ, ਫਾਸਫੋਰਸ ਅਤੇ ਪੋਟਾਸ਼ੀਅਮ ਦੀਆਂ ਲੋੜਾਂ ਨੂੰ ਸਮਝਣਾ।",
         "nutrientDeficiency": "ਪੋਸ਼ਟਿਕ ਤੱਤਾਂ ਦੀ ਕਮੀ",
         "nutrientDeficiencyDesc": "ਪੌਦਿਆਂ ਵਿੱਚ ਪੋਸ਼ਟਿਕ ਤੱਤਾਂ ਦੀ ਕਮੀ ਦੀ ਪਛਾਣ ਕਰੋ।",
@@ -530,7 +530,7 @@ new_keys = {
         "cropVarietyDatabase": "ਫਸਲ ਦੀਆਂ ਕਿਸਮਾਂ ਦਾ ਡੇਟਾਬੇਸ",
         "cropVarietyDesc": "ਵੱਧ ਝਾੜ ਦੇਣ ਵਾਲੀਆਂ ਫਸਲਾਂ ਦੀਆਂ ਕਿਸਮਾਂ ਦੀ ਜਾਣਕਾਰੀ।",
         "farmTaskManager": "ਖੇਤੀ ਕਾਰਜ ਪ੍ਰਬੰਧਕ",
-        "farmTaskDesc": "ਆਪਣੀਆਂ ਰੋਜ਼ਾਨਾ ਅਤੇ ਮੌਸਮੀ ਗਤੀਵਿਧੀਆਂ ਦੀ ਯੋਜನಾ ਬਣਾਓ।",
+        "farmTaskDesc": "ਆਪਣੀਆਂ ਰੋਜ਼ਾਨਾ ਅਤੇ ਮੌਸਮੀ ਗਤੀਵਿਧੀਆਂ ਦੀ ਯੋਜਨਾ ਬਣਾਓ।",
         "mspGovtPrice": "MSP ਅਤੇ ਸਰਕਾਰੀ ਕੀਮਤਾਂ",
         "mspGovtPriceDesc": "ਤੁਹਾਡੀਆਂ ਫਸਲਾਂ ਲਈ ਮੌਜੂਦਾ ਘੱਟੋ-ਘੱਟ ਸਮਰਥਨ ਮੁੱਲ।",
         "mspWheat": "MSP ਕਣਕ (2024-25)",
@@ -538,7 +538,7 @@ new_keys = {
         "mspCotton": "MSP ਕਪਾਹ (2024-25)",
         "agriVideoLearning": "ਖੇਤੀ ਵੀਡੀਓ ਲਰਨਿੰਗ ਸੈਂਟਰ",
         "agriVideoDesc": "ਮਾਹਰ ਵੀਡੀਓਜ਼ ਰਾਹੀਂ ਖੇਤੀਬਾੜੀ ਸਿੱਖੋ।",
-        "subsidyTracker": "ਖੇਤੀਬਾੜੀ ਸਬਸਿಡಿ ਟ੍ਰੈਕਰ",
+        "subsidyTracker": "ਖੇਤੀਬਾੜੀ ਸਬਸਿਡੀ ਟ੍ਰੈਕਰ",
         "subsidyTrackerDesc": "ਆਪਣੀ ਅਰਜ਼ੀ ਅਤੇ ਭੁਗਤਾਨ ਦੀ ਸਥਿਤੀ ਦੇਖੋ।",
         "applicationStatus": "ਅਰਜ਼ੀ ਦੀ ਸਥਿਤੀ",
         "paymentReceived": "ਭੁਗਤਾਨ ਪ੍ਰਾਪਤ ਹੋਇਆ"
@@ -612,16 +612,21 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 # Iterate through each language and add the keys
 for lang, keys in new_keys.items():
+    # Only process languages already in the file
     if lang + ": {" in content:
+        # Find the start of the language block
         lang_start_pat = rf"{lang}:\s*{{"
         start_match = re.search(lang_start_pat, content)
         if start_match:
+            # Prepare the block of keys to insert
             insert_str = ""
             for k, v in keys.items():
-                if f"{k}:" not in content[start_match.start():start_match.start() + 5000]:
+                # Avoid duplicates
+                if f"{k}:" not in content[start_match.start():start_match.start() + 5000]: # Look ahead a bit
                      insert_str += f'    {k}: "{v}",\n'
             
             if insert_str:
+                # Insert after the opening brace
                 content = content[:start_match.end()] + "\n" + insert_str + content[start_match.end():]
 
 with open(file_path, "w", encoding="utf-8") as f:
