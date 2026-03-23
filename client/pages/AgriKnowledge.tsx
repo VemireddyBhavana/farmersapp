@@ -149,51 +149,6 @@ const SUCCESS_PROTOCOLS_DATA: ProtocolGuide[] = [
   }
 ];
 
-// 3. Industry Trends Data
-interface IndustryTrend {
-  id: string;
-  title: string;
-  summary: string;
-  description: string;
-  benefits: string[];
-  usage: string;
-}
-
-const INDUSTRY_TRENDS_DATA: IndustryTrend[] = [
-  {
-    id: "precision",
-    title: "Precision Smart Farming",
-    summary: "High-tech sensors & IoT",
-    description: "Using IoT sensors for real-time monitoring of soil moisture, temperature, and nutrient levels directly from your smartphone.",
-    benefits: ["Optimized inputs", "Reduced waste", "Higher precision"],
-    usage: "Install sensors 30cm deep across different field zones for best data mapping."
-  },
-  {
-    id: "drones",
-    title: "Agri-Drone Delivery",
-    summary: "Automated aerial spraying",
-    description: "UAVs equipped with multi-spectral cameras to detect crop stress and spray pesticides only where needed.",
-    benefits: ["80% faster spraying", "Better coverage", "Zero soil compaction"],
-    usage: "Schedule flights early morning on low-wind days for maximum spray efficiency."
-  },
-  {
-    id: "climate",
-    title: "Climate-Resilient Seeds",
-    summary: "Drought & heat tolerant",
-    description: "New hybrid varieties designed to maintain high yields even under extreme heat or restricted water conditions.",
-    benefits: ["Stable productivity", "Heat resistance", "Risk mitigation"],
-    usage: "Purchase only from certified labs and test a small patch before full-scale use."
-  }
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
 // --- Main Component ---
 
 export default function AgriKnowledgeHub() {
@@ -269,10 +224,7 @@ export default function AgriKnowledgeHub() {
     });
   }, [cropSearch, activeCropCategory]);
 
-  // States: Protocol Modal
   const [selectedProtocol, setSelectedProtocol] = useState<ProtocolGuide | null>(null);
-
-  // States: Industry Trends
   const [activeTrendId, setActiveTrendId] = useState<string | null>(null);
 
   // --- Sub-Components (Internal) ---
@@ -292,11 +244,10 @@ export default function AgriKnowledgeHub() {
   return (
     <div className="min-h-screen bg-slate-50/50 py-16 scroll-smooth overflow-x-hidden">
       
-      {/* 🚀 Main Header */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 mb-20 text-center">
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-block px-4 py-1.5 bg-white text-emerald-700 text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6 shadow-sm border border-emerald-100/50">
-            Professional Farmer Tools
+            Educational Resources
           </span>
           <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-6 leading-tight">
             Agri Knowledge Hub
@@ -309,438 +260,189 @@ export default function AgriKnowledgeHub() {
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-32 mb-32">
         
-        {/* --- SECTION 1: AI Crop Planning & SECTION 2: P&L Calculator (Dual Grid) --- */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* 🎯 1. AI Crop Planning */}
           <div className="space-y-6">
-            <SectionHeader icon={Leaf} title="AI Crop Planning" subtitle="Data-driven seasonal crop selection powered by agronomy models" />
+            <SectionHeader 
+              icon={Leaf} 
+              title="AI Crop Planning" 
+              subtitle="Data-driven seasonal crop selection powered by agronomy models" 
+            />
             <FeatureCard className="p-8">
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Soil Condition</label>
-                    <select className="w-full rounded-2xl border border-slate-200 text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropSoil} onChange={e => setCropSoil(e.target.value)}>
-                      <option value="">Select Soil Type</option>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Select Soil Type</label>
+                    <select className="w-full rounded-2xl border border-slate-200 text-sm py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropSoil} onChange={e => setCropSoil(e.target.value)}>
+                      <option value="">Select Soil Type...</option>
                       <option value="Black">Medium-Deep Black Soil</option>
                       <option value="Red">Laterite Red Soil</option>
                       <option value="Sandy">Alluvial Sandy Soil</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Current Season</label>
-                    <select className="w-full rounded-2xl border border-slate-200 text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropSeason} onChange={e => setCropSeason(e.target.value)}>
-                      <option value="">Select Season</option>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Select Season</label>
+                    <select className="w-full rounded-2xl border border-slate-200 text-sm py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropSeason} onChange={e => setCropSeason(e.target.value)}>
+                      <option value="">Select Season...</option>
                       <option value="Kharif">Kharif (Monsoon)</option>
                       <option value="Rabi">Rabi (Winter)</option>
                       <option value="Summer">Summer (Zaid)</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Water Access</label>
-                    <select className="w-full rounded-2xl border border-slate-200 text-sm focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropWater} onChange={e => setCropWater(e.target.value)}>
-                      <option value="">Water Availability</option>
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Water Availability</label>
+                    <select className="w-full rounded-2xl border border-slate-200 text-sm py-3.5 px-5 bg-white outline-none transition-all font-bold text-slate-700" value={cropWater} onChange={e => setCropWater(e.target.value)}>
+                      <option value="">Water Availability...</option>
                       <option value="Low">Low (Rain-fed)</option>
                       <option value="Medium">Moderate (Canal/Well)</option>
                       <option value="High">High (Unlimited)</option>
                     </select>
                   </div>
                 </div>
-                <Button onClick={getCropSuggestion} disabled={isPlanning || !cropSoil || !cropSeason || !cropWater} className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg rounded-2xl shadow-lg shadow-emerald-200 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center">
-                  {isPlanning ? <Loader2 className="w-6 h-6 animate-spin" /> : "Generate Intelligence Report"}
+                <Button onClick={getCropSuggestion} disabled={isPlanning || !cropSoil || !cropSeason || !cropWater} className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg rounded-2xl shadow-lg transition-all active:scale-[0.98]">
+                  {isPlanning ? <Loader2 className="w-6 h-6 animate-spin mx-auto" /> : "Generate Intelligence Report"}
                 </Button>
-
-                <AnimatePresence mode="wait">
-                  {cropSuggestion && !isPlanning && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-emerald-50 border border-emerald-100 p-6 rounded-[28px] relative overflow-hidden ring-1 ring-emerald-500/10 shadow-inner">
-                       <div className="relative z-10 flex gap-4">
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-sm ring-1 ring-emerald-100 flex-shrink-0">
-                            {cropSuggestion.crop.includes("Cotton") ? "🌱" : cropSuggestion.crop.includes("Groundnut") ? "🥜" : cropSuggestion.crop.includes("Watermelon") ? "🍉" : "🌾"}
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Recommended Cultivation</p>
-                            <h4 className="text-2xl font-black text-slate-900 mb-3">{cropSuggestion.crop}</h4>
-                            <p className="text-sm text-emerald-900/70 font-medium leading-relaxed bg-white/50 p-4 rounded-xl border border-emerald-100">
-                              {cropSuggestion.tip}
-                            </p>
-                          </div>
-                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {cropSuggestion && !isPlanning && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-emerald-50 border border-emerald-100 p-6 rounded-[28px] mt-4">
+                     <h4 className="text-2xl font-black text-slate-900 mb-3">{cropSuggestion.crop}</h4>
+                     <p className="text-sm text-emerald-900/70 font-medium leading-relaxed bg-white/50 p-4 rounded-xl border border-emerald-100">{cropSuggestion.tip}</p>
+                  </motion.div>
+                )}
               </div>
             </FeatureCard>
           </div>
 
           {/* 💰 2. Profit & Loss Calculator */}
           <div className="space-y-6">
-            <SectionHeader icon={Calculator} title="P&L Performance" subtitle="Real-time financial analysis tool for precision farming ROI" />
+            <SectionHeader 
+              icon={Calculator} 
+              title="P&L Performance" 
+              subtitle="Real-time financial analysis tool for precision farming ROI" 
+            />
             <FeatureCard className="p-8">
               <div className="space-y-5">
-                 <div className="space-y-4">
-                    <div className="relative group/input">
-                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm transition-colors group-focus-within/input:text-emerald-500">₹</span>
-                       <input type="number" placeholder="Fixed Capital Investment" className="w-full rounded-2xl border border-slate-200 py-3.5 pl-9 pr-6 text-sm font-bold outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500" value={investment} onChange={e => setInvestment(e.target.value)} />
-                    </div>
-                    <div className="relative group/input">
-                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm transition-colors group-focus-within/input:text-emerald-500">₹</span>
-                       <input type="number" placeholder="Direct Operating Expenses" className="w-full rounded-2xl border border-slate-200 py-3.5 pl-9 pr-6 text-sm font-bold outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500" value={expenses} onChange={e => setExpenses(e.target.value)} />
-                    </div>
-                    <div className="relative group/input">
-                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm transition-colors group-focus-within/input:text-emerald-500">₹</span>
-                       <input type="number" placeholder="Gross Projected Revenue" className="w-full rounded-2xl border border-slate-200 py-3.5 pl-9 pr-6 text-sm font-bold outline-none transition-all focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500" value={revenue} onChange={e => setRevenue(e.target.value)} />
-                    </div>
-                 </div>
-
-                 <Button onClick={calculateProfit} disabled={!isCalcValid} className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white font-black text-lg rounded-2xl shadow-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
-                   Analyze Fiscal ROI
-                 </Button>
-
-                 <AnimatePresence mode="wait">
-                   {calcError ? (
-                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3">
-                       <AlertCircle className="w-5 h-5 text-red-500" />
-                       <p className="text-red-700 text-xs font-bold leading-tight">{calcError}</p>
-                     </motion.div>
-                   ) : profitResult !== null ? (
-                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={cn(
-                       "p-6 rounded-[32px] border ring-1 transition-all shadow-inner text-center",
-                       profitResult >= 0 ? "bg-emerald-50 border-emerald-200 ring-emerald-500/10" : "bg-red-50 border-red-200 ring-red-500/10"
-                     )}>
-                        <p className={cn("text-[10px] font-black uppercase tracking-widest mb-1", profitResult >= 0 ? "text-emerald-600" : "text-red-600")}>
-                          Net Operating Margin
-                        </p>
-                        <p className={cn("text-4xl font-black mb-3", profitResult >= 0 ? "text-emerald-900" : "text-red-900")}>
-                          ₹ {Math.abs(profitResult).toLocaleString('en-IN')}
-                        </p>
-                        <span className={cn(
-                          "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-2",
-                          profitResult >= 0 ? "bg-emerald-600 text-white" : "bg-red-600 text-white"
-                        )}>
-                          {profitResult >= 0 ? <ShieldCheck className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
-                          {profitResult >= 0 ? "Favorable Growth" : "Deficit Warning"}
-                        </span>
-                     </motion.div>
-                   ) : null}
-                 </AnimatePresence>
+                <div className="space-y-4">
+                  <input type="number" placeholder="Fixed Capital Investment" className="w-full rounded-2xl border border-slate-200 py-3.5 px-6 text-sm font-bold outline-none" value={investment} onChange={e => setInvestment(e.target.value)} />
+                  <input type="number" placeholder="Direct Operating Expenses" className="w-full rounded-2xl border border-slate-200 py-3.5 px-6 text-sm font-bold outline-none" value={expenses} onChange={e => setExpenses(e.target.value)} />
+                  <input type="number" placeholder="Gross Projected Revenue" className="w-full rounded-2xl border border-slate-200 py-3.5 px-6 text-sm font-bold outline-none" value={revenue} onChange={e => setRevenue(e.target.value)} />
+                </div>
+                <Button onClick={calculateProfit} disabled={!isCalcValid} className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white font-black text-lg rounded-2xl">Analyze Fiscal ROI</Button>
+                {profitResult !== null && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className={cn("p-6 rounded-[32px] border text-center mt-4", profitResult >= 0 ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200")}>
+                    <p className={cn("text-4xl font-black", profitResult >= 0 ? "text-emerald-900" : "text-red-900")}>₹ {Math.abs(profitResult).toLocaleString('en-IN')}</p>
+                    <span className="text-[10px] font-black uppercase tracking-widest mt-2 block">{profitResult >= 0 ? "Favorable Growth" : "Deficit Warning"}</span>
+                  </motion.div>
+                )}
               </div>
             </FeatureCard>
           </div>
-        </motion.div>
+        </div>
 
-        {/* --- SECTION 3: Nutrient Optimization --- */}
+        {/* 🧪 3. Nutrient Optimization */}
         <div className="space-y-6">
-          <SectionHeader icon={Beaker} title="Nutrient Optimization" subtitle="Precise fertilization roadmap tailored to your specific soil composition" />
+          <SectionHeader 
+            icon={Beaker} 
+            title="Nutrient Optimization" 
+            subtitle="Precise fertilization roadmap tailored to your specific soil composition" 
+          />
           <FeatureCard className="p-8 max-w-2xl">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 pl-1">Primary Soil Classification</label>
-                <select className="w-full rounded-2xl border border-slate-200 py-3.5 px-6 text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all" value={fertSoil} onChange={e => setFertSoil(e.target.value)}>
-                  <option value="">Identify Soil Character...</option>
-                  <option value="Black">Medium-Deep Black Soil</option>
-                  <option value="Red">Laterite Red Soil</option>
-                  <option value="Sandy">Alluvial Sandy Soil</option>
-                </select>
-              </div>
-
-              <AnimatePresence mode="wait">
-                {fertSoil ? (
-                  <motion.div key={fertSoil} initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div className="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm">
-                        <p className="text-[10px] font-black text-emerald-600 uppercase mb-2">Suitable Companion</p>
-                        <p className="text-xl font-black text-slate-900">{fertMap[fertSoil].crop}</p>
-                     </div>
-                     <div className="bg-white border border-slate-100 p-5 rounded-2xl shadow-sm">
-                        <p className="text-[10px] font-black text-emerald-600 uppercase mb-2">Fertilizer Protocol</p>
-                        <p className="text-xl font-black text-slate-900">{fertMap[fertSoil].fertilizer}</p>
-                     </div>
-                     <div className="col-span-full bg-slate-900 p-5 rounded-2xl shadow-xl">
-                        <div className="flex items-center gap-3 mb-2 text-emerald-400">
-                           <Lightbulb className="w-5 h-5" />
-                           <p className="text-[10px] font-black uppercase tracking-widest">Management Strategy</p>
-                        </div>
-                        <p className="text-slate-300 font-medium text-sm leading-relaxed">{fertMap[fertSoil].tip}</p>
-                     </div>
-                  </motion.div>
-                ) : (
-                  <div className="text-center py-10 border-2 border-dashed border-slate-200 rounded-3xl">
-                    <p className="text-sm font-bold text-slate-400">Enter soil data to generate nutrient roadmap</p>
-                  </div>
-                )}
-              </AnimatePresence>
-            </div>
+            <select className="w-full rounded-2xl border border-slate-200 py-3.5 px-6 text-sm font-bold outline-none" value={fertSoil} onChange={e => setFertSoil(e.target.value)}>
+              <option value="">Select Soil Type...</option>
+              <option value="Black">Medium-Deep Black Soil</option>
+              <option value="Red">Laterite Red Soil</option>
+              <option value="Sandy">Alluvial Sandy Soil</option>
+            </select>
+            {fertSoil && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div className="bg-white border p-5 rounded-2xl shadow-sm"><p className="text-[10px] font-black text-emerald-600 uppercase mb-2">Suitable Crop</p><p className="text-xl font-black text-slate-900">{fertMap[fertSoil].crop}</p></div>
+                <div className="bg-white border p-5 rounded-2xl shadow-sm"><p className="text-[10px] font-black text-emerald-600 uppercase mb-2">Fertilizer</p><p className="text-xl font-black text-slate-900">{fertMap[fertSoil].fertilizer}</p></div>
+                <div className="col-span-full bg-slate-900 p-5 rounded-2xl text-slate-300 text-sm font-medium">{fertMap[fertSoil].tip}</div>
+              </motion.div>
+            )}
           </FeatureCard>
         </div>
 
-        {/* --- SECTION 4: Visual Crop Guides --- */}
+        {/* 🌾 4. Visual Crop Guides */}
         <div className="space-y-8">
-          <SectionHeader icon={BookOpen} title="Visual Crop Guides" subtitle="High-yield growing roadmaps with image-driven step-by-step learning" />
-          
+          <SectionHeader 
+            icon={BookOpen} 
+            title="Visual Crop Guides" 
+            subtitle="High-yield growing roadmaps with image-driven step-by-step learning" 
+          />
           <div className="flex flex-col md:flex-row gap-6">
             <div className="relative flex-1 group">
-               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-600 transition-colors" />
-               <input 
-                 type="text" 
-                 placeholder="Search cultivation library..." 
-                 className="w-full rounded-2xl border border-slate-200 py-4 pl-14 pr-6 text-sm font-bold outline-none focus:ring-4 focus:ring-emerald-500/5 focus:border-emerald-500 bg-white transition-all shadow-sm"
-                 value={cropSearch} onChange={e => setCropSearch(e.target.value)}
-               />
-            </div>
-            <div className="flex bg-white p-1.5 rounded-2xl shadow-sm border border-slate-100 overflow-x-auto no-scrollbar gap-1">
-               {CROP_CATEGORIES.map(cat => (
-                 <button key={cat} onClick={() => setActiveCropCategory(cat)} className={cn("px-6 py-2.5 text-xs font-black rounded-xl transition-all whitespace-nowrap uppercase tracking-widest", activeCropCategory === cat ? "bg-emerald-600 text-white shadow-lg shadow-emerald-100 rotate-1 scale-105" : "text-slate-500 hover:bg-slate-50")}>
-                   {cat}
-                 </button>
-               ))}
+               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+               <input type="text" placeholder="Search cultivation library..." className="w-full rounded-2xl border border-slate-200 py-4 pl-14 pr-6 text-sm font-bold outline-none bg-white shadow-sm" value={cropSearch} onChange={e => setCropSearch(e.target.value)} />
             </div>
           </div>
-
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <AnimatePresence mode="popLayout">
-              {isGridLoading ? (
-                Array.from({ length: 4 }).map((_, i) => (
-                  <motion.div key={i} className="h-72 rounded-[32px] bg-white border border-slate-100 animate-pulse" />
-                ))
-              ) : (
-                filteredCrops.map((crop, idx) => (
-                  <motion.div key={crop.id} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} transition={{ delay: idx * 0.05 }} className="group" onClick={() => setSelectedCropGuide(crop)}>
-                     <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-900/10 hover:-translate-y-2 cursor-pointer flex flex-col h-full ring-1 ring-slate-100">
-                        <div className="h-48 overflow-hidden relative">
-                           <img src={crop.image} alt={crop.name} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                           {crop.tag && (
-                             <span className={cn("absolute top-5 left-5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest z-10 shadow-sm flex items-center gap-1.5", crop.tag === "Popular" ? "bg-amber-400 text-amber-950" : "bg-emerald-600 text-white")}>
-                               {crop.tag === "Popular" && <Star className="w-3 h-3 fill-amber-950" />} {crop.tag}
-                             </span>
-                           )}
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                        </div>
-                        <div className="p-6 flex-1 flex flex-col">
-                           <span className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.1em] mb-2">{crop.category}</span>
-                           <h3 className="text-xl font-black text-slate-900 mb-6">{crop.name} Cultivation</h3>
-                           <div className="mt-auto flex items-center justify-between text-emerald-600">
-                              <span className="text-xs font-black uppercase tracking-widest">Guide Details</span>
-                              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                           </div>
-                        </div>
-                     </div>
-                  </motion.div>
-                ))
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* --- SECTION 5: Success Protocols (Visual) --- */}
-        <div className="space-y-8">
-           <SectionHeader icon={ShieldCheck} title="Success Protocols" subtitle="Operational blueprints for maximum farm efficiency and risk mitigation" />
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {SUCCESS_PROTOCOLS_DATA.map((proto, idx) => (
-                <motion.div key={proto.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.1 }} className="group" onClick={() => setSelectedProtocol(proto)}>
-                  <div className="bg-white rounded-[32px] border border-slate-100 shadow-sm p-2 hover:shadow-xl transition-all h-full cursor-pointer flex flex-col ring-1 ring-slate-100 group-hover:-translate-y-1">
-                    <div className="h-40 rounded-[28px] overflow-hidden relative">
-                      <img src={proto.image} alt={proto.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                      <div className="absolute inset-0 bg-slate-900/10" />
-                      <div className="absolute top-4 left-4">
-                        <div className="w-8 h-8 rounded-xl bg-white/95 backdrop-blur shadow-sm flex items-center justify-center">
-                          <Zap className="w-4 h-4 text-emerald-600" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-5 flex-1 flex flex-col pt-6">
-                      <h3 className="text-lg font-black text-slate-900 mb-1 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">{proto.title}</h3>
-                      <p className="text-[11px] text-slate-500 font-bold mb-5 leading-tight">{proto.subtitle}</p>
-                      <div className="flex flex-wrap gap-1.5 mb-6">
-                        {proto.benefits.slice(0, 2).map((b, i) => (
-                          <span key={i} className="text-[9px] font-bold bg-slate-50 text-slate-500 px-2 py-0.5 rounded-md border border-slate-100">{b}</span>
-                        ))}
-                      </div>
-                      <div className="mt-auto flex items-center gap-2 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                        <span>Deploy Protocol</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </div>
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {filteredCrops.map((crop, idx) => (
+              <motion.div key={crop.id} layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="group" onClick={() => setSelectedCropGuide(crop)}>
+                <div className="bg-white rounded-[32px] overflow-hidden border border-slate-100 shadow-sm transition-all hover:shadow-2xl cursor-pointer flex flex-col h-full ring-1 ring-slate-100 p-4">
+                  <img src={crop.image} alt={crop.name} loading="lazy" className="h-40 w-full object-cover rounded-2xl group-hover:scale-105 transition-transform" />
+                  <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">{crop.name}</h3>
+                  <div className="mt-auto flex items-center justify-between text-emerald-600 text-[10px] font-black uppercase tracking-widest pt-4 border-t border-slate-50">
+                    <span>Read Full Guide</span>
+                    <ArrowRight className="w-4 h-4" />
                   </div>
-                </motion.div>
-              ))}
-           </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* --- SECTION 6: Industry Trends (Interactive) --- */}
+        {/* 🌿 5. Success Protocols */}
         <div className="space-y-8">
-           <SectionHeader icon={TrendingUp} title="Industry Trends" subtitle="Global technological shifts reshaping the future of modern agriculture" />
-           <div className="grid grid-cols-1 gap-6 max-w-4xl">
-              {INDUSTRY_TRENDS_DATA.map((trend, idx) => {
-                const isActive = activeTrendId === trend.id;
-                return (
-                  <motion.div key={trend.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }}>
-                    <div 
-                      className={cn(
-                        "rounded-[28px] border transition-all cursor-pointer overflow-hidden ring-1 shadow-sm",
-                        isActive ? "bg-slate-900 border-slate-800 ring-slate-800 shadow-2xl" : "bg-white border-slate-100 ring-slate-50 hover:border-emerald-200"
-                      )}
-                      onClick={() => setActiveTrendId(isActive ? null : trend.id)}
-                    >
-                      <div className="p-7 flex items-center justify-between">
-                         <div className="flex items-center gap-5">
-                            <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black transition-colors", isActive ? "bg-emerald-500 text-white" : "bg-emerald-50 text-emerald-600 ")}>
-                               {idx + 1}
-                            </div>
-                            <div>
-                               <h3 className={cn("text-xl font-black transition-colors", isActive ? "text-white" : "text-slate-900")}>{trend.title}</h3>
-                               <p className={cn("text-xs font-bold transition-colors uppercase tracking-[0.1em]", isActive ? "text-emerald-400" : "text-slate-400")}>{trend.summary}</p>
-                            </div>
-                         </div>
-                         <div className={cn("w-10 h-10 rounded-full flex items-center justify-center transition-all", isActive ? "bg-white/10 text-white rotate-180" : "bg-slate-50 text-slate-400")}>
-                            <ChevronRight className="w-6 h-6" />
-                         </div>
-                      </div>
-                      
-                      <AnimatePresence>
-                        {isActive && (
-                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-slate-800">
-                             <div className="p-8 space-y-8">
-                                <div className="space-y-4">
-                                   <p className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em] mb-2 flex items-center gap-2">
-                                     <Info className="w-3 h-3" /> Core Concept
-                                   </p>
-                                   <p className="text-slate-300 font-medium text-lg leading-relaxed max-w-2xl">{trend.description}</p>
-                                </div>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                   <div className="space-y-4">
-                                      <p className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">Efficiency Benefits</p>
-                                      <div className="flex flex-wrap gap-2">
-                                         {trend.benefits.map((b, i) => (
-                                           <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-emerald-200 text-xs font-bold leading-none">{b}</span>
-                                         ))}
-                                      </div>
-                                   </div>
-                                   <div className="space-y-4">
-                                      <p className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">Practical Implementation</p>
-                                      <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl">
-                                         <p className="text-emerald-300 text-xs font-bold italic leading-relaxed">{trend.usage}</p>
-                                      </div>
-                                   </div>
-                                </div>
-                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </motion.div>
-                );
-              })}
-           </div>
+          <SectionHeader 
+            icon={ShieldCheck} 
+            title="Success Protocols" 
+            subtitle="Operational blueprints for maximum farm efficiency and risk mitigation" 
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {SUCCESS_PROTOCOLS_DATA.map((proto, idx) => (
+              <motion.div key={proto.id} onClick={() => setSelectedProtocol(proto)} className="bg-white rounded-[32px] border border-slate-100 shadow-sm p-4 hover:shadow-xl transition-all cursor-pointer ring-1 ring-slate-100">
+                <img src={proto.image} alt={proto.title} loading="lazy" className="h-32 w-full object-cover rounded-2xl" />
+                <h3 className="text-lg font-black text-slate-900 mt-4">{proto.title}</h3>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{proto.subtitle}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* --- MODALS (Uses Reusable Component) --- */}
-
-      {/* 1. Crop Guide Modal */}
+      {/* --- MODALS --- */}
       <AgriModal 
         isOpen={!!selectedCropGuide} 
-        onClose={() => setSelectedCropGuide(null)}
-        title={selectedCropGuide?.name ? `${selectedCropGuide.name} Cultivation roadmap` : ""}
-        subtitle={selectedCropGuide ? `${selectedCropGuide.category} • High Yield Protocol` : ""}
+        onClose={() => setSelectedCropGuide(null)} 
+        title={selectedCropGuide ? `${selectedCropGuide.name} Activate Roadmap` : ""} 
         icon={BookOpen}
-        maxWidth="max-w-5xl"
       >
-        {selectedCropGuide && selectedCropGuide.steps.length > 0 ? (
-          <div className="space-y-20 py-8">
-            {selectedCropGuide.steps.map((step, i) => (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                 <div className="space-y-5 order-2 md:order-1">
-                    <div className="flex items-center gap-4">
-                       <span className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black shadow-lg">{i + 1}</span>
-                       <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{step.title}</h4>
-                    </div>
-                    <p className="text-slate-600 font-medium text-lg leading-relaxed bg-slate-50 p-6 rounded-3xl border border-slate-100 shadow-sm">{step.description}</p>
-                 </div>
-                 <div className="aspect-video rounded-[40px] overflow-hidden shadow-2xl ring-12 ring-slate-50 group order-1 md:order-2">
-                    <img src={step.image} alt={step.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                 </div>
-              </div>
-            ))}
-            <div className="pt-20 border-t border-slate-100 text-center">
-               <Button onClick={() => setSelectedCropGuide(null)} className="h-14 px-12 bg-emerald-600 text-white font-black text-lg rounded-2xl hover:bg-emerald-700 shadow-xl shadow-emerald-100 transition-all active:scale-95">
-                 Activate roadmap
-               </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="py-20 text-center flex flex-col items-center">
-             <div className="w-24 h-24 bg-emerald-50 rounded-[40px] flex items-center justify-center mb-6 shadow-inner ring-1 ring-emerald-100">
-               <Clock className="w-10 h-10 text-emerald-600" />
-             </div>
-             <h3 className="text-3xl font-black text-slate-900 mb-2 mt-4">Module Preparation In Progress</h3>
-             <p className="text-slate-500 max-w-sm mx-auto font-medium text-lg leading-snug">Our agronomy team is finalizing the image-based steps for {selectedCropGuide?.name}.</p>
-             <Button onClick={() => setSelectedCropGuide(null)} className="mt-12 h-14 px-10 bg-slate-900 text-white font-black rounded-2xl hover:bg-slate-800 transition-all">Explore Available Modules</Button>
-          </div>
-        )}
+         {selectedCropGuide && selectedCropGuide.steps.length > 0 ? (
+           <div className="space-y-12 py-4">
+             {selectedCropGuide.steps.map((step, i) => (
+               <div key={i} className="flex gap-6 items-start">
+                 <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-black flex-shrink-0">{i+1}</span>
+                 <div><h4 className="text-lg font-black text-slate-900 mb-2">{step.title}</h4><p className="text-slate-500 font-medium">{step.description}</p></div>
+               </div>
+             ))}
+           </div>
+         ) : (
+           <div className="py-20 text-center flex flex-col items-center">
+             <h3 className="text-2xl font-black text-slate-900 mb-2">Module Preparation In Progress</h3>
+             <p className="text-slate-500 font-medium">Our agronomy team is finalizing the image-based steps.</p>
+             <Button onClick={() => setSelectedCropGuide(null)} className="mt-8 bg-slate-900 text-white font-black rounded-2xl px-8 h-12">Back to Crops</Button>
+           </div>
+         )}
       </AgriModal>
 
-      {/* 2. Protocol Guide Modal */}
-      <AgriModal
-        isOpen={!!selectedProtocol}
-        onClose={() => setSelectedProtocol(null)}
-        title={selectedProtocol?.title ? `${selectedProtocol.title} SOP` : ""}
-        subtitle={selectedProtocol?.subtitle}
-        icon={ShieldCheck}
-      >
+      <AgriModal isOpen={!!selectedProtocol} onClose={() => setSelectedProtocol(null)} title={selectedProtocol?.title || ""} icon={ShieldCheck}>
         {selectedProtocol && (
-          <div className="space-y-12">
-            <div className="rounded-[40px] overflow-hidden aspect-[21/9] shadow-2xl ring-1 ring-slate-200">
-               <img src={selectedProtocol.image} alt={selectedProtocol.title} className="w-full h-full object-cover" />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-               {selectedProtocol.benefits.map((b, i) => (
-                 <div key={i} className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex flex-col items-center text-center">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-600 mb-2" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800">{b}</span>
-                 </div>
-               ))}
-               <div className="md:col-span-1 p-4 bg-amber-50 border border-amber-100 rounded-2xl flex flex-col items-center text-center">
-                  <Star className="w-5 h-5 text-amber-600 mb-2 fill-amber-600" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-amber-800">Critical Insight</span>
-               </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-               <div className="space-y-6">
-                  <h4 className="text-xl font-black text-slate-900 border-b-2 border-emerald-500 w-fit pb-1">Execution Roadmap</h4>
-                  <div className="space-y-6">
-                    {selectedProtocol.steps.map((step, i) => (
-                      <div key={i} className="flex gap-5 group">
-                        <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 border border-slate-200 flex items-center justify-center font-black flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-500 transition-all shadow-sm">
-                          {i + 1}
-                        </div>
-                        <div>
-                          <p className="text-base font-bold text-slate-800 mb-1 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">{step.title}</p>
-                          <p className="text-sm text-slate-500 font-medium leading-relaxed">{step.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-               </div>
-               <div className="space-y-6">
-                  <h4 className="text-xl font-black text-slate-900 border-b-2 border-amber-500 w-fit pb-1">Practical Usage Tip</h4>
-                  <div className="p-8 bg-slate-50 rounded-[40px] border border-slate-100 shadow-inner">
-                     <p className="text-slate-600 text-lg font-medium leading-relaxed italic">
-                       &quot;{selectedProtocol.usageTip}&quot;
-                     </p>
-                  </div>
-                  <div className="p-8 rounded-[40px] bg-slate-900 text-emerald-400 flex items-start gap-4 shadow-2xl">
-                     <AlertCircle className="w-6 h-6 flex-shrink-0 mt-1" />
-                     <p className="text-sm font-bold leading-relaxed">
-                       Compliance with these steps ensures minimum risk during high-stress climate conditions. Use this SOP as your primary field reference.
-                     </p>
-                  </div>
-               </div>
+          <div className="space-y-8">
+            <p className="text-slate-600 font-medium italic">"{selectedProtocol.usageTip}"</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {selectedProtocol.steps.map((step, i) => (
+                <div key={i} className="flex gap-4"><span className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black flex-shrink-0 text-[10px]">{i+1}</span><div><p className="font-bold text-slate-900 uppercase tracking-tight">{step.title}</p><p className="text-xs text-slate-500 font-medium">{step.desc}</p></div></div>
+              ))}
             </div>
           </div>
         )}
