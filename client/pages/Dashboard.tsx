@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Search,
   Filter,
@@ -18,6 +18,7 @@ import {
   ArrowUpRight,
   CheckCircle2,
   ChevronLeft,
+  ArrowLeft,
   X,
   Clock,
   Bug,
@@ -62,8 +63,10 @@ import { useMandi } from "@/hooks/useMandi";
 
 import { speakText } from "@/lib/speech";
 
+
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { language, t } = useLanguage();
   const { weather, loading: weatherLoading, getLocationAndFetch, error: weatherError } = useWeather();
   const { prices: mandiRates, loading: mandiLoading } = useMandi();
@@ -295,17 +298,21 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: t('indoorSaffronTitle'), category: t('agricultureCategory'), catKey: "agriculture", tag: t('tagNew'), icon: TractorIcon, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s" },
-            { title: t('eggProductionTitle'), category: t('poultryCategory'), catKey: "livestock", tag: t('tagGuide'), icon: Bird, color: "bg-emerald-100 text-emerald-700", img: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800" },
-            { title: t('shrimpFarmingTitle'), category: t('aquacultureCategory'), catKey: "aquaculture", tag: t('tagExpert'), icon: Fish, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrho1VB3WThsItYUa1WLYOugvC4LCfv7mAg&s" },
-            { title: t('solarPumpTitle'), category: t('subsidiesCategory'), catKey: "business", tag: t('tagScheme'), icon: Landmark, color: "bg-emerald-100 text-emerald-700", img: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg" },
-            { title: t('aloeVeraTitle'), category: t('horticultureCategory'), catKey: "horticulture", tag: t('tagBusiness'), icon: Sprout, color: "bg-emerald-100 text-emerald-700", img: "https://pbs.twimg.com/media/FMLdOWGXsAUOIkY.jpg" },
-            { title: t('curryLeavesTitle'), category: t('gardeningCategory'), catKey: "horticulture", tag: t('tagTips'), icon: SunIcon, color: "bg-emerald-100 text-emerald-700", img: "https://blog.suvie.com/wp-content/uploads/2021/08/kadipatta-2701445_1920-1360x907.jpg" }
+            { id: "saffron", title: t('indoorSaffronTitle'), category: t('agricultureCategory'), catKey: "agriculture", tag: t('tagNew'), icon: TractorIcon, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s" },
+            { id: "egg-production", title: t('eggProductionTitle'), category: t('poultryCategory'), catKey: "livestock", tag: t('tagGuide'), icon: Bird, color: "bg-emerald-100 text-emerald-700", img: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800" },
+            { id: "vannamei-shrimp", title: t('shrimpFarmingTitle'), category: t('aquacultureCategory'), catKey: "aquaculture", tag: t('tagExpert'), icon: Fish, color: "bg-emerald-100 text-emerald-700", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrho1VB3WThsItYUa1WLYOugvC4LCfv7mAg&s" },
+            { id: "solar-pump", title: t('solarPumpTitle'), category: t('subsidiesCategory'), catKey: "business", tag: t('tagScheme'), icon: Landmark, color: "bg-emerald-100 text-emerald-700", img: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg" },
+            { id: "aloe-vera", title: t('aloeVeraTitle'), category: t('horticultureCategory'), catKey: "horticulture", tag: t('tagBusiness'), icon: Sprout, color: "bg-emerald-100 text-emerald-700", img: "https://pbs.twimg.com/media/FMLdOWGXsAUOIkY.jpg" },
+            { id: "curry-leaves", title: t('curryLeavesTitle'), category: t('gardeningCategory'), catKey: "horticulture", tag: t('tagTips'), icon: SunIcon, color: "bg-emerald-100 text-emerald-700", img: "https://blog.suvie.com/wp-content/uploads/2021/08/kadipatta-2701445_1920-1360x907.jpg" }
           ].map((post, idx) => (
-            <Link key={idx} to={`/knowledge?category=${post.catKey}`} className="block group">
+            <div 
+              key={idx} 
+              onClick={() => navigate(`/guide/${post.id}`)} 
+              className="block group cursor-pointer"
+            >
               <div className="rounded overflow-hidden border border-slate-200 bg-white hover:border-emerald-500 hover:shadow-lg transition-all flex flex-col h-full">
                 <div className="h-40 w-full overflow-hidden relative">
-                  <img src={post.img} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={post.img} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-slate-800 flex items-center gap-1.5 shadow-sm">
                     <post.icon className={cn("h-3 w-3", post.color.split(' ')[1])} /> {post.category}
                   </div>
@@ -317,11 +324,11 @@ export default function Dashboard() {
                   </div>
                   <h3 className="font-bold text-slate-800 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">{post.title}</h3>
                   <div className="mt-auto pt-4 text-xs font-semibold text-emerald-600 group-hover:underline flex items-center">
-                    {t('readFullGuide')} <ArrowRight className="ml-1 h-3 w-3" />
+                    Cultivation Guide →
                   </div>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
