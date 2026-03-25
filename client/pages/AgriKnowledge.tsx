@@ -65,7 +65,6 @@ const GUIDES_DATA: AgriGuide[] = [
     tag: "tagNew",
     icon: Leaf,
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s",
-    featured: true,
     steps: [
       { id: 1, title: "Setup Growing Area", image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600", description: "Prepare trays and specialized indoor climate-controlled soil." },
       { id: 2, title: "Plant Bulbs", image: "https://images.unsplash.com/photo-1599395155160-b6e9a7e04f6c?auto=format&fit=crop&q=80&w=600", description: "Place high-quality saffron bulbs correctly in the substrate." },
