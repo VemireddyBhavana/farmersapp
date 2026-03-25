@@ -79,6 +79,7 @@ const AppRoutes = () => {
       <Route path="/pests" element={<Pests />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/knowledge" element={<AgriKnowledge />} />
+      <Route path="/guide/:guideId" element={<AgriKnowledge />} />
       <Route path="/agri-schemes" element={<AgriSchemes />} />
       <Route path="/help-center" element={<HelpCenter />} />
       <Route path="/growing-guide" element={<GrowingGuide />} />
