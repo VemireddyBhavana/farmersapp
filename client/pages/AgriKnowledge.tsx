@@ -144,104 +144,7 @@ const GUIDES_DATA: AgriGuide[] = [
   }
 ];
 
-interface ProtocolGuide {
-  id: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  benefits: string[];
-  usageTip: string;
-  steps: { title: string; desc: string }[];
-}
 
-const SUCCESS_PROTOCOLS_DATA: ProtocolGuide[] = [
-  {
-    id: "drip-irrigation",
-    title: "Drip Irrigation",
-    subtitle: "Precision water management system",
-    image: "https://images.unsplash.com/photo-1592982537447-6f23f669e4ce?auto=format&fit=crop&q=80&w=600",
-    benefits: ["Saves 70% Water", "Direct Root Feeding", "Weed Suppression"],
-    usageTip: "Check emitters weekly for mineral buildup to ensure uniform flow.",
-    steps: [
-      { title: "System Layout", desc: "Design a grid-based lateral line system tailored to crop spacing." },
-      { title: "Filter Setup", desc: "Install sand or disc filters to prevent particulate clogging." },
-      { title: "Pressure Check", desc: "Maintain 1-2 bar pressure for optimal emitter performance." },
-      { title: "Fertigation", desc: "Inject water-soluble fertilizers directly into the stream." }
-    ]
-  },
-  {
-    id: "crop-rotation",
-    title: "Crop Rotation",
-    subtitle: "Soil health & pest management",
-    image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=600",
-    benefits: ["Breaks Pest Cycles", "Natural Nitrogen Fixation", "Soil Structure Improvement"],
-    usageTip: "Always alternate heavy-feeding crops with nitrogen-fixing legumes.",
-    steps: [
-      { title: "Field Allocation", desc: "Divide land into plots and map historical crop sequences." },
-      { title: "Sequence Design", desc: "Rotate cereal → legume → root crop to balance nutients." },
-      { title: "Timing", desc: "Allow a 3-4 year gap before repeating the same botanical family." },
-      { title: "Bio-monitoring", desc: "Observe pest pressure changes across different rotations." }
-    ]
-  },
-  {
-    id: "organic-compost",
-    title: "Organic Compost",
-    subtitle: "Sustainable soil enrichment",
-    image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=600",
-    benefits: ["Increases Microbial Life", "High Water Retention", "Zero Chemical Input"],
-    usageTip: "Use a 1:2 ratio of green waste (Nitrogen) to brown waste (Carbon).",
-    steps: [
-      { title: "Pile Assembly", desc: "Layer waste materials in a 4x4x4 foot composting pit or pile." },
-      { title: "Aeration", desc: "Turn the pile every 10 days to maintain heat and oxygen levels." },
-      { title: "Curing", desc: "Let the dark, earthy compost sit for 1 month before application." },
-      { title: "Field Mixing", desc: "Incorporate 5-10 tons/ha during primary land preparation." }
-    ]
-  },
-  {
-    id: "regular-monitoring",
-    title: "Regular Monitoring",
-    subtitle: "Proactive field scouting SOP",
-    image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=600",
-    benefits: ["Early Pest Detection", "Precise Harvest Timing", "Damage Mitigation"],
-    usageTip: "Scout fields twice weekly during early morning for accurate pest activity.",
-    steps: [
-      { title: "Walking Pattern", desc: "Walk in a Z-shaped pattern to cover representative field areas." },
-      { title: "Plant Inspection", desc: "Check underside of leaves for tiny eggs or fungal spores." },
-      { title: "Soil Probing", desc: "Check moisture depth and root health by digging small pits." },
-      { title: "Digital Logging", desc: "Capture photos of anomalies and log GPS coordinates." }
-    ]
-  }
-];
-
-const INDUSTRY_TRENDS_DATA = [
-  {
-    id: "smart-irrigation",
-    title: "Smart Irrigation Tech",
-    desc: "AI-sensor based systems reducing water usage by 30% in India.",
-    date: "March 2026",
-    icon: Zap,
-    benefits: ["Precision Scheduling", "Cloud Monitoring", "30% Water Savings"],
-    usage: "Best for high-value greenhouses and precision horticulture projects."
-  },
-  {
-    id: "drone-adoption",
-    title: "Drone-as-a-Service",
-    desc: "Smallholder farmers adopting drone spraying for precision agriculture.",
-    date: "Feb 2026",
-    icon: ShieldCheck,
-    benefits: ["UAV Spraying", "Multispectral Imaging", "Efficient Labor"],
-    usage: "Used for rapid foliar feeding and pesticide application over large areas."
-  },
-  {
-    id: "organic-export",
-    title: "Organic Export Boom",
-    desc: "Global demand for organic spices from India sees 20% YoY growth.",
-    date: "Jan 2026",
-    icon: TrendingUp,
-    benefits: ["Premium Pricing", "Traceability Systems", "Global Logistics"],
-    usage: "Focus on certified organic production for EU and NA export markets."
-  }
-];
 
 // --- Main Component ---
 
@@ -340,8 +243,7 @@ export default function AgriKnowledgeHub() {
     );
   }, [guideSearch]);
 
-  const [selectedProtocol, setSelectedProtocol] = useState<ProtocolGuide | null>(null);
-  const [activeTrendId, setActiveTrendId] = useState<string | null>(null);
+
 
   // --- Sub-Components (Internal) ---
 
@@ -681,116 +583,7 @@ export default function AgriKnowledgeHub() {
             </AnimatePresence>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-20 border-t border-slate-100">
-             {/* 🌿 SUCCESS PROTOCOLS */}
-             <div className="lg:col-span-2 space-y-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-200">
-                    <ShieldCheck className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Success Protocols</h3>
-                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">Verified Operational Frameworks</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {SUCCESS_PROTOCOLS_DATA.map((proto) => (
-                    <motion.div 
-                      key={proto.id} 
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => setSelectedProtocol(proto)} 
-                      className="bg-white rounded-[32px] border border-slate-100 p-5 shadow-sm hover:shadow-2xl transition-all cursor-pointer flex gap-5 group"
-                    >
-                      <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 shadow-md">
-                        <img src={proto.image} alt={proto.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
-                      <div className="flex flex-col justify-center">
-                        <h4 className="font-black text-slate-900 text-lg mb-1 group-hover:text-emerald-700 transition-colors">{proto.title}</h4>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-relaxed mb-3">{proto.subtitle}</p>
-                        <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-black uppercase tracking-widest">
-                          <span>View SOP</span>
-                          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-             </div>
 
-             {/* 📈 INDUSTRY TRENDS */}
-             <div className="space-y-10">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg shadow-slate-200">
-                    <TrendingUp className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Market Trends</h3>
-                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">Real-time Industry Insights</p>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  {INDUSTRY_TRENDS_DATA.map((trend) => (
-                    <div 
-                      key={trend.id} 
-                      onClick={() => setActiveTrendId(activeTrendId === trend.id ? null : trend.id)}
-                      className={cn(
-                        "p-6 rounded-[28px] border transition-all cursor-pointer group",
-                        activeTrendId === trend.id 
-                          ? "bg-slate-900 border-slate-800 shadow-xl shadow-slate-200" 
-                          : "bg-white border-slate-100 shadow-sm hover:border-emerald-200"
-                      )}
-                    >
-                      <div className="flex justify-between items-start mb-4">
-                         <div className={cn(
-                           "p-3 rounded-xl transition-colors",
-                           activeTrendId === trend.id ? "bg-emerald-500 text-white" : "bg-emerald-50 text-emerald-600"
-                         )}>
-                            <trend.icon className="w-5 h-5" />
-                         </div>
-                         <span className={cn(
-                           "text-[10px] font-black uppercase tracking-widest",
-                           activeTrendId === trend.id ? "text-slate-400" : "text-slate-400"
-                         )}>{trend.date}</span>
-                      </div>
-                      <h4 className={cn(
-                        "font-black text-lg transition-colors",
-                        activeTrendId === trend.id ? "text-white" : "text-slate-900 group-hover:text-emerald-700"
-                      )}>{trend.title}</h4>
-                      
-                      <AnimatePresence>
-                        {activeTrendId === trend.id && (
-                          <motion.div 
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <p className="text-sm text-slate-300 font-medium mt-4 leading-relaxed mb-6">
-                              {trend.desc}
-                            </p>
-                            <div className="space-y-4 pt-4 border-t border-slate-800">
-                               <div className="space-y-2">
-                                  <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Key Benefits</p>
-                                  <div className="flex flex-wrap gap-2">
-                                     {trend.benefits.map(b => (
-                                       <span key={b} className="px-2 py-1 bg-slate-800 text-slate-200 text-[9px] font-bold rounded-lg border border-slate-700">{b}</span>
-                                     ))}
-                                  </div>
-                               </div>
-                               <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20">
-                                  <p className="text-[10px] font-black text-emerald-400 uppercase mb-1">Practical Usage</p>
-                                  <p className="text-[11px] text-emerald-50 font-medium leading-relaxed">{trend.usage}</p>
-                               </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
-                </div>
-             </div>
-          </div>
 
         </section>
       </motion.div>
@@ -839,73 +632,7 @@ export default function AgriKnowledgeHub() {
          )}
       </AgriModal>
 
-      {/* --- SUCCESS PROTOCOL MODAL --- */}
-      <AgriModal 
-        isOpen={!!selectedProtocol} 
-        onClose={() => setSelectedProtocol(null)} 
-        title={selectedProtocol?.title || ""} 
-        subtitle="Standard Operating Procedure"
-        icon={ShieldCheck}
-        maxWidth="max-w-4xl"
-      >
-        {selectedProtocol && (
-          <div className="space-y-10 py-4">
-            {/* Header Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-slate-50 p-8 rounded-[32px] border border-slate-100">
-               <div className="space-y-6">
-                  <div className="space-y-2">
-                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Key Performance Benefits</p>
-                    <div className="flex flex-wrap gap-2">
-                       {selectedProtocol.benefits.map(benefit => (
-                         <span key={benefit} className="px-3 py-1.5 bg-white text-slate-700 text-[10px] font-bold rounded-xl border border-slate-200 flex items-center gap-2 shadow-sm">
-                           <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                           {benefit}
-                         </span>
-                       ))}
-                    </div>
-                  </div>
-                  <div className="p-4 bg-emerald-600 rounded-2xl text-white shadow-lg shadow-emerald-200">
-                    <div className="flex items-center gap-2 mb-1">
-                       <Lightbulb className="w-4 h-4 text-emerald-300" />
-                       <p className="text-[10px] font-black uppercase tracking-widest">Expert Usage Tip</p>
-                    </div>
-                    <p className="text-xs font-medium leading-relaxed italic opacity-90">"{selectedProtocol.usageTip}"</p>
-                  </div>
-               </div>
-               <div className="h-48 rounded-2xl overflow-hidden shadow-2xl ring-8 ring-white">
-                  <img src={selectedProtocol.image} alt={selectedProtocol.title} className="w-full h-full object-cover" />
-               </div>
-            </div>
 
-            {/* Implementation Steps */}
-            <div className="space-y-6">
-              <h5 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 px-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                Implementation Roadmap
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {selectedProtocol.steps.map((step, i) => (
-                  <div key={i} className="flex gap-5 p-5 rounded-2xl border border-slate-100 bg-white hover:border-emerald-200 hover:shadow-lg transition-all group">
-                    <span className="w-8 h-8 rounded-xl bg-slate-100 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center font-black flex-shrink-0 text-xs transition-colors shadow-sm">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <p className="font-black text-slate-900 text-sm mb-1 group-hover:text-emerald-700 transition-colors">{step.title}</p>
-                      <p className="text-xs text-slate-500 font-medium leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="pt-8 flex justify-center">
-               <Button onClick={() => setSelectedProtocol(null)} className="rounded-2xl bg-slate-900 text-white px-10 py-6 font-black tracking-widest uppercase text-[10px] hover:bg-emerald-600 transition-all shadow-xl active:scale-95">
-                 Acknowledge Protocol
-               </Button>
-            </div>
-          </div>
-        )}
-      </AgriModal>
     </div>
   );
 }
