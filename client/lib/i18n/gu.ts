@@ -1271,4 +1271,32 @@ export const gu = {
     
     // Guide Button
     cultivationGuideBtn: "ખેતી માર્ગદર્શಿಕા →",
+
+    // Smart Assistant Features
+    proTipsTitle: "Pro Tips",
+    commonMistakesTitle: "Common Mistakes",
+    bestPracticesTitle: "Best Practices",
+    watchDemoTitle: "Watch Demo",
+    estimatedCostTitle: "Estimated Cost",
+    expectedProfitTitle: "Expected Profit",
+    timeDurationTitle: "Time Duration",
+    requiredResourcesTitle: "Required Resources",
+    farmerTipsTitle: "Farmer Tips",
+    dosTitle: "Do's",
+    dontsTitle: "Don'ts",
+    saveGuideBtn: "Save Guide",
+    savedGuideBtn: "Saved",
+    difficultyBeginner: "Beginner",
+    difficultyIntermediate: "Intermediate",
+    difficultyExpert: "Expert",
+    profitCalculatorTitle: "Profit Calculator",
+    eggProfitCalculatorTitle: "Egg Profit Calculator",
+    shrimpGrowthEstimatorTitle: "Shrimp Growth Estimator",
+    feedPerBird: "Feed per Bird (kg)",
+    numberOfBirds: "Number of Birds",
+    milkYield: "Milk Yield (L)",
+    fishCount: "Fish Count",
+    feedRate: "Feed Rate (%)",
+    daysGrowth: "Days",
+    calculateBtn: "Calculate",
 };
