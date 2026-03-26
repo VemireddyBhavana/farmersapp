@@ -39,183 +39,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 
 // --- Types & Data ---
 
-interface GuideStep {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  proTips?: string[];
-  mistakes?: string[];
-  bestPractices?: string[];
-}
-
-interface AgriGuide {
-  id: string;
-  name: string;
-  category: "Agriculture" | "Poultry" | "Aquaculture" | "Horticulture" | "Subsidies" | "Gardening";
-  image: string;
-  featured?: boolean;
-  tag: string;
-  icon: any;
-  difficulty?: "Beginner" | "Intermediate" | "Expert";
-  videoUrl?: string;
-  realWorldData?: {
-    cost: string;
-    profit: string;
-    duration: string;
-    resources: string[];
-  };
-  farmerTips?: {
-    dos: string[];
-    donts: string[];
-  };
-  steps: GuideStep[];
-}
-
-const GUIDES_DATA: AgriGuide[] = [
-  {
-    id: "saffron",
-    name: "indoorSaffronTitle",
-    category: "Agriculture",
-    tag: "tagNew",
-    icon: Leaf,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s",
-    difficulty: "Expert",
-    videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ",
-    realWorldData: {
-      cost: "₹ 5-10 Lakhs",
-      profit: "₹ 15-25 Lakhs / yr",
-      duration: "3-4 Months",
-      resources: ["Climate Control Unit", "Corms (Bulbs)", "Vertical Trays", "Grow Lights"]
-    },
-    farmerTips: {
-      dos: ["Maintain strictly 15-18°C during flowering phase", "Ensure high quality A-grade saffron corms"],
-      donts: ["Do not over-irrigate the substrate", "Avoid exposing the stigmas to direct intense light after harvest"]
-    },
-    steps: [
-      { 
-        id: 1, title: "Setup Growing Area", image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&q=80&w=600", description: "Prepare trays and specialized indoor climate-controlled soil.",
-        proTips: ["Install backup power systems for climate control units."],
-        mistakes: ["Using non-sterilized soil mixes."],
-        bestPractices: ["Use aeroponic or highly porous coco-peat substrates."]
-      },
-      { 
-        id: 2, title: "Plant Bulbs", image: "https://images.unsplash.com/photo-1599395155160-b6e9a7e04f6c?auto=format&fit=crop&q=80&w=600", description: "Place high-quality saffron bulbs correctly in the substrate.",
-        proTips: ["Separate bulbs based on size for uniform growth."],
-        bestPractices: ["Plant at a precise depth of 10-15 cm."]
-      },
-      { 
-        id: 3, title: "Maintain Temperature", image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&q=80&w=600", description: "Keep the proper climate for optimal flower and thread growth.",
-        mistakes: ["Allowing humidity to exceed 60% which causes fungal rot."]
-      },
-      { 
-        id: 4, title: "Harvest", image: "https://images.unsplash.com/photo-1615485290382-440344d93025?auto=format&fit=crop&q=80&w=600", description: "Collect the delicate saffron threads during the flowering window.",
-        proTips: ["Harvest exclusively during early morning hours before flowers fully open."]
-      }
-    ]
-  },
-  {
-    id: "egg-production",
-    name: "eggProductionTitle",
-    category: "Poultry",
-    tag: "tagGuide",
-    icon: Bird,
-    image: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800",
-    difficulty: "Intermediate",
-    videoUrl: "https://www.youtube.com/embed/aqz-KE-bpKQ",
-    realWorldData: {
-      cost: "₹ 2-5 Lakhs (Initial Shed Setup)",
-      profit: "₹ 40,000 - 60,000 / month",
-      duration: "Ongoing (72+ weeks lifecycle)",
-      resources: ["Layer Birds (BV380 / Leghorn)", "Layer Feed", "Cages & Feeders", "Vaccines"]
-    },
-    farmerTips: {
-      dos: ["Implement strict bio-security measures at entry points", "Provide 14-16 hours of daily light in the shed"],
-      donts: ["Never skip the vaccination schedule", "Do not feed stale or fungus-affected feed"]
-    },
-    steps: [
-      { id: 1, title: "Setup Poultry Farm", image: "https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&q=80&w=600", description: "Construct well-ventilated housing with proper nesting stations.", proTips: ["Ensure east-west shed orientation to avoid direct sun."], mistakes: ["Poor air circulation leading to ammonia buildup."] },
-      { id: 2, title: "Select Good Breeds", image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&q=80&w=600", description: "Choose high-yield layer breeds resistant to local diseases.", bestPractices: ["Source chicks from reputed commercial hatcheries."] },
-      { id: 3, title: "Feed & Care", image: "https://images.unsplash.com/photo-1582769923195-c6e60dc1d8bc?auto=format&fit=crop&q=80&w=600", description: "Maintain a strict feeding schedule and monitor bird health daily.", mistakes: ["Changing feed brand suddenly causes stress and drops egg production."] },
-      { id: 4, title: "Egg Collection", image: "https://images.unsplash.com/photo-1529511582893-2d7e684dd128?auto=format&fit=crop&q=80&w=600", description: "Gather eggs twice daily to maintain freshness and hygiene.", proTips: ["Always collect using clean sanitized trays."] }
-    ]
-  },
-  {
-    id: "vannamei-shrimp",
-    name: "shrimpFarmingTitle",
-    category: "Aquaculture",
-    tag: "tagExpert",
-    icon: Fish,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrho1VB3WThsItYUa1WLYOugvC4LCfv7mAg&s",
-    difficulty: "Expert",
-    realWorldData: {
-      cost: "₹ 10-15 Lakhs / Hectare",
-      profit: "₹ 5-8 Lakhs / crop",
-      duration: "100-120 Days",
-      resources: ["Aerators", "SPF Seeds", "Quality Feed", "Water Testing Kits"]
-    },
-    farmerTips: { dos: ["Test water dissolved oxygen daily", "Use bio-floc technology"], donts: ["Overfeed the shrimp", "Ignore ammonia spikes"] },
-    steps: [
-      { id: 1, title: "Pond Preparation", image: "https://images.unsplash.com/photo-1599940824399-b87980ba9715?auto=format&fit=crop&q=80&w=600", description: "Prepare, clean, and lime the aquaculture ponds for shrimp stocking.", proTips: ["Dry pond bottom till cracks appear before liming."] },
-      { id: 2, title: "Seed Selection", image: "https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&q=80&w=600", description: "Acquire healthy, disease-free seed batches from certified sources.", mistakes: ["Stocking seeds without gradual salinity acclimatization."] },
-      { id: 3, title: "Feeding", image: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&q=80&w=600", description: "Optimize feed cycles to promote rapid, sustainable growth.", bestPractices: ["Use check-trays to monitor actual feed consumption."] },
-      { id: 4, title: "Harvesting", image: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?auto=format&fit=crop&q=80&w=600", description: "Harvest shrimps during night or early morning for best quality." }
-    ]
-  },
-  {
-    id: "solar-pump",
-    name: "solarPumpTitle",
-    category: "Subsidies",
-    tag: "tagScheme",
-    icon: Landmark,
-    image: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg",
-    difficulty: "Beginner",
-    farmerTips: { dos: ["Keep land documents clear", "Check bank Aadhaar linking"], donts: ["Pay middlemen for forms"] },
-    steps: [
-      { id: 1, title: "Eligibility Check", image: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg", description: "Verify you meet the land and farming status criteria for the subsidy.", mistakes: ["Applying without active agricultural land registration."] },
-      { id: 2, title: "Application Submission", image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=800", description: "Apply online or at a district-level agriculture office with required docs." },
-      { id: 3, title: "Site Inspection", image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=800", description: "Authorities will inspect the farm site for solar installation feasibility.", proTips: ["Ensure clear shadow-free area for panel installation."] },
-      { id: 4, title: "System Installation", image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800", description: "Get the solar pump system installed by approved government vendors." }
-    ]
-  },
-  {
-    id: "aloe-vera",
-    name: "aloeVeraTitle",
-    category: "Horticulture",
-    tag: "tagBusiness",
-    icon: Sprout,
-    image: "https://pbs.twimg.com/media/FMLdOWGXsAUOIkY.jpg",
-    difficulty: "Beginner",
-    realWorldData: {
-      cost: "₹ 50,000 - 80,000 / Acre",
-      profit: "₹ 2-3 Lakhs / year",
-      duration: "8-10 Months to first harvest",
-      resources: ["Suckers (Babies)", "Sandy Loam Soil", "Minimal Water"]
-    },
-    farmerTips: { dos: ["Sign buyback agreements with cosmetic companies beforehand"], donts: ["Plant in water-logged areas"] },
-    steps: [
-      { id: 1, title: "Soil Preparation", image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=600", description: "Ensure well-draining soil with proper organic matter content.", mistakes: ["Using heavy clay soils that retain too much water."] },
-      { id: 2, title: "Planting Suckers", image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&q=80&w=600", description: "Plant healthy aloe vera suckers or offsets from mother plants." },
-      { id: 3, title: "Minimal Watering", image: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?auto=format&fit=crop&q=80&w=600", description: "Avoid overwatering; keep soil moderately dry to prevent root rot.", bestPractices: ["Drip irrigation is highly recommended to control water flow."] },
-      { id: 4, title: "Harvesting Leaves", image: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&q=80&w=600", description: "Cut outer mature leaves directly from the plant base as needed.", proTips: ["Harvest only lower 3-4 mature leaves per plant to ensure continued growth."] }
-    ]
-  },
-  {
-    id: "curry-leaves",
-    name: "curryLeavesTitle",
-    category: "Gardening",
-    tag: "tagTips",
-    icon: Sun,
-    image: "https://blog.suvie.com/wp-content/uploads/2021/08/kadipatta-2701445_1920-1360x907.jpg",
-    difficulty: "Beginner",
-    steps: [
-      { id: 1, title: "Sapling Selection", image: "https://images.unsplash.com/photo-1459156212016-c812468e2115?auto=format&fit=crop&q=80&w=600", description: "Select healthy nursery saplings for transplanting." },
-      { id: 2, title: "Field Planting", image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=600", description: "Transplant saplings into prepared pits during favorable seasons.", mistakes: ["Planting too close to other large trees reducing sunlight."] },
-      { id: 3, title: "Pruning Control", image: "https://images.unsplash.com/photo-1592150621344-79e5085f3ac2?auto=format&fit=crop&q=80&w=600", description: "Regularly prune branch tips to encourage lush, bushy leaf growth.", proTips: ["Pinch the top growing tips frequently to force lateral branches."] },
-      { id: 4, title: "Pest Management", image: "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&q=80&w=600", description: "Apply organic neem-based solutions to manage leaf-eating pests." }
-    ]
-  }
-];
+import { GUIDES_DATA, AgriGuide, GuideStep } from "@/lib/data/guidesData";
 
 
 
@@ -391,6 +215,7 @@ export default function AgriKnowledgeHub() {
   // States: Visual Knowledge Guides
   const [guideSearch, setGuideSearch] = useState("");
   const [selectedGuide, setSelectedGuide] = useState<AgriGuide | null>(null);
+  const [expandedStepId, setExpandedStepId] = useState<number | null>(null);
   const [isGridLoading, setIsGridLoading] = useState(false);
 
   // Sync URL with Modal State
@@ -399,6 +224,7 @@ export default function AgriKnowledgeHub() {
       const guide = GUIDES_DATA.find(g => g.id === guideId);
       if (guide) {
         setSelectedGuide(guide);
+        setExpandedStepId(null);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else {
@@ -823,55 +649,155 @@ export default function AgriKnowledgeHub() {
              )}
 
              <div className="grid grid-cols-1 gap-12">
-               {selectedGuide.steps.map((step, i) => (
-                 <div key={step.id} className="flex flex-col md:flex-row gap-8 items-start group">
-                   <div className="shrink-0 w-full md:w-80 h-48 overflow-hidden rounded-[24px] shadow-xl border border-slate-100 relative">
-                      <img src={step.image} alt={step.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-lg ring-4 ring-white">
-                        {i + 1}
-                      </div>
-                   </div>
-                   <div className="flex-1 py-2 space-y-4">
-                      <h4 className="text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">
-                        {step.title}
-                      </h4>
-                      <p className="text-slate-500 font-medium text-lg leading-relaxed">{step.description}</p>
-                      
-                      {/* Smart Insights for Step */}
-                      {(step.proTips || step.mistakes || step.bestPractices) && (
-                        <div className="grid grid-cols-1 gap-3 pt-3">
-                          {step.proTips?.map((tip, idx) => (
-                            <div key={`pro-${idx}`} className="flex gap-3 items-start bg-blue-50/50 p-3 rounded-xl border border-blue-100">
-                              <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 shrink-0" />
-                              <div>
-                                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5">{t('proTipsTitle')}</p>
-                                <p className="text-sm font-medium text-slate-700">{tip}</p>
-                              </div>
-                            </div>
-                          ))}
-                          {step.mistakes?.map((mistake, idx) => (
-                            <div key={`err-${idx}`} className="flex gap-3 items-start bg-rose-50/50 p-3 rounded-xl border border-rose-100">
-                              <AlertCircle className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-                              <div>
-                                <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-0.5">{t('commonMistakesTitle')}</p>
-                                <p className="text-sm font-medium text-slate-700">{mistake}</p>
-                              </div>
-                            </div>
-                          ))}
-                          {step.bestPractices?.map((bp, idx) => (
-                            <div key={`bp-${idx}`} className="flex gap-3 items-start bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                              <div>
-                                <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-0.5">{t('bestPracticesTitle')}</p>
-                                <p className="text-sm font-medium text-slate-700">{bp}</p>
-                              </div>
-                            </div>
-                          ))}
+               {selectedGuide.steps.map((step, i) => {
+                 const isExpanded = expandedStepId === step.id;
+                 return (
+                 <div key={step.id} className="flex flex-col gap-6 group bg-white border border-slate-100 p-6 md:p-8 rounded-[32px] shadow-sm hover:shadow-xl transition-all duration-500">
+                   {/* Step Header */}
+                   <div 
+                     className="flex flex-col md:flex-row gap-8 items-start cursor-pointer select-none"
+                     onClick={() => setExpandedStepId(isExpanded ? null : step.id)}
+                   >
+                     <div className="shrink-0 w-full md:w-80 h-48 overflow-hidden rounded-[24px] shadow-xl border border-slate-100 relative">
+                        <img src={step.image} alt={step.title} loading="lazy" className={cn("w-full h-full object-cover transition-transform duration-700", isExpanded ? "scale-105" : "group-hover:scale-105")} />
+                        <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-black text-xs shadow-lg ring-4 ring-white">
+                          {i + 1}
                         </div>
-                      )}
+                     </div>
+                     <div className="flex-1 py-2 space-y-4 pr-8">
+                        <div className="flex items-start justify-between">
+                          <h4 className="text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">
+                            {step.title}
+                          </h4>
+                          <motion.div
+                            animate={{ rotate: isExpanded ? 90 : 0 }}
+                            className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:bg-emerald-50 border border-slate-200"
+                          >
+                            <ChevronRight className="w-5 h-5" />
+                          </motion.div>
+                        </div>
+                        <p className="text-slate-500 font-medium text-lg leading-relaxed">{step.description}</p>
+                     </div>
                    </div>
+
+                   {/* Accordion Sub-Steps */}
+                   <AnimatePresence>
+                     {isExpanded && (
+                       <motion.div
+                         initial={{ height: 0, opacity: 0 }}
+                         animate={{ height: "auto", opacity: 1 }}
+                         exit={{ height: 0, opacity: 0 }}
+                         className="overflow-hidden"
+                       >
+                         <div className="pt-8 border-t border-slate-100 space-y-8">
+                           {step.subSteps?.map((sub, sIdx) => (
+                             <div key={sIdx} className="bg-slate-50 rounded-[24px] p-6 md:p-8 border border-slate-200">
+                               <div className="flex items-center gap-3 mb-4">
+                                 <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-black text-xs flex items-center justify-center">
+                                   {i + 1}.{sIdx + 1}
+                                 </div>
+                                 <h5 className="text-xl font-black text-slate-800 uppercase tracking-tight">{sub.title}</h5>
+                               </div>
+                               
+                               <div className="space-y-6">
+                                 {/* Explanations */}
+                                 <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                                   <p className="font-bold text-slate-700 text-lg mb-2">{sub.simpleExplanation}</p>
+                                   <p className="text-slate-500 leading-relaxed font-medium">{sub.detailedExplanation}</p>
+                                 </div>
+
+                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                   {/* Instructions */}
+                                   {sub.instructions.length > 0 && (
+                                     <div className="space-y-3">
+                                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('instructionsTitle')}</p>
+                                       <ul className="space-y-2">
+                                         {sub.instructions.map((inst, idx) => (
+                                           <li key={idx} className="flex gap-3 text-sm font-semibold text-slate-700 items-start">
+                                             <div className="w-5 h-5 mt-0.5 rounded-full bg-slate-200 flex-shrink-0 flex items-center justify-center text-[9px] text-slate-500">
+                                               {idx + 1}
+                                             </div>
+                                             {inst}
+                                           </li>
+                                         ))}
+                                       </ul>
+                                     </div>
+                                   )}
+
+                                   {/* Materials */}
+                                   {sub.materials.length > 0 && (
+                                     <div className="space-y-3">
+                                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('materialsRequiredTitle')}</p>
+                                       <div className="flex flex-wrap gap-2">
+                                         {sub.materials.map((mat, idx) => (
+                                           <span key={idx} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 text-xs font-bold rounded-lg shadow-sm">
+                                             {mat}
+                                           </span>
+                                         ))}
+                                       </div>
+                                     </div>
+                                   )}
+                                 </div>
+
+                                 {/* Tips, Mistakes, Best Practices */}
+                                 {(sub.proTips.length > 0 || sub.mistakes.length > 0 || sub.bestPractices.length > 0) && (
+                                   <div className="grid grid-cols-1 gap-3 pt-4">
+                                     {sub.proTips.map((tip, idx) => (
+                                       <div key={`pro-${idx}`} className="flex gap-3 items-start bg-blue-50/50 p-4 rounded-xl border border-blue-100">
+                                         <Lightbulb className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
+                                         <div>
+                                           <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5">{t('proTipsTitle')}</p>
+                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{tip}</p>
+                                         </div>
+                                       </div>
+                                     ))}
+                                     {sub.mistakes.map((mistake, idx) => (
+                                       <div key={`err-${idx}`} className="flex gap-3 items-start bg-rose-50/50 p-4 rounded-xl border border-rose-100">
+                                         <AlertCircle className="w-5 h-5 text-rose-500 mt-0.5 shrink-0" />
+                                         <div>
+                                           <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-0.5">{t('commonMistakesTitle')}</p>
+                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{mistake}</p>
+                                         </div>
+                                       </div>
+                                     ))}
+                                     {sub.bestPractices.map((bp, idx) => (
+                                       <div key={`bp-${idx}`} className="flex gap-3 items-start bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
+                                         <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
+                                         <div>
+                                           <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-0.5">{t('bestPracticesTitle')}</p>
+                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{bp}</p>
+                                         </div>
+                                       </div>
+                                     ))}
+                                   </div>
+                                 )}
+
+                                 {/* Real-world Example Highlight */}
+                                 {sub.example && (
+                                   <div className="mt-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group">
+                                      <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-150 transition-transform duration-700">
+                                        <TrendingUp className="w-32 h-32 text-indigo-400" />
+                                      </div>
+                                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                        <Play className="w-3 h-3" /> {t('realWorldExampleTitle')}
+                                      </p>
+                                      <p className="text-sm text-slate-300 font-medium leading-relaxed italic relative z-10">
+                                        "{sub.example}"
+                                      </p>
+                                   </div>
+                                 )}
+
+                               </div>
+                             </div>
+                           ))}
+                         </div>
+                       </motion.div>
+                     )}
+                   </AnimatePresence>
+
                  </div>
-               ))}
+                 );
+               })}
              </div>
 
              {/* Interactive Calculators */}

@@ -2097,4 +2097,16 @@ export const en = {
     feedRate: "Feed Rate (%)",
     daysGrowth: "Days",
     calculateBtn: "Calculate",
+
+    // Deep Learning Module Extensions
+    instructionsTitle: "Instructions",
+    materialsRequiredTitle: "Materials Required",
+    realWorldExampleTitle: "Real-world Example",
+    milkProductionTitle: "Modern Milk Production Guide",
+    dairyFarmSetupTitle: "Dairy Farm Setup Guide",
+    broilerFarmingTitle: "Commercial Broiler Farming Guide",
+    goatFarmingTitle: "Commercial Goat Farming",
+    sheepFarmingTitle: "Commercial Sheep Farming",
+    fishFarmingTitle: "Inland Fish Farming",
+    cat_dairy: "Dairy",
 };
