@@ -27,7 +27,10 @@ import {
   Fish,
   Landmark,
   Sprout,
-  Sun
+  Sun,
+  Shrimp,
+  Beef,
+  GlassWater
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FeatureCard } from "@/components/FeatureCard";
@@ -154,6 +157,14 @@ function ShrimpGrowthEstimator() {
     </div>
   );
 }
+
+// --- Atomic UI Components ---
+const AgriCard = ({ title, children, color = "white" }: { title: string, children: React.ReactNode, color?: string }) => (
+  <div className={cn("rounded-2xl shadow-lg p-6 border transition-all hover:shadow-xl", `bg-${color}`)}>
+    <h3 className="font-black text-lg mb-4 uppercase tracking-tight text-slate-900 border-b border-slate-100 pb-2">{title}</h3>
+    <div className="text-slate-600 font-medium leading-relaxed">{children}</div>
+  </div>
+);
 
 // --- Main Component ---
 export default function AgriKnowledgeHub() {
@@ -652,10 +663,13 @@ export default function AgriKnowledgeHub() {
                {selectedGuide.steps.map((step, i) => {
                  const isExpanded = expandedStepId === step.id;
                  return (
-                 <div key={step.id} className="flex flex-col gap-6 group bg-white border border-slate-100 p-6 md:p-8 rounded-[32px] shadow-sm hover:shadow-xl transition-all duration-500">
-                   {/* Step Header */}
+                 <div key={step.id} className="flex flex-col gap-6">
+                   {/* Step Header -> Now a Standalone Card */}
                    <div 
-                     className="flex flex-col md:flex-row gap-8 items-start cursor-pointer select-none"
+                     className={cn(
+                       "flex flex-col md:flex-row gap-8 items-start cursor-pointer select-none bg-white rounded-xl shadow p-4 border border-slate-200 transition-all duration-500 group",
+                       isExpanded ? "ring-2 ring-emerald-500/20 border-emerald-100 shadow-md" : "hover:shadow-xl hover:border-slate-200"
+                     )}
                      onClick={() => setExpandedStepId(isExpanded ? null : step.id)}
                    >
                      <div className="shrink-0 w-full md:w-80 h-48 overflow-hidden rounded-[24px] shadow-xl border border-slate-100 relative">
@@ -680,7 +694,7 @@ export default function AgriKnowledgeHub() {
                      </div>
                    </div>
 
-                   {/* Accordion Sub-Steps */}
+                   {/* Accordion Sub-Steps -> Each will render as standalone sibling cards */}
                    <AnimatePresence>
                      {isExpanded && (
                        <motion.div
@@ -689,116 +703,129 @@ export default function AgriKnowledgeHub() {
                          exit={{ height: 0, opacity: 0 }}
                          className="overflow-hidden"
                        >
-                         <div className="pt-8 border-t border-slate-100 space-y-8">
-                           {step.subSteps?.map((sub, sIdx) => (
-                             <div key={sIdx} className="bg-slate-50 rounded-[24px] p-6 md:p-8 border border-slate-200">
-                               <div className="flex items-center gap-3 mb-4">
-                                 <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-black text-xs flex items-center justify-center">
-                                   {i + 1}.{sIdx + 1}
-                                 </div>
-                                 <h5 className="text-xl font-black text-slate-800 uppercase tracking-tight">{sub.title}</h5>
-                               </div>
-                               
-                               <div className="space-y-6">
-                                 {/* Explanations */}
-                                 <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                                   <p className="font-bold text-slate-700 text-lg mb-2">{sub.simpleExplanation}</p>
-                                   <p className="text-slate-500 leading-relaxed font-medium">{sub.detailedExplanation}</p>
-                                 </div>
-
-                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                   {/* Instructions */}
-                                   {sub.instructions.length > 0 && (
-                                     <div className="space-y-3">
-                                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('instructionsTitle')}</p>
-                                       <ul className="space-y-2">
-                                         {sub.instructions.map((inst, idx) => (
-                                           <li key={idx} className="flex gap-3 text-sm font-semibold text-slate-700 items-start">
-                                             <div className="w-5 h-5 mt-0.5 rounded-full bg-slate-200 flex-shrink-0 flex items-center justify-center text-[9px] text-slate-500">
-                                               {idx + 1}
-                                             </div>
-                                             {inst}
-                                           </li>
-                                         ))}
-                                       </ul>
-                                     </div>
-                                   )}
-
-                                   {/* Materials */}
-                                   {sub.materials.length > 0 && (
-                                     <div className="space-y-3">
-                                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t('materialsRequiredTitle')}</p>
-                                       <div className="flex flex-wrap gap-2">
-                                         {sub.materials.map((mat, idx) => (
-                                           <span key={idx} className="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 text-xs font-bold rounded-lg shadow-sm">
-                                             {mat}
-                                           </span>
-                                         ))}
-                                       </div>
-                                     </div>
-                                   )}
-                                 </div>
-
-                                 {/* Tips, Mistakes, Best Practices */}
-                                 {(sub.proTips.length > 0 || sub.mistakes.length > 0 || sub.bestPractices.length > 0) && (
-                                   <div className="grid grid-cols-1 gap-3 pt-4">
-                                     {sub.proTips.map((tip, idx) => (
-                                       <div key={`pro-${idx}`} className="flex gap-3 items-start bg-blue-50/50 p-4 rounded-xl border border-blue-100">
-                                         <Lightbulb className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
-                                         <div>
-                                           <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5">{t('proTipsTitle')}</p>
-                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{tip}</p>
-                                         </div>
-                                       </div>
-                                     ))}
-                                     {sub.mistakes.map((mistake, idx) => (
-                                       <div key={`err-${idx}`} className="flex gap-3 items-start bg-rose-50/50 p-4 rounded-xl border border-rose-100">
-                                         <AlertCircle className="w-5 h-5 text-rose-500 mt-0.5 shrink-0" />
-                                         <div>
-                                           <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-0.5">{t('commonMistakesTitle')}</p>
-                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{mistake}</p>
-                                         </div>
-                                       </div>
-                                     ))}
-                                     {sub.bestPractices.map((bp, idx) => (
-                                       <div key={`bp-${idx}`} className="flex gap-3 items-start bg-emerald-50/50 p-4 rounded-xl border border-emerald-100">
-                                         <CheckCircle2 className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                                         <div>
-                                           <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-0.5">{t('bestPracticesTitle')}</p>
-                                           <p className="text-sm font-bold text-slate-700 leading-relaxed">{bp}</p>
-                                         </div>
-                                       </div>
-                                     ))}
-                                   </div>
-                                 )}
-
-                                 {/* Real-world Example Highlight */}
-                                 {sub.example && (
-                                   <div className="mt-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group">
-                                      <div className="absolute -right-4 -top-4 opacity-5 group-hover:scale-150 transition-transform duration-700">
-                                        <TrendingUp className="w-32 h-32 text-indigo-400" />
+                         <div className="space-y-4 pt-10">
+                             {step.subSteps?.map((sub, sIdx) => (
+                                <motion.div 
+                                  key={sIdx}
+                                  initial={{ opacity: 0, y: 20 }}
+                                  whileInView={{ opacity: 1, y: 0 }}
+                                  viewport={{ once: true }}
+                                  transition={{ delay: sIdx * 0.1, duration: 0.5 }}
+                                  className="space-y-5 pt-10 border-t border-slate-100/50 first:border-0 first:pt-4"
+                                >
+                                  {/* 📘 PROCESS CARD */}
+                                  <div className="backdrop-blur-lg bg-white/20 border border-white/40 rounded-2xl shadow-xl p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                                    <h3 className="flex items-center gap-3 font-black text-xl text-slate-900 mb-6 uppercase tracking-tight">
+                                      <span className="text-2xl">📘</span> Step Details: {sub.title}
+                                    </h3>
+                                    
+                                    <div className="space-y-6">
+                                      <div className="p-4 bg-white/40 backdrop-blur-md rounded-xl border border-white/50 shadow-inner">
+                                        <p className="text-[11px] font-black uppercase text-emerald-700 tracking-[0.2em] mb-2">Technical Overview</p>
+                                        <p className="text-slate-800 text-[16px] font-bold leading-relaxed italic border-l-4 border-emerald-500 pl-4">
+                                          {sub.simpleExplanation}
+                                        </p>
                                       </div>
-                                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                        <Play className="w-3 h-3" /> {t('realWorldExampleTitle')}
-                                      </p>
-                                      <p className="text-sm text-slate-300 font-medium leading-relaxed italic relative z-10">
-                                        "{sub.example}"
-                                      </p>
-                                   </div>
-                                 )}
 
-                               </div>
-                             </div>
-                           ))}
-                         </div>
-                       </motion.div>
-                     )}
-                   </AnimatePresence>
+                                      <div className="space-y-2 px-1">
+                                        <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">In-Depth Cultivation Logic</p>
+                                        <p className="text-slate-600 text-[15px] font-medium leading-relaxed">
+                                          {sub.detailedExplanation}
+                                        </p>
+                                      </div>
 
-                 </div>
-                 );
-               })}
-             </div>
+                                      {sub.instructions.length > 0 && (
+                                        <div className="space-y-4">
+                                          <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Step-by-Step implementation</p>
+                                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {sub.instructions.map((inst, iIdx) => (
+                                              <div key={iIdx} className="flex gap-4 items-start bg-white/30 p-4 rounded-xl border border-white/40 shadow-sm hover:bg-white/50 transition-colors">
+                                                <div className="w-8 h-8 rounded-lg bg-white/80 border border-slate-200 flex items-center justify-center shrink-0 font-black text-emerald-600 text-sm shadow-sm">
+                                                  {iIdx + 1}
+                                                </div>
+                                                <p className="text-slate-700 text-sm font-bold leading-tight pt-1">{inst}</p>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {sub.materials.length > 0 && (
+                                        <div className="pt-5 border-t border-slate-200/30">
+                                          <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-3">Required Resources</p>
+                                          <div className="flex flex-wrap gap-2">
+                                            {sub.materials.map((mat, mIdx) => (
+                                              <span key={mIdx} className="px-4 py-2 bg-slate-900 text-white text-[10px] font-black rounded-xl border border-slate-800 uppercase tracking-widest shadow-lg hover:scale-105 transition-transform">
+                                                {mat}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* TIP + PRACTICES GRID */}
+                                  <div className="grid md:grid-cols-2 gap-5">
+                                    {/* 🌱 FARMER TIP */}
+                                    <div className="backdrop-blur-lg bg-green-50/60 border border-green-100/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] flex flex-col justify-between">
+                                      <div>
+                                        <h4 className="flex items-center gap-2 font-black text-green-700 uppercase tracking-tight text-sm mb-4">
+                                          <span className="text-lg">🌱</span> Farmer Tip
+                                        </h4>
+                                        <div className="space-y-3">
+                                          {sub.proTips.map((tip, tIdx) => (
+                                            <p key={tIdx} className="text-[14px] text-green-900 font-bold leading-relaxed flex gap-3">
+                                              <span className="text-green-500">•</span>
+                                              {tip}
+                                            </p>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* ✅ BEST PRACTICES */}
+                                    <div className="backdrop-blur-lg bg-slate-50/60 border border-slate-200/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:scale-[1.02]">
+                                      <h4 className="flex items-center gap-2 font-black text-slate-800 uppercase tracking-tight text-sm mb-4">
+                                        <span className="text-lg">✅</span> Best Practices
+                                      </h4>
+                                      <ul className="space-y-3">
+                                        {sub.bestPractices.map((bp, bIdx) => (
+                                          <li key={bIdx} className="text-[14px] font-bold text-slate-600 flex gap-3 items-start leading-tight">
+                                            <span className="text-emerald-500">✔</span>
+                                            {bp}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  </div>
+
+                                  {/* ⚠ COMMON MISTAKES */}
+                                  {sub.mistakes.length > 0 && (
+                                    <div className="backdrop-blur-lg bg-red-50/60 border border-red-100/50 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                                      <h4 className="flex items-center gap-2 font-black text-red-600 uppercase tracking-tight text-sm mb-4">
+                                        <span className="text-lg">⚠</span> Common Mistakes
+                                      </h4>
+                                      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {sub.mistakes.map((mistake, eIdx) => (
+                                          <li key={eIdx} className="flex gap-3 items-start font-bold text-red-900/80 text-[14px] leading-tight bg-white/20 p-3 rounded-lg border border-red-100/30">
+                                            <span className="text-red-500">✖</span>
+                                            {mistake}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </motion.div>
+                             ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  );
+                })}
+              </div>
 
              {/* Interactive Calculators */}
              {selectedGuide.id === "egg-production" && <EggProfitCalculator />}
@@ -849,7 +876,7 @@ export default function AgriKnowledgeHub() {
                        </div>
                        <h4 className="text-xl font-black mb-6 text-emerald-950 uppercase tracking-tight">{t('farmerTipsTitle')}</h4>
                        
-                       <div className="space-y-6">
+                       <div className="space-y-4">
                          <div className="space-y-3">
                            <div className="flex items-center gap-2">
                              <CheckCircle2 className="w-4 h-4 text-emerald-600" />

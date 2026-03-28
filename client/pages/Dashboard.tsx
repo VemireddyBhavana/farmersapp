@@ -37,10 +37,11 @@ import {
   BookOpen,
   Fish,
   Bird,
+  Leaf,
+  Scan,
   Tractor as TractorIcon,
   Sun as SunIcon
 } from "lucide-react";
-import DiseaseDetection from "@/components/DiseaseDetection";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -188,14 +189,33 @@ export default function Dashboard() {
           {/* Disease Detection */}
           <section className="space-y-4">
             <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-              <h2 className="text-xl font-bold tracking-tight text-slate-800">{t('aiCropDiagnostics')}</h2>
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">BETA</span>
+              <h2 className="text-xl font-bold tracking-tight text-slate-800 uppercase italic tracking-tighter">{t('aiCropDiagnostics')}</h2>
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">REAL-WORLD TOOL</span>
             </div>
-            <Card className="rounded-xl border border-slate-200 shadow-sm overflow-hidden bg-slate-50">
-              <CardContent className="p-0">
-                <DiseaseDetection />
-              </CardContent>
-            </Card>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link to="/crop-doctor" className="block group">
+                <Card className="rounded-[2rem] border-2 border-emerald-100 shadow-sm overflow-hidden bg-white hover:border-emerald-500 transition-all p-6 flex items-center gap-4">
+                  <div className="h-14 w-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                    <Leaf className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-slate-800 uppercase italic tracking-tighter">{t('checkCropHealth')}</h3>
+                    <p className="text-[10px] font-bold text-slate-400">Identify problems from 1 leaf</p>
+                  </div>
+                </Card>
+              </Link>
+              <Link to="/crop-doctor" className="block group">
+                <Card className="rounded-[2rem] border-2 border-blue-100 shadow-sm overflow-hidden bg-white hover:border-blue-500 transition-all p-6 flex items-center gap-4">
+                  <div className="h-14 w-14 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                    <Scan className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-slate-800 uppercase italic tracking-tighter">{t('scanFarmAreaOption')}</h3>
+                    <p className="text-[10px] font-bold text-slate-400">Scan entire field area</p>
+                  </div>
+                </Card>
+              </Link>
+            </div>
           </section>
         </div>
 

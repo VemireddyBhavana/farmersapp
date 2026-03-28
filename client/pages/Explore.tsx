@@ -15,7 +15,9 @@ import {
   MessageSquare,
   User,
   TrendingUp,
-  FileText
+  FileText,
+  Leaf,
+  Map
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -75,12 +77,12 @@ const Explore = () => {
       image: "/explore_pests.png"
     },
     {
-      title: t('satelliteAnalysisTitle'),
-      description: t('satelliteAnalysisDesc'),
-      icon: Globe,
+      title: "🌿 Crop Health Monitor",
+      description: "Analyze crop and farm health instantly using smart detection",
+      icon: Leaf,
       color: "bg-emerald-500/10 text-emerald-600",
       link: "/satellite-analysis",
-      image: "/satellite_farm_health.png"
+      image: "/pulses_farm.png"
     },
     {
       title: t('communityHubTitle'),
@@ -115,8 +117,8 @@ const Explore = () => {
       image: "/subsidy_finder.png"
     },
     {
-      title: t('p2pToolSharingTitle'),
-      description: t('p2pToolSharingDesc'),
+      title: t('toolSharingTitle'),
+      description: t('toolSharingDesc'),
       icon: Truck,
       color: "bg-blue-500/10 text-blue-600",
       link: "/tool-sharing",

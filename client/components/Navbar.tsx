@@ -100,30 +100,30 @@ const Navbar = () => {
   ];
 
   const premiumLinks = [
-    { name: "Crop Health Monitor", path: "/satellite-analysis", icon: Globe, desc: "Track crop health using satellite data." },
-    { name: "Farmer Community",    path: "/community",          icon: Users, desc: "Connect with farmers and share knowledge." },
-    { name: "Expert Help",         path: "/expert-consult",     icon: User,  desc: "Talk to certified agriculture experts." },
-    { name: "Yield Forecast",      path: "/yield-prediction",   icon: TrendingUp, desc: "Estimate your crop production using AI." },
-    { name: "Subsidy Checker",     path: "/subsidy-finder",     icon: FileText, desc: "Find government schemes easily." },
-    { name: "Tool Sharing",        path: "/tool-sharing",       icon: Truck, desc: "Share and rent farming tools nearby." },
-    { name: "Soil Test Finder",    path: "/soil-lab-locator",   icon: Microscope, desc: "Locate soil testing labs near you." },
-    { name: "Loan & EMI Calculator", path: "/agri-loan-calculator", icon: Calculator, desc: "Plan loans and calculate EMI easily." },
-    { name: "Farm Ledger",         path: "/farmer-finance",     icon: Wallet, desc: "Track expenses, sales, and profits." },
+    { name: "Crop Health Monitor", path: "/satellite-analysis", icon: Globe },
+    { name: "Farmer Community",    path: "/community",          icon: Users },
+    { name: "Expert Help",         path: "/expert-consult",     icon: User  },
+    { name: "Yield Forecast",      path: "/yield-prediction",   icon: TrendingUp },
+    { name: "Subsidy Checker",     path: "/subsidy-finder",     icon: FileText },
+    { name: "Tool Sharing",        path: "/tool-sharing",       icon: Truck },
+    { name: "Soil Test Finder",    path: "/soil-lab-locator",   icon: Microscope },
+    { name: "Loan & EMI Calculator", path: "/agri-loan-calculator", icon: Calculator },
+    { name: "Farm Ledger",         path: "/farmer-finance",     icon: Wallet },
   ];
 
   const ourSolutionsLinks = [
-    { name: t("farmAdvisory"),  path: "/chat",          icon: Bot,           desc: t("solutionAdvisoryDesc") },
-    { name: t("agriInputs"),    path: "/seeds",         icon: Sprout,        desc: t("solutionInputsDesc")   },
-    { name: t("omnichannel"),   path: "/omnichannel",   icon: Store,         desc: t("solutionOmniDesc")     },
-    { name: t("marketLinkage"), path: "/market-linkage",icon: TrendingUp,    desc: t("solutionMarketDesc")   },
+    { name: t("farmAdvisory"),  path: "/chat",          icon: Bot        },
+    { name: t("agriInputs"),    path: "/seeds",         icon: Sprout     },
+    { name: t("omnichannel"),   path: "/omnichannel",   icon: Store      },
+    { name: t("marketLinkage"), path: "/market-linkage",icon: TrendingUp },
   ];
 
   const aboutTeachSparkLinks = [
-    { name: t("aboutUs"),       path: "/about",      icon: Target,        desc: t("aboutUsDesc") },
-    { name: t("ourVision"),     path: "/vision", icon: Target,        desc: t("visionDesc")                 },
-    { name: t("ourImpact"),     path: "/impact",     icon: Zap,           desc: t("impactDesc")                 },
-    { name: "TechSpark AI",     path: "/techspark",  icon: Bot,           desc: "Technology & Innovation"      },
-    { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake,desc: t("joinUsDesc")                 },
+    { name: t("aboutUs"),       path: "/about",      icon: Target         },
+    { name: t("ourVision"),     path: "/vision",     icon: Target         },
+    { name: t("ourImpact"),     path: "/impact",     icon: Zap            },
+    { name: "TechSpark AI",     path: "/techspark",  icon: Bot            },
+    { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake },
   ];
 
   return (
@@ -267,8 +267,8 @@ const Navbar = () => {
                           <motion.div key={item.path} variants={dropdownItemVariants}>
                             <DropdownMenuItem asChild>
                               <Link to={item.path} className={cn(
-                                "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
-                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10" : "hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                                "relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10 text-emerald-700" : "hover:bg-gray-100 text-foreground group-hover:text-emerald-600"
                               )}>
                                 {location.pathname === item.path && (
                                   <motion.div
@@ -281,10 +281,7 @@ const Navbar = () => {
                                   </motion.div>
                                 )}
                                 <item.icon className="h-4 w-4 text-emerald-600" />
-                                <div>
-                                  <p className={cn("text-sm font-bold", location.pathname === item.path ? "text-emerald-700" : "text-foreground group-hover:text-emerald-600")}>{item.name}</p>
-                                  <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
-                                </div>
+                                <span className="text-sm font-semibold">{item.name}</span>
                               </Link>
                             </DropdownMenuItem>
                           </motion.div>
@@ -316,8 +313,8 @@ const Navbar = () => {
                           <motion.div key={item.path} variants={dropdownItemVariants}>
                             <DropdownMenuItem asChild>
                               <Link to={item.path} className={cn(
-                                "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
-                                location.pathname === item.path ? "bg-blue-50/50 dark:bg-blue-900/10" : "hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                "relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                                location.pathname === item.path ? "bg-blue-50/50 dark:bg-blue-900/10 text-blue-700" : "hover:bg-gray-100 text-foreground group-hover:text-blue-600"
                               )}>
                                 {location.pathname === item.path && (
                                   <motion.div
@@ -330,10 +327,7 @@ const Navbar = () => {
                                   </motion.div>
                                 )}
                                 <item.icon className="h-4 w-4 text-blue-600" />
-                                <div>
-                                  <p className={cn("text-sm font-bold", location.pathname === item.path ? "text-blue-700" : "text-foreground group-hover:text-blue-600")}>{item.name}</p>
-                                  <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
-                                </div>
+                                <span className="text-sm font-semibold">{item.name}</span>
                               </Link>
                             </DropdownMenuItem>
                           </motion.div>
@@ -365,8 +359,8 @@ const Navbar = () => {
                           <motion.div key={item.path} variants={dropdownItemVariants}>
                             <DropdownMenuItem asChild>
                               <Link to={item.path} className={cn(
-                                "relative flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
-                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10" : "hover:bg-emerald-50 dark:hover:bg-emerald-900/20"
+                                "relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
+                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10 text-emerald-700" : "hover:bg-gray-100 text-foreground group-hover:text-emerald-600"
                               )}>
                                 {location.pathname === item.path && (
                                   <motion.div
@@ -378,11 +372,8 @@ const Navbar = () => {
                                     <div className="absolute inset-0 bg-emerald-500/10 rounded-lg" />
                                   </motion.div>
                                 )}
-                                <item.icon className="h-4 w-4 text-emerald-600 mt-0.5" />
-                                <div>
-                                  <p className={cn("text-sm font-bold", location.pathname === item.path ? "text-emerald-700" : "text-foreground group-hover:text-emerald-600")}>{item.name}</p>
-                                  <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
-                                </div>
+                                <item.icon className="h-4 w-4 text-emerald-600" />
+                                <span className="text-sm font-semibold">{item.name}</span>
                               </Link>
                             </DropdownMenuItem>
                           </motion.div>
@@ -473,10 +464,7 @@ const Navbar = () => {
                   <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
                     className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-emerald-100 text-emerald-700" : "text-muted-foreground hover:bg-muted")}>
                     <link.icon className="h-4 w-4 flex-shrink-0 text-emerald-600" /> 
-                    <div className="flex flex-col">
-                      <span>{link.name}</span>
-                      <span className="text-[9px] opacity-60 font-medium">{link.desc}</span>
-                    </div>
+                    <span>{link.name}</span>
                   </Link>
                 ))}
               </div>

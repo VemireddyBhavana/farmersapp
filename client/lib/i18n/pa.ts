@@ -1257,8 +1257,8 @@ export const pa = {
     today: "ਅੱਜ",
     // Cultivation Guides
     indoorSaffronTitle: "ਇਨਡੋਰ ਕੇਸਰ ਦੀ ਖੇਤੀ ਗਾਈਡ",
-    eggProductionTitle: "ਅੰਡਾ ਉਤਪਾਦਨ ਗਾਈਡ",
-    shrimpFarmingTitle: "ਵੈਨਾਮੇਈ ਝੀਂਗਾ ਪਾਲਣ",
+    eggProductionTitle: "Egg Production (Layer Farming) Guide",
+    shrimpFarmingTitle: "Vannamei Shrimp Farming Guide",
     aloeVeraTitle: "ਐਲੋਵੇਰਾ ਦੀ ਖੇਤੀ ਗਾਈਡ",
     curryLeavesTitle: "ਕੜੀ ਪੱਤੇ ਦੀ ਖੇਤੀ ਗਾਈਡ",
     solarPumpTitle: "ਪੀਐਮ ਕੁਸੁਮ ਸੋਲਰ ਪੰਪ ਸਬਸਿਡੀ",
@@ -1306,11 +1306,16 @@ export const pa = {
     instructionsTitle: "Instructions",
     materialsRequiredTitle: "Materials Required",
     realWorldExampleTitle: "Real-world Example",
-    milkProductionTitle: "Modern Milk Production Guide",
+    milkProductionTitle: "Milk Production Guide",
     dairyFarmSetupTitle: "Dairy Farm Setup Guide",
-    broilerFarmingTitle: "Commercial Broiler Farming Guide",
-    goatFarmingTitle: "Commercial Goat Farming",
-    sheepFarmingTitle: "Commercial Sheep Farming",
-    fishFarmingTitle: "Inland Fish Farming",
+    broilerFarmingTitle: "Broiler Chicken Farming Guide",
+    goatFarmingTitle: "Goat Farming Guide",
+    sheepFarmingTitle: "Sheep Farming Guide",
+    fishFarmingTitle: "Inland Fish Farming Guide",
     cat_dairy: "Dairy",
-};
+
+    // Deep Learning Module Extensions
+    detailedExplanationTitle: "Detailed Expert Explanation",
+    cat_poultry: "Poultry",
+    cat_subsidies: "Subsidies",
+    cat_gardening: "Gardening",};

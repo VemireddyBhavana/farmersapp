@@ -2,36 +2,26 @@ const fs = require('fs');
 const path = require('path');
 
 const i18nDir = path.join(__dirname, 'lib', 'i18n');
-const languageFiles = ['en.ts', 'hi.ts', 'te.ts', 'ta.ts', 'pa.ts', 'mr.ts', 'ml.ts', 'kn.ts', 'gu.ts', 'bn.ts'];
+const languageFiles = ['hi.ts', 'te.ts', 'ta.ts', 'pa.ts', 'mr.ts', 'ml.ts', 'kn.ts', 'gu.ts', 'bn.ts'];
 
 const keysToInject = `
-    // Smart Assistant Features
-    proTipsTitle: "Pro Tips",
-    commonMistakesTitle: "Common Mistakes",
-    bestPracticesTitle: "Best Practices",
-    watchDemoTitle: "Watch Demo",
-    estimatedCostTitle: "Estimated Cost",
-    expectedProfitTitle: "Expected Profit",
-    timeDurationTitle: "Time Duration",
-    requiredResourcesTitle: "Required Resources",
-    farmerTipsTitle: "Farmer Tips",
-    dosTitle: "Do's",
-    dontsTitle: "Don'ts",
-    saveGuideBtn: "Save Guide",
-    savedGuideBtn: "Saved",
-    difficultyBeginner: "Beginner",
-    difficultyIntermediate: "Intermediate",
-    difficultyExpert: "Expert",
-    profitCalculatorTitle: "Profit Calculator",
-    eggProfitCalculatorTitle: "Egg Profit Calculator",
-    shrimpGrowthEstimatorTitle: "Shrimp Growth Estimator",
-    feedPerBird: "Feed per Bird (kg)",
-    numberOfBirds: "Number of Birds",
-    milkYield: "Milk Yield (L)",
-    fishCount: "Fish Count",
-    feedRate: "Feed Rate (%)",
-    daysGrowth: "Days",
-    calculateBtn: "Calculate",
+    // Deep Learning Module Extensions
+    detailedExplanationTitle: "Detailed Expert Explanation",
+    instructionsTitle: "Instructions",
+    materialsRequiredTitle: "Materials Required",
+    realWorldExampleTitle: "Real-world Example",
+    milkProductionTitle: "Milk Production Guide",
+    dairyFarmSetupTitle: "Dairy Farm Setup Guide",
+    broilerFarmingTitle: "Broiler Chicken Farming Guide",
+    eggProductionTitle: "Egg Production (Layer Farming) Guide",
+    goatFarmingTitle: "Goat Farming Guide",
+    sheepFarmingTitle: "Sheep Farming Guide",
+    fishFarmingTitle: "Inland Fish Farming Guide",
+    shrimpFarmingTitle: "Vannamei Shrimp Farming Guide",
+    cat_poultry: "Poultry",
+    cat_dairy: "Dairy",
+    cat_subsidies: "Subsidies",
+    cat_gardening: "Gardening",
 `;
 
 languageFiles.forEach(file => {
