@@ -96,7 +96,7 @@ export function AgriModal({
             </div>
             
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-8 no-scrollbar bg-white">
+            <div className="flex-1 overflow-y-auto p-6 md:p-8 no-scrollbar bg-slate-50/50">
               {children}
             </div>
           </motion.div>

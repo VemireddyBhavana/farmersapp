@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import DiseaseDetection from "@/components/DiseaseDetection";
+import CropHealthChecker from "@/components/CropHealthChecker";
 import { useLanguage } from "@/lib/LanguageContext";
 import {
   Select,
@@ -217,7 +217,7 @@ export default function Pests() {
 
       {/* Disease Detection Camera Section */}
       <section id="detection" className="scroll-mt-24">
-        <DiseaseDetection />
+        <CropHealthChecker />
       </section>
 
       {/* Monitoring Setup Section */}

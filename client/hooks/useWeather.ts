@@ -1,201 +1,204 @@
 import { useState, useEffect, useCallback } from "react";
 
-const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
-const CACHE_KEY = "ismigs_weather_cache";
-const CACHE_TTL = 10 * 60 * 1000; // 10 minutes in milliseconds
+const CACHE_KEY = "ismigs_weather_intel_cache";
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes (MSN Refresh cycle)
 
-export interface WeatherData {
-    temp: number;
-    feelsLike: number;
-    humidity: number;
-    windSpeed: number;
-    description: string;
-    icon: string;
-    location: string;
-    rainProbability: number;
-    cloudCoverage: number;
-    uvIndex: number;
-    timestamp: number;
+export interface WeatherCondition {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
 }
 
-export interface ForecastData {
-    day: string;
-    temp: number;
-    condition: string;
-    icon: string;
+export interface CurrentWeather {
+  dt: number;
+  temp: number;
+  feels_like: number;
+  humidity: number;
+  uvi: number;
+  visibility: number;
+  wind_speed: number;
+  pressure: number;
+  sunrise: number;
+  sunset: number;
+  weather: WeatherCondition[];
+}
+
+export interface HourlyWeather {
+  dt: number;
+  temp: number;
+  weather: WeatherCondition[];
+  pop: number; // Probability of precipitation
+}
+
+export interface DailyWeather {
+  dt: number;
+  temp: {
+    min: number;
+    max: number;
+  };
+  weather: WeatherCondition[];
+  pop: number;
+}
+
+export interface SatelliteData {
+  ndvi: number;
+  soil: {
+    moisture: number;
+    carbon: number;
+  };
+  status: string;
+  timestamp: string;
+}
+
+export interface WeatherData {
+  lat: number;
+  lon: number;
+  current: CurrentWeather;
+  hourly: HourlyWeather[];
+  daily: DailyWeather[];
+  satellite: SatelliteData;
+  location: string;
+  advisory: string;
+  timestamp: number;
 }
 
 export const useWeather = () => {
-    const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [forecast, setForecast] = useState<ForecastData[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
 
-    const fetchWeather = useCallback(async (lat?: number, lon?: number, manualLocation?: string) => {
-        setLoading(true);
-        setError(null);
+  const fetchWeather = useCallback(async (lat?: number, lon?: number, manualLocation?: string) => {
+    setLoading(true);
+    setLoadingStage("Initializing Satellite Link...");
+    setError(null);
 
-        try {
-            // Check cache first
-            if (!manualLocation) {
-                const cached = localStorage.getItem(CACHE_KEY);
-                if (cached) {
-                    const { data, forecast: cachedForecast, timestamp } = JSON.parse(cached);
-                    if (Date.now() - timestamp < CACHE_TTL) {
-                        setWeather(data);
-                        setForecast(cachedForecast);
-                        setLoading(false);
-                        return;
-                    }
-                }
-            }
+    try {
+      let queryLat = lat;
+      let queryLon = lon;
+      let displayLocation = "";
 
-            let queryLat = lat;
-            let queryLon = lon;
-            let locationName = "Current Location";
+      // 1. Optional Geocoding on Frontend (User Implementation Strategy 2)
+      if (manualLocation) {
+        setLoadingStage("Geocoding Location Coordinates...");
+        const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+        const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(manualLocation)}&limit=1&appid=${API_KEY}`;
+        const geoRes = await fetch(geoUrl);
+        const geoData = await geoRes.json();
 
-            if (manualLocation) {
-                const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(manualLocation)}&count=1&language=en&format=json`;
-                const geoRes = await fetch(geoUrl);
-                if (!geoRes.ok) throw new Error("Failed to fetch location data");
-                const geoData = await geoRes.json();
-                if (!geoData.results || geoData.results.length === 0) {
-                    throw new Error("Location not found");
-                }
-                queryLat = geoData.results[0].latitude;
-                queryLon = geoData.results[0].longitude;
-                locationName = `${geoData.results[0].name}, ${geoData.results[0].country}`;
-            } else if (lat === undefined || lon === undefined) {
-                throw new Error("No location provided");
-            } else {
-                // Try to reverse geocode if lat/lon is provided
-                try {
-                    const revGeoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
-                    const revRes = await fetch(revGeoUrl);
-                    if (revRes.ok) {
-                        const revData = await revRes.json();
-                        locationName = revData.address?.city || revData.address?.town || revData.address?.village || revData.address?.county || "Current Location";
-                    }
-                } catch (e) {
-                    console.log("Reverse geocoding failed, using fallback name");
-                }
-            }
-
-            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${queryLat}&longitude=${queryLon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,cloud_cover&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`;
-
-            const weatherRes = await fetch(weatherUrl);
-
-            if (!weatherRes.ok) {
-                throw new Error("Failed to fetch weather data.");
-            }
-
-            const weatherData = await weatherRes.json();
-
-            // Open-Meteo Weather Codes Mapping
-            const getWeatherDescription = (code: number) => {
-                const codes: Record<number, string> = {
-                    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
-                    45: "Fog", 48: "Depositing rime fog",
-                    51: "Light drizzle", 53: "Moderate drizzle", 55: "Dense drizzle",
-                    61: "Slight rain", 63: "Moderate rain", 65: "Heavy rain",
-                    71: "Slight snow fall", 73: "Moderate snow fall", 75: "Heavy snow fall",
-                    95: "Thunderstorm", 96: "Thunderstorm with slight hail", 99: "Thunderstorm with heavy hail"
-                };
-                return codes[code] || "Unknown";
-            };
-
-            const getIcon = (code: number) => {
-                if (code === 0 || code === 1) return "01d";
-                if (code === 2) return "02d";
-                if (code === 3) return "03d";
-                if (code >= 50 && code <= 65) return "09d";
-                if (code >= 70 && code <= 75) return "13d";
-                if (code >= 95) return "11d";
-                return "03d";
-            };
-
-            // Process current weather
-            const processedWeather: WeatherData = {
-                temp: Math.round(weatherData.current.temperature_2m),
-                feelsLike: Math.round(weatherData.current.apparent_temperature),
-                humidity: weatherData.current.relative_humidity_2m,
-                windSpeed: Math.round(weatherData.current.wind_speed_10m),
-                description: getWeatherDescription(weatherData.current.weather_code),
-                icon: getIcon(weatherData.current.weather_code),
-                location: locationName,
-                rainProbability: weatherData.current.precipitation > 0 ? 100 : 0, // Simplified for current
-                cloudCoverage: weatherData.current.cloud_cover,
-                uvIndex: 0,
-                timestamp: Date.now()
-            };
-
-            // Process daily forecast
-            const dailyForecast: ForecastData[] = [];
-            for (let i = 0; i < 5; i++) {
-                if (weatherData.daily.time[i]) {
-                    const date = new Date(weatherData.daily.time[i]);
-                    dailyForecast.push({
-                        day: date.toLocaleDateString("en-US", { weekday: "short" }),
-                        temp: Math.round(weatherData.daily.temperature_2m_max[i]),
-                        condition: getWeatherDescription(weatherData.daily.weather_code[i]),
-                        icon: getIcon(weatherData.daily.weather_code[i])
-                    });
-                }
-            }
-
-            setWeather(processedWeather);
-            setForecast(dailyForecast);
-
-            // Save to cache
-            if (!manualLocation) {
-                localStorage.setItem(CACHE_KEY, JSON.stringify({
-                    data: processedWeather,
-                    forecast: dailyForecast,
-                    timestamp: Date.now()
-                }));
-            }
-
-        } catch (err: any) {
-            setError(err.message || "An error occurred");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    const getLocationAndFetch = useCallback(() => {
-        if (!navigator.geolocation) {
-            setError("Geolocation is not supported by your browser");
-            return;
+        if (!geoData || geoData.length === 0) {
+          throw new Error(`Location not found: ${manualLocation}`);
         }
 
-        setLoading(true);
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                fetchWeather(position.coords.latitude, position.coords.longitude);
-            },
-            (err) => {
-                setError("Location permission denied or unavailable. Please select manually.");
-                setLoading(false);
-            }
-        );
-    }, [fetchWeather]);
+        queryLat = geoData[0].lat;
+        queryLon = geoData[0].lon;
+        displayLocation = geoData[0].state ? `${geoData[0].name}, ${geoData[0].state}, ${geoData[0].country}` : `${geoData[0].name}, ${geoData[0].country}`;
+        setLoadingStage("Locking GPS Composition...");
+      }
 
-    useEffect(() => {
-        // Initial fetch if cache exists, otherwise wait for manual or auto trigger
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (cached) {
-            const { data, forecast: cachedForecast, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < CACHE_TTL) {
-                setWeather(data);
-                setForecast(cachedForecast);
-            } else {
-                getLocationAndFetch();
-            }
+      if (queryLat === undefined || queryLon === undefined) {
+        throw new Error("No coordinate lock found.");
+      }
+
+      setLoadingStage("Scanning Atmospheric Composition...");
+      const params = new URLSearchParams({
+        lat: queryLat.toString(),
+        lon: queryLon.toString()
+      });
+
+      const response = await fetch(`/api/weather?${params.toString()}`);
+      
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Intelligence feed interrupted.");
+      }
+
+      setLoadingStage("Processing Geospatial Imagery...");
+      const data = await response.json();
+      
+      const processedData: WeatherData = {
+        ...data,
+        lat: queryLat,
+        lon: queryLon,
+        location: displayLocation || data.locationName || "Monitored Region",
+        timestamp: Date.now()
+      };
+
+      setWeather(processedData);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(processedData));
+
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setLoadingStage("");
+    }
+  }, []);
+
+  const getLocationAndFetch = useCallback(() => {
+    if (!navigator.geolocation) {
+      setError("Geolocation hardware not detected.");
+      return;
+    }
+
+    setLoading(true);
+    setLoadingStage("Locking GPS Coordinates...");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        fetchWeather(position.coords.latitude, position.coords.longitude);
+      },
+      (err) => {
+        setError("Location access denied. Please manual-lock your region.");
+        setLoading(false);
+        setLoadingStage("");
+      },
+      { timeout: 10000 }
+    );
+  }, [fetchWeather]);
+
+  const refreshWeather = useCallback(() => {
+    if (weather?.lat !== undefined && weather?.lon !== undefined) {
+      fetchWeather(weather.lat, weather.lon);
+    } else {
+      getLocationAndFetch();
+    }
+  }, [weather, fetchWeather, getLocationAndFetch]);
+
+  useEffect(() => {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      try {
+        const data = JSON.parse(cached);
+        if (Date.now() - data.timestamp < CACHE_TTL) {
+          setWeather(data);
         } else {
-            getLocationAndFetch();
+          getLocationAndFetch();
         }
-    }, [getLocationAndFetch]);
+      } catch (e) {
+        getLocationAndFetch();
+      }
+    } else {
+      getLocationAndFetch();
+    }
+  }, [getLocationAndFetch]);
 
-    return { weather, forecast, loading, error, fetchWeather, getLocationAndFetch };
+  // AUTO-REFRESH EVERY 5 MINUTES (MSN Style)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshWeather();
+    }, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [refreshWeather]);
+
+  return { 
+    weather, 
+    loading, 
+    loadingStage,
+    error, 
+    fetchWeather, 
+    getLocationAndFetch,
+    refreshWeather
+  };
 };

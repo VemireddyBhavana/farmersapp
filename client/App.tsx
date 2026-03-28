@@ -36,7 +36,6 @@ import { FloatingChatbot } from "./components/FloatingChatbot";
 import AgriKnowledge from "./pages/AgriKnowledge";
 import Impact from "./pages/Impact";
 import Explore from "./pages/Explore";
-import SatelliteAnalysis from "./pages/SatelliteAnalysis";
 import Community from "./pages/Community";
 import ExpertConsult from "./pages/ExpertConsult";
 import YieldPrediction from "./pages/YieldPrediction";
@@ -48,6 +47,8 @@ import FarmerFinance from "./pages/FarmerFinance";
 import PricePredictor from "./pages/PricePredictor";
 import D2CMarketplace from "./pages/D2CMarketplace";
 import DroneBooking from "./pages/DroneBooking";
+import CropHealthMonitor from "./pages/CropHealthMonitor";
+
 
 import TechSparkAI from "./pages/TechSparkAI";
 import MarketLinkage from "./pages/MarketLinkage";
@@ -104,7 +105,7 @@ const AppRoutes = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/explore" element={<Explore />} />
-      <Route path="/satellite-analysis" element={<SatelliteAnalysis />} />
+      <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
       <Route path="/community" element={<Community />} />
       <Route path="/expert-consult" element={<ExpertConsult />} />
       <Route path="/yield-prediction" element={<YieldPrediction />} />
@@ -116,6 +117,7 @@ const AppRoutes = () => {
       <Route path="/price-predictor" element={<PricePredictor />} />
       <Route path="/d2c-marketplace" element={<D2CMarketplace />} />
       <Route path="/drone-booking" element={<DroneBooking />} />
+      <Route path="/crop-doctor" element={<CropHealthMonitor />} />
       
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
