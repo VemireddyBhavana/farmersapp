@@ -38,7 +38,11 @@ import {
   AlertTriangle,
   Siren,
   HelpCircle,
-  ShieldAlert
+  ShieldAlert,
+  Settings2,
+  Lock,
+  RefreshCcw,
+  SkipForward
 } from "lucide-react";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -76,6 +80,9 @@ const ExpertConsult = () => {
   const [showEmergency, setShowEmergency] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  // Permission Error States
+  const [showPermissionHelp, setShowPermissionHelp] = useState<{ visible: boolean, type: 'camera' | 'mic' | 'both', originalType: any } | null>(null);
+
   // Agora State
   const [localAudioTrack, setLocalAudioTrack] = useState<ILocalAudioTrack | null>(null);
   const [localVideoTrack, setLocalVideoTrack] = useState<ILocalVideoTrack | null>(null);
@@ -97,7 +104,7 @@ const ExpertConsult = () => {
     return () => {
       if (localVideoTrack) localVideoTrack.stop();
     };
-  }, [localVideoTrack, callActive]); // Re-run when overlay becomes active
+  }, [localVideoTrack, callActive]);
 
   // --- AUTO SCROLL & TIMER ---
   useEffect(() => {
@@ -143,17 +150,11 @@ const ExpertConsult = () => {
 
   // --- CALL LOGIC ---
   const startConsultation = async (type: "voice" | "video" | "ai", customPrompt?: string) => {
-    if (isConnecting || callActive) {
-      console.log("Call attempt blocked: already active or connecting");
-      return;
-    }
+    if (isConnecting || callActive) return;
     
     // Safety guard for Agora state
     if (agoraClient.connectionState !== "DISCONNECTED") {
-      console.warn("Agora client not idle, forcing leave before new join");
-      try {
-        await agoraClient.leave();
-      } catch(e) {}
+      try { await agoraClient.leave(); } catch(e) {}
     }
 
     try {
@@ -168,16 +169,36 @@ const ExpertConsult = () => {
       // Agora Join
       await agoraClient.join(APP_ID, "expert-hub", null, null);
       
-      const audio = await AgoraRTC.createMicrophoneAudioTrack();
-      setLocalAudioTrack(audio);
+      // Attempt Microphone first
+      let audio = null;
+      try {
+        audio = await AgoraRTC.createMicrophoneAudioTrack();
+        setLocalAudioTrack(audio);
+      } catch (micErr: any) {
+         if (micErr.message?.includes("Permission denied") || micErr.code === "PERMISSION_DENIED") {
+           setIsConnecting(false);
+           setShowPermissionHelp({ visible: true, type: 'mic', originalType: type });
+           throw micErr;
+         }
+      }
       
       let video = null;
       if (type === "video") {
-        video = await AgoraRTC.createCameraVideoTrack();
-        setLocalVideoTrack(video);
+        try {
+          video = await AgoraRTC.createCameraVideoTrack();
+          setLocalVideoTrack(video);
+        } catch (camErr: any) {
+           if (camErr.message?.includes("Permission denied") || camErr.code === "PERMISSION_DENIED") {
+             setIsConnecting(false);
+             setShowPermissionHelp({ visible: true, type: 'camera', originalType: type });
+             throw camErr;
+           }
+        }
       }
       
-      await agoraClient.publish(video ? [audio, video] : [audio]);
+      if (audio) {
+        await agoraClient.publish(video ? [audio, video] : [audio]);
+      }
       
       setCallStatus("idle");
       timerIntervalRef.current = setInterval(() => setTimer(prev => prev + 1), 1000);
@@ -191,7 +212,9 @@ const ExpertConsult = () => {
 
     } catch (err: any) {
       console.error("Join Failed:", err);
-      toast.error(err.message || "Bridge Error: Check Mic/Camera Permissions");
+      if (!(err.message?.includes("Permission denied") || err.code === "PERMISSION_DENIED")) {
+        toast.error(err.message || "Connection Error: Please check your internet");
+      }
       cleanupSession();
     } finally {
       setIsConnecting(false);
@@ -224,9 +247,7 @@ const ExpertConsult = () => {
     
     try {
       await agoraClient.leave();
-    } catch(e) {
-      console.warn("Safe leave fail:", e);
-    }
+    } catch(e) {}
     
     setCallActive(false);
     setCallStatus("idle");
@@ -417,11 +438,57 @@ const ExpertConsult = () => {
                          </div>
                       </motion.button>
                    </div>
-                   
-                   <div className="mt-8 p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4">
-                      <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />
-                      <p className="text-[10px] font-bold text-white/40 leading-relaxed uppercase tracking-wider">Note: AI Crisis Scan uses real-time video analysis to identify pest outbreaks, crop failures, or livestock emergencies.</p>
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* --- PERMISSION HELP MODAL --- */}
+      <AnimatePresence>
+        {showPermissionHelp?.visible && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl">
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               className="relative w-full max-w-lg bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 overflow-hidden"
+             >
+                <div className="h-16 w-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 mx-auto shadow-3xl shadow-blue-900/40">
+                   <Lock className="h-8 w-8 text-white" />
+                </div>
+                
+                <h3 className="text-3xl font-black text-center mb-2">Action Required</h3>
+                <p className="text-white/40 text-center mb-8 font-medium">Please grant {showPermissionHelp.type} access in your browser to proceed with the consultation.</p>
+                
+                <div className="space-y-4 mb-10">
+                   <div className="flex items-start gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
+                      <div className="h-6 w-6 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-black shrink-0">1</div>
+                      <p className="text-xs font-bold text-white/60">Click the <Settings2 className="inline h-4 w-4 text-white mx-1" /> **Lock/Settings icon** in your browser address bar.</p>
                    </div>
+                   <div className="flex items-start gap-4 p-4 bg-white/5 rounded-2xl border border-white/5">
+                      <div className="h-6 w-6 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-black shrink-0">2</div>
+                      <p className="text-xs font-bold text-white/60">Switch **Microphone** and **Camera** to "Allow".</p>
+                   </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                   <Button 
+                     onClick={() => { setShowPermissionHelp(null); startConsultation(showPermissionHelp.originalType); }}
+                     className="bg-emerald-600 h-14 rounded-2xl font-black uppercase tracking-widest gap-2"
+                   >
+                      <RefreshCcw className="h-5 w-5" /> Retry
+                   </Button>
+                   <Button 
+                     variant="outline"
+                     onClick={() => { 
+                       setShowPermissionHelp(null); 
+                       if (showPermissionHelp.originalType === 'video') startConsultation('voice');
+                       else cleanupSession();
+                     }}
+                     className="bg-white/5 border-white/10 h-14 rounded-2xl font-black uppercase tracking-widest text-white hover:bg-white/10 gap-2"
+                   >
+                      {showPermissionHelp.originalType === 'video' ? <><SkipForward className="h-5 w-5" /> Voice Only</> : "Cancel"}
+                   </Button>
                 </div>
              </motion.div>
           </div>
