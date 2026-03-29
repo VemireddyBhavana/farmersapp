@@ -149,7 +149,7 @@ const ExpertConsult = () => {
   }, [callActive]);
 
   // --- CALL LOGIC ---
-  const startCall = async (type: "voice" | "video") => {
+  const startCall = async (type: "voice" | "video", contextPrompt?: string) => {
     try {
       setCallActive(true);
       setCallType(type);
@@ -189,7 +189,12 @@ const ExpertConsult = () => {
       }, 1000);
 
       const greeting = t("botWelcome") + " I am your Smart Expert for today. How can I assist you with your farming needs?";
-      setTimeout(() => speakText(greeting), 1000);
+      setTimeout(() => {
+          speakText(greeting);
+          if (contextPrompt) {
+              handleAI(contextPrompt);
+          }
+      }, 1000);
     } catch (err) {
       console.error("Agora Join Error:", err);
       toast.error("Call Failed: Ensure Camera/Microphone permissions are enabled.");
@@ -388,7 +393,8 @@ const ExpertConsult = () => {
                whileHover={{ y: -8, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
                onClick={() => {
-                   if (action.id === 'video' || action.id === 'voice') startCall(action.id as any);
+                   if (action.id === 'ai') startCall('voice', "I need instant expert help with my crops. What should I do?");
+                   else if (action.id === 'video' || action.id === 'voice') startCall(action.id as any);
                    else if (action.id === 'emergency') setShowEmergency(true);
                    else toast.info(`${action.title} coming soon!`);
                }}
@@ -423,12 +429,6 @@ const ExpertConsult = () => {
                       <div className="absolute bottom-4 left-4">
                          <h3 className="text-white font-black text-xl leading-tight">{expert.name}</h3>
                       </div>
-                      {expert.available && (
-                         <div className="absolute top-4 right-4 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-3 py-1.5 rounded-2xl flex items-center gap-2">
-                            <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
-                            <span className="text-white text-[10px] font-black uppercase tracking-widest">Available</span>
-                         </div>
-                      )}
                    </div>
 
                    {/* Simplified Actions */}
@@ -446,11 +446,17 @@ const ExpertConsult = () => {
         {/* 4. SMART HELP FEATURES */}
         <div className="mb-20 grid grid-cols-1 md:grid-cols-3 gap-8">
            {[
-             { title: "Decision Support", icon: BrainCircuit, desc: "AI-driven algorithms to help you choose the best crop and market protocol." },
-             { title: "Personalized Farm Plan", icon: FileText, desc: "Step-by-step roadmap tailored to your specific soil and topography." },
-             { title: "Second Opinion", icon: ShieldCheck, desc: "Validate your diagnosis with senior agri-scientists in seconds." }
+             { title: "Decision Support", icon: BrainCircuit, desc: "AI-driven algorithms to help you choose the best crop and market protocol.", prompt: "Help me choose the best crop and market protocol for my area." },
+             { title: "Personalized Farm Plan", icon: FileText, desc: "Step-by-step roadmap tailored to your specific soil and topography.", prompt: "Generate a personalized farm plan for my soil and topography." },
+             { title: "Second Opinion", icon: ShieldCheck, desc: "Validate your diagnosis with senior agri-scientists in seconds.", prompt: "I need a second opinion on my current crop diagnosis." }
            ].map((feature, i) => (
-             <div key={i} className="flex gap-6 p-6 rounded-[2rem] bg-emerald-950/20 border border-emerald-500/10 group hover:border-emerald-500/30 transition-all">
+             <motion.button 
+               key={i} 
+               whileHover={{ scale: 1.02 }}
+               whileTap={{ scale: 0.98 }}
+               onClick={() => startCall("voice", feature.prompt)}
+               className="flex text-left gap-6 p-6 rounded-[2rem] bg-emerald-950/20 border border-emerald-500/10 group hover:border-emerald-500/30 transition-all h-full"
+             >
                 <div className="flex-shrink-0 h-16 w-16 rounded-[1.2rem] bg-emerald-600/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
                    <feature.icon className="h-8 w-8" />
                 </div>
@@ -458,7 +464,7 @@ const ExpertConsult = () => {
                    <h3 className="text-white font-black text-lg mb-2">{feature.title}</h3>
                    <p className="text-white/30 text-xs font-medium leading-relaxed">{feature.desc}</p>
                 </div>
-             </div>
+             </motion.button>
            ))}
         </div>
 
@@ -532,11 +538,11 @@ const ExpertConsult = () => {
                          ))}
 
                          <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <Button className="h-16 rounded-3xl bg-red-600 hover:bg-red-700 text-white font-black text-sm uppercase tracking-widest gap-3 shadow-2xl">
+                             <Button onClick={() => window.location.href = "tel:18004251556"} className="h-16 rounded-3xl bg-red-600 hover:bg-red-700 text-white font-black text-sm uppercase tracking-widest gap-3 shadow-2xl">
                                 <PhoneCall className="h-5 w-5" />
                                 Call Govt. Toll Free
                              </Button>
-                             <Button variant="outline" onClick={() => startCall("video")} className="h-16 rounded-3xl border-white/10 text-white hover:bg-white/10 bg-transparent font-black text-sm uppercase tracking-widest gap-3">
+                             <Button variant="outline" onClick={() => { setShowEmergency(false); startCall("video", "Analyze my crop for emergency crisis signs immediately."); }} className="h-16 rounded-3xl border-white/10 text-white hover:bg-white/10 bg-transparent font-black text-sm uppercase tracking-widest gap-3">
                                 <Activity className="h-5 w-5" />
                                 AI Crisis Scan
                              </Button>
@@ -710,44 +716,44 @@ const ExpertConsult = () => {
             </div>
 
             {/* BOTTOM CONTROLS & INPUT */}
-            <div className="relative z-50 p-12 flex flex-col items-center gap-10">
+            <div className="relative z-50 p-6 md:p-12 flex flex-col items-center gap-6 md:gap-10 mt-auto">
                 {/* Chat Input Overlay */}
                 <div className="w-full max-w-2xl relative group">
                     <Input 
                         ref={inputRef}
-                        placeholder="Type your doubt or talk directly..."
+                        placeholder="Type or talk to your expert..."
                         value={manualInput}
                         onChange={(e) => setManualInput(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && manualInput.trim()) handleAI(manualInput);
                         }}
-                        className="h-20 bg-white/5 backdrop-blur-3xl border-white/10 rounded-[2.5rem] text-white text-lg font-bold placeholder:text-white/10 pl-10 pr-24 shadow-3xl focus:ring-emerald-500/50 transition-all border-2 focus:border-emerald-500/30"
+                        className="h-16 md:h-20 bg-white/5 backdrop-blur-3xl border-white/10 rounded-[2rem] md:rounded-[2.5rem] text-white text-base md:text-lg font-bold placeholder:text-white/20 pl-8 pr-20 shadow-3xl focus:ring-emerald-500/50 transition-all border-2 focus:border-emerald-500/30"
                     />
                     <button 
                         onClick={() => manualInput.trim() && handleAI(manualInput)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 h-14 w-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl hover:bg-emerald-500 transition-all hover:scale-110 active:scale-95 group"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 h-10 md:h-14 w-10 md:w-14 bg-emerald-600 rounded-xl md:rounded-2xl flex items-center justify-center shadow-2xl hover:bg-emerald-500 transition-all hover:scale-110 active:scale-95 group"
                     >
-                        <Send className="h-8 w-8 text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        <Send className="h-6 w-6 md:h-8 md:w-8 text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </button>
                 </div>
 
-                {/* Floating Action Controls */}
-                <div className="bg-black/60 backdrop-blur-3xl px-12 py-6 rounded-[3rem] border border-white/10 flex items-center gap-10 shadow-[0_32px_128px_rgba(0,0,0,0.8)]">
-                  <button onClick={() => setIsMuted(!isMuted)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isMuted && "bg-red-500/20 border-red-500/50 text-red-500")}>
-                    {isMuted ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
+                {/* Main Action Controls */}
+                <div className="bg-black/80 backdrop-blur-3xl px-6 md:px-12 py-4 md:py-6 rounded-[2.5rem] md:rounded-[3rem] border border-white/10 flex items-center gap-4 md:gap-10 shadow-[0_32px_128px_rgba(0,0,0,0.8)] mb-4">
+                  <button onClick={() => setIsMuted(!isMuted)} className={cn("h-12 w-12 md:h-16 md:w-16 rounded-xl md:rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isMuted && "bg-red-500/20 border-red-500/50 text-red-500")}>
+                    {isMuted ? <MicOff className="h-6 w-6 md:h-7 md:w-7" /> : <Mic className="h-6 w-6 md:h-7 md:w-7" />}
                   </button>
 
                   <button
                     onClick={startListening}
                     disabled={callStatus === "thinking" || isMuted || callStatus === "connecting"}
                     className={cn(
-                      "h-24 w-24 rounded-[2rem] flex items-center justify-center shadow-3xl transition-all active:scale-95 group relative bg-emerald-600 hover:bg-emerald-500 border-4 border-emerald-400/30",
+                      "h-16 w-16 md:h-24 md:w-24 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center shadow-3xl transition-all active:scale-95 group relative bg-emerald-600 hover:bg-emerald-500 border-4 border-emerald-400/30",
                       isListening && "scale-110 shadow-emerald-500/20"
                     )}
                   >
-                    <Mic className={cn("h-10 w-10 text-white", isListening && "animate-pulse")} />
+                    <Mic className={cn("h-8 w-8 md:h-10 md:w-10 text-white", isListening && "animate-pulse")} />
                     {isListening && (
-                        <div className="absolute -top-16 bg-emerald-500 text-white text-[10px] font-black px-6 py-2 rounded-full whitespace-nowrap shadow-2xl animate-bounce tracking-widest">
+                        <div className="absolute -top-12 md:-top-16 bg-emerald-500 text-white text-[8px] md:text-[10px] font-black px-4 md:px-6 py-1.5 md:py-2 rounded-full whitespace-nowrap shadow-2xl animate-bounce tracking-widest">
                             LISTENING...
                         </div>
                     )}
@@ -755,22 +761,22 @@ const ExpertConsult = () => {
 
                   {/* Camera toggle hidden for Voice Calls */}
                   {callType === "video" && (
-                      <button onClick={toggleCamera} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isCameraOff && "bg-red-500/20 border-red-500/50 text-red-500")}>
-                        {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
+                      <button onClick={toggleCamera} className={cn("h-12 w-12 md:h-16 md:w-16 rounded-xl md:rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isCameraOff && "bg-red-500/20 border-red-500/50 text-red-500")}>
+                        {isCameraOff ? <CameraOff className="h-6 w-6 md:h-7 md:w-7" /> : <Camera className="h-6 w-6 md:h-7 md:w-7" />}
                       </button>
                   )}
 
-                  <button onClick={() => setIsSpeakerOn(!isSpeakerOn)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", !isSpeakerOn && "bg-amber-500/20 shadow-amber-500/10")}>
-                    {isSpeakerOn ? <Volume2 className="h-7 w-7" /> : <VolumeX className="h-7 w-7" />}
+                  <button onClick={() => setIsSpeakerOn(!isSpeakerOn)} className={cn("h-12 w-12 md:h-16 md:w-16 rounded-xl md:rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", !isSpeakerOn && "bg-amber-500/20 shadow-amber-500/10")}>
+                    {isSpeakerOn ? <Volume2 className="h-6 w-6 md:h-7 md:w-7" /> : <VolumeX className="h-6 w-6 md:h-7 md:w-7" />}
                   </button>
 
-                  <div className="h-10 w-[1px] bg-white/10 mx-2" />
+                  <div className="h-10 w-[1px] bg-white/10 mx-1 md:mx-2" />
 
                   <button 
                     onClick={endCall} 
-                    className="h-16 w-40 bg-red-600 hover:bg-red-700 rounded-[1.5rem] flex items-center justify-center gap-3 border border-red-500/50 text-white font-black uppercase text-xs tracking-widest shadow-2xl shadow-red-900/40 transition-all hover:scale-[1.05] active:scale-95"
+                    className="h-12 w-32 md:h-16 md:w-44 bg-red-600 hover:bg-red-700 rounded-[1rem] md:rounded-[1.5rem] flex items-center justify-center gap-2 md:gap-3 border-2 border-red-500/50 text-white font-black uppercase text-[10px] md:text-xs tracking-widest shadow-2xl shadow-red-900/60 transition-all hover:scale-[1.05] active:scale-95 z-50"
                   >
-                      <PhoneOff className="h-5 w-5" />
+                      <PhoneOff className="h-4 w-4 md:h-5 md:w-5" />
                       End Call
                   </button>
                 </div>
