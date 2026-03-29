@@ -1292,4 +1292,26 @@ export const hi = {
     shrimpFarmingTitle: "Vannamei Shrimp Farming Guide",
     cat_poultry: "Poultry",
     cat_subsidies: "Subsidies",
-    cat_gardening: "Gardening",};
+    cat_gardening: "Gardening",
+    
+    // Support & Community Hub
+    cropHealthMonitor: "फसल स्वास्थ्य मॉनिटर",
+    farmerCommunity: "किसान समुदाय",
+    expertHelp: "विशेषज्ञ सहायता",
+    yieldForecast: "उपज पूर्वानुमान",
+    subsidyChecker: "सब्सिडी चेकर",
+    toolSharing: "उपकरण साझाकरण",
+    soilTestFinder: "मिट्टी परीक्षण केंद्र",
+    loanCalculator: "कृषि ऋण कैलकुलेटर",
+    farmLedger: "फार्म लेजर (वित्त)",
+    communityHub: "किसान समुदाय केंद्र",
+    shareProgress: "अपनी प्रगति साझा करें...",
+    postNow: "अभी पोस्ट करें",
+    analyzing: "विश्लेषण किया जा रहा है...",
+    expertProtocolGenerated: "विशेषज्ञ प्रोटोकॉल तैयार!",
+    expertAssistantBusy: "विशेषज्ञ सहायक व्यस्त है। सामुदायिक सलाह देख रहे हैं...",
+    comments: "टिप्पणियाँ",
+    addComment: "एक टिप्पणी जोड़ें...",
+    reply: "जवाब दें",
+    share: "साझा करें",
+};
