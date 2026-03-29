@@ -55,7 +55,6 @@ import MarketLinkage from "./pages/MarketLinkage";
 import Omnichannel from "./pages/Omnichannel";
 import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
-import { VoiceAssistant } from "./components/VoiceAssistant";
 import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
 import { LocationProvider } from "./lib/LocationContext";
 import IrrigationStats from "./pages/IrrigationStats";
@@ -204,7 +203,6 @@ const App = () => (
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </Layout>
-                  <VoiceAssistant />
                   <FloatingChatbot />
                 </SignedIn>
                 <SignedOut>
