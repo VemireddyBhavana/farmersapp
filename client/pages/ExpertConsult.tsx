@@ -34,7 +34,11 @@ import {
   Flame,
   Stethoscope,
   PhoneCall,
-  Settings
+  Settings,
+  AlertTriangle,
+  Siren,
+  HelpCircle,
+  ShieldAlert
 } from "lucide-react";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -84,6 +88,17 @@ const ExpertConsult = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const localPlayerRef = useRef<HTMLDivElement>(null);
 
+  // --- VIDEO PLAYBACK FIX: Reliability with localPlayerRef ---
+  useEffect(() => {
+    if (localVideoTrack && localPlayerRef.current) {
+      console.log("Playing local video track...");
+      localVideoTrack.play(localPlayerRef.current);
+    }
+    return () => {
+      if (localVideoTrack) localVideoTrack.stop();
+    };
+  }, [localVideoTrack, callActive]); // Re-run when overlay becomes active
+
   // --- AUTO SCROLL & TIMER ---
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -127,7 +142,7 @@ const ExpertConsult = () => {
   };
 
   // --- CALL LOGIC ---
-  const startConsultation = async (type: "voice" | "video" | "ai") => {
+  const startConsultation = async (type: "voice" | "video" | "ai", customPrompt?: string) => {
     if (isConnecting || callActive) {
       console.log("Call attempt blocked: already active or connecting");
       return;
@@ -164,10 +179,6 @@ const ExpertConsult = () => {
       
       await agoraClient.publish(video ? [audio, video] : [audio]);
       
-      if (video && localPlayerRef.current) {
-        video.play(localPlayerRef.current);
-      }
-
       setCallStatus("idle");
       timerIntervalRef.current = setInterval(() => setTimer(prev => prev + 1), 1000);
 
@@ -175,7 +186,7 @@ const ExpertConsult = () => {
       recognitionRef.current = initSpeechRecognition();
       recognitionRef.current?.start();
 
-      const greeting = "Hello, I am your agricultural expert. How can I help you today?";
+      const greeting = customPrompt || "Hello, I am your agricultural expert. How can I help you today?";
       speakAutonomous(greeting);
 
     } catch (err: any) {
@@ -359,7 +370,65 @@ const ExpertConsult = () => {
 
       </div>
 
-      {/* --- FULLSCREEN MODAL UI --- */}
+      {/* --- EMERGENCY CRISIS MODAL --- */}
+      <AnimatePresence>
+        {showEmergency && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.9, y: 20 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.9, y: 20 }}
+               className="relative w-full max-w-2xl bg-gradient-to-br from-red-950/40 via-black to-red-950/20 border border-red-500/20 rounded-[3rem] p-12 overflow-hidden shadow-[0_0_100px_rgba(220,38,38,0.2)]"
+             >
+                <div className="absolute top-0 right-0 p-8">
+                   <button onClick={() => setShowEmergency(false)} className="h-12 w-12 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white transition-all"><X className="h-6 w-6" /></button>
+                </div>
+                
+                <div className="relative z-10">
+                   <div className="h-20 w-20 bg-red-600 rounded-3xl flex items-center justify-center mb-8 shadow-3xl shadow-red-900/60 mx-auto">
+                      <ShieldAlert className="h-10 w-10 text-white" />
+                   </div>
+                   
+                   <h2 className="text-4xl font-black text-center mb-4 tracking-tighter">Emergency Help</h2>
+                   <p className="text-red-200/40 text-center mb-12 font-medium">Critical agricultural crises require immediate action. Choose a protocol below.</p>
+                   
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => window.location.href = 'tel:18004251556'}
+                        className="p-8 rounded-[2rem] bg-white/5 border border-white/5 text-left group hover:bg-red-600 transition-all flex flex-col justify-between"
+                      >
+                         <PhoneCall className="h-8 w-8 text-red-500 group-hover:text-white mb-6" />
+                         <div>
+                            <h3 className="font-black text-xl mb-1">CALL GOVT.</h3>
+                            <p className="text-[10px] font-black uppercase text-red-400 group-hover:text-red-200">National Helpline</p>
+                         </div>
+                      </motion.button>
+                      
+                      <motion.button 
+                        whileHover={{ scale: 1.05 }}
+                        onClick={() => { setShowEmergency(false); startConsultation('video', "I am facing a severe agricultural emergency. Please analyze my situation immediately."); }}
+                        className="p-8 rounded-[2rem] bg-emerald-600 text-left group hover:bg-emerald-700 transition-all flex flex-col justify-between"
+                      >
+                         <BrainCircuit className="h-8 w-8 text-white mb-6" />
+                         <div>
+                            <h3 className="font-black text-xl mb-1">AI CRISIS SCAN</h3>
+                            <p className="text-[10px] font-black uppercase text-emerald-200">Start Video Diagnostic</p>
+                         </div>
+                      </motion.button>
+                   </div>
+                   
+                   <div className="mt-8 p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center gap-4">
+                      <AlertTriangle className="h-6 w-6 text-yellow-500 animate-pulse" />
+                      <p className="text-[10px] font-bold text-white/40 leading-relaxed uppercase tracking-wider">Note: AI Crisis Scan uses real-time video analysis to identify pest outbreaks, crop failures, or livestock emergencies.</p>
+                   </div>
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* --- FULLSCREEN CALL MODAL UI --- */}
       <AnimatePresence>
         {callActive && (
           <motion.div 
@@ -460,7 +529,7 @@ const ExpertConsult = () => {
                               <CameraOff className="h-12 w-12 text-white/10" />
                            </div>
                          ) : (
-                           <div ref={localPlayerRef} className="h-full w-full object-cover mirror scale-[1.01]" />
+                           <div ref={localPlayerRef} className="h-full w-full" />
                          )}
                          <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest border border-white/5">Self Preview</div>
                       </div>
