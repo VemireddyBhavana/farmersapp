@@ -28,7 +28,12 @@ import {
   ShieldCheck,
   FileText,
   BrainCircuit,
-  Star
+  Star,
+  Activity,
+  HeartPulse,
+  Flame,
+  Stethoscope,
+  PhoneCall
 } from "lucide-react";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -55,12 +60,19 @@ const RECENT_CONSULTATIONS = [
   { id: 3, query: "Paddy transplantation best practices for Kharif.", date: "24 Mar 2024", lang: "English" }
 ];
 
+const EMERGENCY_PROTOCOLS = [
+  { id: 1, title: "Pest Outbreak Alert", icon: Flame, desc: "Immediate isolation of affected area. Contact dist. agri-office: 1800-425-1556", color: "text-red-500" },
+  { id: 2, title: "Crop Failure Protocol", icon: Activity, desc: "Document damage. file PMFBY insurance claim within 72 hours. Call 14447.", color: "text-amber-500" },
+  { id: 3, title: "Livestock Health Emergency", icon: Stethoscope, desc: "Move animals to shade. Call local vet: +91 98480 22338 immediately.", color: "text-blue-500" }
+];
+
 const ExpertConsult = () => {
   const { t, language } = useLanguage();
 
-  // Call State
+  // Mode & UI States
   const [callActive, setCallActive] = useState(false);
   const [callType, setCallType] = useState<"voice" | "video" | null>(null);
+  const [showEmergency, setShowEmergency] = useState(false);
   const [callStatus, setCallStatus] = useState<"idle" | "listening" | "thinking" | "speaking" | "connecting">("idle");
   const [isListening, setIsListening] = useState(false);
   const [timer, setTimer] = useState(0);
@@ -91,7 +103,7 @@ const ExpertConsult = () => {
   useEffect(() => {
     agoraClient.on("user-published", async (user, mediaType) => {
       await agoraClient.subscribe(user, mediaType);
-      if (mediaType === "video") {
+      if (mediaType === "video" && callType === "video") {
         setRemoteUsers(prev => {
           if (prev.find(u => u.uid === user.uid)) return prev;
           return [...prev, user];
@@ -113,14 +125,14 @@ const ExpertConsult = () => {
     return () => {
       stopSession();
     };
-  }, []);
+  }, [callType]);
 
   // --- LOCAL VIDEO PLAYER SYNC ---
   useEffect(() => {
-    if (callActive && localVideoTrack && localPlayerRef.current) {
+    if (callActive && localVideoTrack && localPlayerRef.current && callType === "video") {
       localVideoTrack.play(localPlayerRef.current);
     }
-  }, [callActive, localVideoTrack]);
+  }, [callActive, localVideoTrack, callType]);
 
   // --- AUTO SCROLL ---
   useEffect(() => {
@@ -144,25 +156,32 @@ const ExpertConsult = () => {
       setTimer(0);
       setTranscript([]);
       setCallStatus("connecting");
+      setIsCameraOff(type === "voice"); 
 
       const channelName = "farmer"; 
       await agoraClient.join(APP_ID, channelName, null, null);
 
       const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-      const videoTrack = await AgoraRTC.createCameraVideoTrack({
-        encoderConfig: {
-          width: 1280,
-          height: 720,
-          frameRate: 15,
-          bitrateMin: 100, 
-          bitrateMax: 1130
-        },
-        optimizationMode: "motion" 
-      });
+      let videoTrack = null;
+
+      if (type === "video") {
+          videoTrack = await AgoraRTC.createCameraVideoTrack({
+            encoderConfig: {
+              width: 1280,
+              height: 720,
+              frameRate: 15,
+              bitrateMin: 100, 
+              bitrateMax: 1130
+            },
+            optimizationMode: "motion" 
+          });
+          setLocalVideoTrack(videoTrack);
+      }
 
       setLocalAudioTrack(audioTrack);
-      setLocalVideoTrack(videoTrack);
-      await agoraClient.publish([audioTrack, videoTrack]);
+      
+      const publishTracks = videoTrack ? [audioTrack, videoTrack] : [audioTrack];
+      await agoraClient.publish(publishTracks);
 
       setCallStatus("idle");
       timerIntervalRef.current = setInterval(() => {
@@ -322,6 +341,7 @@ const ExpertConsult = () => {
   };
 
   const toggleCamera = () => {
+    if (callType === "voice") return; 
     if (localVideoTrack) {
       localVideoTrack.setEnabled(isCameraOff);
       setIsCameraOff(!isCameraOff);
@@ -367,7 +387,11 @@ const ExpertConsult = () => {
                key={action.id}
                whileHover={{ y: -8, scale: 1.02 }}
                whileTap={{ scale: 0.98 }}
-               onClick={() => action.id === 'video' || action.id === 'voice' ? startCall(action.id as any) : toast.info(`${action.title} coming soon!`)}
+               onClick={() => {
+                   if (action.id === 'video' || action.id === 'voice') startCall(action.id as any);
+                   else if (action.id === 'emergency') setShowEmergency(true);
+                   else toast.info(`${action.title} coming soon!`);
+               }}
                className="p-8 rounded-[2rem] bg-white/5 border border-white/5 text-left group hover:bg-white/10 transition-all shadow-xl shadow-black h-full"
              >
                 <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center mb-6 shadow-2xl", action.color)}>
@@ -397,10 +421,6 @@ const ExpertConsult = () => {
                       <img src={expert.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={expert.name} />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
                       <div className="absolute bottom-4 left-4">
-                         <div className="flex items-center gap-1.5 bg-emerald-500 px-2.5 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-tighter mb-2">
-                            <Star className="h-3 w-3 fill-white" />
-                            {expert.rating} Rating
-                         </div>
                          <h3 className="text-white font-black text-xl leading-tight">{expert.name}</h3>
                       </div>
                       {expert.available && (
@@ -411,13 +431,8 @@ const ExpertConsult = () => {
                       )}
                    </div>
 
-                   {/* Profile Details */}
+                   {/* Simplified Actions */}
                    <div className="px-4 pb-6">
-                      <p className="text-emerald-400 text-xs font-black uppercase tracking-widest mb-2">{expert.specialty}</p>
-                      <p className="text-white/40 text-xs font-bold mb-6 flex items-center gap-2">
-                         <Clock className="h-3.5 w-3.5" />
-                         {expert.experience} experience
-                      </p>
                       <div className="grid grid-cols-2 gap-2">
                          <Button onClick={() => startCall("video")} className="bg-emerald-600 hover:bg-emerald-700 rounded-xl h-10 font-black text-xs uppercase tracking-widest">Video</Button>
                          <Button variant="outline" onClick={() => startCall("voice")} className="border-white/10 text-white hover:bg-white/10 rounded-xl h-10 font-black text-xs uppercase tracking-widest bg-transparent">Voice</Button>
@@ -478,6 +493,60 @@ const ExpertConsult = () => {
 
       </div>
 
+      {/* --- EMERGENCY HELP MODAL --- */}
+      <AnimatePresence>
+          {showEmergency && (
+              <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 bg-black/90 backdrop-blur-xl">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="w-full max-w-2xl bg-slate-900 rounded-[3rem] border border-red-500/20 overflow-hidden shadow-[0_0_100px_rgba(239,68,68,0.2)]"
+                  >
+                      <div className="p-10 border-b border-white/5 bg-gradient-to-r from-red-500/10 to-transparent flex items-center justify-between">
+                         <div className="flex items-center gap-5">
+                            <div className="h-16 w-16 bg-red-600 rounded-3xl flex items-center justify-center animate-pulse">
+                               <AlertCircle className="h-10 w-10 text-white" />
+                            </div>
+                            <div>
+                               <h2 className="text-3xl font-black text-white">Emergency Help</h2>
+                               <p className="text-red-400/60 font-black text-xs uppercase tracking-widest">Agricultural Crisis Support</p>
+                            </div>
+                         </div>
+                         <Button onClick={() => setShowEmergency(false)} variant="ghost" className="rounded-full h-12 w-12 hover:bg-white/5 p-0">
+                            <X className="h-6 w-6 text-white/40" />
+                         </Button>
+                      </div>
+
+                      <div className="p-10 space-y-6">
+                         {EMERGENCY_PROTOCOLS.map((protocol) => (
+                             <div key={protocol.id} className="flex gap-6 p-6 rounded-[2rem] bg-white/5 border border-white/5">
+                                <div className={cn("h-14 w-14 rounded-2xl bg-white/5 flex items-center justify-center", protocol.color)}>
+                                   <protocol.icon className="h-8 w-8" />
+                                </div>
+                                <div>
+                                   <h3 className="text-white font-black text-lg mb-2">{protocol.title}</h3>
+                                   <p className="text-white/30 text-sm font-medium leading-relaxed">{protocol.desc}</p>
+                                </div>
+                             </div>
+                         ))}
+
+                         <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <Button className="h-16 rounded-3xl bg-red-600 hover:bg-red-700 text-white font-black text-sm uppercase tracking-widest gap-3 shadow-2xl">
+                                <PhoneCall className="h-5 w-5" />
+                                Call Govt. Toll Free
+                             </Button>
+                             <Button variant="outline" onClick={() => startCall("video")} className="h-16 rounded-3xl border-white/10 text-white hover:bg-white/10 bg-transparent font-black text-sm uppercase tracking-widest gap-3">
+                                <Activity className="h-5 w-5" />
+                                AI Crisis Scan
+                             </Button>
+                         </div>
+                      </div>
+                  </motion.div>
+              </div>
+          )}
+      </AnimatePresence>
+
       {/* --- 6. VIDEO CALL UI (FULL SCREEN OVERLAY) --- */}
       <AnimatePresence>
         {callActive && (
@@ -487,17 +556,54 @@ const ExpertConsult = () => {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-black flex flex-col items-stretch justify-items-stretch overflow-hidden"
           >
-            {/* Background Layer: AI / Expert Feed */}
+            {/* Background Layer (Only Experts for Video) */}
             <div className="absolute inset-0 z-0 bg-slate-900">
                <div className="relative h-full w-full">
-                  <img
-                    src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=2000"
-                    alt="AI Expert"
-                    className="w-full h-full object-cover grayscale-[0.2] brightness-[0.5]"
-                  />
-                  {remoteUsers.map(user => (
-                    <div key={user.uid} id={`remote-player-${user.uid}`} className="absolute inset-0 z-20" />
-                  ))}
+                  {callType === "video" ? (
+                    <>
+                      <img
+                        src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=2000"
+                        alt="AI Expert"
+                        className="w-full h-full object-cover grayscale-[0.2] brightness-[0.5]"
+                      />
+                      {remoteUsers.map(user => (
+                        <div key={user.uid} id={`remote-player-${user.uid}`} className="absolute inset-0 z-20" />
+                      ))}
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-emerald-950 to-black">
+                       <motion.div 
+                         animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                         transition={{ repeat: Infinity, duration: 3 }}
+                         className="h-[500px] w-[500px] bg-emerald-500/10 rounded-full blur-[120px]" 
+                       />
+                       <div className="absolute inset-0 flex flex-col items-center justify-center gap-10">
+                          <motion.div 
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ repeat: Infinity, duration: 4 }}
+                            className="h-56 w-56 rounded-full border-4 border-emerald-500/30 p-2 shadow-[0_0_80px_rgba(16,185,129,0.2)]"
+                          >
+                             <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=500" className="h-full w-full object-cover rounded-full grayscale" alt="expert" />
+                          </motion.div>
+                          <div className="text-center">
+                             <h2 className="text-white font-black text-4xl mb-3">Audio Consultation</h2>
+                             <p className="text-emerald-400 font-black text-xs uppercase tracking-[0.5em] animate-pulse">Secure Link Active</p>
+                          </div>
+                          
+                          {/* Pulsing Audio Waves */}
+                          <div className="flex items-end gap-1.5 h-16">
+                             {[...Array(12)].map((_, i) => (
+                               <motion.div 
+                                 key={i}
+                                 animate={{ height: [10, 40 + Math.random() * 40, 10] }}
+                                 transition={{ repeat: Infinity, duration: 0.5 + Math.random(), ease: "easeInOut" }}
+                                 className="w-2.5 bg-emerald-500/40 rounded-full"
+                               />
+                             ))}
+                          </div>
+                       </div>
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
                </div>
             </div>
@@ -506,7 +612,7 @@ const ExpertConsult = () => {
             <div className="relative z-30 p-8 flex items-center justify-between">
                <div className="flex items-center gap-6">
                   <div className="flex flex-col">
-                     <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Live Consultation</span>
+                     <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">{callType === "video" ? "Video Consultation" : "Voice Consultation"}</span>
                      <div className="flex items-center gap-3">
                         <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
                         <h2 className="text-white font-black text-xl tracking-tight">Dr. Rajesh Kumar</h2>
@@ -524,19 +630,21 @@ const ExpertConsult = () => {
                </div>
             </div>
 
-            {/* USER VIDEO (LOCAL FEED): Floating Small Box */}
-            <div className="absolute top-24 right-8 w-56 h-80 z-40">
-               <Card className="h-full w-full rounded-3xl border-2 border-white/10 overflow-hidden bg-slate-800 shadow-2xl overflow-hidden relative group">
-                  {isCameraOff ? (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-900/80 backdrop-blur-xl">
-                      <CameraOff className="h-10 w-10 text-white/20" />
-                    </div>
-                  ) : (
-                    <div ref={localPlayerRef} className="h-full w-full object-cover mirror scale-[1.01]" />
-                  )}
-                  <div className="absolute bottom-4 left-4 z-30 px-2 py-1 bg-black/40 backdrop-blur-md text-white text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5">Local Feed</div>
-               </Card>
-            </div>
+            {/* USER VIDEO (LOCAL FEED): Only for Video Calls */}
+            {callType === "video" && (
+                <div className="absolute top-24 right-8 w-56 h-80 z-40">
+                   <Card className="h-full w-full rounded-3xl border-2 border-white/10 overflow-hidden bg-slate-800 shadow-2xl overflow-hidden relative group">
+                      {isCameraOff ? (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-900/80 backdrop-blur-xl">
+                          <CameraOff className="h-10 w-10 text-white/20" />
+                        </div>
+                      ) : (
+                        <div ref={localPlayerRef} className="h-full w-full object-cover mirror scale-[1.01]" />
+                      )}
+                      <div className="absolute bottom-4 left-4 z-30 px-2 py-1 bg-black/40 backdrop-blur-md text-white text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5">Local Feed</div>
+                   </Card>
+                </div>
+            )}
 
             {/* CENTER DASHBOARD: CHAT TRANSCRIPT */}
             <div className="flex-1 relative z-30 flex flex-col items-center justify-center px-4">
@@ -645,9 +753,12 @@ const ExpertConsult = () => {
                     )}
                   </button>
 
-                  <button onClick={toggleCamera} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isCameraOff && "bg-red-500/20 border-red-500/50 text-red-500")}>
-                    {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
-                  </button>
+                  {/* Camera toggle hidden for Voice Calls */}
+                  {callType === "video" && (
+                      <button onClick={toggleCamera} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isCameraOff && "bg-red-500/20 border-red-500/50 text-red-500")}>
+                        {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
+                      </button>
+                  )}
 
                   <button onClick={() => setIsSpeakerOn(!isSpeakerOn)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", !isSpeakerOn && "bg-amber-500/20 shadow-amber-500/10")}>
                     {isSpeakerOn ? <Volume2 className="h-7 w-7" /> : <VolumeX className="h-7 w-7" />}
