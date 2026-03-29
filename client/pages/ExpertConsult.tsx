@@ -128,7 +128,19 @@ const ExpertConsult = () => {
 
   // --- CALL LOGIC ---
   const startConsultation = async (type: "voice" | "video" | "ai") => {
-    if (isConnecting) return;
+    if (isConnecting || callActive) {
+      console.log("Call attempt blocked: already active or connecting");
+      return;
+    }
+    
+    // Safety guard for Agora state
+    if (agoraClient.connectionState !== "DISCONNECTED") {
+      console.warn("Agora client not idle, forcing leave before new join");
+      try {
+        await agoraClient.leave();
+      } catch(e) {}
+    }
+
     try {
       setIsConnecting(true);
       setCallActive(true);
@@ -140,15 +152,21 @@ const ExpertConsult = () => {
 
       // Agora Join
       await agoraClient.join(APP_ID, "expert-hub", null, null);
+      
       const audio = await AgoraRTC.createMicrophoneAudioTrack();
+      setLocalAudioTrack(audio);
+      
       let video = null;
-
       if (type === "video") {
         video = await AgoraRTC.createCameraVideoTrack();
         setLocalVideoTrack(video);
       }
-      setLocalAudioTrack(audio);
+      
       await agoraClient.publish(video ? [audio, video] : [audio]);
+      
+      if (video && localPlayerRef.current) {
+        video.play(localPlayerRef.current);
+      }
 
       setCallStatus("idle");
       timerIntervalRef.current = setInterval(() => setTimer(prev => prev + 1), 1000);
@@ -160,30 +178,55 @@ const ExpertConsult = () => {
       const greeting = "Hello, I am your agricultural expert. How can I help you today?";
       speakAutonomous(greeting);
 
-    } catch (err) {
-      console.error(err);
-      toast.error("Bridge Error: Check Mic/Camera Permissions");
-      setCallActive(false);
+    } catch (err: any) {
+      console.error("Join Failed:", err);
+      toast.error(err.message || "Bridge Error: Check Mic/Camera Permissions");
+      cleanupSession();
     } finally {
       setIsConnecting(false);
     }
   };
 
-  const endCall = async () => {
+  const cleanupSession = async () => {
     if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-    if (localAudioTrack) { localAudioTrack.stop(); localAudioTrack.close(); }
-    if (localVideoTrack) { localVideoTrack.stop(); localVideoTrack.close(); }
-    if (recognitionRef.current) recognitionRef.current.stop();
-    if (synthesisRef.current) synthesisRef.current.cancel();
+    
+    if (localAudioTrack) {
+      localAudioTrack.stop();
+      localAudioTrack.close();
+      setLocalAudioTrack(null);
+    }
+    
+    if (localVideoTrack) {
+      localVideoTrack.stop();
+      localVideoTrack.close();
+      setLocalVideoTrack(null);
+    }
+    
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch(e) {}
+      recognitionRef.current = null;
+    }
+    
+    if (synthesisRef.current) {
+      synthesisRef.current.cancel();
+    }
     
     try {
       await agoraClient.leave();
-    } catch(e) {}
+    } catch(e) {
+      console.warn("Safe leave fail:", e);
+    }
     
     setCallActive(false);
     setCallStatus("idle");
     setTranscript([]);
     setInterimTranscript("");
+    setTimer(0);
+  };
+
+  const endCall = async () => {
+    await cleanupSession();
+    toast.success("Consultation ended successfully");
   };
 
   // --- AI ENGINE (AUTONOMOUS) ---
@@ -451,7 +494,7 @@ const ExpertConsult = () => {
                       <PhoneOff className="h-6 w-6" />
                       End Call
                    </button>
- 
+
                    <button onClick={() => setIsCameraOff(!isCameraOff)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center border transition-all", isCameraOff ? "bg-red-500/20 border-red-500/50 text-red-500" : "bg-white/5 border-white/10 text-white")}>
                       {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
                    </button>
