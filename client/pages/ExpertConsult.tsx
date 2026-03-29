@@ -48,12 +48,6 @@ import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 const APP_ID = "5930870848764feb9441058af4c939a1"; // User App ID
 const agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
-const LANGUAGES = [
-  { id: "en-IN", name: "English", flag: "🇺🇸" },
-  { id: "te-IN", name: "Telugu", flag: "🇮🇳" },
-  { id: "hi-IN", name: "Hindi", flag: "🇮🇳" }
-];
-
 const EXPERTS = [
   { id: 1, name: "Dr. Rajesh Kumar", specialty: "Crop Pathology", image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=300" },
   { id: 2, name: "Er. Sneha Rao", specialty: "Irrigation Expert", image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300" },
@@ -61,12 +55,12 @@ const EXPERTS = [
 ];
 
 const ExpertConsult = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   
   // Call Engine States
   const [callActive, setCallActive] = useState(false);
   const [callType, setCallType] = useState<"voice" | "video" | "ai" | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("en-IN");
+  const [selectedLanguage] = useState("en-IN"); 
   const [callStatus, setCallStatus] = useState<"idle" | "listening" | "thinking" | "speaking" | "connecting">("idle");
   const [timer, setTimer] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -76,6 +70,7 @@ const ExpertConsult = () => {
   const [transcript, setTranscript] = useState<{ sender: 'user' | 'ai', text: string }[]>([]);
   const [interimTranscript, setInterimTranscript] = useState("");
   const [showEmergency, setShowEmergency] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   // Agora State
   const [localAudioTrack, setLocalAudioTrack] = useState<ILocalAudioTrack | null>(null);
@@ -122,7 +117,9 @@ const ExpertConsult = () => {
 
     recognition.onend = () => {
       if (callActive && callStatus !== "speaking" && callStatus !== "thinking") {
-        recognition.start();
+        try {
+          recognition.start();
+        } catch(e) {}
       }
     };
 
@@ -131,7 +128,9 @@ const ExpertConsult = () => {
 
   // --- CALL LOGIC ---
   const startConsultation = async (type: "voice" | "video" | "ai") => {
+    if (isConnecting) return;
     try {
+      setIsConnecting(true);
       setCallActive(true);
       setCallType(type);
       setTimer(0);
@@ -158,17 +157,15 @@ const ExpertConsult = () => {
       recognitionRef.current = initSpeechRecognition();
       recognitionRef.current?.start();
 
-      const greeting = selectedLanguage === "en-IN" 
-        ? "Hello, I am your agricultural expert. How can I help you today?"
-        : selectedLanguage === "hi-IN" ? "नमस्ते, मैं आपका कृषि विशेषज्ञ हूँ। मैं आपकी कैसे मदद कर सकता हूँ?" 
-        : "నమస్కారం, నేను మీ వ్యవసాయ నిపుణుడిని. నేను మీకు ఎలా సహాయం చేయగలను?";
-      
+      const greeting = "Hello, I am your agricultural expert. How can I help you today?";
       speakAutonomous(greeting);
 
     } catch (err) {
       console.error(err);
       toast.error("Bridge Error: Check Mic/Camera Permissions");
       setCallActive(false);
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -179,7 +176,10 @@ const ExpertConsult = () => {
     if (recognitionRef.current) recognitionRef.current.stop();
     if (synthesisRef.current) synthesisRef.current.cancel();
     
-    await agoraClient.leave();
+    try {
+      await agoraClient.leave();
+    } catch(e) {}
+    
     setCallActive(false);
     setCallStatus("idle");
     setTranscript([]);
@@ -206,14 +206,18 @@ const ExpertConsult = () => {
       speakAutonomous(aiReply);
     } catch (err) {
       setCallStatus("idle");
-      recognitionRef.current?.start();
+      try {
+        recognitionRef.current?.start();
+      } catch(e) {}
     }
   };
 
   const speakAutonomous = (text: string) => {
     if (!synthesisRef.current || !isSpeakerOn) {
       setCallStatus("idle");
-      recognitionRef.current?.start();
+      try {
+        recognitionRef.current?.start();
+      } catch(e) {}
       return;
     }
     synthesisRef.current.cancel();
@@ -222,7 +226,9 @@ const ExpertConsult = () => {
     utterance.onstart = () => setCallStatus("speaking");
     utterance.onend = () => {
       setCallStatus("idle");
-      recognitionRef.current?.start(); // Auto-restart listening
+      try {
+        recognitionRef.current?.start(); 
+      } catch(e) {}
     };
     synthesisRef.current.speak(utterance);
   };
@@ -252,22 +258,6 @@ const ExpertConsult = () => {
            </motion.div>
         </section>
 
-        {/* --- LANGUAGE SELECTOR --- */}
-        <div className="flex justify-center gap-4 mb-12">
-            {LANGUAGES.map(lang => (
-              <button 
-                key={lang.id}
-                onClick={() => setSelectedLanguage(lang.id)}
-                className={cn(
-                  "px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all border",
-                  selectedLanguage === lang.id ? "bg-emerald-600 border-emerald-400 shadow-xl shadow-emerald-950" : "bg-white/5 border-white/5 opacity-40 grayscale"
-                )}
-              >
-                {lang.flag} {lang.name}
-              </button>
-            ))}
-        </div>
-
         {/* --- QUICK ACTIONS GRID --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
            {[
@@ -278,12 +268,13 @@ const ExpertConsult = () => {
            ].map((action) => (
              <motion.button 
                key={action.id}
+               disabled={isConnecting}
                whileHover={{ y: -8, scale: 1.05 }}
                onClick={() => action.id === 'emergency' ? setShowEmergency(true) : startConsultation(action.id as any)}
-               className="p-8 rounded-[2rem] bg-white/5 border border-white/5 text-left group hover:border-emerald-500/20 transition-all flex flex-col justify-between h-full shadow-2xl"
+               className="p-8 rounded-[2rem] bg-white/5 border border-white/5 text-left group hover:border-emerald-500/20 transition-all flex flex-col justify-between h-full shadow-2xl disabled:opacity-50"
              >
                 <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center mb-6 shadow-2xl", action.color)}>
-                   <action.icon className="h-7 w-7 text-white" />
+                   {isConnecting && (action.id !== 'emergency') ? <Loader2 className="h-7 w-7 animate-spin text-white" /> : <action.icon className="h-7 w-7 text-white" />}
                 </div>
                 <div>
                    <h3 className="text-white font-black text-xl mb-1">{action.title}</h3>
@@ -311,8 +302,12 @@ const ExpertConsult = () => {
                       </div>
                    </div>
                    <div className="grid grid-cols-2 gap-3 pb-2 px-2">
-                      <Button onClick={() => startConsultation("video")} className="bg-emerald-600 hover:bg-emerald-700 rounded-xl h-12 font-black uppercase text-xs tracking-widest border border-emerald-400/20">Video</Button>
-                      <Button onClick={() => startConsultation("voice")} variant="outline" className="bg-white/5 border-white/10 rounded-xl h-12 font-black uppercase text-xs tracking-widest text-white hover:bg-white/10">Voice Call</Button>
+                      <Button disabled={isConnecting} onClick={() => startConsultation("video")} className="bg-emerald-600 hover:bg-emerald-700 rounded-xl h-12 font-black uppercase text-xs tracking-widest border border-emerald-400/20">
+                        {isConnecting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Video"}
+                      </Button>
+                      <Button disabled={isConnecting} onClick={() => startConsultation("voice")} variant="outline" className="bg-white/5 border-white/10 rounded-xl h-12 font-black uppercase text-xs tracking-widest text-white hover:bg-white/10">
+                        {isConnecting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Voice Call"}
+                      </Button>
                    </div>
                 </Card>
               ))}
@@ -456,7 +451,7 @@ const ExpertConsult = () => {
                       <PhoneOff className="h-6 w-6" />
                       End Call
                    </button>
-
+ 
                    <button onClick={() => setIsCameraOff(!isCameraOff)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center border transition-all", isCameraOff ? "bg-red-500/20 border-red-500/50 text-red-500" : "bg-white/5 border-white/10 text-white")}>
                       {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
                    </button>
