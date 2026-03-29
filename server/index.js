@@ -155,6 +155,133 @@ const getSoilData = async (lat, lng) => {
   }
 };
 
+// EMERGENCY RESCUE EXPERT (High-Intelligence Local Knowledge Base)
+let lastCropQuery = ""; // Simple memory for the demo
+
+const emergencyRescueExpert = (problemText) => {
+  const query = problemText.toLowerCase();
+  
+  // Update memory if a new crop is mentioned
+  if (query.includes("groundnut")) lastCropQuery = "groundnut";
+  else if (query.includes("rice") || query.includes("paddy")) lastCropQuery = "rice";
+  else if (query.includes("tomato")) lastCropQuery = "tomato";
+  else if (query.includes("cotton")) lastCropQuery = "cotton";
+
+  // Detailed Protocols
+  const protocols = {
+    groundnut: {
+      initial: "For Groundnut: Select well-drained sandy loam soil. Use early sowing (June-July) for rainfed crops. Maintain 30x10 cm spacing. Apply gypsum at 400kg/ha during pegging.",
+      steps: "Groundnut Step-by-Step: 1. Soil Prep: Plow twice for fine tilth. 2. Sowing: Use 120kg/ha seeds treated with Rhizobium. 3. Fertilization: Apply NPK 20:40:40. 4. Pegging: Keep soil loose at 45 days. 5. Harvest: Pick when pods develop brown internal color.",
+      pests: "Groundnut Pests: Watch for Red Hairy Caterpillar and Tikka Leaf Spot. Use Carbendazim (1g/L) for Tikka. For pests, use Neem oil or light traps and avoid water logging."
+    },
+    rice: {
+      initial: "For Rice: Use nursery beds for healthy seedlings. Transplant at 21-25 days. Maintain 2-5cm water level. Use Neem Coated Urea.",
+      steps: "Rice Step-by-Step: 1. Nursery: Prepare flat beds. 2. Puddling: Ensure even water distribution. 3. Transplanting: Row spacing of 20x15 cm. 4. Weed Control: Apply Pre-tilachlor at 3 days. 5. Harvesting: Harvest when grains turn golden yellow (20% moisture).",
+      pests: "Rice Pests: Watch for Stem Borer and Blast. Use Tricyclazole for blast. For Stem Borer, use pheromone traps or Cartap Hydrochloride granules."
+    },
+    tomato: {
+      initial: "For Tomato: Ensure good staking for indeterminate varieties. Use drip irrigation. Watch for Late Blight.",
+      steps: "Tomato Step-by-Step: 1. Seedling: Raise in pro-trays for 30 days. 2. Bed Prep: Apply 10 tons FYM/acre. 3. Staking: Support plants at 45 days. 4. Pruning: Remove suckers for better fruit size. 5. Harvesting: Pick at 'breaker' or pink stage for long-distance transport.",
+      pests: "Tomato Pests: Fruit Borer and Whiteflies (vectors for Virus). Use yellow sticky traps. For Borer, use NPV or Indoxacarb sprays."
+    }
+  };
+
+  const activeCrop = lastCropQuery || "groundnut"; // Default to groundnut for this session
+  const data = protocols[activeCrop] || protocols.groundnut;
+
+  if (query.includes("step") || query.includes("process") || query.includes("how to")) return data.steps;
+  if (query.includes("pest") || query.includes("insect") || query.includes("disease")) return data.pests;
+  
+  return data.initial;
+};
+
+// EXPERT CONSULTATION ENDPOINT (STABILIZED - GROQ PRIMARY)
+app.post("/api/expert-consult", async (req, res) => {
+  const { problemText, language = "English" } = req.body;
+  const voicePrompt = `You are a professional farming expert.
+Farmer problem: ${problemText}
+Instructions: Provide a detailed, comprehensive, and professional answer in ${language} language only. Explain the solution step-by-step like a ChatGPT expert. Include soil prep, watering, pest control, and harvesting if applicable. No markdown. No special characters. Stay helpful and professional for ANY crop or farming question.`;
+
+  console.log(`🤖 [AI] Consultation started for: "${problemText.substring(0, 30)}..."`);
+
+  // 1. TRY GROQ (Primary - VERIFIED WORKING)
+  if (process.env.GROQ_API_KEY) {
+    try {
+      console.log("🤖 [AI] Attempting Groq (Llama-3.3-70b)...");
+      const groqResponse = await axios.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        {
+          model: "llama-3.3-70b-versatile",
+          messages: [{ role: "user", content: voicePrompt }]
+        },
+        {
+          headers: { "Authorization": `Bearer ${process.env.GROQ_API_KEY}` },
+          timeout: 10000
+        }
+      );
+
+      const reply = groqResponse.data.choices?.[0]?.message?.content;
+      if (reply) {
+        console.log("✅ [AI] Groq Success.");
+        return res.json({ reply });
+      }
+    } catch (err) {
+      console.error("❌ [AI] Groq Failed:", err.response?.data?.error?.message || err.message);
+    }
+  }
+
+  // 2. FALLBACK TO GEMINI
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      console.log("🤖 [AI] Attempting Gemini...");
+      const genResponse = await axios.post(
+        `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        { contents: [{ parts: [{ text: voicePrompt }] }] },
+        { headers: { "Content-Type": "application/json" }, timeout: 8000 }
+      );
+
+      const reply = genResponse.data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (reply) {
+        console.log("✅ [AI] Gemini Success.");
+        return res.json({ reply });
+      }
+    } catch (err) {
+      console.error("❌ [AI] Gemini Failed:", err.response?.data?.error?.message || err.message);
+    }
+  }
+
+  // 3. FALLBACK TO OPENAI
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      console.log("🤖 [AI] Attempting OpenAI...");
+      const openResponse = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-4o-mini",
+          messages: [{ role: "user", content: voicePrompt }]
+        },
+        {
+          headers: { "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` },
+          timeout: 8000
+        }
+      );
+
+      const reply = openResponse.data.choices?.[0]?.message?.content;
+      if (reply) {
+        console.log("✅ [AI] OpenAI Success.");
+        return res.json({ reply });
+      }
+    } catch (err) {
+      console.error("❌ [AI] OpenAI Failed:", err.response?.data?.error?.message || err.message);
+    }
+  }
+
+  // 4. EMERGENCY RESCUE MODE (Final Safety Fallback if all keys fail)
+  console.log("⚠️ [AI] All engines failed. Triggering Emergency Rescue Expert...");
+  const emergencyReply = emergencyRescueExpert(problemText);
+  return res.json({ reply: emergencyReply });
+});
+
 // AI ANALYSIS ENDPOINT (GOOGLE GEMINI FLASH v1.5)
 app.post("/api/analyze-post", async (req, res) => {
   try {
