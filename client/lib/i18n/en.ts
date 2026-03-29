@@ -2136,4 +2136,26 @@ export const en = {
     goatFarmingTitle: "Goat Farming Guide",
     sheepFarmingTitle: "Sheep Farming Guide",
     fishFarmingTitle: "Inland Fish Farming Guide",
-    shrimpFarmingTitle: "Vannamei Shrimp Farming Guide",};
+    shrimpFarmingTitle: "Vannamei Shrimp Farming Guide",
+    
+    // Support & Community Hub
+    cropHealthMonitor: "Crop Health Monitor",
+    farmerCommunity: "Farmer Community",
+    expertHelp: "Expert Help",
+    yieldForecast: "Yield Forecast",
+    subsidyChecker: "Subsidy Checker",
+    toolSharing: "Tool Sharing",
+    soilTestFinder: "Soil Lab Locator",
+    loanCalculator: "Agri Loan Calculator",
+    farmLedger: "Farmer Finance",
+    communityHub: "Kisan Community Hub",
+    shareProgress: "Share your progress...",
+    postNow: "Post Now",
+    analyzing: "Analyzing...",
+    expertProtocolGenerated: "Expert protocol generated!",
+    expertAssistantBusy: "Expert assistant busy. Reviewing community advice...",
+    comments: "Comments",
+    addComment: "Add a comment...",
+    reply: "Reply",
+    share: "Share",
+};

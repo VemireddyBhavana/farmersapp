@@ -100,15 +100,15 @@ const Navbar = () => {
   ];
 
   const premiumLinks = [
-    { name: "Crop Health Monitor", path: "/satellite-analysis", icon: Globe },
-    { name: "Farmer Community",    path: "/community",          icon: Users },
-    { name: "Expert Help",         path: "/expert-consult",     icon: User  },
-    { name: "Yield Forecast",      path: "/yield-prediction",   icon: TrendingUp },
-    { name: "Subsidy Checker",     path: "/subsidy-finder",     icon: FileText },
-    { name: "Tool Sharing",        path: "/tool-sharing",       icon: Truck },
-    { name: "Soil Test Finder",    path: "/soil-lab-locator",   icon: Microscope },
-    { name: "Loan & EMI Calculator", path: "/agri-loan-calculator", icon: Calculator },
-    { name: "Farm Ledger",         path: "/farmer-finance",     icon: Wallet },
+    { name: t("cropHealthMonitor"), path: "/satellite-analysis", icon: Globe },
+    { name: t("farmerCommunity"),    path: "/community",          icon: Users },
+    { name: t("expertHelp"),         path: "/expert-consult",     icon: User  },
+    { name: t("yieldForecast"),      path: "/yield-prediction",   icon: TrendingUp },
+    { name: t("subsidyChecker"),     path: "/subsidy-finder",     icon: FileText },
+    { name: t("toolSharing"),        path: "/tool-sharing",       icon: Truck },
+    { name: t("soilTestFinder"),    path: "/soil-lab-locator",   icon: Microscope },
+    { name: t("loanCalculator"), path: "/agri-loan-calculator", icon: Calculator },
+    { name: t("farmLedger"),         path: "/farmer-finance",     icon: Wallet },
   ];
 
   const ourSolutionsLinks = [
@@ -342,7 +342,7 @@ const Navbar = () => {
               <DropdownMenu open={premiumOpen} onOpenChange={setPremiumOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap">
-                    Smart Farming Tools <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
+                    {t("smartFarmingTools")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
                   </Button>
                 </DropdownMenuTrigger>
                 <AnimatePresence>
@@ -459,7 +459,7 @@ const Navbar = () => {
               ))}
 
               <div className="pt-2 border-t">
-                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic">Smart Farming Tools</p>
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic">{t("smartFarmingTools")}</p>
                 {premiumLinks.map((link) => (
                   <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
                     className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-emerald-100 text-emerald-700" : "text-muted-foreground hover:bg-muted")}>

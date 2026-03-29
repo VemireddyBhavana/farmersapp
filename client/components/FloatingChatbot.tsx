@@ -226,9 +226,6 @@ export const FloatingChatbot = () => {
             >
                 <div className="relative">
                     <MessageCircle className="w-8 h-8 translate-y-[-1px] translate-x-[-1px]" strokeWidth={2.5} />
-                    <div className="absolute -top-3 -right-3 w-6 h-6 bg-[#B46A14] flex items-center justify-center rounded-full text-[11px] font-black tracking-tight text-white border-2 border-white shadow-sm">
-                        1
-                    </div>
                 </div>
             </motion.button>
         </>

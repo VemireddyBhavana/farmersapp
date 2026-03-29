@@ -1313,4 +1313,26 @@ export const te = {
     detailedExplanationTitle: "Detailed Expert Explanation",
     cat_poultry: "Poultry",
     cat_subsidies: "Subsidies",
-    cat_gardening: "Gardening",};
+    cat_gardening: "Gardening",
+    
+    // Support & Community Hub
+    cropHealthMonitor: "పంట ఆరోగ్య పర్యవేక్షణ",
+    farmerCommunity: "రైతు సంఘం",
+    expertHelp: "నిపుణుల సహాయం",
+    yieldForecast: "దిగుబడి అంచనా",
+    subsidyChecker: "సబ్సిడీ చెకర్",
+    toolSharing: "పనిముట్ల భాగస్వామ్యం",
+    soilTestFinder: "నేల పరీక్ష కేంద్రం",
+    loanCalculator: "వ్యవసాయ రుణ కాలిక్యులేటర్",
+    farmLedger: "ఫార్మ్ లెడ్జర్",
+    communityHub: "కిసాన్ కమ్యూనిటీ హబ్",
+    shareProgress: "మీ పురోగతిని పంచుకోండి...",
+    postNow: "ఇప్పుడే పోస్ట్ చేయండి",
+    analyzing: "విశ్లేషిస్తోంది...",
+    expertProtocolGenerated: "నిపుణుల ప్రోటోకాల్ సిద్ధం!",
+    expertAssistantBusy: "నిపుణుల సహాయకుడు బిజీగా ఉన్నారు. కమ్యూనిటీ సలహాలను సమీక్షిస్తున్నారు...",
+    comments: "వ్యాఖ్యలు",
+    addComment: "వ్యాఖ్యను జోడించండి...",
+    reply: "సమాధానం",
+    share: "షేర్ చేయండి",
+};
