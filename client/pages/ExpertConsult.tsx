@@ -23,7 +23,12 @@ import {
   Wifi,
   Terminal,
   MessageSquare,
-  Circle
+  Circle,
+  AlertCircle,
+  ShieldCheck,
+  FileText,
+  BrainCircuit,
+  Star
 } from "lucide-react";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -37,13 +42,26 @@ import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 const APP_ID = "5930870848764feb9441058af4c939a1"; // User App ID
 const agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
 
+const EXPERTS = [
+  { id: 1, name: "Dr. Rajesh Kumar", specialty: "Crop Pathology & Disease", experience: "12+ Years", rating: 4.9, available: true, image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=300" },
+  { id: 2, name: "Er. Sneha Rao", specialty: "Precision Irrigation & Water", experience: "8+ Years", rating: 4.8, available: true, image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300" },
+  { id: 3, name: "Prof. Amit Singh", specialty: "Soil Health & Nutrient Management", experience: "15+ Years", rating: 5.0, available: false, image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300" },
+  { id: 4, name: "Meera Deshmukh", specialty: "Organic Farming Specialist", experience: "10+ Years", rating: 4.7, available: true, image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=300" }
+];
+
+const RECENT_CONSULTATIONS = [
+  { id: 1, query: "Best pest control for late blight in tomatoes?", date: "2 Hours ago", lang: "Hindi" },
+  { id: 2, query: "Soil moisture levels for young groundnut pegs?", date: "Yesterday", lang: "Telugu" },
+  { id: 3, query: "Paddy transplantation best practices for Kharif.", date: "24 Mar 2024", lang: "English" }
+];
+
 const ExpertConsult = () => {
   const { t, language } = useLanguage();
 
   // Call State
   const [callActive, setCallActive] = useState(false);
   const [callType, setCallType] = useState<"voice" | "video" | null>(null);
-  const [callStatus, setCallStatus] = useState<"idle" | "listening" | "thinking" | "speaking">("idle");
+  const [callStatus, setCallStatus] = useState<"idle" | "listening" | "thinking" | "speaking" | "connecting">("idle");
   const [isListening, setIsListening] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
@@ -71,7 +89,6 @@ const ExpertConsult = () => {
 
   // --- INITIALIZATION ---
   useEffect(() => {
-    // Agora Listeners
     agoraClient.on("user-published", async (user, mediaType) => {
       await agoraClient.subscribe(user, mediaType);
       if (mediaType === "video") {
@@ -114,9 +131,9 @@ const ExpertConsult = () => {
 
   // --- FOCUS INPUT ---
   useEffect(() => {
-      if (callActive && inputRef.current) {
-          inputRef.current.focus();
-      }
+    if (callActive && inputRef.current) {
+      inputRef.current.focus();
+    }
   }, [callActive]);
 
   // --- CALL LOGIC ---
@@ -126,7 +143,7 @@ const ExpertConsult = () => {
       setCallType(type);
       setTimer(0);
       setTranscript([]);
-      setCallStatus("idle");
+      setCallStatus("connecting");
 
       const channelName = "farmer"; 
       await agoraClient.join(APP_ID, channelName, null, null);
@@ -137,22 +154,22 @@ const ExpertConsult = () => {
           width: 1280,
           height: 720,
           frameRate: 15,
-          bitrateMin: 100, // Allow dropping as low as 100kbps to prevent 1003 error
+          bitrateMin: 100, 
           bitrateMax: 1130
         },
-        optimizationMode: "motion" // Prioritize stability over extreme detail
+        optimizationMode: "motion" 
       });
-        
 
       setLocalAudioTrack(audioTrack);
       setLocalVideoTrack(videoTrack);
       await agoraClient.publish([audioTrack, videoTrack]);
 
+      setCallStatus("idle");
       timerIntervalRef.current = setInterval(() => {
         setTimer(prev => prev + 1);
       }, 1000);
 
-      const greeting = t("botWelcome") + " " + t("botGuidanceReply");
+      const greeting = t("botWelcome") + " I am your Smart Expert for today. How can I assist you with your farming needs?";
       setTimeout(() => speakText(greeting), 1000);
     } catch (err) {
       console.error("Agora Join Error:", err);
@@ -283,7 +300,7 @@ const ExpertConsult = () => {
       speakText(aiReply);
     } catch (err) {
       console.error("AI ERROR:", err);
-      setTranscript(prev => [...prev, { sender: 'ai', text: "I'm having trouble connecting. Please check your internet or API keys." }]);
+      setTranscript(prev => [...prev, { sender: 'ai', text: "I'm having trouble connecting. Our experts are currently tied up, but I'm trying again." }]);
     }
   };
 
@@ -318,143 +335,217 @@ const ExpertConsult = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F9F0] pt-24 pb-12 font-sans selection:bg-emerald-100 overflow-x-hidden">
-      <div className="container mx-auto px-4 max-w-5xl">
+    <div className="min-h-screen bg-black pt-24 pb-12 font-sans selection:bg-emerald-500 overflow-x-hidden">
+      <div className="container mx-auto px-4 max-w-6xl">
 
-        {/* HEADER */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 px-4">
-          <div>
-            <h1 className="text-4xl font-black text-emerald-900 tracking-tighter flex items-center gap-3">
-              <Sparkles className="h-10 w-10 text-amber-500" />
-              AI Expert Consultation
-            </h1>
-            <p className="text-emerald-700 font-bold text-xs mt-1 uppercase tracking-widest opacity-60">
-              Live Video & Chat Prioritized
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-emerald-100">
-             <Circle className="h-3 w-3 fill-emerald-500 text-emerald-500 animate-pulse" />
-             <span className="text-xs font-black text-emerald-900 uppercase">Expert Online</span>
-          </div>
+        {/* 1. HERO SECTION */}
+        <div className="relative p-12 rounded-[2rem] bg-gradient-to-br from-emerald-950 via-emerald-900 to-black overflow-hidden mb-12 border border-emerald-500/10 shadow-3xl">
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-emerald-500/10 via-transparent to-transparent opacity-50" />
+           <motion.div 
+             initial={{ opacity: 0, scale: 0.95 }}
+             animate={{ opacity: 1, scale: 1 }}
+             className="relative z-10 text-center max-w-2xl mx-auto"
+           >
+              <h1 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
+                 Expert Help
+              </h1>
+              <p className="text-emerald-200/60 text-lg font-medium tracking-wide">
+                 Get real-time guidance from AI & agriculture experts. Powered by advanced decision support systems.
+              </p>
+           </motion.div>
         </div>
 
-        {/* CHAT-CENTRIC MAIN ACTIONS */}
-        <div className="space-y-8">
-            <Card className="p-1 w-full rounded-[40px] border-none shadow-2xl bg-white overflow-hidden relative group h-[400px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-white z-0" />
-              
-              <div className="relative z-10 h-full flex flex-col md:flex-row">
-                 {/* Left: Chat Info */}
-                 <div className="md:w-1/2 p-10 flex flex-col justify-center">
-                    <h2 className="text-4xl font-black text-slate-800 mb-4 leading-tight">{t("askDoubtsInstantly")}</h2>
-                    <p className="text-slate-500 font-medium mb-8 leading-relaxed max-w-sm">
-                      {t("expertConsultDescDetail")}
-                    </p>
-                    <div className="flex gap-4">
-                        <Button
-                            onClick={() => startCall("video")}
-                            className="h-16 px-8 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg gap-3 shadow-xl shadow-emerald-200 transition-all hover:scale-[1.05] active:scale-95"
-                        >
-                            <Video className="h-6 w-6" />
-                            {t("startCall")}
-                        </Button>
+        {/* 2. QUICK ACTIONS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+           {[
+             { id: 'ai', icon: Sparkles, title: "Ask AI Instantly", desc: "Get rapid solutions from our advanced model.", color: "bg-emerald-600" },
+             { id: 'voice', icon: Phone, title: "Start Voice Call", desc: "Direct hands-free audio consultation.", color: "bg-blue-600" },
+             { id: 'video', icon: Video, title: "Start Video Call", desc: "HD video link with expert analysis.", color: "bg-amber-600" },
+             { id: 'emergency', icon: AlertCircle, title: "Emergency Help", desc: "Critical support for urgent farm risks.", color: "bg-red-600" }
+           ].map((action) => (
+             <motion.button 
+               key={action.id}
+               whileHover={{ y: -8, scale: 1.02 }}
+               whileTap={{ scale: 0.98 }}
+               onClick={() => action.id === 'video' || action.id === 'voice' ? startCall(action.id as any) : toast.info(`${action.title} coming soon!`)}
+               className="p-8 rounded-[2rem] bg-white/5 border border-white/5 text-left group hover:bg-white/10 transition-all shadow-xl shadow-black h-full"
+             >
+                <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center mb-6 shadow-2xl", action.color)}>
+                   <action.icon className="h-7 w-7 text-white" />
+                </div>
+                <h3 className="text-white font-black text-xl mb-3">{action.title}</h3>
+                <p className="text-white/40 text-sm font-medium leading-relaxed">{action.desc}</p>
+             </motion.button>
+           ))}
+        </div>
+
+        {/* 3. EXPERT CONSULTATION CARDS */}
+        <div className="mb-20">
+           <div className="flex items-center justify-between mb-8 px-2">
+              <h2 className="text-3xl font-black text-white flex items-center gap-3">
+                 <ShieldCheck className="h-8 w-8 text-emerald-400" />
+                 Verified Experts
+              </h2>
+              <Button variant="link" className="text-emerald-400 font-bold uppercase tracking-widest text-xs">View All</Button>
+           </div>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {EXPERTS.map((expert) => (
+                <Card key={expert.id} className="group relative overflow-hidden bg-white/5 border-white/5 border-none rounded-[2.5rem] shadow-2xl hover:bg-white/10 transition-all p-2">
+                   {/* Profile Header */}
+                   <div className="relative h-64 rounded-[2rem] overflow-hidden mb-4">
+                      <img src={expert.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={expert.name} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+                      <div className="absolute bottom-4 left-4">
+                         <div className="flex items-center gap-1.5 bg-emerald-500 px-2.5 py-1 rounded-full text-[10px] font-black text-white uppercase tracking-tighter mb-2">
+                            <Star className="h-3 w-3 fill-white" />
+                            {expert.rating} Rating
+                         </div>
+                         <h3 className="text-white font-black text-xl leading-tight">{expert.name}</h3>
+                      </div>
+                      {expert.available && (
+                         <div className="absolute top-4 right-4 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 px-3 py-1.5 rounded-2xl flex items-center gap-2">
+                            <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
+                            <span className="text-white text-[10px] font-black uppercase tracking-widest">Available</span>
+                         </div>
+                      )}
+                   </div>
+
+                   {/* Profile Details */}
+                   <div className="px-4 pb-6">
+                      <p className="text-emerald-400 text-xs font-black uppercase tracking-widest mb-2">{expert.specialty}</p>
+                      <p className="text-white/40 text-xs font-bold mb-6 flex items-center gap-2">
+                         <Clock className="h-3.5 w-3.5" />
+                         {expert.experience} experience
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                         <Button onClick={() => startCall("video")} className="bg-emerald-600 hover:bg-emerald-700 rounded-xl h-10 font-black text-xs uppercase tracking-widest">Video</Button>
+                         <Button variant="outline" onClick={() => startCall("voice")} className="border-white/10 text-white hover:bg-white/10 rounded-xl h-10 font-black text-xs uppercase tracking-widest bg-transparent">Voice</Button>
+                      </div>
+                   </div>
+                </Card>
+              ))}
+           </div>
+        </div>
+
+        {/* 4. SMART HELP FEATURES */}
+        <div className="mb-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+           {[
+             { title: "Decision Support", icon: BrainCircuit, desc: "AI-driven algorithms to help you choose the best crop and market protocol." },
+             { title: "Personalized Farm Plan", icon: FileText, desc: "Step-by-step roadmap tailored to your specific soil and topography." },
+             { title: "Second Opinion", icon: ShieldCheck, desc: "Validate your diagnosis with senior agri-scientists in seconds." }
+           ].map((feature, i) => (
+             <div key={i} className="flex gap-6 p-6 rounded-[2rem] bg-emerald-950/20 border border-emerald-500/10 group hover:border-emerald-500/30 transition-all">
+                <div className="flex-shrink-0 h-16 w-16 rounded-[1.2rem] bg-emerald-600/10 text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                   <feature.icon className="h-8 w-8" />
+                </div>
+                <div>
+                   <h3 className="text-white font-black text-lg mb-2">{feature.title}</h3>
+                   <p className="text-white/30 text-xs font-medium leading-relaxed">{feature.desc}</p>
+                </div>
+             </div>
+           ))}
+        </div>
+
+        {/* 5. RECENT CONSULTATIONS */}
+        <div className="max-w-4xl mx-auto">
+           <div className="flex items-center gap-3 mb-8 px-4">
+              <History className="h-7 w-7 text-white/30" />
+              <h2 className="text-2xl font-black text-white">Recent Consultations</h2>
+           </div>
+           <div className="space-y-4">
+              {RECENT_CONSULTATIONS.map((cons) => (
+                 <motion.div 
+                   key={cons.id}
+                   whileHover={{ x: 8 }}
+                   className="p-6 rounded-[1.5rem] bg-white/5 border border-white/5 flex items-center justify-between group cursor-pointer hover:bg-white/10 transition-all"
+                 >
+                    <div className="flex-1">
+                       <p className="text-white font-bold text-base mb-1">"{cons.query}"</p>
+                       <div className="flex items-center gap-4">
+                          <span className="text-white/20 text-xs font-black uppercase tracking-widest flex items-center gap-1.5">
+                             <Languages className="h-3 w-3" />
+                             {cons.lang}
+                          </span>
+                          <span className="text-white/20 text-xs font-black uppercase tracking-widest">{cons.date}</span>
+                       </div>
                     </div>
-                 </div>
-
-                 {/* Right: Decorative AI Avatar */}
-                 <div className="md:w-1/2 relative hidden md:block">
-                    <img 
-                        src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=1000"
-                        className="absolute inset-0 w-full h-full object-cover grayscale-[0.3] brightness-90 rounded-r-[38px]"
-                        alt="AI Expert" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 to-transparent" />
-                 </div>
-              </div>
-            </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                 {[
-                     { icon: MessageSquare, title: "Chat Focused", desc: "Type your doubts and get immediate replies." },
-                     { icon: Wifi, title: "HD Streaming", desc: "High-definition 720p stable video link." },
-                     { icon: Sparkles, title: "Smart AI", desc: "Powered by Llama 3 for expert level coaching." }
-                 ].map((box, i) => (
-                     <Card key={i} className="p-6 rounded-3xl border-none shadow-lg bg-white group hover:bg-emerald-600 transition-all duration-500">
-                        <box.icon className="h-10 w-10 text-emerald-600 group-hover:text-white mb-4 transition-colors" />
-                        <h3 className="font-black text-slate-800 group-hover:text-white mb-2">{box.title}</h3>
-                        <p className="text-slate-500 group-hover:text-emerald-50 text-xs font-medium">{box.desc}</p>
-                     </Card>
-                 ))}
-            </div>
+                    <ChevronRight className="h-6 w-6 text-white/10 group-hover:text-emerald-400 transition-colors" />
+                 </motion.div>
+              ))}
+           </div>
         </div>
 
       </div>
 
-      {/* --- FULL SCREEN OVERLAY (CHAT PRIORITY) --- */}
+      {/* --- 6. VIDEO CALL UI (FULL SCREEN OVERLAY) --- */}
       <AnimatePresence>
         {callActive && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[100] bg-black flex flex-col items-stretch justify-items-stretch overflow-hidden"
           >
-            {/* Background Video Layer */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
-                <div className="relative h-full w-full bg-slate-950 grid grid-cols-1 md:grid-cols-2 gap-2 p-2 pb-48">
-                  <div className="relative h-full w-full bg-slate-900 rounded-[32px] border border-white/5 overflow-hidden shadow-2xl">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <img
-                          src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=1000"
-                          alt="AI Expert"
-                          className="w-full h-full object-cover grayscale-[0.2] brightness-[0.7]"
-                        />
-                    </div>
-                    {remoteUsers.map(user => (
-                      <div key={user.uid} id={`remote-player-${user.uid}`} className="absolute inset-0 z-20" />
-                    ))}
-                    <div className="absolute top-4 left-4 z-30 px-3 py-1 bg-white/10 backdrop-blur-md text-white text-[10px] font-black rounded-lg uppercase tracking-widest border border-white/5">Expert</div>
-                  </div>
-
-                  <div className="relative h-full w-full bg-slate-900 rounded-[32px] border border-white/5 overflow-hidden shadow-2xl">
-                    {isCameraOff ? (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                        <CameraOff className="h-16 w-16 text-white/20" />
-                      </div>
-                    ) : (
-                      <div ref={localPlayerRef} className="h-full w-full object-cover mirror" />
-                    )}
-                    <div className="absolute top-4 left-4 z-30 px-3 py-1 bg-white/10 backdrop-blur-md text-white text-[10px] font-black rounded-lg uppercase tracking-widest border border-white/5">Local Feed</div>
-                  </div>
-                </div>
-            </div>
-
-            {/* CALL HEADER */}
-            <div className="absolute top-6 left-0 right-0 px-8 flex items-center justify-between z-30">
-               <div className="flex items-center gap-4">
-                    <button 
-                      onClick={endCall} 
-                      className="px-6 py-2.5 bg-red-600 hover:bg-red-700 backdrop-blur-xl rounded-2xl flex items-center gap-3 border border-red-500/50 text-white font-black uppercase text-xs tracking-widest shadow-lg shadow-red-900/40 transition-all hover:scale-[1.05] active:scale-95"
-                    >
-                        <PhoneOff className="h-4 w-4" />
-                        {t("endCall")}
-                    </button>
-                    <div className="px-5 py-2.5 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/5 flex items-center gap-3">
-                        <div className="h-2 w-2 bg-emerald-500 rounded-full animate-ping" />
-                        <span className="font-mono text-white text-lg font-black">{formatTimer(timer)}</span>
-                    </div>
+            {/* Background Layer: AI / Expert Feed */}
+            <div className="absolute inset-0 z-0 bg-slate-900">
+               <div className="relative h-full w-full">
+                  <img
+                    src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=2000"
+                    alt="AI Expert"
+                    className="w-full h-full object-cover grayscale-[0.2] brightness-[0.5]"
+                  />
+                  {remoteUsers.map(user => (
+                    <div key={user.uid} id={`remote-player-${user.uid}`} className="absolute inset-0 z-20" />
+                  ))}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
                </div>
             </div>
 
-            {/* CHAT & TRANSCRIPT CENTRIC (PRIORITY) */}
-            <div className="absolute bottom-32 left-8 right-8 max-w-2xl mx-auto z-40 bg-black/60 backdrop-blur-3xl rounded-[40px] p-8 border border-white/10 shadow-[0_32px_128px_rgba(0,0,0,0.8)] overflow-hidden">
-                <div ref={scrollRef} className="h-80 overflow-y-auto space-y-6 pr-4 scrollbar-thin scrollbar-thumb-white/10 mb-6">
+            {/* Header: Call Stats */}
+            <div className="relative z-30 p-8 flex items-center justify-between">
+               <div className="flex items-center gap-6">
+                  <div className="flex flex-col">
+                     <span className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Live Consultation</span>
+                     <div className="flex items-center gap-3">
+                        <div className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]" />
+                        <h2 className="text-white font-black text-xl tracking-tight">Dr. Rajesh Kumar</h2>
+                     </div>
+                  </div>
+                  <div className="h-10 w-[1px] bg-white/10 mx-2" />
+                  <div className="px-4 py-1.5 bg-white/5 backdrop-blur-3xl rounded-xl border border-white/5 flex items-center gap-3">
+                      <span className="font-mono text-white text-lg font-black tracking-tight">{formatTimer(timer)}</span>
+                  </div>
+               </div>
+
+               <div className="flex items-center gap-1 bg-white/5 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-white/50 text-[10px] font-black uppercase tracking-widest">
+                  <Wifi className="h-3 w-3" />
+                  Stable Connection: 12ms
+               </div>
+            </div>
+
+            {/* USER VIDEO (LOCAL FEED): Floating Small Box */}
+            <div className="absolute top-24 right-8 w-56 h-80 z-40">
+               <Card className="h-full w-full rounded-3xl border-2 border-white/10 overflow-hidden bg-slate-800 shadow-2xl overflow-hidden relative group">
+                  {isCameraOff ? (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-900/80 backdrop-blur-xl">
+                      <CameraOff className="h-10 w-10 text-white/20" />
+                    </div>
+                  ) : (
+                    <div ref={localPlayerRef} className="h-full w-full object-cover mirror scale-[1.01]" />
+                  )}
+                  <div className="absolute bottom-4 left-4 z-30 px-2 py-1 bg-black/40 backdrop-blur-md text-white text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5">Local Feed</div>
+               </Card>
+            </div>
+
+            {/* CENTER DASHBOARD: CHAT TRANSCRIPT */}
+            <div className="flex-1 relative z-30 flex flex-col items-center justify-center px-4">
+                <div ref={scrollRef} className="w-full max-w-2xl h-[450px] overflow-y-auto space-y-6 pr-4 scrollbar-hidden mb-8">
                   {transcript.length === 0 && !interimTranscript ? (
-                    <div className="h-full flex items-center justify-center flex-col gap-4 opacity-30 text-white">
-                      <Sparkles className="h-12 w-12 animate-pulse" />
-                      <p className="font-black italic tracking-widest text-xs uppercase text-center">
-                        Stable Chat Active.<br/>Type your doubts below.
+                    <div className="h-full flex items-center justify-center flex-col gap-6 opacity-20 text-white text-center">
+                      <Terminal className="h-16 w-16" />
+                      <p className="font-black italic tracking-[0.2em] text-xs uppercase">
+                        Encrypted Connection Active.<br/>Talk to your expert now.
                       </p>
                     </div>
                   ) : (
@@ -462,33 +553,33 @@ const ExpertConsult = () => {
                       {transcript.map((m, i) => (
                         <motion.div
                           key={i}
-                          initial={{ opacity: 0, y: 10 }}
+                          initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           className={cn(
-                            "flex items-start gap-4 mb-2",
+                            "flex items-start gap-4",
                             m.sender === 'user' ? "flex-row-reverse text-right" : "flex-row text-left"
                           )}
                         >
                           <div className={cn(
-                            "h-8 w-8 rounded-xl flex items-center justify-center text-[10px] font-black text-white shadow-xl flex-shrink-0",
+                            "h-10 w-10 rounded-2xl flex items-center justify-center text-[10px] font-black text-white shadow-2xl flex-shrink-0 mt-1",
                             m.sender === 'user' ? "bg-emerald-600" : "bg-blue-600"
                           )}>
                             {m.sender === 'user' ? <User className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
                           </div>
                           <div className={cn(
-                            "max-w-[80%] p-4 rounded-3xl text-xs font-black shadow-lg",
-                            m.sender === 'user' ? "bg-emerald-600 text-white" : "bg-white/10 text-white border border-white/5"
+                            "max-w-[75%] p-5 rounded-[1.5rem] text-[15px] font-medium leading-relaxed tracking-tight shadow-3xl",
+                            m.sender === 'user' ? "bg-emerald-600 text-white" : "bg-white/10 backdrop-blur-3xl text-white border border-white/10"
                           )}>
                             {m.text}
                           </div>
                         </motion.div>
                       ))}
                       {interimTranscript && (
-                        <div className="flex flex-row-reverse items-start gap-4 mt-2">
-                          <div className="h-8 w-8 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 animate-pulse">
+                        <div className="flex flex-row-reverse items-start gap-4 pb-12">
+                          <div className="h-10 w-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 animate-pulse mt-1">
                              <Mic className="h-5 w-5" />
                           </div>
-                          <div className="max-w-[80%] p-4 rounded-3xl text-xs font-black text-emerald-400 border border-emerald-500/20 bg-emerald-500/5 italic animate-pulse">
+                          <div className="max-w-[75%] p-5 rounded-[1.5rem] text-[15px] font-bold text-emerald-400 border border-emerald-500/20 bg-emerald-500/5 italic animate-pulse shadow-2xl">
                             {interimTranscript}...
                           </div>
                         </div>
@@ -496,73 +587,82 @@ const ExpertConsult = () => {
                     </>
                   )}
                   {callStatus === "thinking" && (
-                    <div className="flex gap-2 items-center text-emerald-400 font-black text-[10px] mt-2 ml-12">
-                       <Loader2 className="h-4 w-4 animate-spin" />
-                       <span className="uppercase tracking-widest">{t("thinking")}</span>
+                    <div className="flex gap-3 items-center text-emerald-400 font-black text-xs mt-6 ml-14">
+                       <Loader2 className="h-5 w-5 animate-spin" />
+                       <span className="uppercase tracking-[0.3em] font-sans">AI Thinking...</span>
+                    </div>
+                  )}
+                  {callStatus === "connecting" && (
+                    <div className="h-full flex flex-col gap-6 items-center justify-center text-emerald-200">
+                       <Loader2 className="h-16 w-16 animate-spin" />
+                       <span className="uppercase tracking-[0.5em] font-black text-sm">Secure Linking...</span>
                     </div>
                   )}
                 </div>
+            </div>
 
-                {/* TEXTBOX (REBUILT FOR 100% RELIABILITY) */}
-                <div className="relative group">
+            {/* BOTTOM CONTROLS & INPUT */}
+            <div className="relative z-50 p-12 flex flex-col items-center gap-10">
+                {/* Chat Input Overlay */}
+                <div className="w-full max-w-2xl relative group">
                     <Input 
                         ref={inputRef}
-                        placeholder={t("chatPlaceholder")}
+                        placeholder="Type your doubt or talk directly..."
                         value={manualInput}
                         onChange={(e) => setManualInput(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && manualInput.trim()) handleAI(manualInput);
                         }}
-                        className="h-20 bg-white/5 backdrop-blur-2xl border-white/10 rounded-[28px] text-white text-lg font-black placeholder:text-white/20 pl-8 pr-20 shadow-2xl focus:ring-emerald-500/50 transition-all border-2 focus:border-emerald-500/50"
+                        className="h-20 bg-white/5 backdrop-blur-3xl border-white/10 rounded-[2.5rem] text-white text-lg font-bold placeholder:text-white/10 pl-10 pr-24 shadow-3xl focus:ring-emerald-500/50 transition-all border-2 focus:border-emerald-500/30"
                     />
                     <button 
                         onClick={() => manualInput.trim() && handleAI(manualInput)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 h-14 w-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg hover:bg-emerald-500 transition-all hover:scale-105 active:scale-90"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 h-14 w-14 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl hover:bg-emerald-500 transition-all hover:scale-110 active:scale-95 group"
                     >
-                        <Send className="h-8 w-8 text-white" />
+                        <Send className="h-8 w-8 text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </button>
                 </div>
-            </div>
 
-            {/* MINIMAL CONTROL BAR */}
-            <div className="absolute bottom-8 left-0 right-0 px-8 flex items-center justify-center z-50">
-              <div className="bg-black/80 backdrop-blur-3xl px-8 py-4 rounded-[40px] border border-white/10 flex items-center gap-6 shadow-2xl">
-                  <button
-                    onClick={() => setIsMuted(!isMuted)}
-                    className={cn(
-                      "h-14 w-14 rounded-2xl flex items-center justify-center transition-all active:scale-90 shadow-2xl relative",
-                      isMuted ? "bg-red-500 text-white" : "bg-white/10 text-white"
-                    )}
-                  >
-                    {isMuted ? <MicOff className="h-6 w-6" /> : <Mic className="h-6 w-6" />}
+                {/* Floating Action Controls */}
+                <div className="bg-black/60 backdrop-blur-3xl px-12 py-6 rounded-[3rem] border border-white/10 flex items-center gap-10 shadow-[0_32px_128px_rgba(0,0,0,0.8)]">
+                  <button onClick={() => setIsMuted(!isMuted)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isMuted && "bg-red-500/20 border-red-500/50 text-red-500")}>
+                    {isMuted ? <MicOff className="h-7 w-7" /> : <Mic className="h-7 w-7" />}
                   </button>
 
                   <button
                     onClick={startListening}
-                    disabled={callStatus === "thinking" || isMuted}
+                    disabled={callStatus === "thinking" || isMuted || callStatus === "connecting"}
                     className={cn(
-                      "h-20 w-20 rounded-3xl flex items-center justify-center shadow-2xl transition-all active:scale-95 group relative",
-                      isListening ? "bg-emerald-500 text-white scale-110" : "bg-white text-slate-900"
+                      "h-24 w-24 rounded-[2rem] flex items-center justify-center shadow-3xl transition-all active:scale-95 group relative bg-emerald-600 hover:bg-emerald-500 border-4 border-emerald-400/30",
+                      isListening && "scale-110 shadow-emerald-500/20"
                     )}
                   >
-                    <Mic className={cn("h-10 w-10", isListening && "animate-pulse")} />
+                    <Mic className={cn("h-10 w-10 text-white", isListening && "animate-pulse")} />
                     {isListening && (
-                        <div className="absolute -top-12 bg-emerald-500 text-white text-[10px] font-black px-4 py-1.5 rounded-full whitespace-nowrap shadow-xl">
-                            TALK NOW
+                        <div className="absolute -top-16 bg-emerald-500 text-white text-[10px] font-black px-6 py-2 rounded-full whitespace-nowrap shadow-2xl animate-bounce tracking-widest">
+                            LISTENING...
                         </div>
                     )}
                   </button>
 
-                  <button
-                    onClick={toggleCamera}
-                    className={cn(
-                      "h-14 w-14 rounded-2xl flex items-center justify-center transition-all active:scale-90 shadow-2xl",
-                      isCameraOff ? "bg-red-500 text-white" : "bg-white/10 text-white"
-                    )}
-                  >
-                    {isCameraOff ? <CameraOff className="h-6 w-6" /> : <Camera className="h-6 w-6" />}
+                  <button onClick={toggleCamera} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", isCameraOff && "bg-red-500/20 border-red-500/50 text-red-500")}>
+                    {isCameraOff ? <CameraOff className="h-7 w-7" /> : <Camera className="h-7 w-7" />}
                   </button>
-              </div>
+
+                  <button onClick={() => setIsSpeakerOn(!isSpeakerOn)} className={cn("h-16 w-16 rounded-2xl flex items-center justify-center transition-all bg-white/5 hover:bg-white/10 border border-white/10 text-white", !isSpeakerOn && "bg-amber-500/20 shadow-amber-500/10")}>
+                    {isSpeakerOn ? <Volume2 className="h-7 w-7" /> : <VolumeX className="h-7 w-7" />}
+                  </button>
+
+                  <div className="h-10 w-[1px] bg-white/10 mx-2" />
+
+                  <button 
+                    onClick={endCall} 
+                    className="h-16 w-40 bg-red-600 hover:bg-red-700 rounded-[1.5rem] flex items-center justify-center gap-3 border border-red-500/50 text-white font-black uppercase text-xs tracking-widest shadow-2xl shadow-red-900/40 transition-all hover:scale-[1.05] active:scale-95"
+                  >
+                      <PhoneOff className="h-5 w-5" />
+                      End Call
+                  </button>
+                </div>
             </div>
           </motion.div>
         )}
