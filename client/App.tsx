@@ -37,7 +37,7 @@ import AgriKnowledge from "./pages/AgriKnowledge";
 import Impact from "./pages/Impact";
 import Explore from "./pages/Explore";
 import Community from "./pages/Community";
-import ExpertConsult from "./pages/ExpertConsult";
+import ExpertHelpFull from "./pages/ExpertHelpFull";
 import YieldPrediction from "./pages/YieldPrediction";
 import SubsidyFinder from "./pages/SubsidyFinder";
 import ToolSharing from "./pages/ToolSharing";
@@ -106,7 +106,7 @@ const AppRoutes = () => {
       <Route path="/explore" element={<Explore />} />
       <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
       <Route path="/community" element={<Community />} />
-      <Route path="/expert-consult" element={<ExpertConsult />} />
+      <Route path="/expert-consult" element={<ExpertHelpFull />} />
       <Route path="/yield-prediction" element={<YieldPrediction />} />
       <Route path="/subsidy-finder" element={<SubsidyFinder />} />
       <Route path="/tool-sharing" element={<ToolSharing />} />
@@ -189,7 +189,7 @@ const App = () => (
                       <Route path="/explore" element={<Explore />} />
                       <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
                       <Route path="/community" element={<Community />} />
-                      <Route path="/expert-consult" element={<ExpertConsult />} />
+                      <Route path="/expert-consult" element={<ExpertHelpFull />} />
                       <Route path="/yield-prediction" element={<YieldPrediction />} />
                       <Route path="/subsidy-finder" element={<SubsidyFinder />} />
                       <Route path="/tool-sharing" element={<ToolSharing />} />

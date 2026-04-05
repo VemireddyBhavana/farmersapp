@@ -1,274 +1,396 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 import { 
+  Sprout, 
   TrendingUp, 
-  Target, 
-  Calendar, 
-  MapPin, 
-  BarChart3, 
+  AlertTriangle, 
   Zap, 
+  Map as MapIcon,
+  ChevronRight,
+  Database,
+  CloudSun,
+  ShieldCheck,
+  Activity,
+  User,
+  History,
   ArrowRight,
-  Info,
-  ChevronDown,
-  LayoutDashboard,
-  Sprout,
-  Wheat,
-  CloudRain,
-  Sun
+  Droplets,
+  Thermometer,
+  Wind,
+  Layers,
+  Cpu,
+  Target,
+  Wallet,
+  Calendar,
+  ExternalLink,
+  BarChart3
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/lib/LanguageContext";
-import { cn } from "@/lib/utils";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area
+} from "recharts";
 
 const YieldPrediction = () => {
-  const { t } = useLanguage();
-  const [isPredicting, setIsPredicting] = useState(false);
-  const [predictionData, setPredictionData] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    crop: "Rice",
+    land: "5",
+    soil: "Alluvial",
+    irrigation: "Borewell",
+  });
 
-  const handlePredict = () => {
-    setIsPredicting(true);
-    setTimeout(() => {
-      setPredictionData({
-        yield: "12.5",
-        unit: "Tons",
-        confidence: 94,
-        comparison: "+15%",
-        marketValue: "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹2.5L",
-        breakdown: [
-          { month: "Apr", growth: 20 },
-          { month: "May", growth: 45 },
-          { month: "Jun", growth: 70 },
-          { month: "Jul", growth: 95 }
-        ]
-      });
-      setIsPredicting(false);
-    }, 2500);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [result, setResult] = useState<any>(null);
+  const [history, setHistory] = useState<any[]>([]);
+  const [weather, setWeather] = useState<any>(null);
+  const [farmer, setFarmer] = useState<any>({ name: "Pratap Reddy", location: "Anantapur, AP" });
+
+  useEffect(() => {
+    const fetchMeta = async () => {
+      try {
+        const hRes = await axios.get("/api/yield/history");
+        setHistory(hRes.data);
+        
+        const wRes = await axios.get("https://api.open-meteo.com/v1/forecast?latitude=14.6819&longitude=77.6006&current=temperature_2m,relative_humidity_2m&timezone=auto");
+        setWeather(wRes.data.current);
+
+        const fRes = await axios.get("/api/farmer");
+        if (fRes.data) setFarmer(fRes.data);
+      } catch (e) {
+        console.warn("Context fetch partially failed.");
+      }
+    };
+    fetchMeta();
+  }, []);
+
+  const handlePredict = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsCalculating(true);
+    
+    try {
+      const res = await axios.post("/api/predict", formData);
+      setResult(res.data);
+      setHistory(prev => [res.data, ...prev].slice(0, 5));
+    } catch (err) {
+      console.error("Prediction failed");
+    } finally {
+      setIsCalculating(false);
+    }
   };
 
+  const trendData = [
+    { name: "Week 1", yield: 2.1, ndvi: 0.65 },
+    { name: "Week 2", yield: 2.4, ndvi: 0.68 },
+    { name: "Week 3", yield: 2.8, ndvi: 0.72 },
+    { name: "Week 4", yield: result?.yield || 3.2, ndvi: result?.ndvi || 0.75 },
+  ];
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 pb-12">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-16 pt-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6"
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
+      {/* --- TOP BAR --- */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+             <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-700 font-bold border border-emerald-200 shadow-sm">
+                <Sprout size={20} />
+             </div>
+             <div>
+                <h1 className="font-bold text-slate-800 tracking-tight leading-none">Agri Intelligence Suite</h1>
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-1">Production Hub v4.8</p>
+             </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8">
+            <div className="flex items-center gap-2">
+              <User size={16} className="text-slate-400" />
+              <span className="text-sm font-bold text-slate-700">{farmer?.name}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapIcon size={16} className="text-slate-400" />
+              <span className="text-sm font-bold text-slate-700">{farmer?.location}</span>
+            </div>
+            <div className="h-8 w-[1px] bg-slate-200"></div>
+            <div className="text-right">
+                <p className="text-[10px] text-slate-400 font-bold uppercase">Status</p>
+                <div className="flex items-center gap-1.5 justify-end">
+                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                   <span className="text-xs font-bold text-emerald-600">SECURE CONNECT</span>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-[1600px] mx-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* --- LEFT: CONTROLS --- */}
+        <div className="lg:col-span-4 space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-200"
           >
-            <Zap className="h-4 w-4 fill-amber-500" />
-            <span>AI Predictive Engine v4.0</span>
+            <div className="flex items-center gap-3 mb-8">
+               <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200">
+                  <Zap size={22} />
+               </div>
+               <h3 className="text-xl font-extrabold tracking-tight text-slate-800">Intelligence Parameters</h3>
+            </div>
+
+            <form onSubmit={handlePredict} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Crop Selection</label>
+                <div className="grid grid-cols-2 gap-2">
+                   {["Rice", "Wheat", "Cotton", "Maize"].map(c => (
+                     <button 
+                       key={c}
+                       type="button"
+                       onClick={() => setFormData({...formData, crop: c})}
+                       className={`py-3 rounded-2xl text-xs font-bold border-2 transition-all ${formData.crop === c ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-100" : "border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200"}`}
+                     >
+                        {c}
+                     </button>
+                   ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Land Area (Acres)</label>
+                  <input 
+                    type="number"
+                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
+                    value={formData.land}
+                    onChange={(e) => setFormData({...formData, land: e.target.value})}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Soil Type</label>
+                  <select 
+                    className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
+                    value={formData.soil}
+                    onChange={(e) => setFormData({...formData, soil: e.target.value})}
+                  >
+                    <option>Alluvial</option>
+                    <option>Black</option>
+                    <option>Clay</option>
+                    <option>Loamy</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Irrigation</label>
+                <select 
+                  className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
+                  value={formData.irrigation}
+                  onChange={(e) => setFormData({...formData, irrigation: e.target.value})}
+                >
+                  <option>Borewell</option>
+                  <option>Canal</option>
+                  <option>Rain-fed</option>
+                  <option>Drip</option>
+                </select>
+              </div>
+
+              <button 
+                type="submit"
+                disabled={isCalculating}
+                className="w-full bg-slate-900 hover:bg-black text-white rounded-2xl py-6 font-bold shadow-xl shadow-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+              >
+                {isCalculating ? (
+                  <>
+                    <Activity className="animate-spin" size={20} />
+                    Calculating ML Insights...
+                  </>
+                ) : (
+                  <>
+                    <Target size={20} />
+                    RUN PREDICTIVE ENGINE
+                  </>
+                )}
+              </button>
+            </form>
           </motion.div>
-          <h1 className="text-4xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white uppercase italic leading-[0.9] mb-6">
-            {t('yieldPredictionTitle')}
-          </h1>
-          <p className="text-xl text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
-            {t('yieldPredictionDesc')}
-          </p>
+
+          {/* SATELLITE STATUS */}
+          <div className="bg-emerald-900 rounded-[32px] p-8 text-white relative overflow-hidden shadow-xl border border-emerald-800">
+             <div className="absolute right-0 top-0 p-10 opacity-10">
+                <Layers size={120} />
+             </div>
+             <div className="flex items-center gap-4 mb-2">
+                <div className="p-3 bg-emerald-800 rounded-2xl">
+                    <MapIcon size={24} className="text-emerald-400" />
+                </div>
+                <div>
+                   <h4 className="font-extrabold text-lg">Sentinel Hub Link</h4>
+                   <p className="text-xs text-emerald-300 font-medium">Real-World NDVI Stream Active</p>
+                </div>
+             </div>
+             <div className="mt-6 flex items-center gap-2 bg-emerald-800/50 w-fit px-3 py-1 rounded-full border border-emerald-700/50">
+                <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">Satellite Sync 100%</span>
+             </div>
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 max-w-7xl mx-auto">
-          
-          {/* Input Form Card */}
-          <div className="lg:col-span-4 space-y-6">
-            <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900">
-              <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter mb-8 flex items-center gap-2">
-                <LayoutDashboard className="h-6 w-6 text-emerald-500" /> 
-                Farm Configuration
-              </h3>
-              
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Select Crop</label>
-                  <div className="relative group">
-                    <select className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic appearance-none cursor-pointer outline-none transition-all">
-                      <option>Rice (Paddy)</option>
-                      <option>Wheat</option>
-                      <option>Cotton</option>
-                      <option>Maize</option>
-                    </select>
-                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none group-hover:text-emerald-500 transition-colors" />
+        {/* --- RIGHT: DASHBOARD --- */}
+        <div className="lg:col-span-8">
+           <AnimatePresence mode="wait">
+             {!result && !isCalculating ? (
+               <motion.div 
+                 key="empty"
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 exit={{ opacity: 0 }}
+                 className="h-full min-h-[600px] border-4 border-dashed border-slate-200 rounded-[40px] flex flex-col items-center justify-center text-slate-400 p-12 text-center"
+               >
+                  <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                    <History size={48} className="text-slate-300" />
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Farm Area (Acre)</label>
-                  <input type="number" defaultValue="5" className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic outline-none transition-all" />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Sowing Date</label>
-                  <input type="date" defaultValue="2026-03-20" className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic outline-none transition-all cursor-pointer" />
-                </div>
-
-                <Button 
-                  onClick={handlePredict}
-                  disabled={isPredicting}
-                  className="w-full h-20 bg-slate-900 hover:bg-emerald-600 text-white font-black rounded-3xl italic text-lg shadow-2xl transition-all active:scale-95 group"
-                >
-                  {isPredicting ? (
-                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
-                      <Zap className="h-8 w-8 text-yellow-400 fill-yellow-400" />
-                    </motion.div>
-                  ) : (
-                    <span className="flex items-center gap-3">
-                      Calculate Yield <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  )}
-                </Button>
-              </div>
-            </Card>
-
-            <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-slate-900 text-white overflow-hidden relative">
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <Info className="h-24 w-24" />
-              </div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-4 italic">How it works</p>
-              <p className="text-sm font-medium leading-relaxed italic opacity-80">
-                Our model analyzes 10+ years of local weather data, soil moisture levels from satellite imagery, and crop germination rates to predict your harvest with 90% accuracy.
-              </p>
-            </Card>
-          </div>
-
-          {/* Results Area */}
-          <div className="lg:col-span-8">
-            <AnimatePresence mode="wait">
-              {!predictionData && !isPredicting ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="h-full min-h-[500px] flex flex-col items-center justify-center text-center p-12 rounded-[3.5rem] bg-white border-4 border-dashed border-slate-100"
-                >
-                  <BarChart3 className="h-24 w-24 text-slate-100 mb-6" />
-                  <h4 className="text-2xl font-black text-slate-300 italic uppercase">Provide farm config to run AI model</h4>
-                </motion.div>
-              ) : isPredicting ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="h-full min-h-[500px] flex flex-col items-center justify-center bg-slate-900 rounded-[3.5rem] p-12 text-center"
-                >
-                  <div className="relative w-64 h-64 mb-12">
-                    <motion.div 
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                      className="absolute inset-0 rounded-full border-4 border-dashed border-white/10"
-                    />
-                    <motion.div 
-                      animate={{ rotate: -360 }}
-                      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                      className="absolute inset-4 rounded-full border-4 border-dashed border-emerald-500/20"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Zap className="h-20 w-20 text-emerald-500 animate-pulse fill-emerald-500/20" />
-                    </div>
+                  <h2 className="text-2xl font-black text-slate-500">Ready for Analysis</h2>
+                  <p className="max-w-xs mt-4 text-sm font-medium leading-relaxed"> Configure your farm parameters to sync with ML models and satellite metrics.</p>
+               </motion.div>
+             ) : isCalculating ? (
+               <motion.div 
+                 key="loading"
+                 initial={{ opacity: 0, scale: 0.95 }}
+                 animate={{ opacity: 1, scale: 1 }}
+                 className="h-full min-h-[600px] bg-white rounded-[40px] shadow-sm border border-slate-200 flex flex-col items-center justify-center space-y-8"
+               >
+                  <div className="relative">
+                     <div className="w-32 h-32 border-[6px] border-emerald-50 rounded-full"></div>
+                     <div className="w-32 h-32 border-t-[6px] border-emerald-500 rounded-full absolute top-0 animate-spin"></div>
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-600 font-black text-2xl">ML</div>
                   </div>
-                  <h4 className="text-3xl font-black text-white italic uppercase tracking-tighter mb-2">Analyzing Multi-Source Data...</h4>
-                  <p className="text-emerald-400 font-black uppercase tracking-widest text-xs">Crunching Weather, Soil & Satellite Inputs</p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="space-y-8"
-                >
-                  {/* Top Stats */}
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900 group">
-                      <div className="h-12 w-12 bg-emerald-100 text-emerald-600 rounded-[1.5rem] flex items-center justify-center mb-6">
-                        <TrendingUp className="h-6 w-6" />
-                      </div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 italic">{t('expectedHarvest')}</p>
-                      <h4 className="text-5xl font-black text-slate-900 dark:text-white italic tracking-tighter leading-none">
-                        {predictionData.yield} <span className="text-xl font-bold uppercase">{predictionData.unit}</span>
-                      </h4>
-                    </Card>
-
-                    <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-slate-900 text-white group overflow-hidden relative">
-                      <div className="h-12 w-12 bg-white/10 text-white rounded-[1.5rem] flex items-center justify-center mb-6">
-                        <Target className="h-6 w-6" />
-                      </div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-1 italic">{t('confidenceScore')}</p>
-                      <h4 className="text-5xl font-black italic tracking-tighter leading-none">
-                        {predictionData.confidence}%
-                      </h4>
-                      {/* Gauge simulation */}
-                      <div className="absolute bottom-4 left-8 right-8 h-1 bg-white/10 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${predictionData.confidence}%` }}
-                          className="h-full bg-emerald-500"
-                        />
-                      </div>
-                    </Card>
-
-                    <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900 group">
-                      <div className="h-12 w-12 bg-amber-100 text-amber-600 rounded-[1.5rem] flex items-center justify-center mb-6">
-                        <TrendingUp className="h-6 w-6" />
-                      </div>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 italic">Comparison to Avg</p>
-                      <h4 className="text-5xl font-black text-emerald-600 italic tracking-tighter leading-none">
-                        {predictionData.comparison}
-                      </h4>
-                    </Card>
+                  <div className="text-center">
+                     <h3 className="text-2xl font-black text-slate-800">Processing Yield Matrix</h3>
+                     <p className="text-slate-400 font-bold text-sm tracking-widest uppercase mt-2">Syncing satellite vegetation health...</p>
                   </div>
-
-                  {/* Charts & Graphs Area */}
-                  <Card className="p-10 rounded-[4rem] border-none shadow-2xl bg-slate-900 text-white overflow-hidden relative min-h-[400px]">
-                    <div className="flex items-center justify-between mb-12">
-                      <div>
-                        <h4 className="text-2xl font-black uppercase italic tracking-tighter leading-none mb-2">Estimated Market Value</h4>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Based on current NCDEX index</p>
-                      </div>
-                      <div className="text-right">
-                        <h5 className="text-5xl font-black italic tracking-tighter leading-none text-emerald-500">{predictionData.marketValue}</h5>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-4 items-end gap-6 h-48 relative">
-                      {predictionData.breakdown.map((bar: any, i: number) => (
-                        <div key={i} className="space-y-4">
-                          <div className="relative group">
-                            <motion.div 
-                              initial={{ height: 0 }}
-                              animate={{ height: `${bar.growth}%` }}
-                              transition={{ duration: 1.5, delay: i * 0.1 }}
-                              className="w-full bg-gradient-to-t from-emerald-600 to-teal-400 rounded-2xl shadow-[0_0_30px_rgba(16,185,129,0.3)] relative group-hover:brightness-110 transition-all"
-                            />
-                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-black italic bg-white text-slate-900 px-2 py-1 rounded-md">
-                              {bar.growth}%
-                            </div>
-                          </div>
-                          <p className="text-center text-[10px] font-black uppercase tracking-widest opacity-60 italic">{bar.month}</p>
-                        </div>
-                      ))}
-                      {/* Grid Lines */}
-                      <div className="absolute inset-0 border-b border-white/10 flex flex-col justify-between pointer-events-none">
-                        <div className="border-t border-white/5 w-full h-px" />
-                        <div className="border-t border-white/5 w-full h-px" />
-                        <div className="border-t border-white/5 w-full h-px" />
-                      </div>
-                    </div>
-
-                    <div className="mt-12 flex items-center justify-between pt-8 border-t border-white/10">
-                       <div className="flex gap-12">
-                         <div className="flex items-center gap-3">
-                           <CloudRain className="h-5 w-5 text-blue-400" />
-                           <span className="text-[10px] font-black uppercase tracking-tight italic">Optimized Rain</span>
-                         </div>
-                         <div className="flex items-center gap-3">
-                           <Sun className="h-5 w-5 text-yellow-500" />
-                           <span className="text-[10px] font-black uppercase tracking-tight italic">Max Solar Input</span>
-                         </div>
+               </motion.div>
+             ) : (
+               <motion.div 
+                 key="result"
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 className="space-y-8 pb-20"
+               >
+                 {/* METRICS GRID */}
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Predicted Yield</p>
+                       <h2 className="text-5xl font-black text-slate-800 relative z-10">{result.yield} <span className="text-base font-bold text-slate-400">Tons</span></h2>
+                       <div className="mt-4 flex items-center gap-2 text-emerald-600 font-bold text-xs relative z-10 bg-emerald-50 w-fit px-3 py-1 rounded-full">
+                          <TrendingUp size={14} /> AI Model Confirmed
                        </div>
-                       <Button variant="outline" className="rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 font-black italic uppercase tracking-widest px-8">Export Dataset</Button>
                     </div>
-                  </Card>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+
+                    <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Market Revenue</p>
+                       <h2 className="text-5xl font-black text-blue-600 relative z-10">{result.profit}</h2>
+                       <div className="mt-4 flex items-center gap-2 text-blue-600 font-bold text-xs relative z-10 bg-blue-50 w-fit px-3 py-1 rounded-full">
+                          <Wallet size={14} /> Projected Price
+                       </div>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Farm Risk Index</p>
+                       <h2 className={`text-5xl font-black relative z-10 ${result.risk === "Low" ? "text-emerald-600" : "text-red-500"}`}>{result.risk}</h2>
+                       <div className="mt-4 flex items-center gap-2 text-slate-400 font-bold text-xs relative z-10">
+                          <AlertTriangle size={14} /> Climate Validated
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* ANALYTICS SECTION */}
+                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-200 h-[400px]">
+                       <div className="flex items-center justify-between mb-8">
+                          <div>
+                            <h4 className="font-extrabold text-lg">Growth Trajectory</h4>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ML Predicted Curve</p>
+                          </div>
+                          <BarChart3 size={20} className="text-slate-400" />
+                       </div>
+                       <div className="h-[250px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                             <AreaChart data={trendData}>
+                                <defs>
+                                  <linearGradient id="colorY" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/>
+                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                                  </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
+                                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
+                                <Tooltip 
+                                  contentStyle={{borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'}}
+                                />
+                                <Area type="monotone" dataKey="yield" stroke="#10b981" strokeWidth={4} fillOpacity={1} fill="url(#colorY)" />
+                             </AreaChart>
+                          </ResponsiveContainer>
+                       </div>
+                    </div>
+
+                    <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-200 h-[400px]">
+                       <div className="flex items-center justify-between mb-8">
+                          <div>
+                            <h4 className="font-extrabold text-lg">Vegetation Health</h4>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">NDVI Index Trend</p>
+                          </div>
+                          <Activity size={20} className="text-blue-500" />
+                       </div>
+                       <div className="h-[250px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                             <LineChart data={trendData}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} />
+                                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 700}} domain={[0, 1]} />
+                                <Tooltip 
+                                  contentStyle={{borderRadius: '20px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'}}
+                                />
+                                <Line type="monotone" dataKey="ndvi" stroke="#3b82f6" strokeWidth={4} dot={{ r: 6, fill: "#3b82f6", strokeWidth: 3, stroke: "#fff" }} />
+                             </LineChart>
+                          </ResponsiveContainer>
+                       </div>
+                    </div>
+                 </div>
+
+                 {/* ADVISORY SECTION */}
+                 <div className="bg-slate-900 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden">
+                    <div className="absolute right-0 top-0 p-10 opacity-10">
+                       <Zap size={150} />
+                    </div>
+                    <div className="flex items-center gap-4 mb-8">
+                       <div className="p-3 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20">
+                          <Cpu size={24} />
+                       </div>
+                       <h3 className="text-3xl font-black tracking-tight">AI Tactical Advisor</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       {result.insights.map((insight: string, i: number) => (
+                          <div key={i} className="flex gap-4 p-6 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10 hover:bg-white/10 transition-all group">
+                             <div className="w-8 h-8 rounded-full bg-emerald-500 flex-shrink-0 flex items-center justify-center text-xs font-black group-hover:scale-110 transition-all">
+                                {i + 1}
+                             </div>
+                             <p className="text-sm font-medium leading-relaxed text-slate-300 group-hover:text-white">{insight}</p>
+                          </div>
+                       ))}
+                    </div>
+                 </div>
+
+               </motion.div>
+             )}
+           </AnimatePresence>
         </div>
       </div>
     </div>

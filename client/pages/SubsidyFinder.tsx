@@ -1,286 +1,252 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Search, 
-  FileText, 
   CheckCircle2, 
-  ChevronRight, 
-  ChevronLeft, 
-  MapPin, 
-  Landmark, 
-  History,
-  Info,
-  ArrowRight,
-  ShieldCheck,
-  Sprout,
-  Users
+  XCircle, 
+  Sprout, 
+  ChevronDown, 
+  ArrowRight, 
+  Zap, 
+  Search,
+  MapPin,
+  FileText
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/lib/LanguageContext";
-import { cn } from "@/lib/utils";
+
+const ShieldCheck = ({ className }: { className?: string }) => <FileText className={className} />;
+const Landmark = ({ className, size }: { className?: string, size?: number }) => <CheckCircle2 className={className} size={size} />;
+
+// --- SIMPLE FARMER DATA ---
+const SCHEMES = [
+  {
+    name: "PM-KISAN Cash Support",
+    benefit: "₹6,000 / Year",
+    rule: (f: any) => f.land <= 5,
+    reason: "Land size must be below 5 acres for this aid.",
+    icon: <Zap className="text-amber-500" />
+  },
+  {
+    name: "KCC Agriculture Loan",
+    benefit: "₹3 Lakh @ 4% Interest",
+    rule: (f: any) => f.land <= 12,
+    reason: "Your land holding is too large for this credit line.",
+    icon: <Sprout className="text-emerald-500" />
+  },
+  {
+    name: "Solar Pump Subsidy",
+    benefit: "75% Off Solar Pump",
+    rule: (f: any) => f.irrigation !== "Rain-fed",
+    reason: "Only for farmers with existing water sources.",
+    icon: <Zap className="text-sky-500" />
+  },
+  {
+    name: "Crop Insurance (PMFBY)",
+    benefit: "100% Risk Cover",
+    rule: (f: any) => f.land >= 1,
+    reason: "Minimal land holding required: 1 Acre.",
+    icon: <ShieldCheck className="text-blue-500" />
+  }
+];
+
 
 const SubsidyFinder = () => {
-  const { t } = useLanguage();
-  const [step, setStep] = useState(1);
-  const [isSearching, setIsSearching] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [land, setLand] = useState(2);
+  const [crop, setCrop] = useState("Rice");
+  const [irrigation, setIrrigation] = useState("Borewell");
+  const [results, setResults] = useState<any[]>([]);
+  const [isChecking, setIsChecking] = useState(false);
+  
+  const resultsRef = useRef<HTMLDivElement>(null);
 
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
-
-  const findSubsidies = () => {
-    setIsSearching(true);
+  const checkEligibility = () => {
+    setIsChecking(true);
+    
     setTimeout(() => {
-      setResults([
-        {
-          title: "PM-Kisan Samman Nidhi",
-          match: 100,
-          benefit: "ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹6,000 / Year",
-          category: "Income Support",
-          deadline: "Ongoing"
-        },
-        {
-          title: "Micro-Irrigation Fund",
-          match: 85,
-          benefit: "45% Subsidy on Drip",
-          category: "Irrigation",
-          deadline: "Oct 20, 2026"
-        },
-        {
-          title: "National Bamboo Mission",
-          match: 60,
-          benefit: "50% Planting Subsidy",
-          category: "Horticulture",
-          deadline: "Dec 15, 2026"
-        }
-      ]);
-      setIsSearching(false);
-      setStep(3);
-    }, 2000);
+      const farmer = { land, crop, irrigation };
+      const evaluated = SCHEMES.map(s => ({
+        ...s,
+        eligible: s.rule(farmer)
+      }));
+      
+      setResults(evaluated);
+      setIsChecking(false);
+      
+      // Auto-scroll to results
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }, 1200);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 pb-12">
-      <div className="container mx-auto px-4 max-w-5xl">
-        {/* Header */}
-        <div className="text-center mb-16 pt-10">
-          <h1 className="text-4xl lg:text-7xl font-black tracking-tight text-slate-900 dark:text-white uppercase italic leading-[0.9] mb-6">
-            {t('subsidyFinderTitle')}
-          </h1>
-          <p className="text-xl text-slate-500 font-bold uppercase tracking-widest leading-relaxed">
-            {t('subsidyFinderDesc')}
-          </p>
+    <div className="min-h-screen bg-green-50 font-sans p-4 md:p-10 pb-32">
+      
+      {/* --- TITLE SECTION --- */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-3xl mx-auto text-center py-12"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full font-black text-xs uppercase tracking-widest mb-4">
+          <Sprout size={16} />
+          Government Support Portal
         </div>
+        <h1 className="text-4xl md:text-6xl font-black text-slate-800 tracking-tight leading-none">
+          🌾 Check Your <br /> 
+          <span className="text-emerald-600">Government Benefits</span>
+        </h1>
+        <p className="mt-4 text-slate-500 font-bold text-lg">Simple. Fast. For every Farmer.</p>
+      </motion.div>
 
-        {/* Progress Bar */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-           {[1, 2, 3].map((s) => (
-             <div key={s} className="flex items-center gap-2">
-               <div className={cn(
-                 "h-10 w-10 rounded-xl flex items-center justify-center font-black transition-all",
-                 step === s ? "bg-emerald-600 text-white shadow-xl scale-110" : 
-                 step > s ? "bg-emerald-100 text-emerald-600" : "bg-slate-200 text-slate-400"
-               )}>
-                 {step > s ? <CheckCircle2 className="h-5 w-5" /> : s}
-               </div>
-               {s < 3 && <div className={cn("w-12 h-1 rounded-full", step > s ? "bg-emerald-600" : "bg-slate-200")} />}
-             </div>
-           ))}
+      {/* --- INPUT CARD --- */}
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-2xl mx-auto bg-white rounded-[2.5rem] shadow-xl p-8 md:p-12 mb-12 border-b-8 border-emerald-100"
+      >
+        <div className="space-y-10">
+          
+          {/* LAND SLIDER */}
+          <div className="space-y-4">
+            <div className="flex justify-between items-end">
+               <label className="text-sm font-black uppercase text-slate-400 tracking-widest">How much land do you have?</label>
+               <span className="text-4xl font-black text-emerald-600 italic">{land} <span className="text-sm">Acres</span></span>
+            </div>
+            <input 
+              type="range"
+              min="0.5"
+              max="15"
+              step="0.5"
+              value={land}
+              onChange={(e) => setLand(parseFloat(e.target.value))}
+              className="w-full h-4 bg-emerald-50 rounded-full appearance-none cursor-pointer accent-emerald-600"
+            />
+            <div className="flex justify-between text-xs font-bold text-slate-300">
+               <span>Small Area</span>
+               <span>Large Farm</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            {/* CROP SELECT */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Main Crop</label>
+              <div className="relative">
+                <select 
+                  value={crop}
+                  onChange={(e) => setCrop(e.target.value)}
+                  className="w-full bg-slate-50 border-0 rounded-2xl p-5 text-base font-bold text-slate-700 focus:ring-4 focus:ring-emerald-100 transition-all appearance-none outline-none"
+                >
+                  <option>Rice</option>
+                  <option>Wheat</option>
+                  <option>Cotton</option>
+                  <option>Pulse</option>
+                </select>
+                <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* IRRIGATION SELECT */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Irrigation Type</label>
+              <div className="relative">
+                <select 
+                  value={irrigation}
+                  onChange={(e) => setIrrigation(e.target.value)}
+                  className="w-full bg-slate-50 border-0 rounded-2xl p-5 text-base font-bold text-slate-700 focus:ring-4 focus:ring-emerald-100 transition-all appearance-none outline-none"
+                >
+                  <option>Borewell</option>
+                  <option>Canal</option>
+                  <option>Rain-fed</option>
+                </select>
+                <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+
+          <Button 
+            onClick={checkEligibility}
+            disabled={isChecking}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white rounded-full py-8 text-xl font-black shadow-2xl shadow-emerald-200 transition-all active:scale-95 space-x-3"
+          >
+            {isChecking ? (
+              <span className="animate-pulse">Checking Government Data...</span>
+            ) : (
+              <>
+                <Search />
+                <span>Check Your Benefits</span>
+              </>
+            )}
+          </Button>
+
         </div>
+      </motion.div>
 
-        <AnimatePresence mode="wait">
-          {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+      {/* --- RESULTS DASHBOARD --- */}
+      <div ref={resultsRef} className="max-w-3xl mx-auto space-y-6 pt-10">
+        <AnimatePresence mode="popLayout">
+          {results.length > 0 && (
+            <motion.div 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               className="mb-8 text-center"
             >
-              <Card className="p-10 rounded-[3rem] border-none shadow-2xl bg-white dark:bg-slate-900 space-y-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center">
-                    <MapPin className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">Farmer Profile</h3>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Select State</label>
-                    <select className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic appearance-none outline-none">
-                      <option>Maharashtra</option>
-                      <option>Andhra Pradesh</option>
-                      <option>Punjab</option>
-                      <option>Karnataka</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Land Size (Acres)</label>
-                    <input type="number" placeholder="e.g. 5" className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Farmer Category</label>
-                    <select className="w-full bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-4 text-sm font-bold italic appearance-none outline-none">
-                      <option>Small & Marginal</option>
-                      <option>Regular</option>
-                      <option>Tenant Farmer</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="pt-8 flex justify-end">
-                   <Button onClick={nextStep} className="bg-slate-900 hover:bg-emerald-600 text-white font-black px-10 h-16 rounded-2xl italic group">
-                     Next Stage <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                   </Button>
-                </div>
-              </Card>
+               <h2 className="text-2xl font-black text-slate-700">Scheme Search Results</h2>
+               <p className="text-slate-400 text-sm font-bold mt-1">Based on {land} Acres and {crop} Farming</p>
             </motion.div>
           )}
 
-          {step === 2 && (
+          {results.map((res: any, i: number) => (
             <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              layout
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              key={res.name}
+              className={`rounded-[2rem] p-8 border-4 transition-all shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 ${
+                res.eligible 
+                ? "bg-white border-emerald-200 shadow-emerald-100" 
+                : "bg-slate-100 border-slate-200 opacity-60"
+              }`}
             >
-              <Card className="p-10 rounded-[3rem] border-none shadow-2xl bg-white dark:bg-slate-900 space-y-8">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center">
-                    <Sprout className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">Crop & Asset Details</h3>
+              <div className="flex items-center gap-6">
+                <div className={`w-20 h-20 rounded-3xl flex items-center justify-center text-3xl shadow-lg ${res.eligible ? "bg-emerald-100" : "bg-slate-200"}`}>
+                  {res.icon}
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-8">
-                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Major Crops</label>
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {["Rice", "Wheat", "Cotton", "Mango"].map(crop => (
-                        <button key={crop} className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-emerald-500 hover:text-white transition-all">
-                          {crop}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-center md:text-left">
-                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Existing Assets</label>
-                     <div className="flex gap-4 pt-2">
-                       <div className="flex items-center gap-2">
-                         <input type="checkbox" id="tractor" className="h-4 w-4 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-500" />
-                         <label htmlFor="tractor" className="text-xs font-bold uppercase tracking-tight text-slate-600 italic">Tractor</label>
-                       </div>
-                       <div className="flex items-center gap-2">
-                         <input type="checkbox" id="drip" className="h-4 w-4 rounded-md border-slate-300 text-emerald-600 focus:ring-emerald-500" />
-                         <label htmlFor="drip" className="text-xs font-bold uppercase tracking-tight text-slate-600 italic">Drip System</label>
-                       </div>
+                <div>
+                  <h3 className="text-2xl font-black text-slate-800 uppercase leading-none tracking-tight">{res.name}</h3>
+                  <div className="flex items-center gap-2 mt-2">
+                     <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${res.eligible ? "bg-emerald-600 text-white" : "bg-slate-400 text-white"}`}>
+                        {res.eligible ? "✅ Verified" : "❌ Ineligible"}
                      </div>
+                     <span className="text-sm font-black text-emerald-600 italic">{res.benefit}</span>
                   </div>
                 </div>
-
-                <div className="pt-8 flex justify-between">
-                   <Button variant="ghost" onClick={prevStep} className="font-black text-slate-400 hover:text-slate-900 italic">
-                     <ChevronLeft className="mr-2 h-5 w-5" /> Go Back
-                   </Button>
-                   <Button 
-                    onClick={findSubsidies} 
-                    disabled={isSearching}
-                    className="bg-slate-900 hover:bg-emerald-600 text-white font-black px-10 h-16 rounded-2xl italic shadow-2xl transition-all"
-                   >
-                     {isSearching ? "Searching Databases..." : "Find Eligible Schemes"}
-                   </Button>
-                </div>
-              </Card>
-            </motion.div>
-          )}
-
-          {step === 3 && results && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="space-y-8"
-            >
-              <div className="grid md:grid-cols-3 gap-6">
-                <Card className="p-8 rounded-[2.5rem] bg-emerald-600 text-white text-center">
-                  <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1 italic">Best Match</p>
-                  <h4 className="text-3xl font-black italic uppercase tracking-tighter tabular-nums">100%</h4>
-                </Card>
-                <Card className="p-8 rounded-[2.5rem] bg-white border-none shadow-xl text-center">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 italic">Schemes Found</p>
-                  <h4 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900 tabular-nums">{results.length}</h4>
-                </Card>
-                <Card className="p-8 rounded-[2.5rem] bg-white border-none shadow-xl text-center">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1 italic">Est. Benefits</p>
-                  <h4 className="text-3xl font-black italic uppercase tracking-tighter text-emerald-600 tabular-nums">ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¹15k+</h4>
-                </Card>
               </div>
 
-              <div className="space-y-6">
-                {results.map((res: any, i: number) => (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    key={i}
-                  >
-                    <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900 group hover:translate-x-2 transition-transform">
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div className="flex gap-6 items-center">
-                          <div className="h-16 w-16 rounded-[1.5rem] bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 flex items-center justify-center text-xl font-black italic">
-                            {res.match}%
-                          </div>
-                          <div>
-                            <h4 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter leading-none mb-1 group-hover:text-emerald-600 transition-colors">
-                              {res.title}
-                            </h4>
-                            <div className="flex gap-3">
-                               <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">{res.category}</span>
-                               <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500 italic">Deadline: {res.deadline}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-8">
-                           <div className="text-right">
-                             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic">Potential Benefit</p>
-                             <p className="text-xl font-black text-slate-900 dark:text-white italic tracking-tighter">{res.benefit}</p>
-                           </div>
-                           <Button className="h-14 px-8 rounded-xl bg-slate-900 hover:bg-emerald-600 text-white font-black italic uppercase tracking-widest text-xs">
-                              Apply Now
-                           </Button>
-                        </div>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="text-center pt-8">
-                <Button variant="ghost" onClick={() => setStep(1)} className="font-black text-slate-400 hover:text-emerald-600 uppercase tracking-widest text-xs italic">
-                  Run New Search
-                </Button>
+              <div className="flex flex-col items-center md:items-end gap-3">
+                {res.eligible ? (
+                  <Button className="rounded-full px-10 py-6 bg-slate-900 border-none text-white font-black hover:bg-black group">
+                    Apply Now <ArrowRight className="ml-2 group-hover:translate-x-1 transition-all" size={18} />
+                  </Button>
+                ) : (
+                  <p className="max-w-[200px] text-center md:text-right text-[10px] font-bold text-slate-400 italic">
+                    Reason: {res.reason}
+                  </p>
+                )}
               </div>
             </motion.div>
-          )}
+          ))}
         </AnimatePresence>
 
-        {/* Global Stats Footer */}
-        <div className="mt-24 grid md:grid-cols-3 gap-12 text-center opacity-40">
-           <div className="space-y-4">
-              <Landmark className="h-10 w-10 mx-auto text-slate-400" />
-              <p className="text-xs font-bold uppercase tracking-widest italic">100+ Gov Databases</p>
-           </div>
-           <div className="space-y-4">
-              <ShieldCheck className="h-10 w-10 mx-auto text-slate-400" />
-              <p className="text-xs font-bold uppercase tracking-widest italic">Direct Benefit Transfer</p>
-           </div>
-           <div className="space-y-4">
-              <History className="h-10 w-10 mx-auto text-slate-400" />
-              <p className="text-xs font-bold uppercase tracking-widest italic">Real-time Updates</p>
-           </div>
-        </div>
+        {results.length === 0 && !isChecking && (
+          <div className="text-center opacity-20 py-20 pointer-events-none">
+             <Landmark size={120} className="mx-auto" />
+             <p className="text-sm font-black uppercase mt-4 tracking-tighter">Enter Details to Search Registry</p>
+          </div>
+        )}
       </div>
+
     </div>
   );
 };
