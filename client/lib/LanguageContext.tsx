@@ -11,23 +11,22 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<Language>(() => {
-    const saved = localStorage.getItem("TeachSpark_lang");
-    return (saved as Language) || "English";
-  });
+  // Force English state as requested by user
+  const [language] = useState<Language>("English");
 
   useEffect(() => {
-    localStorage.setItem("TeachSpark_lang", language);
-  }, [language]);
+    // Ensure English is saved as the preference
+    localStorage.setItem("TeachSpark_lang", "English");
+  }, []);
 
   const t = (key: string) => {
-    return translations[language][key] || translations["English"][key] || key;
+    // Always return English translation
+    return translations["English"][key] || key;
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language: "English", setLanguage: () => {}, t }}>
       {children}
     </LanguageContext.Provider>
   );

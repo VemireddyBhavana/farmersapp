@@ -4,42 +4,18 @@ import { Bot, Send, X, MessageCircle } from "lucide-react";
 import { useLanguage, Language } from "../lib/LanguageContext";
 import { translations } from "../lib/translations";
 
-const languageLabelMap: Record<string, Language> = {
-    "En": "English",
-    "తె": "Telugu",
-    "हि": "Hindi",
-    "த": "Tamil",
-    "ಕ": "Kannada",
-    "മല": "Malayalam",
-    "म": "Marathi",
-    "ગુ": "Gujarati",
-    "ਪੰ": "Punjabi",
-    "ব": "Bangla"
-};
-
-const labelReverseMap: Record<Language, string> = Object.entries(languageLabelMap).reduce((acc, [label, lang]) => {
-    acc[lang] = label;
-    return acc;
-}, {} as Record<Language, string>);
-
-
 export const FloatingChatbot = () => {
-    const { language: globalLanguage, setLanguage: setGlobalLanguage } = useLanguage();
-    const [localLanguage, setLocalLanguage] = useState<Language>(globalLanguage);
+    const { language: globalLanguage } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
-
-    // Sync local language with global language changes
-    useEffect(() => {
-        setLocalLanguage(globalLanguage);
-    }, [globalLanguage]);
-
-    const tl = (key: string) => {
-        return translations[localLanguage]?.[key] || translations["English"]?.[key] || key;
-    };
     const [messages, setMessages] = useState<{ id: number; text: string; sender: 'bot' | 'user'; time: string }[]>([]);
     const [input, setInput] = useState("");
 
-    // Effect to handle language change in the bot's perspective
+    // Force English always as requested
+    const tl = (key: string) => {
+        return translations["English"]?.[key] || key;
+    };
+
+    // Initial Welcome Message
     useEffect(() => {
         if (messages.length === 0) {
             setMessages([{
@@ -48,16 +24,8 @@ export const FloatingChatbot = () => {
                 sender: "bot",
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             }]);
-        } else if (messages.length === 1 && messages[0].sender === "bot") {
-            // Update the initial greeting if it's the only message
-            setMessages(prev => [{
-                ...prev[0],
-                text: tl("botWelcome") + "\n" + tl("botOffer"),
-            }]);
         }
-    }, [localLanguage]);
-
-    const languages = Object.keys(languageLabelMap);
+    }, []);
 
     const generateBotResponse = (userText: string) => {
         const lowerText = userText.toLowerCase();
@@ -67,26 +35,13 @@ export const FloatingChatbot = () => {
             return keywords.some(k => lowerText.includes(k));
         };
 
-        if (matchKeywords("guidanceKeywords")) {
-            return tl("botGuidanceReply");
-        }
-        if (matchKeywords("rentKeywords")) {
-            return tl("botRentReply");
-        }
-        if (matchKeywords("schemeKeywords")) {
-            return tl("botSchemeReply");
-        }
-        if (matchKeywords("cropKeywords")) {
-            return tl("botCropReply");
-        }
-        if (matchKeywords("pestKeywords")) {
-            return tl("botPestReply");
-        }
-        if (matchKeywords("marketKeywords")) {
-            return tl("botMarketReply");
-        }
+        if (matchKeywords("guidanceKeywords")) return tl("botGuidanceReply");
+        if (matchKeywords("rentKeywords")) return tl("botRentReply");
+        if (matchKeywords("schemeKeywords")) return tl("botSchemeReply");
+        if (matchKeywords("cropKeywords")) return tl("botCropReply");
+        if (matchKeywords("pestKeywords")) return tl("botPestReply");
+        if (matchKeywords("marketKeywords")) return tl("botMarketReply");
 
-        // Default fallback
         return tl("botFallback");
     };
 
@@ -98,7 +53,6 @@ export const FloatingChatbot = () => {
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
 
-        // Simulate bot thinking
         setTimeout(() => {
             const responseTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const botResponse = generateBotResponse(userMessage.text);
@@ -110,9 +64,7 @@ export const FloatingChatbot = () => {
     };
 
     const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            handleSend();
-        }
+        if (e.key === 'Enter') handleSend();
     };
 
     return (
@@ -129,7 +81,7 @@ export const FloatingChatbot = () => {
                     >
                         {/* Header */}
                         <div className="bg-[#106A3A] p-4 flex flex-col shrink-0 rounded-t-3xl">
-                            <div className="flex items-center justify-between text-white mb-3">
+                            <div className="flex items-center justify-between text-white mb-1">
                                 <div className="flex items-center gap-3">
                                     <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm border border-white/10">
                                         <Bot className="w-7 h-7 text-white" />
@@ -148,25 +100,6 @@ export const FloatingChatbot = () => {
                                 >
                                     <X className="w-5 h-5 text-white" />
                                 </button>
-                            </div>
-
-                            {/* Language Selector */}
-                            <div className="flex items-center overflow-x-auto gap-1 no-scrollbar pb-1 -mx-2 px-2 scroll-smooth">
-                                {languages.map((lang) => (
-                                    <button
-                                        key={lang}
-                                        onClick={() => {
-                                            const newLang = languageLabelMap[lang];
-                                            setLocalLanguage(newLang);
-                                        }}
-                                        className={`shrink-0 min-w-[36px] px-2 py-1.5 rounded-lg text-sm font-bold transition-all border ${labelReverseMap[localLanguage] === lang
-                                            ? 'bg-white text-[#106A3A] border-white shadow-sm'
-                                            : 'text-emerald-100/70 border-transparent hover:bg-white/10 hover:text-white'
-                                            }`}
-                                    >
-                                        {lang}
-                                    </button>
-                                ))}
                             </div>
                         </div>
 
