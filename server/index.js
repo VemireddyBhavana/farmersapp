@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import cors from "cors";
 import ee from "@google/earthengine";
@@ -13,9 +14,8 @@ import { calculatePredictiveYield } from "./utils/predictionEngine.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env from current directory (server/.env) and root
-dotenv.config(); // Loads ./server/.env if running in server dir
-dotenv.config({ path: path.join(__dirname, "../.env") }); // Fallback to root .env
+// Ensure root .env is also loaded if needed
+dotenv.config({ path: path.join(__dirname, "../.env") });
 
 const app = express();
 app.use(cors());
