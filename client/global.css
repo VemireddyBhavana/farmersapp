@@ -306,3 +306,31 @@
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ANTIGRAVITY SYSTEM ANIMATIONS */
+@keyframes antigravity-float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(2deg); }
+  66% { transform: translateY(5px) rotate(-1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.antigravity-float {
+  animation: antigravity-float 8s ease-in-out infinite;
+}
+
+.antigravity-float-slow {
+  animation: antigravity-float 12s ease-in-out infinite;
+}
+
+@keyframes bg-scroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 -100%; }
+}
+
+.antigravity-particles {
+  background-image: radial-gradient(circle, rgba(52, 211, 153, 0.15) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, transparent, black, transparent);
+  animation: bg-scroll 30s linear infinite;
+}

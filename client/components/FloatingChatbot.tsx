@@ -10,10 +10,7 @@ export const FloatingChatbot = () => {
     const [messages, setMessages] = useState<{ id: number; text: string; sender: 'bot' | 'user'; time: string }[]>([]);
     const [input, setInput] = useState("");
 
-    // Force English always as requested
-    const tl = (key: string) => {
-        return translations["English"]?.[key] || key;
-    };
+    const { t: tl } = useLanguage();
 
     // Initial Welcome Message
     useEffect(() => {
@@ -76,21 +73,21 @@ export const FloatingChatbot = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="fixed bottom-24 right-4 md:right-8 w-[380px] max-w-[calc(100vw-2rem)] bg-[#F8F9F5] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-emerald-900/10 z-50 font-sans"
+                        className="fixed bottom-24 right-4 md:right-8 w-[380px] max-w-[calc(100vw-2rem)] bg-card rounded-[2rem] shadow-2xl flex flex-col overflow-hidden border border-primary/10 z-50 font-sans backdrop-blur-xl"
                         style={{ height: '600px', maxHeight: 'calc(100vh - 8rem)' }}
                     >
                         {/* Header */}
-                        <div className="bg-[#106A3A] p-4 flex flex-col shrink-0 rounded-t-3xl">
-                            <div className="flex items-center justify-between text-white mb-1">
+                        <div className="bg-primary p-4 flex flex-col shrink-0 rounded-t-[2rem]">
+                            <div className="flex items-center justify-between text-primary-foreground mb-1">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-sm border border-white/10">
+                                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md shadow-sm border border-white/10">
                                         <Bot className="w-7 h-7 text-white" />
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-[19px] leading-tight flex items-center gap-2">{tl("aiAssistantTitle")}</h3>
                                         <div className="flex items-center gap-1.5 mt-0.5">
-                                            <div className="w-2 h-2 rounded-full bg-[#34D399]"></div>
-                                            <p className="text-emerald-100 text-xs font-medium tracking-wide">{tl("aiAssistantOnline")}</p>
+                                            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></div>
+                                            <p className="text-primary-foreground/80 text-xs font-medium tracking-wide">{tl("aiAssistantOnline")}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -111,15 +108,15 @@ export const FloatingChatbot = () => {
                                     className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                                 >
                                     <div
-                                        className={`max-w-[85%] rounded-[1.25rem] p-4 text-[15px] leading-relaxed relative shadow-sm border ${msg.sender === 'user'
-                                            ? 'bg-[#106A3A] text-white rounded-tr-sm border-[#106A3A]'
-                                            : 'bg-[#F2F4E6] text-[#2D3748] rounded-tl-sm border-[#E2E8D5]'
+                                        className={`max-w-[85%] rounded-[1.5rem] p-4 text-[15px] leading-relaxed relative shadow-sm border transition-all ${msg.sender === 'user'
+                                            ? 'bg-primary text-primary-foreground rounded-tr-none border-primary'
+                                            : 'bg-muted/50 text-foreground rounded-tl-none border-border'
                                             }`}
                                         style={{ whiteSpace: 'pre-wrap' }}
                                     >
                                         {msg.text}
                                     </div>
-                                    <span className={`text-xs mt-1.5 font-bold ${msg.sender === 'user' ? 'text-gray-400 mr-1' : 'text-[#507E65] ml-1'}`}>
+                                    <span className={`text-xs mt-1.5 font-bold ${msg.sender === 'user' ? 'text-muted-foreground mr-1' : 'text-primary/60 ml-1'}`}>
                                         {msg.time}
                                     </span>
                                 </div>
@@ -127,7 +124,7 @@ export const FloatingChatbot = () => {
                         </div>
 
                         {/* Input Area */}
-                        <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+                        <div className="p-4 bg-muted/20 border-t border-border shrink-0">
                             <div className="relative flex items-center">
                                 <input
                                     type="text"
@@ -135,12 +132,12 @@ export const FloatingChatbot = () => {
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyPress={handleKeyPress}
-                                    className="w-full h-[52px] pl-5 pr-14 rounded-full border border-gray-200 focus:outline-none focus:border-[#106A3A] focus:ring-1 focus:ring-[#106A3A] text-gray-700 bg-gray-50 placeholder:text-gray-400"
+                                    className="w-full h-[54px] pl-5 pr-14 rounded-full border border-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary text-foreground bg-background placeholder:text-muted-foreground transition-all shadow-inner"
                                 />
                                 <button
                                     onClick={handleSend}
                                     disabled={!input.trim()}
-                                    className="absolute right-2 w-10 h-10 rounded-full bg-[#106A3A] flex items-center justify-center text-white hover:bg-[#0A4A28] transition-colors disabled:opacity-50 disabled:hover:bg-[#106A3A]"
+                                    className="absolute right-2.5 w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground hover:bg-primary/90 transition-all disabled:opacity-30 shadow-md active:scale-95"
                                 >
                                     <Send className="w-4 h-4 ml-0.5" />
                                 </button>
@@ -152,13 +149,18 @@ export const FloatingChatbot = () => {
 
             {/* Floating Toggle Button */}
             <motion.button
-                className={`fixed bottom-6 right-4 md:right-8 w-16 h-16 rounded-full bg-[#106A3A] text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#0A4A28]/20 flex items-center justify-center hover:bg-[#0D5B31] transition-colors z-50 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className={`fixed bottom-6 right-4 md:right-8 w-16 h-16 rounded-full bg-primary text-primary-foreground shadow-[0_12px_40px_rgba(16,185,129,0.3)] border border-white/10 flex items-center justify-center hover:bg-primary/90 transition-all z-50 group ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+                whileHover={{ 
+                    scale: 1.1, 
+                    rotate: 5,
+                    boxShadow: "0 15px 45px rgba(16,185,129,0.4)"
+                }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setIsOpen(true)}
             >
                 <div className="relative">
-                    <MessageCircle className="w-8 h-8 translate-y-[-1px] translate-x-[-1px]" strokeWidth={2.5} />
+                    <MessageCircle className="w-9 h-9 brightness-110 drop-shadow-sm" strokeWidth={2.2} />
+                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-primary animate-bounce shadow-sm" />
                 </div>
             </motion.button>
         </>

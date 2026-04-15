@@ -52,8 +52,14 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
 
     let weatherData;
     if (weatherRes.status === 401) {
-      console.warn("⚠️ One Call 3.0 Key Invalid. Fallback to High-Fidelity Simulator...");
-      weatherData = getDemoWeather(queryLat, queryLon, locationName);
+      console.warn("⚠️ One Call 3.0 Key Invalid. Attempting Legacy Compatibility Fix...");
+      try {
+        weatherData = await getLegacyWeather(queryLat, queryLon);
+        console.log("✅ Legacy Compatibility Link Established. Using Real Data Fallback.");
+      } catch (e) {
+        console.warn("❌ Legacy Fallback Failed. Using High-Fidelity Simulator.");
+        weatherData = getDemoWeather(queryLat, queryLon, locationName);
+      }
     } else {
       if (!weatherRes.ok) throw new Error("Atmospheric feed interrupted");
       weatherData = await weatherRes.json();
@@ -86,7 +92,7 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
         status: ndviVal > 0.7 ? "Healthy Growth" : ndviVal > 0.4 ? "Stable Vigor" : "Stress Detected",
         timestamp: new Date().toISOString()
       },
-      // Generate AI-ready recommendations directly in backend for consistency
+      // Generate AI-ready recommendations
       advisory: generateBackendAdvisory(weatherData, ndviVal, soilVal)
     };
 
@@ -99,6 +105,62 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
     res.status(500).json({ error: "Intelligence sync failed: " + error.message });
   }
 };
+
+async function getLegacyWeather(lat, lon) {
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    
+    const [currRes, foreRes] = await Promise.all([fetch(currentUrl), fetch(forecastUrl)]);
+    
+    if (!currRes.ok || !foreRes.ok) throw new Error("Legacy APIs also failed");
+    
+    const currData = await currRes.json();
+    const foreData = await foreRes.json();
+    
+    // Transform to One Call 3.0 Structure
+    return {
+        lat: parseFloat(lat),
+        lon: parseFloat(lon),
+        current: {
+            dt: currData.dt,
+            temp: currData.main.temp,
+            feels_like: currData.main.feels_like,
+            pressure: currData.main.pressure,
+            humidity: currData.main.humidity,
+            uvi: 5, // Not available in 2.5 free
+            visibility: currData.visibility,
+            wind_speed: currData.wind.speed,
+            weather: currData.weather
+        },
+        hourly: foreData.list.slice(0, 24).map(item => ({
+            dt: item.dt,
+            temp: item.main.temp,
+            weather: item.weather,
+            pop: item.pop || 0
+        })),
+        daily: aggregateToDaily(foreData.list)
+    };
+}
+
+function aggregateToDaily(list) {
+    const days = {};
+    list.forEach(item => {
+        const date = new Date(item.dt * 1000).toLocaleDateString();
+        if (!days[date]) {
+            days[date] = {
+                dt: item.dt,
+                temp: { min: item.main.temp, max: item.main.temp },
+                weather: item.weather,
+                pop: item.pop || 0
+            };
+        } else {
+            days[date].temp.min = Math.min(days[date].temp.min, item.main.temp);
+            days[date].temp.max = Math.max(days[date].temp.max, item.main.temp);
+            days[date].pop = Math.max(days[date].pop, item.pop || 0);
+        }
+    });
+    return Object.values(days).slice(0, 8);
+}
 
 function generateBackendAdvisory(w, ndvi, soil) {
     const current = w.current || {};

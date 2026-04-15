@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { translations, Language as TranslationLanguage } from "./translations";
+import React, { createContext, useContext, ReactNode, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { Language as TranslationLanguage } from "./translations";
 
 export type Language = TranslationLanguage;
 
@@ -11,22 +12,50 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const langMap: Record<string, Language> = {
+  en: "English",
+  hi: "Hindi",
+  te: "Telugu",
+  ta: "Tamil",
+  mr: "Marathi",
+  gu: "Gujarati",
+  kn: "Kannada",
+  ml: "Malayalam",
+  pa: "Punjabi",
+  bn: "Bangla",
+};
+
+const revMap: Record<Language, string> = {
+  English: "en",
+  Hindi: "hi",
+  Telugu: "te",
+  Tamil: "ta",
+  Marathi: "mr",
+  Gujarati: "gu",
+  Kannada: "kn",
+  Malayalam: "ml",
+  Punjabi: "pa",
+  Bangla: "bn",
+};
+
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  // Force English state as requested by user
-  const [language] = useState<Language>("English");
+  const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    // Ensure English is saved as the preference
-    localStorage.setItem("TeachSpark_lang", "English");
-  }, []);
-
-  const t = (key: string) => {
-    // Always return English translation
-    return translations["English"][key] || key;
+  const setLanguage = (lang: Language) => {
+    const code = revMap[lang];
+    if (code) {
+      i18n.changeLanguage(code);
+    }
   };
 
+  const language = langMap[i18n.language] || "English";
+
+  useEffect(() => {
+    localStorage.setItem("TeachSpark_lang", language);
+  }, [language]);
+
   return (
-    <LanguageContext.Provider value={{ language: "English", setLanguage: () => {}, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

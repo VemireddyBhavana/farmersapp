@@ -1,21 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, User, Bot, Sparkles, ChevronDown } from "lucide-react";
+import { MessageCircle, X, Send, Bot, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language } from "@/lib/LanguageContext";
-import { translations } from "@/lib/translations";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const AIChat = () => {
-  const { language } = useLanguage();
-  const [chatLanguage, setChatLanguage] = useState<Language>(language);
+  const { language, t: ct } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Local translation function for chat only
-  const ct = (key: string) => {
-    return (translations[chatLanguage] && translations[chatLanguage][key]) || (translations["English"] && translations["English"][key]) || key;
-  };
 
   const [messages, setMessages] = useState([
     {
@@ -28,12 +21,7 @@ const AIChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Sync initial chat language with site language once
-  useEffect(() => {
-    setChatLanguage(language);
-  }, [language]);
-
-  // Update initial message when chat language changes if no other messages exist
+  // Update initial message when language changes if no other messages exist
   useEffect(() => {
     if (messages.length === 1 && messages[0].role === "bot") {
       setMessages([{
@@ -42,7 +30,7 @@ const AIChat = () => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }]);
     }
-  }, [chatLanguage]);
+  }, [language]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -95,19 +83,6 @@ const AIChat = () => {
     }, 1500);
   };
 
-  const languages: { name: Language; label: string }[] = [
-    { name: "English", label: "En" },
-    { name: "Telugu", label: "తె" },
-    { name: "Hindi", label: "हि" },
-    { name: "Tamil", label: "த" },
-    { name: "Kannada", label: "ಕ" },
-    { name: "Malayalam", label: "മല" },
-    { name: "Marathi", label: "म" },
-    { name: "Gujarati", label: "ગુ" },
-    { name: "Punjabi", label: "ਪੰ" },
-    { name: "Bangla", label: "ব" },
-  ];
-
   return (
     <div className="fixed bottom-6 right-6 z-[100] sm:bottom-10 sm:right-10">
       <AnimatePresence>
@@ -116,7 +91,7 @@ const AIChat = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-3xl bg-background/80 border shadow-2xl glass dark:glass-dark sm:w-[400px]"
+            className="mb-4 flex h-[500px] w-[350px] flex-col overflow-hidden rounded-3xl bg-card border shadow-2xl backdrop-blur-xl sm:w-[400px]"
           >
             {/* Header */}
             <div className="flex items-center justify-between bg-primary p-4 text-primary-foreground">
@@ -140,22 +115,6 @@ const AIChat = () => {
               >
                 <X className="h-5 w-5" />
               </Button>
-            </div>
-
-            {/* Language Selection Bar */}
-            <div className="flex justify-around bg-muted/50 p-2 text-[10px] font-black border-b overflow-x-auto no-scrollbar gap-1">
-              {languages.map((lang) => (
-                <span
-                  key={lang.name}
-                  onClick={() => setChatLanguage(lang.name)}
-                  className={cn(
-                    "cursor-pointer px-1.5 py-1 rounded transition-colors whitespace-nowrap",
-                    chatLanguage === lang.name ? "text-primary bg-primary/10" : "hover:text-primary"
-                  )}
-                >
-                  {lang.label}
-                </span>
-              ))}
             </div>
 
             {/* Messages */}
@@ -202,24 +161,15 @@ const AIChat = () => {
 
             {/* Quick Actions */}
             <div className="flex gap-2 p-2 overflow-x-auto no-scrollbar border-t bg-muted/10">
-              <button
-                onClick={() => handleSend(ct("rentTractor"))}
-                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
-              >
-                {ct("rentTractor")}
-              </button>
-              <button
-                onClick={() => handleSend(ct("cropAdvice"))}
-                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
-              >
-                {ct("cropAdvice")}
-              </button>
-              <button
-                onClick={() => handleSend(ct("mandiRates"))}
-                className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
-              >
-                {ct("mandiRates")}
-              </button>
+              {["rentTractor", "cropAdvice", "mandiRates"].map((action) => (
+                <button
+                  key={action}
+                  onClick={() => handleSend(ct(action))}
+                  className="flex-shrink-0 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase text-accent-foreground hover:bg-primary/20 transition-colors border"
+                >
+                  {ct(action)}
+                </button>
+              ))}
             </div>
 
             {/* Input */}
@@ -234,7 +184,7 @@ const AIChat = () => {
                 <Input
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={ct("askMeAnything Placeholder") || ct("askMeAnything")}
+                  placeholder={ct("chatPlaceholder")}
                   className="rounded-full border-muted bg-muted/50 focus-visible:ring-primary"
                 />
                 <Button
@@ -261,15 +211,6 @@ const AIChat = () => {
         )}
       >
         {isOpen ? <ChevronDown className="h-8 w-8" /> : <MessageCircle className="h-8 w-8" />}
-        {!isOpen && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] text-white"
-          >
-            1
-          </motion.div>
-        )}
       </motion.button>
     </div>
   );
