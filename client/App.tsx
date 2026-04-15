@@ -48,8 +48,6 @@ import PricePredictor from "./pages/PricePredictor";
 import D2CMarketplace from "./pages/D2CMarketplace";
 import DroneBooking from "./pages/DroneBooking";
 import CropHealthMonitor from "./pages/CropHealthMonitor";
-
-
 import TechSparkAI from "./pages/TechSparkAI";
 import MarketLinkage from "./pages/MarketLinkage";
 import Omnichannel from "./pages/Omnichannel";
@@ -61,6 +59,9 @@ import IrrigationStats from "./pages/IrrigationStats";
 import FarmMapper from "./pages/FarmMapper";
 import FarmerMarket from "./pages/FarmerMarket";
 import VoiceNotes from "./pages/VoiceNotes";
+import InterviewMode from "./pages/InterviewMode";
+import { CartProvider } from "./lib/CartContext";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -107,6 +108,7 @@ const AppRoutes = () => {
       <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
       <Route path="/community" element={<Community />} />
       <Route path="/expert-consult" element={<ExpertHelpFull />} />
+      <Route path="/interview" element={<InterviewMode />} />
       <Route path="/yield-prediction" element={<YieldPrediction />} />
       <Route path="/subsidy-finder" element={<SubsidyFinder />} />
       <Route path="/tool-sharing" element={<ToolSharing />} />
@@ -117,6 +119,7 @@ const AppRoutes = () => {
       <Route path="/d2c-marketplace" element={<D2CMarketplace />} />
       <Route path="/drone-booking" element={<DroneBooking />} />
       <Route path="/crop-doctor" element={<CropHealthMonitor />} />
+      <Route path="/checkout" element={<Checkout />} />
       
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />
@@ -133,9 +136,6 @@ const AppRoutes = () => {
   );
 };
 
-import { CartProvider } from "./lib/CartContext";
-import Checkout from "./pages/Checkout";
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -148,60 +148,7 @@ const App = () => (
               <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
                 <SignedIn>
                   <Layout>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/rent" element={<TractorRental />} />
-                      <Route path="/owner" element={<OwnerDashboard />} />
-                      <Route path="/admin" element={<AdminDashboard />} />
-                      <Route path="/weather" element={<Weather />} />
-                      <Route path="/market" element={<Market />} />
-                      <Route path="/mandi/:id" element={<MandiDetail />} />
-                      <Route path="/calendar" element={<Calendar />} />
-                      <Route path="/pests" element={<Pests />} />
-                      <Route path="/chat" element={<Chat />} />
-                      <Route path="/knowledge" element={<AgriKnowledge />} />
-                      <Route path="/guide/:guideId" element={<AgriKnowledge />} />
-                      <Route path="/agri-schemes" element={<AgriSchemes />} />
-                      <Route path="/help-center" element={<HelpCenter />} />
-                      <Route path="/growing-guide" element={<GrowingGuide />} />
-                      <Route path="/support" element={<Support />} />
-                      <Route path="/seeds" element={<SeedsBuyer />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/whatsapp-bot" element={<WhatsAppChat />} />
-                      <Route path="/location" element={<Location />} />
-                      <Route path="/irrigation" element={<IrrigationStats />} />
-                      <Route path="/farm-mapper" element={<FarmMapper />} />
-                      <Route path="/finance" element={<FarmerFinance />} />
-                      <Route path="/market-place" element={<FarmerMarket />} />
-                      <Route path="/voice-notes" element={<VoiceNotes />} />
-                      <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
-                      <Route path="/techspark" element={<TechSparkAI />} />
-                      <Route path="/impact" element={<Impact />} />
-                      <Route path="/market-linkage" element={<MarketLinkage />} />
-                      <Route path="/omnichannel" element={<Omnichannel />} />
-                      <Route path="/join-us" element={<JoinUs />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/vision" element={<Vision />} />
-                      <Route path="/contact" element={<Contact />} />
-                      <Route path="/privacy" element={<Privacy />} />
-                      <Route path="/terms" element={<Terms />} />
-                      <Route path="/explore" element={<Explore />} />
-                      <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
-                      <Route path="/community" element={<Community />} />
-                      <Route path="/expert-consult" element={<ExpertHelpFull />} />
-                      <Route path="/yield-prediction" element={<YieldPrediction />} />
-                      <Route path="/subsidy-finder" element={<SubsidyFinder />} />
-                      <Route path="/tool-sharing" element={<ToolSharing />} />
-                      <Route path="/soil-lab-locator" element={<SoilLabLocator />} />
-                      <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
-                      <Route path="/farmer-finance" element={<FarmerFinance />} />
-                      <Route path="/price-predictor" element={<PricePredictor />} />
-                      <Route path="/d2c-marketplace" element={<D2CMarketplace />} />
-                      <Route path="/drone-booking" element={<DroneBooking />} />
-                      <Route path="/crop-doctor" element={<CropHealthMonitor />} />
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
+                    <AppRoutes />
                   </Layout>
                   <FloatingChatbot />
                 </SignedIn>

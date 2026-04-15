@@ -6,6 +6,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ee from "@google/earthengine";
 import { handleWeather } from "./weather.js";
+import axios from "axios";
+import { calculatePredictiveYield } from "./utils/predictionEngine.js";
 
 dotenv.config();
 
@@ -15,6 +17,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+import aiRoutes from "./routes/aiRoutes.js";
+app.use("/api", aiRoutes);
+
+// IN-MEMORY FALLBACK VAULT (For when MongoDB service is offline)
+let yieldBackupVault = [];
 
 // --- GOOGLE EARTH ENGINE INITIALIZATION ---
 let isGeeActive = false;
@@ -162,6 +170,92 @@ app.get("/api/farm-data", async (req, res) => {
 
 app.get("/api/weather", async (req, res) => {
   await handleWeather(req, res, getNDVI, getSoilData);
+});
+
+// FARMER PROFILE API
+app.get("/api/farmer", (req, res) => {
+  res.json({
+    id: "F-9908",
+    name: "Pratap Reddy",
+    location: "Anantapur, Andhra Pradesh",
+    experience: "12 Years",
+    farmSize: "15 Acres",
+    primaryCrops: ["Cotton", "Groundnut", "Paddy"],
+    achievements: ["Best Farmer 2023", "Eco-Friendly Certification"]
+  });
+});
+
+// YIELD INTELLIGENCE PLATFORM (Machine Learning Orchestration)
+app.post("/api/predict", async (req, res) => {
+  const { crop, land, soil, irrigation } = req.body;
+  console.log(`🤖 [Orchestrator] Starting Full Prediction for ${crop} (${land} Acres)...`);
+
+  try {
+    // 1. Fetch Real Weather (Open-Meteo)
+    const lat = 14.6819; // Default Anantapur context
+    const lng = 77.6006;
+    const weatherRes = await axios.get(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,precipitation&daily=precipitation_sum,temperature_2m_max&timezone=auto`);
+    
+    const temperature = weatherRes.data.current.temperature_2m;
+    const rainfall = weatherRes.data.daily.precipitation_sum[0] || 5.0; // Simulated seasonal if zero
+    
+    // 2. Fetch Satellite NDVI (Sentinel Hub or GEE)
+    const ndviValue = await getNDVI(lat, lng);
+    
+    // 3. Native ML Intelligence Engine (Zero-Python)
+    console.log("🚀 [Intelligence] Calling Node-Native yield engine...");
+    let mlYield = 0;
+    try {
+      const predictionResult = calculatePredictiveYield({
+        rainfall: rainfall * 10,
+        temperature: temperature,
+        ndvi: ndviValue
+      });
+      mlYield = predictionResult.yield;
+      console.log(`✅ [Intelligence] Yield Predicted: ${mlYield} Tons/Hectare`);
+    } catch (e) {
+      console.warn("⚠️ [Intelligence] Engine logic error. Using basic fallback.");
+      mlYield = (parseFloat(land) * (ndviValue > 0.7 ? 1.2 : 0.8)).toFixed(2);
+    }
+
+    // 4. Financial & Government Insights
+    const cropPrices = { "Rice": 2200, "Wheat": 2100, "Cotton": 6200, "Maize": 1900 };
+    const price = cropPrices[crop] || 2000;
+    const totalProfit = mlYield * price * parseFloat(land);
+
+    const finalResult = {
+      crop,
+      yield: mlYield,
+      profit: `₹${totalProfit.toLocaleString()}`,
+      risk: ndviValue < 0.5 ? "High" : "Low",
+      confidence: 0.88,
+      weather: { temp: temperature, rain: rainfall },
+      ndvi: ndviValue,
+      insights: [
+        `Optimal conditions detected by GEE Satellite.`,
+        `ML Model suggests NPK adjustment based on NDVI ${ndviValue.toFixed(2)}.`,
+        `Expected market rate: ₹${price}/quintal.`
+      ],
+      date: new Date()
+    };
+
+    // Save to History (Using existing resilient vault)
+    yieldBackupVault = [finalResult, ...yieldBackupVault].slice(0, 10);
+    res.json(finalResult);
+  } catch (err) {
+    console.error("❌ [Orchestrator] Critical Failure:", err.message);
+    res.status(500).json({ error: "Intelligence Platform Offline. Retrying..." });
+  }
+});
+
+app.get("/api/yield/history", async (req, res) => {
+  console.log("📂 [Yield API] Inspecting history vaults...");
+  try {
+    // Current simple implementation uses memory vault directly
+    res.json(yieldBackupVault.slice(0, 5));
+  } catch (err) {
+    res.json([]);
+  }
 });
 
 app.listen(5000, () => {

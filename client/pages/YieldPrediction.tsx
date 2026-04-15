@@ -37,8 +37,10 @@ import {
   AreaChart,
   Area
 } from "recharts";
+import { useLocation } from "@/lib/LocationContext";
 
 const YieldPrediction = () => {
+  const { location } = useLocation();
   const [formData, setFormData] = useState({
     crop: "Rice",
     land: "5",
@@ -114,7 +116,7 @@ const YieldPrediction = () => {
             </div>
             <div className="flex items-center gap-2">
               <MapIcon size={16} className="text-slate-400" />
-              <span className="text-sm font-bold text-slate-700">{farmer?.location}</span>
+              <span className="text-sm font-bold text-slate-700">{location?.district || farmer?.location}</span>
             </div>
             <div className="h-8 w-[1px] bg-slate-200"></div>
             <div className="text-right">

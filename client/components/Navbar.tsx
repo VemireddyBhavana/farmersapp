@@ -18,6 +18,8 @@ import { useAuth } from "@/lib/AuthContext";
 import { useLanguage, Language } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/clerk-react";
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const allLanguages: { name: Language; native: string }[] = [
   { name: "English",  native: "English"    },
@@ -93,10 +95,9 @@ const Navbar = () => {
   const moreLinks = [
     { name: t("seedsStore"),    path: "/seeds",        icon: Sprout        },
     { name: t("calendar"),      path: "/calendar",     icon: Calendar      },
+    { name: t("rentTractor"),   path: "/rent",         icon: Store         },
     { name: t("security"),      path: "/pests",        icon: Shield        },
     { name: t("supportPortal"), path: "/support",      icon: HeartHandshake},
-    { name: t("agriKnowledge"), path: "/knowledge",    icon: ScrollText    },
-    { name: t("rentTractor"),   path: "/rent",         icon: Store         },
   ];
 
   const premiumLinks = [
@@ -142,8 +143,8 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1 flex-1 mx-4">
-            <div className="flex items-center bg-muted/40 rounded-2xl px-1.5 py-1 gap-0.5 flex-nowrap overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="hidden lg:flex items-center gap-0.5 flex-1 mx-1 justify-center">
+            <div className="flex items-center bg-muted/20 rounded-2xl px-1 py-0.5 gap-0.5 flex-nowrap overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden border border-primary/5">
               {primaryLinks.map((link) => (
                 <motion.div
                   key={link.path}
@@ -153,10 +154,10 @@ const Navbar = () => {
                   <Link
                     to={link.path}
                     className={cn(
-                      "relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold tracking-wide transition-all whitespace-nowrap z-10 group nav-link-item premium-button",
+                      "relative flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-bold tracking-tight transition-all whitespace-nowrap z-10 group nav-link-item",
                       location.pathname === link.path
                         ? "text-primary-foreground nav-glow-active bg-primary/10"
-                        : "text-muted-foreground hover:text-primary hover:bg-muted/40"
+                        : "text-muted-foreground hover:text-primary hover:bg-muted/30"
                     )}
                   >
                     {location.pathname === link.path && (
@@ -201,7 +202,7 @@ const Navbar = () => {
               <DropdownMenu open={moreOpen} onOpenChange={setMoreOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
-                    {t("more")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", moreOpen && "rotate-180")} />
+                    {t("more")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300 opacity-50", moreOpen && "rotate-180")} />
                   </Button>
                 </DropdownMenuTrigger>
                 <AnimatePresence>
@@ -389,32 +390,8 @@ const Navbar = () => {
 
           {/* Right Controls */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
-            {/* Language switch */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-9 px-2.5 rounded-xl bg-muted/40 flex items-center gap-1 text-xs font-bold">
-                  <Globe className="h-4 w-4 text-emerald-600" />
-                  <span className="hidden md:inline text-muted-foreground">{allLanguages.find(l => l.name === language)?.native || language}</span>
-                  <ChevronDown className="h-3 w-3 text-muted-foreground hidden md:block" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44 rounded-xl shadow-xl p-1.5 mt-1 bg-white dark:bg-slate-900">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground px-2 py-1">{t("selectLanguage")}</p>
-                {allLanguages.map((lang) => (
-                  <DropdownMenuItem key={lang.name} onClick={() => setLanguage(lang.name)} className={cn("cursor-pointer rounded-lg py-2 px-3 flex items-center gap-2 text-sm font-semibold", language === lang.name ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700" : "hover:bg-muted")}>
-                    {lang.native}
-                    {language === lang.name && <span className="ml-auto text-emerald-500 text-xs">✓</span>}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Theme toggle */}
-            {mounted && (
-              <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl bg-muted/40" onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
-                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </Button>
-            )}
+            <LanguageSwitcher />
+            <ThemeToggle />
 
             {/* Auth / Profile */}
             {isLoaded && (

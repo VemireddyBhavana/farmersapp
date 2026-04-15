@@ -205,7 +205,7 @@ export default function Index() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 whileHover={{ y: -6 }}
-                className="bg-white dark:bg-white/5 rounded-3xl p-8 border border-primary/5 shadow-sm hover:shadow-xl transition-all"
+                className="bg-card rounded-3xl p-8 border border-primary/10 shadow-sm hover:shadow-xl transition-all"
               >
                 <div className={`w-12 h-12 rounded-2xl ${item.color} flex items-center justify-center mb-4`}>
                   <item.icon className="h-6 w-6" />
@@ -373,7 +373,7 @@ export default function Index() {
       </section>
 
       {/* How it Works Redesign */}
-      <section className="py-24 bg-white dark:bg-slate-950/50">
+      <section className="py-24 bg-background transition-colors">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-20 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-5xl font-black italic">
@@ -437,8 +437,8 @@ export default function Index() {
                       <step.icon className="h-10 w-10" />
                     </div>
                   </div>
-                  <h3 className="text-2xl font-black mb-3 text-slate-900 dark:text-white">{step.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-[280px]">
+                  <h3 className="text-2xl font-black mb-3 text-foreground">{step.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed max-w-[280px]">
                     {step.desc}
                   </p>
                 </motion.div>

@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, ArrowLeft, MoreVertical, Phone, Video, Search, Paperclip, Smile, Mic, Check, CheckCheck, Bot } from "lucide-react";
+import { Send, ArrowLeft, MoreVertical, Phone, Video, Paperclip, Smile, Mic, CheckCheck, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { useLanguage, Language } from "@/lib/LanguageContext";
-import { translations } from "@/lib/translations";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface Message {
     id: string;
@@ -16,24 +15,10 @@ interface Message {
     status?: "sent" | "delivered" | "read";
 }
 
-const languages: { name: Language; label: string }[] = [
-    { name: "English", label: "En" },
-    { name: "Telugu", label: "తె" },
-    { name: "Hindi", label: "हि" },
-    { name: "Tamil", label: "த" },
-    { name: "Kannada", label: "ಕ" },
-    { name: "Malayalam", label: "മല" },
-    { name: "Marathi", label: "म" },
-    { name: "Gujarati", label: "ગુ" },
-    { name: "Punjabi", label: "ਪੰ" },
-    { name: "Bangla", label: "ব" },
-];
-
 const WhatsAppChat = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { language: globalLanguage } = useLanguage();
-    const [localLanguage, setLocalLanguage] = useState<Language>(globalLanguage);
+    const { language, t: tl } = useLanguage();
     const phone = searchParams.get("phone") || "User";
     const initialMessageParam = searchParams.get("initialMessage");
 
@@ -41,10 +26,6 @@ const WhatsAppChat = () => {
     const [inputValue, setInputValue] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
-
-    const tl = (key: string) => {
-        return translations[localLanguage]?.[key] || translations["English"]?.[key] || key;
-    };
 
     useEffect(() => {
         // Initial greeting if coming from SeedsBuyer
@@ -57,7 +38,7 @@ const WhatsAppChat = () => {
             };
             setMessages([initialGreeting]);
         }
-    }, [initialMessageParam, phone, messages.length, localLanguage]);
+    }, [initialMessageParam, phone, messages.length, language]);
 
     // Update greeting retroactively if language changes and it was the only message
     useEffect(() => {
@@ -67,7 +48,7 @@ const WhatsAppChat = () => {
                 content: `👋 ${tl("botWelcome")}\n\nAsk me about:\n- 🚜 ${tl("rentTractor")}\n- 🌾 ${tl("cropAdvice")}\n- 📈 ${tl("marketRatesLabel")}\n- 🐛 ${tl("pestControl")}`,
             }]);
         }
-    }, [localLanguage]);
+    }, [language]);
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -84,7 +65,7 @@ const WhatsAppChat = () => {
         if (lowerText.includes("scheme") || lowerText.includes("ysr") || lowerText.includes("kisan") || lowerText.includes("పథకాలు") || lowerText.includes("योजना")) {
             return tl("botSchemeReply");
         }
-        if (lowerText.includes("tomato") || lowerText.includes("టమోటా") || lowerText.includes("టమాటర్") || lowerText.includes("paddy") || lowerText.includes("rice") || lowerText.includes("వరి") || lowerText.includes("धान") || lowerText.includes("cotton") || lowerText.includes("పత్తి") || lowerText.includes("कपास")) {
+        if (lowerText.includes("tomato") || lowerText.includes("టమోటా") || lowerText.includes("టమాటర్") || lowerText.includes("paddy") || lowerText.includes("rice") || lowerText.includes("వరి") || lowerText.includes("धान") || lowerText.includes("cotton") || lowerText.includes("పత్తి") || lowerText.includes("कપાસ")) {
             return tl("botCropReply");
         }
         if (lowerText.includes("pest") || lowerText.includes("disease") || lowerText.includes("కీటకాలు") || lowerText.includes("कीट")) {
@@ -97,7 +78,6 @@ const WhatsAppChat = () => {
             return tl("botGuidanceReply");
         }
 
-        // Default fallback
         return tl("botFallback");
     };
 
@@ -116,7 +96,6 @@ const WhatsAppChat = () => {
         setInputValue("");
         setIsTyping(true);
 
-        // Simulate bot thinking delay
         setTimeout(() => {
             setIsTyping(false);
             const botResponse: Message = {
@@ -131,7 +110,6 @@ const WhatsAppChat = () => {
 
     return (
         <div className="flex h-screen w-full flex-col bg-[#efeae2] font-sans">
-            {/* WhatsApp Green Top Bar & Language Selector */}
             <div className="flex flex-col bg-[#008f6f] text-white shadow-md z-10 relative">
                 <div className="flex items-center justify-between px-4 py-3">
                     <div className="flex items-center gap-4">
@@ -162,78 +140,42 @@ const WhatsAppChat = () => {
                         </Button>
                     </div>
                 </div>
-
-                {/* Language Selection Bar (Integrated into header) */}
-                <div className="flex justify-start bg-[#00a884] px-4 py-2 text-[11px] sm:text-xs font-medium overflow-x-auto no-scrollbar gap-2 shadow-inner border-t border-white/10">
-                    <span className="flex items-center text-white/80 shrink-0 mr-1">{tl("languageLabel")}:</span>
-                    {languages.map((lang) => (
-                        <span
-                            key={lang.name}
-                            onClick={() => setLocalLanguage(lang.name)}
-                            className={cn(
-                                "cursor-pointer px-2.5 py-1 rounded-full transition-colors whitespace-nowrap shrink-0 border shadow-sm",
-                                localLanguage === lang.name ? "bg-white text-[#00a884] border-white font-bold" : "bg-[#128C7E] border-transparent hover:bg-[#128C7E]/80 text-white"
-                            )}
-                        >
-                            {lang.label} ({lang.name})
-                        </span>
-                    ))}
-                </div>
             </div>
 
-            {/* Chat Area (WhatsApp Background Pattern implied by color) */}
             <div
                 ref={scrollRef}
                 className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto p-4 md:p-8 space-y-3"
             >
-                {/* Encryption notice */}
-                <div className="flex justify-center mb-6">
-                    <div className="bg-[#ffeecd] text-emerald-900/70 text-xs px-4 py-1.5 rounded-lg shadow-sm font-medium flex items-center gap-2 max-w-sm text-center">
-                        🔒 Messages and calls are end-to-end encrypted. No one outside of this chat, not even WhatsApp, can read or listen to them.
-                    </div>
-                </div>
-
-                <AnimatePresence>
-                    {messages.map((msg) => (
-                        <motion.div
-                            key={msg.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
+                {messages.map((msg) => (
+                    <motion.div
+                        key={msg.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className={cn(
+                            "flex w-full",
+                            msg.role === "user" ? "justify-end" : "justify-start"
+                        )}
+                    >
+                        <div
                             className={cn(
-                                "flex w-full",
-                                msg.role === "user" ? "justify-end" : "justify-start"
+                                "relative max-w-[85%] md:max-w-[70%] px-3 py-2 text-[15px] shadow-sm whitespace-pre-wrap",
+                                msg.role === "user"
+                                    ? "bg-[#d9fdd3] text-[#111b21] rounded-lg rounded-tr-none"
+                                    : "bg-white text-[#111b21] rounded-lg rounded-tl-none"
                             )}
                         >
-                            <div
-                                className={cn(
-                                    "relative max-w-[85%] md:max-w-[70%] px-3 py-2 text-[15px] shadow-sm whitespace-pre-wrap",
-                                    msg.role === "user"
-                                        ? "bg-[#d9fdd3] text-[#111b21] rounded-lg rounded-tr-none"
-                                        : "bg-white text-[#111b21] rounded-lg rounded-tl-none"
-                                )}
-                            >
-                                {/* Tail for bubbles */}
-                                <div className={cn(
-                                    "absolute top-0 w-3 h-3",
-                                    msg.role === "user"
-                                        ? "-right-2 bg-[#d9fdd3] [clip-path:polygon(0_0,0%_100%,100%_0)]"
-                                        : "-left-2 bg-white [clip-path:polygon(100%_0,100%_100%,0_0)]"
-                                )} />
-
-                                <div className="pb-3 leading-relaxed">
-                                    {msg.content}
-                                </div>
-
-                                <div className="absolute bottom-1 right-2 flex items-center gap-1 text-[11px] text-muted-foreground bg-transparent">
-                                    {msg.timestamp}
-                                    {msg.role === "user" && msg.status === "read" && (
-                                        <CheckCheck className="h-4 w-4 text-blue-500 ml-0.5" />
-                                    )}
-                                </div>
+                            <div className="pb-3 leading-relaxed">
+                                {msg.content}
                             </div>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                            <div className="absolute bottom-1 right-2 flex items-center gap-1 text-[11px] text-muted-foreground bg-transparent">
+                                {msg.timestamp}
+                                {msg.role === "user" && msg.status === "read" && (
+                                    <CheckCheck className="h-4 w-4 text-blue-500 ml-0.5" />
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
+                ))}
 
                 {isTyping && (
                     <motion.div
@@ -242,7 +184,6 @@ const WhatsAppChat = () => {
                         className="flex w-full justify-start"
                     >
                         <div className="relative bg-white text-[#111b21] rounded-lg rounded-tl-none px-4 py-3 shadow-sm flex items-center gap-1">
-                            <div className="absolute top-0 -left-2 w-3 h-3 bg-white [clip-path:polygon(100%_0,100%_100%,0_0)]" />
                             <div className="h-2 w-2 bg-emerald-400 rounded-full animate-bounce"></div>
                             <div className="h-2 w-2 bg-emerald-400 rounded-full animate-bounce delay-75"></div>
                             <div className="h-2 w-2 bg-emerald-400 rounded-full animate-bounce delay-150"></div>
@@ -251,7 +192,6 @@ const WhatsAppChat = () => {
                 )}
             </div>
 
-            {/* Input Area */}
             <div className="bg-[#f0f2f5] px-3 py-3 w-full flex items-center gap-2">
                 <div className="flex items-center gap-2 sm:gap-4 shrink-0 px-2 text-slate-500">
                     <Smile className="h-6 w-6 cursor-pointer hover:text-slate-700" />

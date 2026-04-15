@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
 import fetch from "node-fetch";
 
-const API_KEY = process.env.VITE_OPENWEATHER_API_KEY;
+const API_KEY = process.env.OPENWEATHER_API_KEY || process.env.VITE_OPENWEATHER_API_KEY;
 const weatherCache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache (Startup-ready)
 
 // Unified Weather + Satellite Intelligence Engine
@@ -52,8 +52,33 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
 
     let weatherData;
     if (weatherRes.status === 401) {
-      console.warn("⚠️ One Call 3.0 Key Invalid. Fallback to High-Fidelity Simulator...");
-      weatherData = getDemoWeather(queryLat, queryLon, locationName);
+      console.warn("⚠️ One Call 3.0 Key Invalid or Subscription Missing. Attempting standard 2.5 fallback...");
+      try {
+        const standardUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${queryLat}&lon=${queryLon}&units=metric&appid=${API_KEY}`;
+        const stdRes = await fetch(standardUrl);
+        if (stdRes.ok) {
+          const stdData = await stdRes.json();
+          // Map 2.5 data to 3.0 structure for compatibility
+          weatherData = {
+            lat: queryLat,
+            lon: queryLon,
+            current: {
+              temp: stdData.main.temp,
+              feels_like: stdData.main.feels_like,
+              humidity: stdData.main.humidity,
+              wind_speed: stdData.wind.speed,
+              weather: stdData.weather,
+              dt: stdData.dt
+            }
+          };
+          console.log("✅ Standard 2.5 Fallback Successful.");
+        } else {
+          throw new Error("Standard fallback failed");
+        }
+      } catch (e) {
+        console.warn("⚠️ Standard fallback failed. Using Simulator.");
+        weatherData = getDemoWeather(queryLat, queryLon, locationName);
+      }
     } else {
       if (!weatherRes.ok) throw new Error("Atmospheric feed interrupted");
       weatherData = await weatherRes.json();
