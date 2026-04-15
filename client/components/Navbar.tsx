@@ -73,7 +73,6 @@ const dropdownItemVariants = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
-  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [premiumOpen, setPremiumOpen] = useState(false);
   const location = useLocation();
@@ -112,20 +111,17 @@ const Navbar = () => {
     { name: t("farmLedger"),         path: "/farmer-finance",     icon: Wallet },
   ];
 
-  const ourSolutionsLinks = [
-    { name: t("farmAdvisory"),  path: "/chat",          icon: Bot        },
-    { name: t("agriInputs"),    path: "/seeds",         icon: Sprout     },
-    { name: t("omnichannel"),   path: "/omnichannel",   icon: Store      },
-    { name: t("marketLinkage"), path: "/market-linkage",icon: TrendingUp },
-  ];
+
 
   const aboutTeachSparkLinks = [
     { name: t("aboutUs"),       path: "/about",      icon: Target         },
     { name: t("ourVision"),     path: "/vision",     icon: Target         },
     { name: t("ourImpact"),     path: "/impact",     icon: Zap            },
-    { name: "TechSpark AI",     path: "/techspark",  icon: Bot            },
+    { name: brandName,          path: "/techspark",  icon: Bot            },
     { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake },
   ];
+
+  const brandName = t("brandName");
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-xl shadow-sm">
@@ -138,7 +134,7 @@ const Navbar = () => {
               <Leaf className="h-5 w-5 text-white" />
             </div>
             <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block group-hover:text-emerald-500 transition-colors">
-              TeachSpark AI
+              {brandName}
             </span>
           </Link>
 
@@ -200,11 +196,21 @@ const Navbar = () => {
 
               {/* More dropdown */}
               <DropdownMenu open={moreOpen} onOpenChange={setMoreOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
-                    {t("more")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300 opacity-50", moreOpen && "rotate-180")} />
-                  </Button>
-                </DropdownMenuTrigger>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
+                      <motion.div
+                        animate={{ y: moreOpen ? -2 : 0, scale: moreOpen ? 1.1 : 1 }}
+                        className="flex items-center gap-1"
+                      >
+                        {t("more")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300 opacity-50", moreOpen && "rotate-180")} />
+                      </motion.div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                </motion.div>
                 <AnimatePresence>
                   {moreOpen && (
                     <DropdownMenuContent asChild forceMount align="start" sideOffset={10}>
@@ -247,59 +253,23 @@ const Navbar = () => {
                 </AnimatePresence>
               </DropdownMenu>
 
-              {/* Our Solutions dropdown */}
-              <DropdownMenu open={solutionsOpen} onOpenChange={setSolutionsOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
-                    {t("ourSolutions")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", solutionsOpen && "rotate-180")} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <AnimatePresence>
-                  {solutionsOpen && (
-                    <DropdownMenuContent asChild forceMount align="end" sideOffset={10}>
-                      <motion.div
-                        className="w-72 rounded-2xl p-2 dropdown-glass border-emerald-500/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        variants={dropdownContainerVariants}
-                      >
-                        {ourSolutionsLinks.map((item) => (
-                          <motion.div key={item.path} variants={dropdownItemVariants}>
-                            <DropdownMenuItem asChild>
-                              <Link to={item.path} className={cn(
-                                "relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
-                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10 text-emerald-700" : "hover:bg-gray-100 text-foreground group-hover:text-emerald-600"
-                              )}>
-                                {location.pathname === item.path && (
-                                  <motion.div
-                                    layoutId="solutions-indicator"
-                                    className="nav-indicator-pill-vertical"
-                                    initial={false}
-                                    transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                                  >
-                                    <div className="absolute inset-0 bg-emerald-500/10 rounded-lg" />
-                                  </motion.div>
-                                )}
-                                <item.icon className="h-4 w-4 text-emerald-600" />
-                                <span className="text-sm font-semibold">{item.name}</span>
-                              </Link>
-                            </DropdownMenuItem>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    </DropdownMenuContent>
-                  )}
-                </AnimatePresence>
-              </DropdownMenu>
-
               {/* About dropdown */}
               <DropdownMenu open={aboutOpen} onOpenChange={setAboutOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
-                    {t("aboutTeachSpark")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", aboutOpen && "rotate-180")} />
-                  </Button>
-                </DropdownMenuTrigger>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-muted-foreground hover:text-primary rounded-xl gap-1 transition-all hover:bg-muted/60 premium-button">
+                      <motion.div
+                        animate={{ y: aboutOpen ? -2 : 0, scale: aboutOpen ? 1.1 : 1 }}
+                        className="flex items-center gap-1"
+                      >
+                        {t("aboutTeachSpark")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", aboutOpen && "rotate-180")} />
+                      </motion.div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                </motion.div>
                 <AnimatePresence>
                   {aboutOpen && (
                     <DropdownMenuContent asChild forceMount align="end" sideOffset={10}>
@@ -341,11 +311,21 @@ const Navbar = () => {
 
               {/* Smart Farming Tools (Original Layout Style) */}
               <DropdownMenu open={premiumOpen} onOpenChange={setPremiumOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap">
-                    {t("smartFarmingTools")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
-                  </Button>
-                </DropdownMenuTrigger>
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap">
+                      <motion.div
+                        animate={{ y: premiumOpen ? -2 : 0, scale: premiumOpen ? 1.1 : 1 }}
+                        className="flex items-center gap-1"
+                      >
+                        {t("smartFarmingTools")} <ChevronDown className={cn("h-3 w-3 transition-transform duration-300", premiumOpen && "rotate-180")} />
+                      </motion.div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                </motion.div>
                 <AnimatePresence>
                   {premiumOpen && (
                     <DropdownMenuContent asChild forceMount align="end" sideOffset={10}>
@@ -446,15 +426,7 @@ const Navbar = () => {
                 ))}
               </div>
 
-              <div className="pt-2 border-t">
-                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600">{t("ourSolutions")}</p>
-                {ourSolutionsLinks.map((link) => (
-                  <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted-foreground hover:bg-muted">
-                    <link.icon className="h-4 w-4 flex-shrink-0 text-emerald-600" /> {link.name}
-                  </Link>
-                ))}
-              </div>
+
 
               <div className="pt-2 border-t">
                 <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600">{t("aboutTeachSpark")}</p>

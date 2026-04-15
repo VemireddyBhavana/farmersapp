@@ -49,8 +49,6 @@ import D2CMarketplace from "./pages/D2CMarketplace";
 import DroneBooking from "./pages/DroneBooking";
 import CropHealthMonitor from "./pages/CropHealthMonitor";
 import TechSparkAI from "./pages/TechSparkAI";
-import MarketLinkage from "./pages/MarketLinkage";
-import Omnichannel from "./pages/Omnichannel";
 import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
 import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
@@ -96,8 +94,7 @@ const AppRoutes = () => {
       <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
       <Route path="/techspark" element={<TechSparkAI />} />
       <Route path="/impact" element={<Impact />} />
-      <Route path="/market-linkage" element={<MarketLinkage />} />
-      <Route path="/omnichannel" element={<Omnichannel />} />
+
       <Route path="/join-us" element={<JoinUs />} />
       <Route path="/about" element={<About />} />
       <Route path="/vision" element={<Vision />} />

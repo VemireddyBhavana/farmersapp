@@ -30,9 +30,9 @@ const Footer = () => {
             {/* Social Icons */}
             <div className="flex gap-3 pt-2">
               {[
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
-                { icon: Facebook, href: "#", label: "Facebook" },
-                { icon: Youtube, href: "#", label: "YouTube" },
+                { icon: Linkedin, href: "#", label: t("linkedinLabel") },
+                { icon: Facebook, href: "#", label: t("facebookLabel") },
+                { icon: Youtube, href: "#", label: t("youtubeLabel") },
               ].map((social, i) => (
                 <a
                   key={i}
@@ -48,32 +48,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Solutions */}
-          <div>
-            <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-primary/80">
-              {t("ourSolutions")}
-            </h3>
-            <ul className="space-y-4 text-muted-foreground">
-              <li>
-                <Link to="/chat" className="hover:text-primary transition-colors">{t("farmAdvisory")}</Link>
-              </li>
-              <li>
-                <Link to="/seeds" className="hover:text-primary transition-colors">{t("agriInputsStore")}</Link>
-              </li>
-              <li>
-                <Link to="/omnichannel" className="hover:text-primary transition-colors">{t("omnichannelAccess")}</Link>
-              </li>
-              <li>
-                <Link to="/market-linkage" className="hover:text-primary transition-colors">{t("marketLinkageKimaye")}</Link>
-              </li>
-              <li>
-                <Link to="/agri-schemes" className="hover:text-primary">{t('govSchemes')}</Link>
-              </li>
-              <li>
-                <Link to="/market" className="hover:text-primary">{t('marketRatesLabel')}</Link>
-              </li>
-            </ul>
-          </div>
+
 
           {/* Services */}
           <div>
@@ -137,7 +112,7 @@ const Footer = () => {
               <Leaf className="h-8 w-8 text-primary-foreground" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-primary">
-              TeachSpark AI
+              {t("brandName")}
             </span>
           </Link>
           <p className="max-w-md text-muted-foreground text-sm">

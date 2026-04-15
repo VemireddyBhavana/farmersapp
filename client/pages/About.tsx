@@ -6,22 +6,22 @@ import { useLanguage } from "@/lib/LanguageContext";
 const coreValues = [
   {
     icon: Target,
-    title: "Customer Success",
-    desc: "Every decision we make starts with what's best for the farmer. Their success is our north star.",
+    title: "valueCustomerSuccessTitle",
+    desc: "valueCustomerSuccessDesc",
     color: "bg-emerald-500",
     bg: "from-emerald-50 dark:from-emerald-950/20",
   },
   {
     icon: Award,
-    title: "Ownership",
-    desc: "We take full accountability for outcomes — not just assigned tasks. Every team member owns their impact.",
+    title: "valueOwnershipTitle",
+    desc: "valueOwnershipDesc",
     color: "bg-blue-500",
     bg: "from-blue-50 dark:from-blue-950/20",
   },
   {
     icon: Users,
-    title: "Humility",
-    desc: "We listen, learn and grow — from farmers, from data, and from each other. Ego has no place at TeachSpark AI.",
+    title: "valueHumilityTitle",
+    desc: "valueHumilityDesc",
     color: "bg-amber-500",
     bg: "from-amber-50 dark:from-amber-950/20",
   },
@@ -86,9 +86,9 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             className="text-white font-black text-2xl md:text-3xl tracking-tight"
           >
-            <span className="opacity-70">#</span>HelpingFarmersWin
+            <span className="opacity-70">#</span>{t('helpingFarmersWinHash').replace('#', '')}
           </motion.p>
-          <p className="text-white/70 text-sm mt-1">Our mission, our identity, our promise — since 2013</p>
+          <p className="text-white/70 text-sm mt-1">{t('aboutMissionTagline')}</p>
         </div>
       </motion.section>
 
@@ -99,15 +99,15 @@ export default function About() {
             {t('aboutTitle')}
           </h1>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            TeachSpark AI was built on a belief that Indian farmers deserve better — better advice, better inputs, better prices, and better access to global markets. Founded in 2013, we've spent over a decade proving it's possible.
+            {t('aboutHeroDesc')}
           </p>
         </div>
 
         {/* Core Values */}
         <div className="space-y-8">
           <div className="text-center">
-            <p className="text-xs font-black uppercase tracking-widest text-emerald-600 mb-2">Our Values</p>
-            <h2 className="text-3xl font-black text-foreground">What We Stand For</h2>
+            <p className="text-xs font-black uppercase tracking-widest text-emerald-600 mb-2">{t('ourValuesLabel')}</p>
+            <h2 className="text-3xl font-black text-foreground">{t('whatWeStandForTitle')}</h2>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {coreValues.map((val, idx) => (
@@ -124,8 +124,8 @@ export default function About() {
                     <div className={`h-12 w-12 rounded-2xl ${val.color} flex items-center justify-center text-white`}>
                       <val.icon className="h-6 w-6" />
                     </div>
-                    <h3 className="text-xl font-bold">{val.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed">{val.desc}</p>
+                    <h3 className="text-xl font-bold">{t(val.title)}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{t(val.desc)}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -137,9 +137,9 @@ export default function About() {
         {/* Timeline */}
         <div className="space-y-8">
           <div className="text-center">
-            <p className="text-xs font-black uppercase tracking-widest text-blue-600 mb-2">Our Journey</p>
-            <h2 className="text-3xl font-black text-foreground">A Decade of Impact</h2>
-            <p className="text-muted-foreground mt-2 max-w-xl mx-auto">From a small startup in Pune to a multi-million farmer platform — here's how we grew.</p>
+            <p className="text-xs font-black uppercase tracking-widest text-blue-600 mb-2">{t('ourJourneyLabel')}</p>
+            <h2 className="text-3xl font-black text-foreground">{t('decadeOfImpactTitle')}</h2>
+            <p className="text-muted-foreground mt-2 max-w-xl mx-auto">{t('aboutJourneyDesc')}</p>
           </div>
           <div className="relative max-w-3xl mx-auto">
             <div className="absolute left-8 top-0 bottom-0 w-px bg-primary/10 hidden md:block" />

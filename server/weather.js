@@ -1,12 +1,18 @@
 import NodeCache from "node-cache";
 import fetch from "node-fetch";
 
-const API_KEY = process.env.OPENWEATHER_API_KEY || process.env.VITE_OPENWEATHER_API_KEY;
 const weatherCache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache (Startup-ready)
 
 // Unified Weather + Satellite Intelligence Engine
 export const handleWeather = async (req, res, getNDVI, getSoilData) => {
   const { lat, lon, city } = req.query;
+
+  // Resolve API Key dynamically to ensure it's picked up from process.env
+  const API_KEY = process.env.VITE_OPENWEATHER_API_KEY || process.env.OPENWEATHER_API_KEY;
+
+  if (!API_KEY) {
+    console.warn("⚠️ OpenWeather API Key missing. Service will operate in simulation mode.");
+  }
 
   try {
     let queryLat = lat;
@@ -15,6 +21,8 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
 
     // 1. Geocoding
     if (city && (!lat || !lon)) {
+      if (!API_KEY) return res.status(500).json({ error: "Geocoding failed: API Key missing." });
+
       const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=1&appid=${API_KEY}`;
       const geoRes = await fetch(geoUrl);
       const geoData = await geoRes.json();
@@ -45,42 +53,24 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
     
     // We run weather and satellite scans in parallel for MSN-level performance
     const [weatherRes, ndviVal, soilVal] = await Promise.all([
-      fetch(weatherUrl),
+      API_KEY ? fetch(weatherUrl) : Promise.resolve({ status: 401, ok: false }),
       getNDVI ? getNDVI(queryLat, queryLon) : Promise.resolve(0.65),
       getSoilData ? getSoilData(queryLat, queryLon) : Promise.resolve({ moisture: 35.0, carbon: 42.0 })
     ]);
 
     let weatherData;
-    if (weatherRes.status === 401) {
-      console.warn("⚠️ One Call 3.0 Key Invalid or Subscription Missing. Attempting standard 2.5 fallback...");
+    if (weatherRes.status === 401 || !API_KEY) {
+      console.log(`[Intelligence] Key Status: ${API_KEY ? "Unauthorized (401)" : "Missing"}`);
+      console.warn("⚠️ One Call 3.0 Key Invalid or Subscription Missing. Attempting Legacy Compatibility Fix...");
       try {
-        const standardUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${queryLat}&lon=${queryLon}&units=metric&appid=${API_KEY}`;
-        const stdRes = await fetch(standardUrl);
-        if (stdRes.ok) {
-          const stdData = await stdRes.json();
-          // Map 2.5 data to 3.0 structure for compatibility
-          weatherData = {
-            lat: queryLat,
-            lon: queryLon,
-            current: {
-              temp: stdData.main.temp,
-              feels_like: stdData.main.feels_like,
-              humidity: stdData.main.humidity,
-              wind_speed: stdData.wind.speed,
-              weather: stdData.weather,
-              dt: stdData.dt
-            }
-          };
-          console.log("✅ Standard 2.5 Fallback Successful.");
-        } else {
-          throw new Error("Standard fallback failed");
-        }
+        weatherData = await getLegacyWeather(queryLat, queryLon, API_KEY);
+        console.log("✅ Legacy Compatibility Link Established. Using Real Data Fallback.");
       } catch (e) {
-        console.warn("⚠️ Standard fallback failed. Using Simulator.");
+        console.warn(`❌ Legacy Fallback Failed: ${e.message}. Using High-Fidelity Simulator.`);
         weatherData = getDemoWeather(queryLat, queryLon, locationName);
       }
     } else {
-      if (!weatherRes.ok) throw new Error("Atmospheric feed interrupted");
+      if (!weatherRes.ok) throw new Error(`Atmospheric feed interrupted (Status: ${weatherRes.status})`);
       weatherData = await weatherRes.json();
     }
 
@@ -124,6 +114,65 @@ export const handleWeather = async (req, res, getNDVI, getSoilData) => {
     res.status(500).json({ error: "Intelligence sync failed: " + error.message });
   }
 };
+
+async function getLegacyWeather(lat, lon, API_KEY) {
+    if (!API_KEY) throw new Error("API Key missing for legacy fallback");
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
+    
+    const [currRes, foreRes] = await Promise.all([fetch(currentUrl), fetch(forecastUrl)]);
+    
+    if (!currRes.ok || !foreRes.ok) {
+        throw new Error(`Legacy APIs failed (Current: ${currRes.status}, Forecast: ${foreRes.status})`);
+    }
+    
+    const currData = await currRes.json();
+    const foreData = await foreRes.json();
+    
+    // Transform to One Call 3.0 Structure
+    return {
+        lat: parseFloat(lat),
+        lon: parseFloat(lon),
+        current: {
+            dt: currData.dt,
+            temp: currData.main.temp,
+            feels_like: currData.main.feels_like,
+            pressure: currData.main.pressure,
+            humidity: currData.main.humidity,
+            uvi: 5, // Not available in 2.5 free
+            visibility: currData.visibility,
+            wind_speed: currData.wind.speed,
+            weather: currData.weather
+        },
+        hourly: foreData.list.slice(0, 24).map(item => ({
+            dt: item.dt,
+            temp: item.main.temp,
+            weather: item.weather,
+            pop: item.pop || 0
+        })),
+        daily: aggregateToDaily(foreData.list)
+    };
+}
+
+function aggregateToDaily(list) {
+    const days = {};
+    list.forEach(item => {
+        const date = new Date(item.dt * 1000).toLocaleDateString();
+        if (!days[date]) {
+            days[date] = {
+                dt: item.dt,
+                temp: { min: item.main.temp, max: item.main.temp },
+                weather: item.weather,
+                pop: item.pop || 0
+            };
+        } else {
+            days[date].temp.min = Math.min(days[date].temp.min, item.main.temp);
+            days[date].temp.max = Math.max(days[date].temp.max, item.main.temp);
+            days[date].pop = Math.max(days[date].pop, item.pop || 0);
+        }
+    });
+    return Object.values(days).slice(0, 8);
+}
 
 function generateBackendAdvisory(w, ndvi, soil) {
     const current = w.current || {};
