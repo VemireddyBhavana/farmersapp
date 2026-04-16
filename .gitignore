@@ -24,4 +24,8 @@ dist-ssr
 *.sw?
 
 .config/
-!.env
+.env
+.env.local
+.env.*
+service-account.json
+service-account.json.json
