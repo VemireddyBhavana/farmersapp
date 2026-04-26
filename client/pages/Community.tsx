@@ -225,7 +225,7 @@ const Community = () => {
   // --- CLAUDE AI ANALYSIS (PRODUCTION-READY FETCH WITH VISION) ---
   const analyzePost = async (problemText: string, language: string, imageData?: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/analyze-post", {
+      const res = await fetch("/api/analyze-post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

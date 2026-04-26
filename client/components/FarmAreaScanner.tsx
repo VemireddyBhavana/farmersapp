@@ -88,7 +88,7 @@ export default function FarmAreaScanner() {
             setLoading(true);
             setError(null);
 
-            const response = await fetch(`http://localhost:5000/api/farm-data?lat=${lat}&lng=${lng}`);
+            const response = await fetch(`/api/farm-data?lat=${lat}&lng=${lng}`);
             
             if (!response.ok) throw new Error("API Connection Failed");
             

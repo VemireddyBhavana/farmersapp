@@ -113,6 +113,8 @@ const Navbar = () => {
 
 
 
+  const brandName = t("brandName");
+
   const aboutTeachSparkLinks = [
     { name: t("aboutUs"),       path: "/about",      icon: Target         },
     { name: t("ourVision"),     path: "/vision",     icon: Target         },
@@ -120,8 +122,6 @@ const Navbar = () => {
     { name: brandName,          path: "/techspark",  icon: Bot            },
     { name: t("joinUs"),        path: "/join-us",    icon: HeartHandshake },
   ];
-
-  const brandName = t("brandName");
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur-xl shadow-sm">
