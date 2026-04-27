@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { 
@@ -118,10 +118,11 @@ const SidebarFilters = ({
     </div>
 );
 
-const ProductCard = ({ seed, idx, onAddToCart, onBuyNow }: any) => {
+const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: any) => {
     const navigate = useNavigate();
     return (
         <motion.div
+            ref={ref}
             layout
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -222,7 +223,7 @@ const ProductCard = ({ seed, idx, onAddToCart, onBuyNow }: any) => {
             </Card>
         </motion.div>
     );
-};
+});
 
 // --- Main Page Component ---
 

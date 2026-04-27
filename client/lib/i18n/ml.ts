@@ -1329,12 +1329,12 @@ export const ml = {
     expertHelpHub: "വിദഗ്ധ സഹായ കേന്ദ്രം",
     expertMentorSub: "വ്യക്തിഗത മാർഗ്ഗനിർദ്ദേശത്തിനായി പരിശോധിച്ച കാർഷിക വിദഗ്ധരുമായി ബന്ധപ്പെടുക.",
     selectExpert: "വിദഗ്ധനെ തിരഞ്ഞെടുക്കുക",
-    availability: "ലഭ്യത",
+
     sessionFee: "സെഷൻ ഫീ",
     bookSession: "സെഷൻ ബുക്ക് ചെയ്യുക",
     fullName: "മുഴുവൻ പേര്",
     emailAddress: "ഇമെയിൽ വിലാസം",
-    phoneNumber: "ഫോൺ നമ്പർ",
+
     proceedToPay: "പേയ്മെന്റിലേക്ക് തുടരുക",
     securePayment: "സുരക്ഷിത പേയ്മെന്റ്",
     refundable: "100% റീഫണ്ട് ചെയ്യാവുന്നത്",
@@ -1342,7 +1342,7 @@ export const ml = {
     mentorOnline: "ഓൺലൈൻ",
     paymentScanner: "പേയ്മെന്റ് സ്കാനർ",
     scanToPay: "ഏതെങ്കിലും UPI ആപ്പ് ഉപയോഗിച്ച് പണമടയ്ക്കാൻ സ്കാൻ ചെയ്യുക",
-    thinking: "വിദഗ്ധൻ ചിന്തിക്കുന്നു...",
+
     chatBtn: "ചാറ്റ്",
     callBtn: "കോൾ",
     perSession: "/ സെഷൻ",

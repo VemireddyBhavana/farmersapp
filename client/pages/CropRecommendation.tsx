@@ -11,24 +11,29 @@ import { Badge } from "@/components/ui/badge";
 
 export default function CropRecommendation() {
   const { t } = useLanguage();
-  const [soilType, setSoilType] = useState("");
-  const [season, setSeason] = useState("");
-  const [district, setDistrict] = useState("");
+  const [n, setN] = useState("50");
+  const [p, setP] = useState("50");
+  const [k, setK] = useState("50");
+  const [ph, setPh] = useState("6.5");
+  const [moisture, setMoisture] = useState("150");
   const [loading, setLoading] = useState(false);
-  const [recommendations, setRecommendations] = useState<null | any[]>(null);
+  const [recommendations, setRecommendations] = useState<null | any>(null);
 
-  const handleRecommend = () => {
+  const handleRecommend = async () => {
     setLoading(true);
-    // Simulate AI Processing
-    setTimeout(() => {
-      setRecommendations([
-        { crop: t('paddy'), yield: "25-30 Qtl/Acre", demand: "High", suitability: "95%" },
-        { crop: t('sugarcane'), yield: "350-400 Qtl/Acre", demand: "Medium", suitability: "88%" },
-        { crop: t('maize'), yield: "20-25 Qtl/Acre", demand: "High", suitability: "82%" },
-      ]);
-      setLoading(true);
-      setTimeout(() => setLoading(false), 500);
-    }, 1500);
+    try {
+      const response = await fetch("/api/soil/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ n, p, k, ph, moisture })
+      });
+      const data = await response.json();
+      setRecommendations(data);
+    } catch (error) {
+      console.error("Analysis failed", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,47 +68,34 @@ export default function CropRecommendation() {
               <CardDescription>{t('enterFarmData') || "Provide soil and location details"}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">{t('district')}</label>
-                <Input 
-                  placeholder={t('selectDistrict')} 
-                  value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700">Nitrogen (N)</label>
+                  <Input type="number" value={n} onChange={(e) => setN(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700">Phosphorus (P)</label>
+                  <Input type="number" value={p} onChange={(e) => setP(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700">Potassium (K)</label>
+                  <Input type="number" value={k} onChange={(e) => setK(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-700">pH Level</label>
+                  <Input type="number" step="0.1" value={ph} onChange={(e) => setPh(e.target.value)} />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">{t('soilType')}</label>
-                <Select onValueChange={setSoilType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('selectSoil')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="black">{t('blackSoil')}</SelectItem>
-                    <SelectItem value="red">{t('redSoil')}</SelectItem>
-                    <SelectItem value="sandy">{t('sandySoil')}</SelectItem>
-                    <SelectItem value="loamy">{t('loamySoil')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">{t('season')}</label>
-                <Select onValueChange={setSeason}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('selectSeason')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="kharif">{t('kharif')}</SelectItem>
-                    <SelectItem value="rabi">{t('rabi')}</SelectItem>
-                    <SelectItem value="zaid">{t('zaid')}</SelectItem>
-                  </SelectContent>
-                </Select>
+                <label className="text-xs font-bold text-slate-700">Moisture Content</label>
+                <Input type="number" value={moisture} onChange={(e) => setMoisture(e.target.value)} />
               </div>
               <Button 
                 className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold h-12"
                 onClick={handleRecommend}
-                disabled={!soilType || !season || !district || loading}
+                disabled={loading}
               >
-                {loading ? "Analyzing..." : t('calculate')}
+                {loading ? "Analyzing Soil..." : "Analyze Soil"}
               </Button>
             </CardContent>
           </Card>
@@ -144,35 +136,32 @@ export default function CropRecommendation() {
                   className="space-y-6"
                 >
                   <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
-                    <CheckCircle2 className="h-6 w-6 text-emerald-500" /> {t('recommendedCrops')}
+                    <CheckCircle2 className="h-6 w-6 text-emerald-500" /> Analysis Results
                   </h2>
-                  {recommendations.map((item, idx) => (
-                    <Card key={idx} className="overflow-hidden border-emerald-100 hover:border-emerald-500 transition-all group shadow-md hover:shadow-xl">
-                      <CardContent className="p-0 flex flex-col sm:flex-row items-stretch">
-                        <div className="bg-emerald-50 p-6 flex flex-col items-center justify-center sm:w-32 group-hover:bg-emerald-600 transition-colors">
-                          <Sprout className="h-10 w-10 text-emerald-600 group-hover:text-white" />
-                        </div>
-                        <div className="p-6 flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 items-center">
-                          <div className="col-span-1 md:col-span-1">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('crop')}</p>
-                            <h4 className="text-lg font-black text-slate-800">{item.crop}</h4>
+                  <Card className="rounded-[2rem] border-emerald-100 bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shadow-xl overflow-hidden p-8">
+                     <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">Soil Fertility</p>
+                     <h2 className="text-5xl font-black mb-4">{recommendations.fertility_level} Level</h2>
+                     <p className="text-sm font-bold italic opacity-90">{recommendations.fertilizer_recommendation}</p>
+                  </Card>
+                  
+                  <div className="grid gap-6">
+                    {recommendations.suitable_crops.map((crop: string, idx: number) => (
+                      <Card key={idx} className="overflow-hidden border-emerald-100 hover:border-emerald-500 transition-all group shadow-md hover:shadow-xl">
+                        <CardContent className="p-0 flex items-center">
+                          <div className="bg-emerald-50 p-6 flex flex-col items-center justify-center w-24 group-hover:bg-emerald-600 transition-colors">
+                            <Sprout className="h-8 w-8 text-emerald-600 group-hover:text-white" />
                           </div>
-                          <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('yieldGrowth') || "Exp. Yield"}</p>
-                            <p className="font-bold text-emerald-700">{item.yield}</p>
+                          <div className="p-6 flex-1">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recommended Crop</p>
+                            <h4 className="text-xl font-black text-slate-800">{crop}</h4>
                           </div>
-                          <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('marketPrice') || "Demand"}</p>
-                            <Badge className="bg-emerald-100 text-emerald-700 border-none">{item.demand}</Badge>
+                          <div className="pr-8 text-right">
+                             <Badge className="bg-emerald-100 text-emerald-700 border-none font-black">High Suitability</Badge>
                           </div>
-                          <div className="text-right">
-                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('suitability') || "Suitability"}</p>
-                             <p className="text-2xl font-black text-emerald-600">{item.suitability}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
                   <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl flex gap-3 italic">
                     <Info className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-amber-800 leading-relaxed font-medium">

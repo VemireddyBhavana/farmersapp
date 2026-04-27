@@ -41,37 +41,39 @@ export default function CropHealthChecker() {
 
         setFile(selectedFile);
         setImage(URL.createObjectURL(selectedFile));
-        setLoading(true);
-        setError(null);
-        setResult(null);
+        try {
+            const formData = new FormData();
+            formData.append("image", selectedFile);
 
-        const isValid = await validateCropImage(selectedFile);
+            const response = await fetch("/api/disease/detect", {
+                method: "POST",
+                body: formData
+            });
 
-        if (!isValid) {
-            setError("❌ Please upload a valid crop or plant image");
-            setLoading(false);
-            return;
-        }
-
-        setTimeout(() => {
+            if (!response.ok) throw new Error("Detection failed");
+            
+            const data = await response.json();
             setResult({
-                disease: "Leaf Spot Disease",
-                confidence: "92%",
-                process: "Leaf Spot is a fungal disease caused due to excess moisture and poor airflow. It appears as small, dark spots on the foliage, which can eventually lead to leaf drop and reduced crop yield.",
-                tip: "Avoid overhead watering and remove infected leaves immediately to prevent further spread.",
+                disease: data.disease,
+                confidence: data.confidence,
+                process: data.cure, // Mapping for UI
+                tip: data.prevention,
                 bestPractices: [
-                    "Use fungicide weekly during humid seasons",
-                    "Ensure proper spacing for better airflow",
-                    "Use disease-resistant seeds for planting"
+                    data.cure,
+                    "Apply " + data.pesticide,
+                    "Monitor crop health daily"
                 ],
                 mistakes: [
-                    "Overwatering during the night",
-                    "Ignoring early yellowing or spots",
-                    "Using infected tools between plants"
+                    "Delaying treatment",
+                    "Poor irrigation management",
+                    "Ignoring early symptoms"
                 ]
             });
+        } catch (err: any) {
+            setError("❌ Analysis failed: " + err.message);
+        } finally {
             setLoading(false);
-        }, 1500);
+        }
         
         e.target.value = "";
     };

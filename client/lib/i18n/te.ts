@@ -1327,12 +1327,12 @@ export const te = {
     expertHelpHub: "నిపుణుల సహాయ కేంద్రం",
     expertMentorSub: "వ్యక్తిగత మార్గదర్శకత్వం కోసం ధృవీకరించబడిన వ్యవసాయ నిపుణులతో కనెక్ట్ అవ్వండి.",
     selectExpert: "నిపుణుడిని ఎంచుకోండి",
-    availability: "అందుబాటు",
+
     sessionFee: "సెషన్ రుసుము",
     bookSession: "సెషన్‌ను బుక్ చేయండి",
     fullName: "పూర్తి పేరు",
     emailAddress: "ఇమెయిల్ చిరునామా",
-    phoneNumber: "ఫోన్ నంబర్",
+
     proceedToPay: "చెల్లించడానికి కొనసాగండి",
     securePayment: "సురక్షిత చెల్లింపు",
     refundable: "100% తిరిగి చెల్లించదగినది",
@@ -1356,20 +1356,20 @@ export const te = {
     addComment: "వ్యాఖ్యను జోడించండి...",
     reply: "సమాధానం",
     share: "షేర్ చేయండి",
-    expertHelpHub: "నిపుణుల సహాయ కేంద్రం",
-    expertMentorSub: "వ్యక్తిగత మార్గదర్శకత్వం కోసం ధృవీకరించబడిన వ్యవసాయ నిపుణులతో కనెక్ట్ అవ్వండి.",
-    selectExpert: "నిపుణుడిని ఎంచుకోండి",
-    availability: "లభ్యత",
-    sessionFee: "సెషన్ ఫీజు",
-    bookSession: "సెషన్ బుక్ చేయండి",
-    fullName: "పూర్తి పేరు",
-    emailAddress: "ఈమెయిల్ చిరునామా",
-    phoneNumber: "ఫోన్ నంబర్",
-    proceedToPay: "చెల్లింపుకు కొనసాగండి",
-    securePayment: "సురక్షిత చెల్లింపు",
-    refundable: "100% వాపసు పొందవచ్చు",
-    typeMessage: "మీ సందేశాన్ని టైప్ చేయండి...",
-    thinking: "నిపుణుడు ఆలోచిస్తున్నారు...",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     chatBtn: "చాట్",
     callBtn: "కాల్",
     perSession: "/ సెషన్",

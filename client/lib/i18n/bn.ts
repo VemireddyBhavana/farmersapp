@@ -1328,12 +1328,12 @@ export const bn = {
     expertHelpHub: "বিশেষজ্ঞ সহায়তা কেন্দ্র",
     expertMentorSub: "ব্যক্তিগতকৃত নির্দেশনার জন্য যাচাইকৃত কৃষি বিশেষজ্ঞদের সাথে সংযোগ করুন।",
     selectExpert: "বিশেষজ্ঞ নির্বাচন করুন",
-    availability: "প্রাপ্যতা",
+
     sessionFee: "সেশন ফি",
     bookSession: "সেশন বুক করুন",
     fullName: "পুরো নাম",
     emailAddress: "ইমেল ঠিকানা",
-    phoneNumber: "ফোন নম্বর",
+
     proceedToPay: "অর্থপ্রদানে এগিয়ে যান",
     securePayment: "নিরাপদ অর্থপ্রদান",
     refundable: "100% ফেরতযোগ্য",
@@ -1341,7 +1341,7 @@ export const bn = {
     mentorOnline: "অনলাইন",
     paymentScanner: "পেমেন্ট স্ক্যানার",
     scanToPay: "যেকোনো UPI অ্যাপ ব্যবহার করে পেমেন্ট করতে স্ক্যান করুন",
-    thinking: "বিশেষজ্ঞ ভাবছেন...",
+
     chatBtn: "চ্যাট",
     callBtn: "কল",
     perSession: "/ সেশন",
