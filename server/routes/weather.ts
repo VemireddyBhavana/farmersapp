@@ -116,7 +116,16 @@ function getDemoWeather(lat: string, lon: string, locationName: string) {
     })),
     daily: Array.from({ length: 8 }).map((_, i) => ({
       dt: now + i * 86400,
-      temp: { min: 22, max: 32 },
+      temp: { 
+        min: 22, 
+        max: 32,
+        morn: 24,
+        day: 30,
+        eve: 27,
+        night: 23
+      },
+      humidity: 60 + Math.random() * 20,
+      wind_speed: 10 + Math.random() * 10,
       pop: 0.2, // Probability of precipitation
       weather: [{ main: i % 3 === 0 ? "Rain" : "Clear", description: "scattered clouds", icon: i % 3 === 0 ? "10d" : "01d" }]
     })),

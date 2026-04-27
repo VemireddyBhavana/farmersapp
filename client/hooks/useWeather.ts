@@ -36,7 +36,13 @@ export interface DailyWeather {
   temp: {
     min: number;
     max: number;
+    morn: number;
+    day: number;
+    eve: number;
+    night: number;
   };
+  humidity: number;
+  wind_speed: number;
   weather: WeatherCondition[];
   pop: number;
 }
