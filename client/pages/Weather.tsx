@@ -112,6 +112,10 @@ function AnimatedTemp({ value }: { value: number }) {
 
   const [selectedDay, setSelectedDay] = useState(0);
 
+  const formatDate = (dt: number) => {
+    return new Date(dt * 1000).toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+  };
+
   return (
     <div className="min-h-screen bg-[#F1F5F2] text-slate-800 font-sans selection:bg-emerald-200">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
@@ -131,41 +135,37 @@ function AnimatedTemp({ value }: { value: number }) {
           </div>
         ) : weather ? (
           <div className="space-y-12">
-            {/* Today Overview */}
-            <Card className="bg-white border-white shadow-xl rounded-3xl p-10 flex flex-col md:flex-row justify-between items-center relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -z-0 opacity-50" />
-              
-              <div className="relative z-10 space-y-4 text-center md:text-left mb-8 md:mb-0">
-                <div className="flex items-center justify-center md:justify-start gap-2 text-slate-400 font-bold uppercase tracking-widest text-[10px]">
-                  <MapPin className="h-4 w-4 text-emerald-500" />
-                  {weather.location}
-                </div>
-                <div className="space-y-1">
-                  <p className="text-xl font-bold text-slate-600 italic">Today • {formatDate(weather.current?.dt)}</p>
-                  <h2 className="text-8xl font-black text-[#2D4534] tracking-tighter italic">
-                    {Math.round(weather.current?.temp || 0)}°C
-                  </h2>
-                </div>
-                <div className="flex items-center justify-center md:justify-start gap-4">
-                  <Badge className="bg-emerald-100 text-emerald-700 border-none font-bold px-4 py-1.5 rounded-full text-xs">
-                    {weather.current?.weather?.[0]?.main}
-                  </Badge>
-                  <div className="flex items-center gap-1 text-slate-400 font-bold text-xs uppercase tracking-widest">
-                    <Droplets className="h-4 w-4" />
-                    {weather.current?.humidity}% Humidity
-                  </div>
-                </div>
+            
+            {/* 7-Day Forecast Tabs (Top Priority) */}
+            <div className="space-y-8">
+              <div className="flex gap-4 overflow-x-auto pb-4 px-1 scrollbar-hide">
+                {weather.daily.slice(0, 7).map((day, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedDay(i)}
+                    className={cn(
+                      "flex-shrink-0 w-32 h-44 rounded-[2.5rem] p-6 flex flex-col items-center justify-between transition-all relative overflow-hidden group border-2",
+                      selectedDay === i 
+                        ? "bg-[#2D4534] border-[#2D4534] text-white shadow-2xl scale-105" 
+                        : "bg-white border-white text-slate-600 hover:bg-emerald-50 shadow-md"
+                    )}
+                  >
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">
+                      {i === 0 ? "Today" : formatDate(day.dt).split(",")[0]}
+                    </p>
+                    <div className={cn("transition-transform group-hover:scale-110", selectedDay === i ? "drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "")}>
+                      {getWeatherIcon(day.weather[0]?.main, "h-12 w-12")}
+                    </div>
+                    <div className="text-center">
+                      <p className="text-xl font-black italic tracking-tighter">{Math.round(day.temp.max)}°</p>
+                      <p className="text-[10px] font-bold opacity-40 italic">{Math.round(day.temp.min)}°</p>
+                    </div>
+                  </button>
+                ))}
               </div>
+            </div>
 
-              <div className="relative z-10 flex flex-col items-center">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-emerald-100 rounded-full blur-2xl scale-150 opacity-40 animate-pulse" />
-                  {getWeatherIcon(weather.current?.weather?.[0]?.main, "h-48 w-48 relative z-10")}
-                </div>
-              </div>
-            </Card>
-
-            {/* Weather Insights */}
+            {/* Weather Insights (Middle Section) */}
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 { label: "Temperature Trend", value: "Rising from 17.5°C to 18.5°C over the week", color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
@@ -194,116 +194,87 @@ function AnimatedTemp({ value }: { value: number }) {
               ))}
             </div>
 
-            {/* 7-Day Forecast Tabs */}
-            <div className="space-y-8">
-              <div className="flex justify-between items-center px-4">
-                <h3 className="text-2xl font-black text-[#2D4534] italic uppercase tracking-tighter">7-Day Forecast</h3>
-                <Cloud className="h-6 w-6 text-emerald-600 opacity-20" />
-              </div>
-              
-              <div className="flex gap-4 overflow-x-auto pb-4 px-4 scrollbar-hide">
-                {weather.daily.slice(0, 7).map((day, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedDay(i)}
-                    className={cn(
-                      "flex-shrink-0 w-32 h-44 rounded-[2.5rem] p-6 flex flex-col items-center justify-between transition-all relative overflow-hidden group",
-                      selectedDay === i 
-                        ? "bg-[#2D4534] text-white shadow-2xl scale-105" 
-                        : "bg-white text-slate-600 hover:bg-emerald-50 shadow-md"
-                    )}
-                  >
-                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60">
-                      {i === 0 ? "Today" : formatDate(day.dt).split(",")[0]}
+            {/* Day Detail Card (Bottom Section) */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedDay}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="bg-white/70 backdrop-blur-xl border-white shadow-2xl rounded-[3.5rem] p-10"
+              >
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+                  <div className="space-y-1">
+                    <h4 className="text-3xl font-black text-[#2D4534] italic uppercase tracking-tighter">
+                      {formatDate(weather.daily[selectedDay].dt)}
+                    </h4>
+                    <p className="text-sm font-bold text-slate-400 italic">
+                      {weather.daily[selectedDay].weather[0].description} throughout the day.
                     </p>
-                    <div className={cn("transition-transform group-hover:scale-110", selectedDay === i ? "drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "")}>
-                      {getWeatherIcon(day.weather[0]?.main, "h-12 w-12")}
-                    </div>
-                    <div className="text-center">
-                      <p className="text-xl font-black italic tracking-tighter">{Math.round(day.temp.max)}°</p>
-                      <p className="text-[10px] font-bold opacity-40 italic">{Math.round(day.temp.min)}°</p>
-                    </div>
-                  </button>
-                ))}
-              </div>
-
-              {/* Day Detail Card */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={selectedDay}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="bg-white/70 backdrop-blur-xl border-white shadow-2xl rounded-[3.5rem] p-10"
-                >
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-                    <div className="space-y-1">
-                      <h4 className="text-3xl font-black text-[#2D4534] italic uppercase tracking-tighter">
-                        {formatDate(weather.daily[selectedDay].dt)}
-                      </h4>
-                      <p className="text-sm font-bold text-slate-400 italic">
-                        {weather.daily[selectedDay].weather[0].description} throughout the day.
-                      </p>
-                    </div>
                   </div>
+                </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                    {[
-                      { label: "Morning", temp: Math.round(weather.daily[selectedDay].temp.morn), icon: <Sunrise className="h-6 w-6" /> },
-                      { label: "Afternoon", temp: Math.round(weather.daily[selectedDay].temp.day), icon: <SunMedium className="h-6 w-6" /> },
-                      { label: "Evening", temp: Math.round(weather.daily[selectedDay].temp.eve), icon: <Sunset className="h-6 w-6" /> },
-                      { label: "Night", temp: Math.round(weather.daily[selectedDay].temp.night), icon: <Moon className="h-6 w-6 text-slate-400" /> }
-                    ].map((time) => (
-                      <div key={time.label} className="bg-white/50 rounded-3xl p-6 flex flex-col items-center gap-4 border border-white/50 shadow-sm">
-                        <div className="h-10 w-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                          {time.icon}
-                        </div>
-                        <div className="text-center">
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{time.label}</p>
-                          <p className="text-2xl font-black text-slate-800 italic">{time.temp}°C</p>
-                        </div>
+                {/* Day Breakdown Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                  {[
+                    { label: "Morning", temp: Math.round(weather.daily[selectedDay].temp.morn), icon: <Sunrise className="h-6 w-6" /> },
+                    { label: "Afternoon", temp: Math.round(weather.daily[selectedDay].temp.day), icon: <SunMedium className="h-6 w-6" /> },
+                    { label: "Evening", temp: Math.round(weather.daily[selectedDay].temp.eve), icon: <Sunset className="h-6 w-6" /> },
+                    { label: "Night", temp: Math.round(weather.daily[selectedDay].temp.night), icon: <Moon className="h-6 w-6 text-slate-400" /> }
+                  ].map((time) => (
+                    <div key={time.label} className="bg-white rounded-3xl p-6 flex flex-col items-center gap-4 border border-slate-50 shadow-sm transition-all hover:shadow-md hover:scale-105">
+                      <div className="h-10 w-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                        {time.icon}
                       </div>
-                    ))}
-                  </div>
+                      <div className="text-center">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{time.label}</p>
+                        <p className="text-2xl font-black text-slate-800 italic">{time.temp}°C</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                  <div className="mt-12 grid md:grid-cols-3 gap-8">
-                    <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50">
-                        <Droplets className="h-8 w-8 text-blue-500" />
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Humidity</p>
-                            <p className="text-xl font-black text-slate-800 italic">{weather.daily[selectedDay].humidity}%</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50">
-                        <Wind className="h-8 w-8 text-emerald-500" />
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Wind Speed</p>
-                            <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].wind_speed * 3.6)} KM/H</p>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50">
-                        <CloudRain className="h-8 w-8 text-blue-600" />
-                        <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Precipitation</p>
-                            <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].pop * 100)}%</p>
-                        </div>
-                    </div>
+                {/* Additional Stats Strip */}
+                <div className="mt-12 grid md:grid-cols-3 gap-8">
+                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
+                      <Droplets className="h-8 w-8 text-blue-500" />
+                      <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Humidity</p>
+                          <p className="text-xl font-black text-slate-800 italic">{weather.daily[selectedDay].humidity}%</p>
+                      </div>
                   </div>
+                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
+                      <Wind className="h-8 w-8 text-emerald-500" />
+                      <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Wind Speed</p>
+                          <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].wind_speed * 3.6)} KM/H</p>
+                      </div>
+                  </div>
+                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
+                      <CloudRain className="h-8 w-8 text-blue-600" />
+                      <div>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Precipitation</p>
+                          <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].pop * 100)}%</p>
+                      </div>
+                  </div>
+                </div>
 
-                  <div className="mt-12 p-8 bg-[#2D4534] rounded-3xl text-white">
-                    <div className="flex items-center gap-4 mb-3">
-                        <AlertTriangle className="h-6 w-6 text-amber-400" />
-                        <h5 className="font-black uppercase italic tracking-tighter">Weather Advisory</h5>
-                    </div>
-                    <p className="text-sm font-bold italic opacity-90">
-                      {weather.daily[selectedDay].weather[0].main === "Rain" 
-                        ? "Expected precipitation may affect harvesting. Ensure proper drainage in fields." 
-                        : "Ideal conditions for field activities. Maintain regular irrigation schedule."}
-                    </p>
+                {/* Weather Advisory Card */}
+                <div className="mt-12 p-8 bg-[#2D4534] rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[80px] -z-0 group-hover:scale-110 transition-transform duration-700" />
+                  <div className="flex items-center gap-4 mb-3 relative z-10">
+                      <AlertTriangle className="h-6 w-6 text-amber-400" />
+                      <h5 className="font-black uppercase italic tracking-tighter text-lg">Weather Advisory</h5>
                   </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                  <p className="text-sm font-bold italic opacity-90 relative z-10 leading-relaxed max-w-2xl">
+                    {weather.daily[selectedDay].weather[0].main === "Rain" 
+                      ? "Expected precipitation may affect harvesting. Ensure proper drainage in fields and protect harvested crops." 
+                      : "Ideal conditions for field activities. Maintain regular irrigation schedule and monitor soil moisture levels."}
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
           </div>
         ) : error ? (
           <div className="text-center py-40">
@@ -320,8 +291,5 @@ function AnimatedTemp({ value }: { value: number }) {
         )}
       </div>
     </div>
-  );
-}
-iv>
   );
 }

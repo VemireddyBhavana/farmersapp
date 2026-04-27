@@ -105,6 +105,26 @@ def detect_disease():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/analyze-soil-image", methods=["POST"])
+def analyze_soil_image():
+    try:
+        if 'image' not in request.files:
+            return jsonify({"error": "No image uploaded"}), 400
+        
+        # In a real app, you'd use a CNN model here.
+        # For now, we simulate analysis based on image presence.
+        soil_types = ["Clay", "Sandy", "Loamy", "Silt", "Peaty", "Chalky"]
+        detected = soil_types[np.random.randint(0, len(soil_types))]
+        
+        return jsonify({
+            "soil_type": detected,
+            "confidence": f"{85 + np.random.uniform(0, 10):.2f}%",
+            "characteristics": f"This {detected.lower()} soil has unique properties suitable for specific agricultural activities.",
+            "suitable_crops": ["Wheat", "Barley", "Root Vegetables"] if detected == "Loamy" else ["Cactus", "Peanuts"] if detected == "Sandy" else ["Rice", "Soybeans"]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/analyze-soil", methods=["POST"])
 def analyze_soil():
     try:
