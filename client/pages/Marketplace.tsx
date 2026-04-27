@@ -196,7 +196,7 @@ const AgriKnowledgeHub = () => {
             transition={{ duration: 0.8 }}
           >
             <Badge variant="outline" className="mb-4 text-emerald-400 border-emerald-400/30 backdrop-blur-md px-4 py-1">
-              TeachSpark AI • Agriculture Marketplace
+              Kisan AI • Agriculture Marketplace
             </Badge>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
               {t("agriMarketplace") || "Agriculture Marketplace"}
@@ -319,7 +319,7 @@ const AgriKnowledgeHub = () => {
 
       {/* Footer info */}
       <footer className="py-12 text-center text-gray-400 text-sm">
-        <p>© 2026 TeachSpark AI • Agriculture Marketplace</p>
+        <p>© 2026 Kisan AI • Agriculture Marketplace</p>
       </footer>
     </div>
   );

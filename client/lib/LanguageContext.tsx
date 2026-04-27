@@ -51,7 +51,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const language = langMap[i18n.language] || "English";
 
   useEffect(() => {
-    localStorage.setItem("TeachSpark_lang", language);
+    localStorage.setItem("Kisan_lang", language);
   }, [language]);
 
   return (
