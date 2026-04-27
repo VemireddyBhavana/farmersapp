@@ -32,19 +32,23 @@ export default function SoilPredictor() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
     setFile(selectedFile);
     setImage(URL.createObjectURL(selectedFile));
+    setResult(null);
+  };
+
+  const triggerAnalysis = async () => {
+    if (!file) return;
+
     setLoading(true);
-    
     try {
       const formData = new FormData();
-      formData.append("image", selectedFile);
+      formData.append("image", file);
 
-      // Using the analyze-soil endpoint from app.py
       const response = await fetch("/api/soil/analyze", {
         method: "POST",
         body: formData
@@ -56,7 +60,7 @@ export default function SoilPredictor() {
       setResult({
         soilType: data.soil_type,
         confidence: data.confidence,
-        characteristics: "Good water retention, rich in organic matter, and well-structured for root growth.",
+        characteristics: data.characteristics || "Good water retention, rich in organic matter, and well-structured for root growth.",
         suitability: data.suitable_crops || ["Tomato", "Rice", "Wheat"]
       });
     } catch (err: any) {
@@ -92,7 +96,7 @@ export default function SoilPredictor() {
                     onClick={() => fileInputRef.current?.click()}
                     className="group relative flex flex-col items-center justify-center border-2 border-dashed border-emerald-100 rounded-[2rem] p-24 bg-slate-50 hover:bg-emerald-50/50 transition-all duration-300 cursor-pointer overflow-hidden"
                   >
-                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
+                    <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileSelect} />
                     
                     <div className="h-24 w-24 rounded-3xl bg-white flex items-center justify-center mb-6 shadow-2xl group-hover:rotate-6 transition-transform">
                       <Upload className="h-10 w-10 text-emerald-600" />
@@ -112,9 +116,11 @@ export default function SoilPredictor() {
                       Upload
                     </Button>
                     <Button 
-                      className="flex-1 bg-[#2D4534] hover:bg-[#1A2E1F] text-white h-14 rounded-xl font-black uppercase italic tracking-tighter shadow-xl shadow-emerald-500/10"
+                      onClick={triggerAnalysis}
+                      disabled={loading || !file}
+                      className="flex-1 bg-[#2D4534] hover:bg-[#1A2E1F] text-white h-14 rounded-xl font-black uppercase italic tracking-tighter shadow-xl shadow-emerald-500/10 disabled:opacity-50"
                     >
-                      Predict Soil Type
+                      {loading ? "Analyzing..." : "Predict Soil Type"}
                     </Button>
                   </div>
                 </div>
@@ -140,7 +146,7 @@ export default function SoilPredictor() {
                       <Activity className="h-12 w-12 text-emerald-600 animate-spin mx-auto" />
                       <p className="text-xl font-black text-emerald-600 uppercase italic tracking-widest animate-pulse">Analyzing Soil Profile...</p>
                     </div>
-                  ) : result && (
+                  ) : result ? (
                     <div className="space-y-8">
                        <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
                           <div className="grid grid-cols-2 gap-8 items-center">
@@ -167,6 +173,15 @@ export default function SoilPredictor() {
                        <Button onClick={reset} className="w-full h-14 rounded-2xl bg-[#2D4534] text-white font-black uppercase tracking-widest text-xs">
                           Analyze Another Sample
                        </Button>
+                    </div>
+                  ) : (
+                    <div className="text-center py-6">
+                       <Button 
+                        onClick={triggerAnalysis}
+                        className="w-full bg-[#2D4534] hover:bg-[#1A2E1F] text-white h-14 rounded-xl font-black uppercase italic tracking-tighter shadow-xl shadow-emerald-500/10"
+                      >
+                        Predict Soil Type
+                      </Button>
                     </div>
                   )}
                 </div>
