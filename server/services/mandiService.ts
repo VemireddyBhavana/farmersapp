@@ -2,6 +2,7 @@ import axios from 'axios';
 import NodeCache from 'node-cache';
 import { MandiPrice } from '../models/MandiPrice';
 import { INDIAN_LOCATIONS } from '../data/locations';
+import { getDbStatus } from '../db/connection';
 
 // Cache for 30 minutes (1800 seconds)
 const cache = new NodeCache({ stdTTL: 1800, checkperiod: 300 });
@@ -12,9 +13,9 @@ const BASE_URL = 'https://api.data.gov.in/resource/';
 
 export class MandiService {
     
-    static async fetchAllData() {
+    static async fetchAllData(): Promise<any[]> {
         const cacheKey = 'all_mandi_data';
-        const cachedData = cache.get(cacheKey);
+        const cachedData = cache.get(cacheKey) as any[];
         
         if (cachedData) {
             return cachedData;
@@ -54,27 +55,29 @@ export class MandiService {
             }
         }
 
-        // Always try to include DB data
-        try {
-            const dbPrices = await MandiPrice.find().sort({ date: -1 }).limit(500);
-            if (dbPrices && dbPrices.length > 0) {
-                const dbMapped = dbPrices.map((p: any) => ({
-                    id: p._id.toString(),
-                    crop: p.crop,
-                    rate: typeof p.rate === 'number' ? p.rate : parseInt(String(p.rate).replace(/[^0-9]/g, '')) || 2200,
-                    min_price: p.rate * 0.9,
-                    max_price: p.rate * 1.1,
-                    change: p.change || "0",
-                    trend: p.trend || "neutral",
-                    mandi: p.mandi,
-                    district: p.district,
-                    state: p.state,
-                    date: p.date
-                }));
-                dataToCache = [...dataToCache, ...dbMapped];
+        // Always try to include DB data if connected
+        if (getDbStatus()) {
+            try {
+                const dbPrices = await MandiPrice.find().sort({ date: -1 }).limit(500);
+                if (dbPrices && dbPrices.length > 0) {
+                    const dbMapped = dbPrices.map((p: any) => ({
+                        id: p._id.toString(),
+                        crop: p.crop,
+                        rate: typeof p.rate === 'number' ? p.rate : parseInt(String(p.rate).replace(/[^0-9]/g, '')) || 2200,
+                        min_price: p.rate * 0.9,
+                        max_price: p.rate * 1.1,
+                        change: p.change || "0",
+                        trend: p.trend || "neutral",
+                        mandi: p.mandi,
+                        district: p.district,
+                        state: p.state,
+                        date: p.date
+                    }));
+                    dataToCache = [...dataToCache, ...dbMapped];
+                }
+            } catch (dbError) {
+                console.error("⚠️ [MandiService] DB fetch failed.");
             }
-        } catch (dbError) {
-            console.error("⚠️ [MandiService] DB fetch failed.");
         }
 
         // If still empty, add a small baseline of common data

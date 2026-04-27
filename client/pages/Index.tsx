@@ -134,7 +134,7 @@ export default function Index() {
               {t('ourEcosystem')}
             </h2>
             <h3 className="text-4xl lg:text-5xl font-black text-foreground">
-              {t('whyChooseTeachSpark')}
+              {t('whyChooseKisan')}
             </h3>
             <p className="text-muted-foreground text-lg">
               {t('whyChooseDesc')}

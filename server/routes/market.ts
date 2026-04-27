@@ -55,7 +55,10 @@ export const handleMarketPredict = async (req: Request, res: Response) => {
             const response = await axios.post(`${ML_SERVICE_URL}/predict-market`, { crop }, { timeout: 2000 });
             prediction = response.data;
         } catch (mlError) {
-            console.warn(`⚠️ [Market] ML Service unreachable, returning mock prediction for ${crop}`);
+            if (!req.app.get('market_ml_logged')) {
+                console.info(`ℹ️ [Market] ML Engine offline. Using Simulation Mode for predictions.`);
+                req.app.set('market_ml_logged', true);
+            }
         }
 
         if (!prediction) {

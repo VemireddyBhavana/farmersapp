@@ -1,4 +1,12 @@
-import "dotenv/config";
+import path from "path";
+import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load .env from root directory (one level up)
+dotenv.config({ path: path.join(__dirname, "../.env") });
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./db/connection";
@@ -9,7 +17,7 @@ import { handleMarketPrices, handleMarketPredict, handleMarketStates, handleMark
 import { handleDiseaseDetect } from "./routes/disease";
 import { handleSoilAnalyze } from "./routes/soil";
 import { handleExpertConsult, handleSmartAssistant } from "./routes/assistant";
-import { handleYieldPredict } from "./routes/yield";
+import { handleYieldPredict, handleYieldHistory } from "./routes/yield";
 
 export function createServer() {
   const app = express();
@@ -56,6 +64,7 @@ export function createServer() {
 
   // Yield Prediction Module
   app.post("/api/predict", handleYieldPredict); // Matches frontend path
+  app.get("/api/yield/history", handleYieldHistory);
 
   // Farmer Profile
   app.get("/api/farmer", (_req, res) => {

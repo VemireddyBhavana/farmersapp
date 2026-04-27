@@ -45,7 +45,10 @@ export const handleWeather = async (req: Request, res: Response) => {
 
     // Handle 401 Unauthorized smoothly (Demo Fallback)
     if (response.status === 401) {
-      console.warn("⚠️ One Call 3.0 API Key is invalid or unpaid. Using demo fallback.");
+      if (!req.app.get('weather_fallback_logged')) {
+        console.info("ℹ️ [Weather] One Call 3.0 API key not active. Running in Simulation Mode.");
+        req.app.set('weather_fallback_logged', true);
+      }
       const demoData = getDemoWeather(queryLat, queryLon, locationName);
       return res.json(demoData);
     }

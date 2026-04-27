@@ -15,6 +15,7 @@ class PricePredictor:
         # Synthetic historical data for training
         # In a real app, this would load from a CSV or Database
         for crop in self.crops:
+        
             # Create synthetic time series data
             dates = pd.date_range(start='2023-01-01', periods=100, freq='D')
             base_price = 2000 if crop in ["Rice", "Wheat"] else 1500
