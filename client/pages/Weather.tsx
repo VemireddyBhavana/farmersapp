@@ -133,19 +133,21 @@ export default function Weather() {
         </header>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-40 bg-white/50 backdrop-blur-3xl rounded-3xl border border-white shadow-xl space-y-10">
-             <Loader2 className="h-12 w-12 text-emerald-600 animate-spin" />
-             <p className="text-xl font-black text-slate-800 animate-pulse tracking-tighter uppercase italic">Syncing Atmosphere Data...</p>
+          <div className="text-center py-40 space-y-6">
+            <div className="relative inline-block">
+               <Loader2 className="h-24 w-24 text-emerald-600 animate-spin mx-auto" />
+               <Satellite className="h-10 w-10 text-emerald-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <p className="text-2xl font-black text-emerald-600 uppercase italic tracking-widest animate-pulse">Syncing with orbital satellites...</p>
           </div>
         ) : weather ? (
           <div className="space-y-12">
-            
-            {/* 7-Day Forecast Tabs (Top Priority) */}
-            <div className="space-y-8">
-              <div className="flex gap-4 overflow-x-auto pb-4 px-1 scrollbar-hide">
+            {/* Horizontal 7-Day Navigation */}
+            <div className="overflow-x-auto pb-6 -mx-4 px-4 scrollbar-hide">
+              <div className="flex gap-4 min-w-max">
                 {weather.daily.slice(0, 7).map((day, i) => (
                   <button
-                    key={i}
+                    key={day.dt}
                     onClick={() => setSelectedDay(i)}
                     className={cn(
                       "flex-shrink-0 w-32 h-44 rounded-[2.5rem] p-6 flex flex-col items-center justify-between transition-all relative overflow-hidden group border-2",
@@ -169,116 +171,110 @@ export default function Weather() {
               </div>
             </div>
 
-            {/* Weather Insights (Middle Section) */}
-            <div className="grid md:grid-cols-3 gap-8">
+            {/* Weather Insights Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { label: "Temperature Trend", value: "Rising from 17.5°C to 18.5°C over the week", color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
                 { label: "Precipitation", value: "Low chance of precipitation through the week (5-10%)", color: "from-blue-400 to-blue-100", percent: 15, icon: <CloudRain className="h-5 w-5" /> },
                 { label: "Wind Conditions", value: "Gentle breeze throughout the week, ranging from 8-14 km/h", color: "from-emerald-400 to-emerald-100", percent: 40, icon: <Wind className="h-5 w-5" /> }
               ].map((insight) => (
-                <Card key={insight.label} className="bg-white border-white shadow-lg rounded-[2.5rem] p-8 space-y-6 transition-all hover:-translate-y-1">
-                  <div className="flex items-center gap-4">
-                    <div className="h-10 w-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-600">
+                <Card key={insight.label} className="bg-white border-white rounded-[2.5rem] p-8 shadow-lg hover:shadow-xl transition-all group overflow-hidden relative">
+                  <div className={cn("absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-[0.03] rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150", insight.color)} />
+                  
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className={cn("h-12 w-12 rounded-2xl flex items-center justify-center text-white bg-gradient-to-br shadow-lg", insight.color)}>
                       {insight.icon}
                     </div>
-                    <h4 className="font-black text-slate-800 uppercase italic tracking-tighter text-sm">{insight.label}</h4>
+                    <div>
+                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">{insight.label}</h3>
+                      <p className="text-sm font-bold text-slate-800 italic leading-tight">{insight.value}</p>
+                    </div>
                   </div>
-                  <p className="text-xs font-bold text-slate-400 italic leading-relaxed">
-                    {insight.value}
-                  </p>
-                  <div className="h-2 w-full bg-slate-50 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${insight.percent}%` }}
-                      transition={{ duration: 1, ease: "circOut" }}
-                      className={cn("h-full rounded-full bg-gradient-to-r", insight.color)}
-                    />
+
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <span>Intensity</span>
+                      <span className="text-slate-600">{insight.percent}%</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${insight.percent}%` }}
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className={cn("h-full rounded-full", insight.color)}
+                      />
+                    </div>
                   </div>
                 </Card>
               ))}
             </div>
 
-            {/* Day Detail Card (Bottom Section) */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedDay}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className="bg-white/70 backdrop-blur-xl border-white shadow-2xl rounded-[3.5rem] p-10"
-              >
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-                  <div className="space-y-1">
-                    <h4 className="text-3xl font-black text-[#2D4534] italic uppercase tracking-tighter">
-                      {formatDate(weather.daily[selectedDay].dt)}
-                    </h4>
-                    <p className="text-sm font-bold text-slate-400 italic">
-                      {weather.daily[selectedDay].weather[0].description} throughout the day.
-                    </p>
+            {/* Daily Breakdown & Advisory */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Daily Breakdown */}
+              <Card className="lg:col-span-8 bg-white border-white rounded-[3rem] p-10 shadow-xl overflow-hidden relative">
+                <div className="flex items-center justify-between mb-10">
+                  <div>
+                    <h3 className="text-xl font-black text-slate-800 italic uppercase tracking-tighter">Daily Breakdown</h3>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Temperature & Conditions per period</p>
+                  </div>
+                  <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center">
+                    <RefreshCw className="h-5 w-5 text-slate-400" />
                   </div>
                 </div>
 
                 {/* Day Breakdown Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {[
-                    { label: "Morning", temp: Math.round(weather.daily[selectedDay].temp.morn), icon: <Sunrise className="h-6 w-6" /> },
-                    { label: "Afternoon", temp: Math.round(weather.daily[selectedDay].temp.day), icon: <SunMedium className="h-6 w-6" /> },
-                    { label: "Evening", temp: Math.round(weather.daily[selectedDay].temp.eve), icon: <Sunset className="h-6 w-6" /> },
-                    { label: "Night", temp: Math.round(weather.daily[selectedDay].temp.night), icon: <Moon className="h-6 w-6 text-slate-400" /> }
+                    { label: "Morning", time: "06:00", temp: weather.daily[selectedDay].temp.morn, icon: <Sunrise className="h-8 w-8 text-orange-400" /> },
+                    { label: "Afternoon", time: "12:00", temp: weather.daily[selectedDay].temp.day, icon: <Sun className="h-8 w-8 text-amber-400" /> },
+                    { label: "Evening", time: "18:00", temp: weather.daily[selectedDay].temp.eve, icon: <Sunset className="h-8 w-8 text-rose-400" /> },
+                    { label: "Night", time: "22:00", temp: weather.daily[selectedDay].temp.night, icon: <Moon className="h-8 w-8 text-indigo-400" /> }
                   ].map((time) => (
                     <div key={time.label} className="bg-white rounded-3xl p-6 flex flex-col items-center gap-4 border border-slate-50 shadow-sm transition-all hover:shadow-md hover:scale-105">
-                      <div className="h-10 w-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                        {time.icon}
-                      </div>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{time.label}</p>
+                      <div className="py-2">{time.icon}</div>
                       <div className="text-center">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{time.label}</p>
-                        <p className="text-2xl font-black text-slate-800 italic">{time.temp}°C</p>
+                        <p className="text-2xl font-black text-slate-800 italic">{Math.round(time.temp)}°C</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{time.time}</p>
                       </div>
                     </div>
                   ))}
                 </div>
+              </Card>
 
-                {/* Additional Stats Strip */}
-                <div className="mt-12 grid md:grid-cols-3 gap-8">
-                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
-                      <Droplets className="h-8 w-8 text-blue-500" />
-                      <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Humidity</p>
-                          <p className="text-xl font-black text-slate-800 italic">{weather.daily[selectedDay].humidity}%</p>
-                      </div>
+              {/* Weather Advisory */}
+              <Card className="lg:col-span-4 bg-[#2D4534] border-[#2D4534] rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-150 transition-transform duration-700" />
+                
+                <div className="relative z-10 space-y-8">
+                  <div className="flex items-center gap-4">
+                    <div className="h-14 w-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center">
+                      <Sprout className="h-8 w-8 text-emerald-400" />
+                    </div>
+                    <h3 className="text-xl font-black text-white italic uppercase tracking-tighter">Weather Advisory</h3>
                   </div>
-                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
-                      <Wind className="h-8 w-8 text-emerald-500" />
-                      <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Wind Speed</p>
-                          <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].wind_speed * 3.6)} KM/H</p>
-                      </div>
+
+                  <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
+                    <p className="text-sm font-bold text-white/90 italic leading-relaxed">
+                      {weather.advisory || "Optimal conditions for crop growth. Ideal for fertilizer application."}
+                    </p>
                   </div>
-                  <div className="flex items-center gap-4 bg-white/50 p-6 rounded-3xl border border-white/50 shadow-sm">
-                      <CloudRain className="h-8 w-8 text-blue-600" />
-                      <div>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Precipitation</p>
-                          <p className="text-xl font-black text-slate-800 italic">{Math.round(weather.daily[selectedDay].pop * 100)}%</p>
-                      </div>
+
+                  <div className="space-y-4">
+                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Agricultural Insight</p>
+                    <div className="flex items-start gap-3">
+                      <div className="h-2 w-2 rounded-full bg-emerald-400 mt-1.5 animate-pulse" />
+                      <p className="text-xs font-bold text-white/60 italic">Stable humidity levels predicted for the next 48 hours. Good for sensitive saplings.</p>
+                    </div>
                   </div>
+
+                  <Button className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase italic tracking-widest text-xs shadow-xl shadow-emerald-950/20">
+                    Detailed PDF Report
+                  </Button>
                 </div>
-
-                {/* Weather Advisory Card */}
-                <div className="mt-12 p-8 bg-[#2D4534] rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[80px] -z-0 group-hover:scale-110 transition-transform duration-700" />
-                  <div className="flex items-center gap-4 mb-3 relative z-10">
-                      <AlertTriangle className="h-6 w-6 text-amber-400" />
-                      <h5 className="font-black uppercase italic tracking-tighter text-lg">Weather Advisory</h5>
-                  </div>
-                  <p className="text-sm font-bold italic opacity-90 relative z-10 leading-relaxed max-w-2xl">
-                    {weather.daily[selectedDay].weather[0].main === "Rain" 
-                      ? "Expected precipitation may affect harvesting. Ensure proper drainage in fields and protect harvested crops." 
-                      : "Ideal conditions for field activities. Maintain regular irrigation schedule and monitor soil moisture levels."}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
+              </Card>
+            </div>
           </div>
         ) : error ? (
           <div className="text-center py-40">
