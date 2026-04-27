@@ -110,7 +110,7 @@ export default function Index() {
                       width="100%" 
                       height="100%" 
                       src="https://www.youtube.com/embed/Y6p9XF_N7_8?autoplay=1&mute=1&rel=0" 
-                      title="TeachSpark AI Farming Demo" 
+                      title="Kisan AI Farming Demo" 
                       frameBorder="0" 
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                       allowFullScreen
@@ -217,11 +217,9 @@ export default function Index() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <Link to="/impact">
-              <Button variant="outline" className="rounded-full px-8 py-5 font-semibold">
+              <Button variant="outline" className="rounded-full px-8 py-5 font-semibold cursor-default">
                 {t('seeFullImpact')} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-            </Link>
           </div>
         </div>
       </section>

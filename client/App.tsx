@@ -23,8 +23,6 @@ import Support from "./pages/Support";
 import { AuthProvider } from "./lib/AuthContext";
 import { LanguageProvider } from "./lib/LanguageContext";
 import { SignedIn, SignedOut, AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
-import About from "./pages/About";
-import Vision from "./pages/Vision";
 import Contact from "./pages/Contact";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
@@ -34,7 +32,6 @@ import SeedsBuyer from "./pages/SeedsBuyer";
 import WhatsAppChat from "./pages/WhatsAppChat";
 import { FloatingChatbot } from "./components/FloatingChatbot";
 import AgriKnowledge from "./pages/AgriKnowledge";
-import Impact from "./pages/Impact";
 import Explore from "./pages/Explore";
 import Community from "./pages/Community";
 import ExpertHelpFull from "./pages/ExpertHelpFull";
@@ -48,8 +45,6 @@ import PricePredictor from "./pages/PricePredictor";
 import D2CMarketplace from "./pages/D2CMarketplace";
 import DroneBooking from "./pages/DroneBooking";
 import CropHealthMonitor from "./pages/CropHealthMonitor";
-import TechSparkAI from "./pages/TechSparkAI";
-import JoinUs from "./pages/JoinUs";
 import MandiDetail from "./pages/MandiDetail";
 import KisanSuvidhaPortal from "./pages/KisanSuvidhaPortal";
 import { LocationProvider } from "./lib/LocationContext";
@@ -92,12 +87,6 @@ const AppRoutes = () => {
       <Route path="/market-place" element={<FarmerMarket />} />
       <Route path="/voice-notes" element={<VoiceNotes />} />
       <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
-      <Route path="/techspark" element={<TechSparkAI />} />
-      <Route path="/impact" element={<Impact />} />
-
-      <Route path="/join-us" element={<JoinUs />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/vision" element={<Vision />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />

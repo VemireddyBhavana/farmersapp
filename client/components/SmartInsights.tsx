@@ -63,8 +63,8 @@ export default function SmartInsights() {
                                         <div className="h-4 w-20 bg-white/10 animate-pulse rounded-full" />
                                     ) : (
                                         <div className="text-right">
-                                            <p className="text-3xl font-black">{weather?.temp}°C</p>
-                                            <p className="text-xs font-bold opacity-60 uppercase tracking-widest">{weather?.description}</p>
+                                            <p className="text-3xl font-black">{weather?.current?.temp}°C</p>
+                                            <p className="text-xs font-bold opacity-60 uppercase tracking-widest">{weather?.current?.weather[0]?.description}</p>
                                         </div>
                                     )}
                                 </div>

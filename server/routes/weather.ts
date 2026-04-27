@@ -74,7 +74,11 @@ export const handleWeather = async (req: Request, res: Response) => {
         }
     }
 
-    // 4. Update Cache
+    // 4. Enhanced AI Farming Advisory
+    data.advisory = getFarmingAdvisory(data);
+    data.alerts = getFarmingAlerts(data);
+
+    // 5. Update Cache
     weatherCache.set(cacheKey, data);
     res.json(data);
 
@@ -115,4 +119,31 @@ function getDemoWeather(lat: string, lon: string, locationName: string) {
     })),
     locationName: locationName || "Hyderabad, TS (DEMO MODE)"
   };
+}
+// 🌾 AGRI-INTEL ADVISORY LOGIC
+function getFarmingAdvisory(data: any) {
+  const temp = data.current?.temp;
+  const humidity = data.current?.humidity;
+  const desc = data.current?.weather?.[0]?.main?.toLowerCase();
+
+  if (desc?.includes("rain")) return "High moisture detected. Delay irrigation and check drainage channels.";
+  if (temp > 35) return "Heat stress alert! Increase irrigation frequency and monitor soil moisture levels.";
+  if (humidity > 80) return "High humidity. Risk of fungal diseases like Blast or Blight. Apply preventive fungicide.";
+  return "Optimal conditions for crop growth. Ideal for fertilizer application.";
+}
+
+function getFarmingAlerts(data: any) {
+  const alerts = [];
+  const temp = data.current?.temp;
+  const wind = data.current?.wind_speed;
+
+  if (temp > 40) alerts.push({ type: "Heat Warning", level: "Critical", suggestion: "Provide shade for young saplings." });
+  if (wind > 20) alerts.push({ type: "High Wind", level: "Caution", suggestion: "Secure tall crops and delay spraying." });
+  
+  // Predict from daily forecast
+  if (data.daily?.[0]?.pop > 0.7) {
+    alerts.push({ type: "Heavy Rain", level: "Warning", suggestion: "Expected rainfall > 70%. Stop irrigation." });
+  }
+
+  return alerts;
 }

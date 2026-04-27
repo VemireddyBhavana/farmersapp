@@ -49,6 +49,7 @@ const InterviewMode = () => {
     const { location } = useLocation();
     const [selectedTopic, setSelectedTopic] = useState(FARM_TOPICS[0]);
     const [selectedMentor, setSelectedMentor] = useState(MENTORS[0]);
+    const [isStarted, setIsStarted] = useState(false);
     const [selectionStep, setSelectionStep] = useState<"topic" | "mentor">("topic");
     const [messages, setMessages] = useState<Message[]>([]);
     const [isThinking, setIsThinking] = useState(false);

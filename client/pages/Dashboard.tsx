@@ -134,7 +134,7 @@ export default function Dashboard() {
                     <div className="flex justify-between items-center">
                       <div className="text-slate-500 text-xs font-semibold">{t('tempAndCond')}</div>
                       <div className="text-right font-bold text-slate-800 flex items-center gap-2">
-                        {weather.temp}°C <Sun className="h-4 w-4 text-amber-500" />
+                        {weather.current.temp}°C <Sun className="h-4 w-4 text-amber-500" />
                       </div>
                     </div>
                     {/* Official Advisory Block */}
@@ -143,7 +143,7 @@ export default function Dashboard() {
                         <AlertTriangle className="h-3 w-3" /> {t('officialAdvisory')}
                       </p>
                       <p className="text-xs font-medium text-amber-900">
-                        {weather.temp > 35 ? t('criticalHeatWarning') : t('nominalConditions')}
+                        {weather.current.temp > 35 ? t('criticalHeatWarning') : t('nominalConditions')}
                       </p>
                     </div>
                   </div>

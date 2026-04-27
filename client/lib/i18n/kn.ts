@@ -1329,12 +1329,12 @@ export const kn = {
     expertHelpHub: "ತಜ್ಞರ ಸಹಾಯ ಕೇಂದ್ರ",
     expertMentorSub: "ವೈಯಕ್ತಿಕ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ಪರಿಶೀಲಿಸಿದ ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ಸಂಪರ್ಕ ಸಾಧಿಸಿ.",
     selectExpert: "ತಜ್ಞರನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-    availability: "ಲಭ್ಯತೆ",
+
     sessionFee: "ಸೆಷನ್ ಶುಲ್ಕ",
     bookSession: "ಸೆಷನ್ ಬುಕ್ ಮಾಡಿ",
     fullName: "ಪೂರ್ಣ ಹೆಸರು",
     emailAddress: "ಇಮೇಲ್ ವಿಳಾಸ",
-    phoneNumber: "ಫೋನ್ ಸಂಖ್ಯೆ",
+
     proceedToPay: "ಪಾವತಿಸಲು ಮುಂದುವರಿಯಿರಿ",
     securePayment: "ಸುರಕ್ಷಿತ ಪಾವತಿ",
     refundable: "100% ಮರುಪಾವತಿಸಬಹುದಾದ",
@@ -1342,7 +1342,7 @@ export const kn = {
     mentorOnline: "ಆನ್‌ಲೈನ್",
     paymentScanner: "ಪಾವತಿ ಸ್ಕ್ಯಾನರ್",
     scanToPay: "ಯಾವುದೇ UPI ಅಪ್ಲಿಕೇಶನ್ ಬಳಸಿ ಪಾವತಿಸಲು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ",
-    thinking: "ತಜ್ಞರು ಯೋಚಿಸುತ್ತಿದ್ದಾರೆ...",
+
     chatBtn: "ಚ್ಯಾಟ್",
     callBtn: "ಕರೆ",
     perSession: "/ ಸೆಷನ್",

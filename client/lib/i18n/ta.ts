@@ -1327,12 +1327,12 @@ export const ta = {
     expertHelpHub: "நிபுணர் உதவி மையம்",
     expertMentorSub: "தனிப்பயனாக்கப்பட்ட வழிகாட்டுதலுக்கு சரிபார்க்கப்பட்ட விவசாய நிபுணர்களுடன் இணையுங்கள்.",
     selectExpert: "நிபுணரைத் தேர்ந்தெடுக்கவும்",
-    availability: "கிடைக்கும் தன்மை",
+
     sessionFee: "அமர்வு கட்டணம்",
     bookSession: "அமர்வை முன்பதிவு செய்யவும்",
     fullName: "முழு பெயர்",
     emailAddress: "மின்னஞ்சல் முகவரி",
-    phoneNumber: "தொலைபேசி எண்",
+
     proceedToPay: "பணம் செலுத்த தொடரவும்",
     securePayment: "பாதுகாப்பான கட்டணம்",
     refundable: "100% திரும்பப் பெறத்தக்கது",
@@ -1340,7 +1340,7 @@ export const ta = {
     mentorOnline: "ஆன்லைன்",
     paymentScanner: "கட்டண ஸ்கேனர்",
     scanToPay: "ஏதேனும் UPI செயலியைப் பயன்படுத்தி பணம் செலுத்த ஸ்கேன் செய்யவும்",
-    thinking: "நிபுணர் யோசிக்கிறார்...",
+
     chatBtn: "அரட்டை",
     callBtn: "அழைக்கவும்",
     perSession: "/ அமர்வு",

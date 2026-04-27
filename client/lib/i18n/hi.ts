@@ -1322,12 +1322,12 @@ export const hi = {
     expertHelpHub: "विशेषज्ञ सहायता केंद्र",
     expertMentorSub: "व्यक्तिगत मार्गदर्शन के लिए सत्यापित कृषि विशेषज्ञों से जुड़ें।",
     selectExpert: "विशेषज्ञ चुनें",
-    availability: "उपलब्धता",
+
     sessionFee: "सत्र शुल्क",
     bookSession: "सत्र बुक करें",
     fullName: "पूరా పేరు",
     emailAddress: "ईमेल पता",
-    phoneNumber: "फ़ोन नंबर",
+
     proceedToPay: "भुगतान के लिए आगे बढ़ें",
     securePayment: "सुरक्षित भुगतान",
     refundable: "100% वापसी योग्य",
@@ -1335,7 +1335,7 @@ export const hi = {
     mentorOnline: "ऑनलाइन",
     paymentScanner: "भुगतान स्कैनर",
     scanToPay: "किसी भी UPI ऐप का उपयोग करके भुगतान करने के लिए स्कैन करें",
-    thinking: "विशेषज्ञ सोच रहा है...",
+
     chatBtn: "चैट",
     callBtn: "कॉल",
     perSession: "/ सत्र",

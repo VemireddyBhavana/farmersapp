@@ -95,6 +95,20 @@ const Community = () => {
       },
       (err) => {
         console.error("🔥 FEED ERROR:", err);
+        // Fallback mock data if Firebase fails
+        const mockPosts = [
+            {
+                id: "mock1",
+                userName: "Ramesh Reddy",
+                location: "Warangal",
+                problemText: "Seeing some yellowing on the edges of my paddy leaves. Is this a nutrient deficiency?",
+                imageUrl: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?auto=format&fit=crop&q=80&w=1000",
+                likesCount: 12,
+                createdAt: { toDate: () => new Date() },
+                userPhoto: "/farmer_avatar.png"
+            }
+        ];
+        setPosts(mockPosts);
         setLoading(false);
       }
     );

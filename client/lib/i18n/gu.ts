@@ -1311,12 +1311,12 @@ export const gu = {
     expertHelpHub: "નિષ્ણાત મદદ કેન્દ્ર",
     expertMentorSub: "વ્યક્તિગત માર્ગદર્શન માટે ચકાસાયેલ કૃષિ નિષ્ણાતો સાથે જોડાઓ.",
     selectExpert: "નિષ્ણાત પસંદ કરો",
-    availability: "ઉપલબ્ધતા",
+
     sessionFee: "સત્ર ફી",
     bookSession: "સત્ર બુક કરો",
     fullName: "પૂરું નામ",
     emailAddress: "ઇમેઇલ સરનામું",
-    phoneNumber: "ફોન નંબર",
+
     proceedToPay: "ચુકવણી માટે આગળ વધો",
     securePayment: "સુરક્ષિત ચુકવણી",
     refundable: "100% રિફંડપાત્ર",
@@ -1324,7 +1324,7 @@ export const gu = {
     mentorOnline: "ઓનલાઇન",
     paymentScanner: "ચુકવણી સ્કેનર",
     scanToPay: "કોઈપણ UPI એપનો ઉપયોગ કરીને ચુકવણી કરવા માટે સ્કેન કરો",
-    thinking: "નિષ્ણાત વિચારી રહ્યા છે...",
+
     chatBtn: "ચેટ",
     callBtn: "કોલ",
     perSession: "/ સત્ર",

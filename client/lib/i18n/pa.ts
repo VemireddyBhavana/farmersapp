@@ -1328,12 +1328,12 @@ export const pa = {
     expertHelpHub: "ਮਾਹਿਰ ਸਹਾਇਤਾ ਕੇਂਦਰ",
     expertMentorSub: "ਵਿਅਕਤੀਗਤ ਮਾਰਗਦਰਸ਼ਨ ਲਈ ਪ੍ਰਮਾਣਿਤ ਖੇਤੀਬਾੜੀ ਮਾਹਿਰਾਂ ਨਾਲ ਜੁੜੋ।",
     selectExpert: "ਮਾਹਿਰ ਚੁਣੋ",
-    availability: "ਉਪਲਬਧਤਾ",
+
     sessionFee: "ਸੈਸ਼ਨ ਫੀਸ",
     bookSession: "ਸੈਸ਼ਨ ਬੁੱਕ ਕਰੋ",
     fullName: "ਪੂਰਾ ਨਾਮ",
     emailAddress: "ਈਮੇਲ ਪਤਾ",
-    phoneNumber: "ਫ਼ੋਨ ਨੰਬਰ",
+
     proceedToPay: "ਭੁਗਤਾਨ ਲਈ ਅੱਗੇ ਵਧੋ",
     securePayment: "ਸੁਰੱਖਿਅਤ ਭੁਗਤਾਨ",
     refundable: "100% ਵਾਪਸੀਯੋਗ",
@@ -1341,7 +1341,7 @@ export const pa = {
     mentorOnline: "ਆਨਲਾਈਨ",
     paymentScanner: "ਭੁਗਤਾਨ ਸਕੈਨਰ",
     scanToPay: "ਕਿਸੇ ਵੀ UPI ਐਪ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਭੁਗਤਾਨ ਕਰਨ ਲਈ ਸਕੈਨ ਕਰੋ",
-    thinking: "ਮਾਹਿਰ ਸੋਚ ਰਿਹਾ ਹੈ...",
+
     chatBtn: "ਚੈਟ",
     callBtn: "ਕਾਲ",
     perSession: "/ ਸੈਸ਼ਨ",
