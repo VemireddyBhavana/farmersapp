@@ -105,7 +105,8 @@ const Navbar = () => {
     { name: t("yieldForecast"),      path: "/yield-prediction",   icon: TrendingUp },
     { name: t("subsidyChecker"),     path: "/subsidy-finder",     icon: FileText },
     { name: t("toolSharing"),        path: "/tool-sharing",       icon: Truck },
-    { name: t("soilTestFinder"),    path: "/soil-lab-locator",   icon: Microscope },
+    { name: "Soil Predictor AI",    path: "/soil-predictor",      icon: Microscope },
+    { name: t("soilTestFinder"),    path: "/soil-lab-locator",   icon: Navigation },
     { name: t("loanCalculator"), path: "/agri-loan-calculator", icon: Calculator },
     { name: t("farmLedger"),         path: "/farmer-finance",     icon: Wallet },
   ];

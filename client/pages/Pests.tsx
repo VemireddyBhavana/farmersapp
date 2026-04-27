@@ -185,295 +185,90 @@ const diseaseData = [
   }
 ];
 
-export default function Pests() {
-  const { t } = useLanguage();
-  const [selectedCrop, setSelectedCrop] = useState("");
-  const [weather, setWeather] = useState("");
-  const [showRecs, setShowRecs] = useState(false);
-
-  const filteredPests = selectedCrop
-    ? pestData.filter(p => p.crops.some(c => c.toLowerCase().includes(selectedCrop.toLowerCase())))
-    : pestData;
-
-  const getRiskLabel = (risk: string) => {
-    switch (risk) {
-      case "High": return t('riskHigh');
-      case "Medium": return t('riskMedium');
-      case "Critical": return t('riskCritical');
-      default: return risk;
-    }
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8 space-y-12">
-      <div className="text-center space-y-4 max-w-3xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
-          {t('pestsTitle')}
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          {t('pestsDesc')}
-        </p>
-      </div>
-
-      {/* Disease Detection Camera Section */}
-      <section id="detection" className="scroll-mt-24">
-        <CropHealthChecker />
-      </section>
-
-      {/* Monitoring Setup Section */}
-      <Card className="rounded-[2.5rem] border-primary/10 bg-white shadow-xl overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full opacity-50 -z-0" />
-        <CardHeader className="p-8 pb-4 relative z-10">
-          <CardTitle className="text-2xl font-black flex items-center gap-3 text-orange-600">
-            <Activity className="h-7 w-7" />
-            {t('pestRecommendation')}
-          </CardTitle>
-          <CardDescription>{t('pestRecommendationDesc')}</CardDescription>
-        </CardHeader>
-        <CardContent className="p-8 relative z-10">
-          <div className="grid gap-6 md:grid-cols-3 items-end">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{t('chooseCrop')}</label>
-              <Select onValueChange={(val) => { setSelectedCrop(val); setShowRecs(false); }}>
-                <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white font-medium focus:ring-orange-500/20">
-                  <SelectValue placeholder={t('chooseCrop')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="tomato">{t('tomato')}</SelectItem>
-                  <SelectItem value="rice">{t('paddy')}</SelectItem>
-                  <SelectItem value="cotton">{t('cotton')}</SelectItem>
-                  <SelectItem value="pulses">{t('pulses')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{t('weatherCondition')}</label>
-              <Select onValueChange={(val) => { setWeather(val); setShowRecs(false); }}>
-                <SelectTrigger className="rounded-xl border-primary/10 h-14 bg-white font-medium focus:ring-orange-500/20">
-                  <SelectValue placeholder={t('currentWeather')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="clear">{t('clearSkies')}</SelectItem>
-                  <SelectItem value="rain">{t('highHumidityRainy')}</SelectItem>
-                  <SelectItem value="hot">{t('hotDry')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <Button
-              onClick={() => setShowRecs(true)}
-              disabled={!selectedCrop || !weather}
-              className="rounded-xl bg-orange-600 hover:bg-orange-700 h-14 font-black flex items-center gap-2 shadow-xl shadow-orange-500/20 transition-all active:scale-95"
-            >
-              <Bug className="h-5 w-5" />
-              {t('analyzeRisks')}
-            </Button>
-          </div>
-
-          <AnimatePresence>
-            {showRecs && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="mt-8 pt-8 border-t border-dashed border-orange-100"
-              >
-                <div className="bg-orange-50/50 rounded-3xl p-8 border border-orange-100">
-                  <div className="flex flex-col md:flex-row gap-8 items-start">
-                    <div className="flex-1 space-y-6">
-                      <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 rounded-2xl bg-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
-                          <ShieldAlert className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-black text-orange-900">{t('pestRiskAnalysis')}</h3>
-                          <p className="text-sm font-bold text-orange-600 uppercase tracking-tighter">
-                            {selectedCrop} • {weather}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="bg-white p-4 rounded-2xl border border-orange-100 shadow-sm">
-                          <p className="text-[10px] font-black text-muted-foreground uppercase mb-1">{t('currentRiskLevel')}</p>
-                          <div className="flex items-center gap-2">
-                            <Badge className={cn(
-                              "text-xs px-3 py-1 rounded-full border-none font-black",
-                              weather === "rain" || (selectedCrop === "cotton" && weather === "hot") 
-                                ? "bg-red-500 text-white" 
-                                : weather === "hot" 
-                                  ? "bg-orange-500 text-white" 
-                                  : "bg-emerald-500 text-white"
-                            )}>
-                              {weather === "rain" || (selectedCrop === "cotton" && weather === "hot") 
-                                ? t('pestRiskCritical') 
-                                : weather === "hot" 
-                                  ? t('pestRiskHigh') 
-                                  : t('pestRiskLow')}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="bg-white p-4 rounded-2xl border border-orange-100 shadow-sm">
-                          <p className="text-[10px] font-black text-muted-foreground uppercase mb-1">{t('recommendation')}</p>
-                          <p className="text-sm font-bold flex items-center gap-1">
-                            <FlaskConical className="h-4 w-4 text-blue-500" />
-                            {weather === "rain" ? t('treatmentPlan') : t('preventiveCare')}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Zap className="h-4 w-4 text-orange-600" />
-                          <h4 className="text-sm font-black uppercase text-orange-900 tracking-wider">
-                            {t('tailoredAdvice')}
-                          </h4>
-                        </div>
-                        <p className="text-base font-medium text-orange-800 leading-relaxed bg-white/50 p-6 rounded-2xl border border-orange-100">
-                          {t(`rec_${selectedCrop}_${weather}`)}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="w-full md:w-64 space-y-4">
-                      <div className="aspect-square rounded-3xl bg-white border border-orange-100 p-6 flex flex-col items-center justify-center text-center shadow-sm">
-                        <Thermometer className="h-10 w-10 text-orange-600 mb-3" />
-                        <p className="text-xs font-black text-muted-foreground uppercase mb-1">{t('weatherAlert')}</p>
-                        <p className="text-lg font-black text-orange-950">
-                          {weather === 'hot' ? '38°C' : weather === 'rain' ? 'High Humidity' : '24°C'}
-                        </p>
-                      </div>
-                      <Button variant="outline" className="w-full rounded-2xl border-orange-200 text-orange-700 hover:bg-orange-50 hover:text-orange-800 font-bold border-2">
-                        {t('expertAdvice')}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </CardContent>
-      </Card>
-
-      <div className="grid lg:grid-cols-2 gap-12">
-        {/* Pest Section */}
-        <div className="space-y-8">
-          <div className="flex items-center gap-3">
-            <Bug className="h-8 w-8 text-red-600" />
-            <h2 className="text-3xl font-black tracking-tight">{t('pestIdentification')}</h2>
-          </div>
-
-          <div className="space-y-6">
-            {filteredPests.map((pest, i) => (
-              <motion.div key={i} layout>
-                <Card className="rounded-2xl border-primary/5 shadow-sm hover:shadow-md transition-all overflow-hidden">
-                  <div className={cn(
-                    "h-1.5 w-full",
-                    pest.risk === "High" ? "bg-red-500" : "bg-orange-500"
-                  )} />
-                  <CardContent className="p-6 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-xl font-bold">{pest.name}</h3>
-                        <div className="flex gap-2 mt-1">
-                          {pest.crops.map(c => (
-                            <Badge key={c} variant="outline" className="text-[10px]">
-                              {t(c.toLowerCase()) || c}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <Badge className={cn(
-                        "rounded-lg px-3 py-1 border-none",
-                        pest.risk === "High" ? "bg-red-100 text-red-700" : "bg-orange-100 text-orange-700"
-                      )}>
-                        {getRiskLabel(pest.risk)} {t('risk')}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground font-medium italic">{pest.desc}</p>
-                    <div className="grid grid-cols-2 gap-4 pt-2">
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-1">
-                          <ShieldCheck className="h-3 w-3 text-emerald-500" /> {t('treatmentPlan')}
-                        </p>
-                        <p className="text-xs font-bold leading-tight">{pest.treatment}</p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-black uppercase text-muted-foreground flex items-center gap-1">
-                          <FlaskConical className="h-3 w-3 text-blue-500" /> {t('recommendedPesticide')}
-                        </p>
-                        <p className="text-xs font-bold leading-tight">{pest.pesticide}</p>
-                      </div>
-                    </div>
-                    <div className="bg-emerald-50 dark:bg-emerald-950/20 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
-                      <p className="text-[10px] font-black uppercase text-emerald-600 mb-1">{t('organicSolution')}</p>
-                      <p className="text-xs font-medium text-emerald-700 dark:text-emerald-400">{pest.organic}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+    <div className="min-h-screen bg-[#0B1C10] text-white">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-[#E8C872] uppercase italic">
+            {t('plantDiseaseDetection') || "Plant Disease Detection"}
+          </h1>
         </div>
 
-        {/* Disease Section */}
-        <div className="space-y-8">
-          <div className="flex items-center gap-3">
-            <Microscope className="h-8 w-8 text-blue-600" />
-            <h2 className="text-3xl font-black tracking-tight">{t('diseaseManagement')}</h2>
+        <div className="grid lg:grid-cols-12 gap-8">
+          {/* Left Column: Upload Section */}
+          <div className="lg:col-span-7">
+            <CropHealthChecker />
           </div>
 
-          <div className="space-y-6">
-            {diseaseData.map((disease, i) => (
-              <motion.div key={i} layout>
-                <Card className="rounded-2xl border-primary/5 shadow-sm hover:shadow-md transition-all overflow-hidden border-t-4 border-t-blue-500">
-                  <CardContent className="p-6 space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="text-xl font-bold">{disease.name}</h3>
-                        <div className="flex gap-2 mt-1">
-                          {disease.crops.map(c => (
-                            <Badge key={c} variant="outline" className="text-[10px]">
-                              {t(c.toLowerCase()) || c}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      <Badge className="bg-blue-100 text-blue-700 border-none rounded-lg">{getRiskLabel(disease.risk)}</Badge>
+          {/* Right Column: How It Works & Statistics */}
+          <div className="lg:col-span-5 space-y-8">
+            {/* How It Works */}
+            <Card className="bg-[#1A2E1F] border-[#2D4534] rounded-3xl p-8 text-slate-300">
+              <h3 className="text-xl font-bold text-[#E8C872] flex items-center gap-3 mb-6">
+                <HelpCircle className="h-6 w-6" />
+                How It Works
+              </h3>
+              <div className="space-y-6">
+                <p className="text-sm leading-relaxed">
+                  Our AI-powered plant disease detection system uses computer vision to identify diseases in crops. The system is trained on thousands of images of healthy and diseased plants.
+                </p>
+                
+                <div className="space-y-4">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-wider">Simple 3-step process:</h4>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-start gap-3">
+                      <div className="h-5 w-5 rounded-full bg-[#E8C872] text-[#0B1C10] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</div>
+                      Upload or capture a clear image of the affected plant.
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="h-5 w-5 rounded-full bg-[#E8C872] text-[#0B1C10] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</div>
+                      Our AI analyzes the image for disease patterns.
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="h-5 w-5 rounded-full bg-[#E8C872] text-[#0B1C10] flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">3</div>
+                      Receive instant identification and treatment advice.
+                    </li>
+                  </ul>
+                </div>
+
+                <p className="text-xs italic opacity-70">
+                  For best results, take close-up images of affected leaves or stems in good lighting conditions.
+                </p>
+              </div>
+            </Card>
+
+            {/* Recent Farm Statistics */}
+            <Card className="bg-[#1A2E1F] border-[#2D4534] rounded-3xl p-8">
+              <h3 className="text-xl font-bold text-[#E8C872] flex items-center gap-3 mb-6">
+                <Activity className="h-6 w-6" />
+                Recent Farm Statistics
+              </h3>
+              <p className="text-xs text-slate-400 mb-8 uppercase tracking-widest font-bold">Common diseases detected on your farm</p>
+              
+              <div className="space-y-8">
+                {[
+                  { name: "Late Blight", count: 12, color: "bg-red-500", total: 40 },
+                  { name: "Early Blight", count: 8, color: "bg-orange-500", total: 40 },
+                  { name: "Bacterial Spot", count: 5, color: "bg-yellow-500", total: 40 },
+                  { name: "Healthy", count: 15, color: "bg-emerald-500", total: 40 }
+                ].map((stat) => (
+                  <div key={stat.name} className="space-y-2">
+                    <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
+                      <span className="text-slate-300">{stat.name}</span>
+                      <span className="text-slate-400">{stat.count} cases</span>
                     </div>
-                    <p className="text-sm text-muted-foreground font-medium italic">{disease.desc}</p>
-                    <div className="space-y-3 pt-2">
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 shrink-0 rounded-full bg-blue-50 flex items-center justify-center">
-                          <Sprout className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black uppercase text-muted-foreground">{t('treatmentPlan')}</p>
-                          <p className="text-sm font-bold leading-tight">{disease.plan}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 shrink-0 rounded-full bg-emerald-50 flex items-center justify-center">
-                          <FlaskConical className="h-5 w-5 text-emerald-600" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black uppercase text-muted-foreground">{t('fertilizerRec')}</p>
-                          <p className="text-sm font-bold leading-tight">{disease.fertilizer}</p>
-                        </div>
-                      </div>
-                      <div className="flex gap-4">
-                        <div className="h-10 w-10 shrink-0 rounded-full bg-orange-50 flex items-center justify-center">
-                          <ShieldCheck className="h-5 w-5 text-orange-600" />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black uppercase text-muted-foreground">{t('preventionSteps')}</p>
-                          <p className="text-sm font-bold leading-tight">{disease.prevention}</p>
-                        </div>
-                      </div>
+                    <div className="h-1.5 w-full bg-black/20 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(stat.count / stat.total) * 100}%` }}
+                        transition={{ duration: 1, ease: "circOut" }}
+                        className={cn("h-full rounded-full", stat.color)}
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
         </div>
       </div>

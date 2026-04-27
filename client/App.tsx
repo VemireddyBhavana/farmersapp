@@ -39,6 +39,7 @@ import YieldPrediction from "./pages/YieldPrediction";
 import SubsidyFinder from "./pages/SubsidyFinder";
 import ToolSharing from "./pages/ToolSharing";
 import SoilLabLocator from "./pages/SoilLabLocator";
+import SoilPredictor from "./pages/SoilPredictor";
 import AgriLoanCalculator from "./pages/AgriLoanCalculator";
 import FarmerFinance from "./pages/FarmerFinance";
 import PricePredictor from "./pages/PricePredictor";
@@ -99,6 +100,7 @@ const AppRoutes = () => {
       <Route path="/subsidy-finder" element={<SubsidyFinder />} />
       <Route path="/tool-sharing" element={<ToolSharing />} />
       <Route path="/soil-lab-locator" element={<SoilLabLocator />} />
+      <Route path="/soil-predictor" element={<SoilPredictor />} />
       <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
       <Route path="/farmer-finance" element={<FarmerFinance />} />
       <Route path="/price-predictor" element={<PricePredictor />} />
