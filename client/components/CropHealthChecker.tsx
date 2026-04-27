@@ -11,8 +11,6 @@ export default function CropHealthChecker() {
     const { t } = useLanguage();
     const [image, setImage] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
-    const [cropName, setCropName] = useState("");
-    const [growthStage, setGrowthStage] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<null | {
@@ -27,20 +25,16 @@ export default function CropHealthChecker() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const cameraInputRef = useRef<HTMLInputElement>(null);
 
-    const validateCropImage = async (file: File) => {
-        // simple validation (mock AI logic)
-        const fileName = file.name.toLowerCase();
-        const cropKeywords = ["leaf", "plant", "crop", "rice", "wheat", "tomato", "corn", "healthy", "sick"];
-        const isValid = cropKeywords.some(keyword => fileName.includes(keyword));
-        return isValid;
-    };
-
     const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (!selectedFile) return;
 
         setFile(selectedFile);
         setImage(URL.createObjectURL(selectedFile));
+        setLoading(true);
+        setError(null);
+        setResult(null);
+
         try {
             const formData = new FormData();
             formData.append("image", selectedFile);
@@ -56,7 +50,7 @@ export default function CropHealthChecker() {
             setResult({
                 disease: data.disease,
                 confidence: data.confidence,
-                process: data.cure, // Mapping for UI
+                process: data.cure,
                 tip: data.prevention,
                 bestPractices: [
                     data.cure,
@@ -102,7 +96,7 @@ export default function CropHealthChecker() {
                             </div>
                             
                             <p className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] italic">
-                                Upload image or image to begin analysis
+                                Upload image or capture photo to begin analysis
                             </p>
                         </div>
 
@@ -120,13 +114,6 @@ export default function CropHealthChecker() {
                             >
                                 <Camera className="h-5 w-5" />
                                 Camera
-                            </Button>
-                            <Button 
-                                disabled={!file}
-                                className="flex-1 bg-[#E8C872] hover:bg-[#D4B661] text-[#0B1C10] h-14 rounded-xl font-black uppercase italic tracking-tighter shadow-xl shadow-[#E8C872]/10"
-                            >
-                                <Microscope className="h-5 w-5 mr-2" />
-                                AI Analysis
                             </Button>
                             <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={handleUpload} />
                         </div>
@@ -247,4 +234,3 @@ export default function CropHealthChecker() {
         </div>
     );
 }
-
