@@ -23,7 +23,9 @@ import {
   Sprout,
   Waves,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Loader2,
+  Moon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,6 +112,8 @@ function AnimatedTemp({ value }: { value: number }) {
     return <motion.span>{rounded}</motion.span>;
 }
 
+export default function Weather() {
+  const { weather, loading, error, getLocationAndFetch } = useWeather();
   const [selectedDay, setSelectedDay] = useState(0);
 
   const formatDate = (dt: number) => {

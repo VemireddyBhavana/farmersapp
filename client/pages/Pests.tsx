@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldAlert, Bug, Leaf, Search, MapPin, ArrowRight, ArrowLeft, Thermometer, ShieldCheck, Microscope, Camera, Zap, AlertTriangle, Eye, Activity, Droplet, Sprout, FlaskConical } from "lucide-react";
+import { ShieldAlert, Bug, Leaf, Search, MapPin, ArrowRight, ArrowLeft, Thermometer, ShieldCheck, Microscope, Camera, Zap, AlertTriangle, Eye, Activity, Droplet, Sprout, FlaskConical, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -184,6 +184,9 @@ const diseaseData = [
     prevention: "Control Aphids and Whiteflies; use virus-free seeds."
   }
 ];
+
+export default function Pests() {
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-[#0B1C10] text-white">

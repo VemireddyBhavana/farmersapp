@@ -88,8 +88,6 @@ export default function CropHealthChecker() {
 
     return (
         <div className="space-y-12">
-    return (
-        <div className="space-y-12">
             {!image ? (
                 <Card className="bg-[#1A2E1F] border-[#2D4534] rounded-[2rem] p-10 shadow-2xl">
                     <div className="space-y-10">
