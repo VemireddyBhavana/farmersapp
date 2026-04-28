@@ -11,12 +11,23 @@ from flask_cors import CORS
 
 try:
     from disease_model import detector
-    from price_predictor import price_predictor
-    from soil_analyzer import soil_analyzer
-    HAS_ENGINES = True
 except ImportError:
-    HAS_ENGINES = False
-    print("[ML Service] WARNING: One or more AI engines failed to load.")
+    detector = None
+    print("[ML Service] WARNING: Disease Detector failed to load (requires TensorFlow).")
+
+try:
+    from price_predictor import price_predictor
+except ImportError:
+    price_predictor = None
+    print("[ML Service] WARNING: Price Predictor failed to load (requires XGBoost).")
+
+try:
+    from soil_analyzer import soil_analyzer
+except ImportError:
+    soil_analyzer = None
+    print("[ML Service] WARNING: Soil Analyzer failed to load.")
+
+HAS_ENGINES = any([detector, price_predictor, soil_analyzer])
 
 app = Flask(__name__)
 CORS(app)
