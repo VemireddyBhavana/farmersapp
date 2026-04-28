@@ -32,6 +32,15 @@ export default defineConfig({
         // External dependencies that should not be bundled
         "express",
         "cors",
+        "dotenv",
+        "@google/earthengine",
+        "axios",
+        "node-fetch",
+        "mongoose",
+        "node-cache",
+        "mongodb",
+        "multer",
+        "cloudinary",
       ],
       output: {
         format: "es",

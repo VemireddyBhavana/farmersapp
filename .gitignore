@@ -40,4 +40,10 @@ env/
 venv/
 ENV/
 env.bak/
-venv.bak/
+# Backups and Logs
+*.bak
+*.txt
+dev_error_utf8.txt
+dev_error.txt
+tsc_output.txt
+tsc_output_2.txt

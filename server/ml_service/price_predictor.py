@@ -32,7 +32,7 @@ class PricePredictor:
             model.fit(X, y)
             
             self.models[crop] = model
-            print(f"📈 [Price Engine] Model trained for {crop}")
+            print(f"[Price Engine] Model trained for {crop}")
 
     def predict_7_days(self, crop):
         if crop not in self.models:
