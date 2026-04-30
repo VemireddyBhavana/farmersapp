@@ -63,6 +63,18 @@ export default function CropHealthChecker() {
                     "Ignoring early symptoms"
                 ]
             });
+
+            // Save to history
+            await fetch("/api/history", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: "user_123", // Mock
+                    type: "disease",
+                    inputData: { method: "image", fileName: selectedFile.name },
+                    result: data
+                })
+            });
         } catch (err: any) {
             setError("❌ Analysis failed: " + err.message);
         } finally {

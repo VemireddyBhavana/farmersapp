@@ -61,6 +61,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { useLanguage } from "@/lib/LanguageContext";
 import { useWeather } from "@/hooks/useWeather";
 import { useMandi } from "@/hooks/useMandi";
+import { CropTrends } from "@/components/CropTrends";
 
 import { speakText } from "@/lib/speech";
 
@@ -172,7 +173,7 @@ export default function Dashboard() {
                 { name: t('cropCalendar'), path: "/calendar", icon: Calendar, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
                 { name: t('pestAdvisory'), path: "/pests", icon: Bug, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
                 { name: t('kisanSupport'), path: "/chat", icon: MessageCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                { name: t('mandiPrices'), path: "/market", icon: IndianRupee, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { name: "History", path: "/history", icon: Clock, color: "bg-amber-50 text-amber-700 border-amber-200" },
               ].map((item, i) => (
                 <Link key={i} to={item.path}>
                   <div className="bg-white p-4 rounded-lg flex items-center gap-3 shadow-sm border hover:border-emerald-500 hover:shadow-md transition-all duration-200 h-full">
@@ -265,6 +266,8 @@ export default function Dashboard() {
               </Link>
             </div>
           </div>
+
+          <CropTrends />
         </aside>
       </section>
 

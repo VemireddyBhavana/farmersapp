@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Menu, X, Sun, Moon, ChevronDown, Leaf, CloudSun, TrendingUp, Shield, Bot,
+  Menu, X, Sun, Moon, ChevronDown, Leaf, CloudSun, TrendingUp, Shield, ShieldAlert, Bot,
   ScrollText, HeartHandshake, Sprout, Globe, Users, Zap, Target, Grid, Calendar,
   Store, FileText, User, Truck, Microscope, Calculator, Wallet, BarChart3, ShoppingBag, Navigation
 } from "lucide-react";
@@ -87,6 +87,7 @@ const Navbar = () => {
     { name: t("weather"), path: "/weather",    icon: CloudSun },
     { name: t("market"),  path: "/market",     icon: TrendingUp },
     { name: t("aiChat"),  path: "/chat",       icon: Bot      },
+    { name: t("pestsAndDisease"), path: "/pests", icon: ShieldAlert },
     { name: t("schemes"), path: "/agri-schemes", icon: ScrollText },
   ];
 
@@ -94,7 +95,6 @@ const Navbar = () => {
     { name: t("seedsStore"),    path: "/seeds",        icon: Sprout        },
     { name: t("calendar"),      path: "/calendar",     icon: Calendar      },
     { name: t("rentTractor"),   path: "/rent",         icon: Store         },
-    { name: t("security"),      path: "/pests",        icon: Shield        },
     { name: t("supportPortal"), path: "/support",      icon: HeartHandshake},
   ];
 

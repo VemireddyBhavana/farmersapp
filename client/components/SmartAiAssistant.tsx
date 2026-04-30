@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mic, MicOff, Camera, X, Paperclip, Loader2, User, Bot, Sparkles, Languages } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -26,6 +27,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { i18n } = useTranslation();
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -46,21 +48,33 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
     };
   }, []);
 
-  // Language Detection Logic
-  // Forced Absolute English Lock
-  const detectLanguage = () => "en-IN";
+  // Language Mapping for Speech Recognition
+  const langMap: { [key: string]: string } = {
+    en: "en-IN",
+    hi: "hi-IN",
+    te: "te-IN",
+    ta: "ta-IN",
+    kn: "kn-IN",
+    ml: "ml-IN",
+    mr: "mr-IN",
+    bn: "bn-IN",
+    gu: "gu-IN",
+    pa: "pa-IN"
+  };
 
   const speak = (text: string) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-IN"; // Professional Indian English
-    window.speechSynthesis.speak(speech);
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    utterance.lang = langMap[i18n.language] || i18n.language;
+    window.speechSynthesis.speak(utterance);
   };
 
   // Continuous Voice Logic
   const startVoiceSession = () => {
-    if (!(window as any).webkitSpeechRecognition) {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
       alert("Please use Chrome or Edge for voice features.");
       return;
     }
@@ -72,11 +86,11 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
       return;
     }
 
-    const SpeechRecognition = (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = false;
-    recognition.lang = "en-IN";
+    
+    recognition.lang = langMap[i18n.language] || i18n.language;
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -144,7 +158,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
       const response = await axios.post("/api/smart-assistant", {
         text: query,
         imageData: newMessage.image,
-        language: "en-IN" // Force English professional mode
+        language: currentLang
       }, { 
         timeout: 25000,
         headers: { "Content-Type": "application/json" }

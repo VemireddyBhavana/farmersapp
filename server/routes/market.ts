@@ -65,18 +65,39 @@ export const handleMarketPredict = async (req: Request, res: Response) => {
             prediction = {
                 current_price: 2200,
                 forecast: [
-                    { day: "Monday", date: "2024-05-20", price: 2210 },
-                    { day: "Tuesday", date: "2024-05-21", price: 2235 },
-                    { day: "Wednesday", date: "2024-05-22", price: 2220 },
-                    { day: "Thursday", date: "2024-05-23", price: 2240 },
-                    { day: "Friday", date: "2024-05-24", price: 2260 },
-                    { day: "Saturday", date: "2024-05-25", price: 2255 },
-                    { day: "Sunday", date: "2024-05-26", price: 2280 }
+                    { day: "Monday", price: 2210 },
+                    { day: "Tuesday", price: 2235 },
+                    { day: "Wednesday", price: 2220 },
+                    { day: "Thursday", price: 2240 },
+                    { day: "Friday", price: 2260 },
+                    { day: "Saturday", price: 2255 },
+                    { day: "Sunday", price: 2280 }
                 ]
             };
         }
         return res.json(prediction);
     } catch (error) {
         return res.json({ current_price: 2200, forecast: [] }); // Absolute fallback
+    }
+};
+
+export const handleCropTrends = async (req: Request, res: Response) => {
+    try {
+        const { lat, lon } = req.query;
+        // Mock data for regional trends based on location
+        // In a real app, this would query a spatial database or regional reports
+        const trends = [
+            { crop: "Cotton", trend: "Increasing", popularity: 85, reason: "High market demand" },
+            { crop: "Paddy", trend: "Stable", popularity: 78, reason: "Traditional staple" },
+            { crop: "Maize", trend: "Increasing", popularity: 65, reason: "Favorable monsoon" },
+            { crop: "Groundnut", trend: "Decreasing", popularity: 45, reason: "Pest risk" }
+        ];
+        res.json({
+            location: { lat, lon },
+            region: "South Central India",
+            trends: trends
+        });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch trends" });
     }
 };

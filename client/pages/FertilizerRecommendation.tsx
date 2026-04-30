@@ -7,25 +7,47 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Badge } from "@/components/ui/badge";
+import { SoilImageUpload } from "@/components/SoilImageUpload";
 
 export default function FertilizerRecommendation() {
   const { t } = useLanguage();
   const [soilType, setSoilType] = useState("");
   const [cropType, setCropType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [n, setN] = useState<number | "">("");
+  const [p, setP] = useState<number | "">("");
+  const [k, setK] = useState<number | "">("");
   const [result, setResult] = useState<{
     npk: string;
     description: string;
     advice: string[];
     organicAlternatives: string[];
+    explanation?: string;
   } | null>(null);
+
+  const handleSoilDetected = (data: any) => {
+    setSoilType(data.type.toLowerCase());
+    setN(data.n);
+    setP(data.p);
+    setK(data.k);
+  };
 
   const calculateFertilizer = () => {
     setLoading(true);
+    
+    // Logic Upgrade: Rule-based explanation
+    let explanation = "";
+    if (n !== "" && n < 80) explanation += "Nitrogen (N) is low, so Urea is recommended. ";
+    if (p !== "" && p < 40) explanation += "Phosphorus (P) is low, so DAP is recommended. ";
+    if (k !== "" && k < 40) explanation += "Potassium (K) is low, so MOP is recommended. ";
+    
+    if (!explanation) explanation = "Nutrient levels are balanced. Maintain with organic compost.";
+
     setTimeout(() => {
       setResult({
-        npk: "120:60:40 (N:P:K)",
+        npk: n !== "" ? `${n}:${p}:${k} (Current)` : "120:60:40 (Recommended)",
         description: "Recommended dosage per hectare based on average nutrient uptake for the selected crop and soil.",
+        explanation: explanation,
         advice: [
           "Apply 50% of Nitrogen as basal dose during transplanting.",
           "Apply Phosphorus and Potassium full dose as basal.",
@@ -67,48 +89,71 @@ export default function FertilizerRecommendation() {
 
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="grid gap-8 md:grid-cols-3">
-          <Card className="md:col-span-1 border-emerald-100 shadow-lg h-fit">
-            <CardHeader>
-              <CardTitle className="text-lg font-bold text-emerald-800">Nutrient Analysis</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">{t('cropType')}</label>
-                <Select onValueChange={setCropType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('selectCrop')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="paddy">{t('paddy')}</SelectItem>
-                    <SelectItem value="wheat">{t('wheat')}</SelectItem>
-                    <SelectItem value="maize">{t('maize')}</SelectItem>
-                    <SelectItem value="chilling">Chilli</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700">{t('soilType')}</label>
-                <Select onValueChange={setSoilType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('selectSoil')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="black">{t('blackSoil')}</SelectItem>
-                    <SelectItem value="red">{t('redSoil')}</SelectItem>
-                    <SelectItem value="sandy">{t('sandySoil')}</SelectItem>
-                    <SelectItem value="loamy">{t('loamySoil')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button 
-                className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold h-12"
-                onClick={calculateFertilizer}
-                disabled={!soilType || !cropType || loading}
-              >
-                {loading ? "Analyzing..." : t('calculate')}
-              </Button>
-            </CardContent>
-          </Card>
+          <div className="md:col-span-1 space-y-6">
+            <SoilImageUpload onSoilDetected={handleSoilDetected} />
+            
+            <Card className="border-emerald-100 shadow-lg h-fit">
+              <CardHeader>
+                <CardTitle className="text-lg font-bold text-emerald-800">Nutrient Analysis</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">{t('cropType')}</label>
+                  <Select value={cropType} onValueChange={setCropType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectCrop')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="paddy">{t('paddy')}</SelectItem>
+                      <SelectItem value="wheat">{t('wheat')}</SelectItem>
+                      <SelectItem value="maize">{t('maize')}</SelectItem>
+                      <SelectItem value="chilling">Chilli</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700">{t('soilType')}</label>
+                  <Select value={soilType} onValueChange={setSoilType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('selectSoil')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="black">{t('blackSoil')}</SelectItem>
+                      <SelectItem value="red">{t('redSoil')}</SelectItem>
+                      <SelectItem value="sandy">{t('sandySoil')}</SelectItem>
+                      <SelectItem value="loamy">{t('loamySoil')}</SelectItem>
+                      <SelectItem value="clay">Clay Soil</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {n !== "" && (
+                  <div className="grid grid-cols-3 gap-2 py-2 bg-slate-50 rounded-lg border border-slate-100">
+                    <div className="text-center">
+                      <p className="text-[8px] font-black text-slate-400 uppercase">N</p>
+                      <p className="text-xs font-black text-emerald-600">{n}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[8px] font-black text-slate-400 uppercase">P</p>
+                      <p className="text-xs font-black text-emerald-600">{p}</p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-[8px] font-black text-slate-400 uppercase">K</p>
+                      <p className="text-xs font-black text-emerald-600">{k}</p>
+                    </div>
+                  </div>
+                )}
+
+                <Button 
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold h-12"
+                  onClick={calculateFertilizer}
+                  disabled={!soilType || !cropType || loading}
+                >
+                  {loading ? "Analyzing..." : t('calculate')}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="md:col-span-2 space-y-6">
             <AnimatePresence mode="wait">
@@ -142,6 +187,12 @@ export default function FertilizerRecommendation() {
                         <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-2">Recommended Dosage</p>
                         <h2 className="text-5xl font-black mb-4">{result.npk}</h2>
                         <p className="text-sm text-purple-100 max-w-md italic opacity-90">{result.description}</p>
+                        
+                        {result.explanation && (
+                          <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/20 text-xs font-bold italic">
+                            {result.explanation}
+                          </div>
+                        )}
                       </div>
                     </CardContent>
                     <FlaskConical className="absolute right-[-5%] bottom-[-5%] h-48 w-48 opacity-10" />

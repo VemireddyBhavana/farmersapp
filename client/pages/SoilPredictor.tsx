@@ -28,6 +28,13 @@ export default function SoilPredictor() {
     confidence: string;
     characteristics: string;
     suitability: string[];
+    suggestedValues?: {
+      n: number;
+      p: number;
+      k: number;
+      ph: number;
+      moisture: number;
+    };
   }>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +68,20 @@ export default function SoilPredictor() {
         soilType: data.soil_type,
         confidence: data.confidence,
         characteristics: data.characteristics || "Good water retention, rich in organic matter, and well-structured for root growth.",
-        suitability: data.suitable_crops || ["Tomato", "Rice", "Wheat"]
+        suitability: data.suitable_crops || ["Tomato", "Rice", "Wheat"],
+        suggestedValues: data.suggested_values
+      });
+
+      // Save to history
+      await fetch("/api/history", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: "user_123", // Mock
+          type: "soil",
+          inputData: { method: "image" },
+          result: data
+        })
       });
     } catch (err: any) {
       console.error(err);
@@ -168,6 +188,17 @@ export default function SoilPredictor() {
                              <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                              <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest">Status: [ACTIVE ANALYSIS]</span>
                           </div>
+
+                          {result.suggestedValues && (
+                            <div className="mt-6 grid grid-cols-5 gap-2">
+                              {Object.entries(result.suggestedValues).map(([key, val]) => (
+                                <div key={key} className="bg-white rounded-lg p-2 border border-slate-100 text-center">
+                                  <p className="text-[8px] font-black text-slate-400 uppercase">{key}</p>
+                                  <p className="text-[10px] font-black text-emerald-600">{val}</p>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                        </div>
                        
                        <Button onClick={reset} className="w-full h-14 rounded-2xl bg-[#2D4534] text-white font-black uppercase tracking-widest text-xs">
