@@ -33,7 +33,18 @@ class SoilAnalyzer:
         crop_idx = prediction[0]
         
         # Real-world crop logic based on common NPK ranges
-        recommended_crop = self.crops[crop_idx % len(self.crops)]
+        all_suitable = [self.crops[crop_idx % len(self.crops)]]
+        
+        # Add secondary recommendations based on soil profile
+        if n > 70: all_suitable.extend(["Rice", "Sugarcane", "Banana"])
+        if p > 50: all_suitable.extend(["Maize", "Chickpea", "Soybean"])
+        if k > 50: all_suitable.extend(["Potato", "Grapes", "Tobacco"])
+        if ph > 7.0: all_suitable.extend(["Cotton", "Wheat"])
+        if ph < 6.0: all_suitable.extend(["Potato", "Tea"])
+        
+        # Remove duplicates and shuffle slightly
+        unique_crops = list(set(all_suitable))
+        np.random.shuffle(unique_crops)
         
         # Simulated fertility logic
         fertility_score = (n + p + k) / 3
@@ -41,16 +52,16 @@ class SoilAnalyzer:
 
         # Fertilizer recommendation logic
         fertilizer = ""
-        if n < 50: fertilizer += "Urea for Nitrogen. "
-        if p < 40: fertilizer += "DAP for Phosphorus. "
-        if k < 40: fertilizer += "MOP for Potassium. "
-        if not fertilizer: fertilizer = "Organic Compost and balanced NPK 19-19-19."
+        if n < 50: fertilizer += "Apply 50kg/acre Urea. "
+        if p < 40: fertilizer += "Apply 30kg/acre DAP. "
+        if k < 40: fertilizer += "Apply 20kg/acre MOP. "
+        if not fertilizer: fertilizer = "Maintain soil health with Organic Compost (2 tons/acre) and balanced NPK 19-19-19."
 
         return {
             "fertility_level": fertility_level,
-            "suitable_crops": [recommended_crop, "Maize" if recommended_crop != "Maize" else "Vegetables"],
+            "suitable_crops": unique_crops[:3], # Return top 3
             "fertilizer_recommendation": fertilizer,
-            "irrigation_suggestion": "Maintain moisture at 20-25%" if moisture < 150 else "Ensure proper drainage."
+            "irrigation_suggestion": "Maintain moisture at 20-25% (Critical for flowering stage)." if moisture < 150 else "Ensure proper drainage to prevent root rot."
         }
 
 soil_analyzer = SoilAnalyzer()
