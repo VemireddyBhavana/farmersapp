@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Badge } from "@/components/ui/badge";
+import { SoilImageUpload } from "@/components/SoilImageUpload";
 
 export default function CropRecommendation() {
   const { t } = useLanguage();
@@ -18,6 +19,16 @@ export default function CropRecommendation() {
   const [moisture, setMoisture] = useState("150");
   const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState<null | any>(null);
+
+  const handleSoilDetected = (data: any) => {
+    if (data.suggested_values) {
+      setN(data.suggested_values.n.toString());
+      setP(data.suggested_values.p.toString());
+      setK(data.suggested_values.k.toString());
+      setPh(data.suggested_values.ph.toString());
+      setMoisture(data.suggested_values.moisture.toString());
+    }
+  };
 
   const handleRecommend = async () => {
     setLoading(true);
@@ -62,7 +73,10 @@ export default function CropRecommendation() {
 
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="grid gap-8 md:grid-cols-3">
-          <Card className="md:col-span-1 border-emerald-100 shadow-lg h-fit">
+          <div className="md:col-span-1 space-y-6">
+            <SoilImageUpload onSoilDetected={handleSoilDetected} />
+            
+            <Card className="border-emerald-100 shadow-lg h-fit">
             <CardHeader>
               <CardTitle className="text-lg font-bold text-emerald-800">{t('farmDetails') || "Farm Details"}</CardTitle>
               <CardDescription>{t('enterFarmData') || "Provide soil and location details"}</CardDescription>
@@ -99,7 +113,7 @@ export default function CropRecommendation() {
               </Button>
             </CardContent>
           </Card>
-
+          </div>
           <div className="md:col-span-2 space-y-6">
             <AnimatePresence mode="wait">
               {!recommendations && !loading ? (

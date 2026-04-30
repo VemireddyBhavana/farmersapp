@@ -13,11 +13,12 @@ import { connectDB } from "./db/connection";
 import { handleDemo } from "./routes/demo";
 import { handleNDVI, initEarthEngine } from "./routes/ndvi";
 import { handleWeather } from "./routes/weather";
-import { handleMarketPrices, handleMarketPredict, handleMarketStates, handleMarketDistricts, handleMarketMarkets } from "./routes/market";
+import { handleMarketPrices, handleMarketPredict, handleMarketStates, handleMarketDistricts, handleMarketMarkets, handleCropTrends } from "./routes/market";
 import { handleDiseaseDetect } from "./routes/disease";
 import { handleSoilAnalyze } from "./routes/soil";
 import { handleExpertConsult, handleSmartAssistant } from "./routes/assistant";
 import { handleYieldPredict, handleYieldHistory } from "./routes/yield";
+import { handleSaveHistory, handleGetHistory } from "./routes/history";
 
 export function createServer() {
   const app = express();
@@ -65,6 +66,13 @@ export function createServer() {
   // Yield Prediction Module
   app.post("/api/predict", handleYieldPredict); // Matches frontend path
   app.get("/api/yield/history", handleYieldHistory);
+
+  // History Tracking
+  app.post("/api/history", handleSaveHistory);
+  app.get("/api/history", handleGetHistory);
+
+  // Trends
+  app.get("/api/crop-trends", handleCropTrends);
 
   // Farmer Profile
   app.get("/api/farmer", (_req, res) => {

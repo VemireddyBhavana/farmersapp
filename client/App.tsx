@@ -56,6 +56,8 @@ import VoiceNotes from "./pages/VoiceNotes";
 import InterviewMode from "./pages/InterviewMode";
 import { CartProvider } from "./lib/CartContext";
 import Checkout from "./pages/Checkout";
+import HistoryDashboard from "./pages/HistoryDashboard";
+import FertilizerRecommendation from "./pages/FertilizerRecommendation";
 
 const queryClient = new QueryClient();
 
@@ -101,6 +103,7 @@ const AppRoutes = () => {
       <Route path="/tool-sharing" element={<ToolSharing />} />
       <Route path="/soil-lab-locator" element={<SoilLabLocator />} />
       <Route path="/soil-predictor" element={<SoilPredictor />} />
+      <Route path="/fertilizer-recommendation" element={<FertilizerRecommendation />} />
       <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
       <Route path="/farmer-finance" element={<FarmerFinance />} />
       <Route path="/price-predictor" element={<PricePredictor />} />
@@ -108,6 +111,7 @@ const AppRoutes = () => {
       <Route path="/drone-booking" element={<DroneBooking />} />
       <Route path="/crop-doctor" element={<CropHealthMonitor />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/history" element={<HistoryDashboard />} />
       
       {/* Legacy/Utility Redirects */}
       <Route path="/Home" element={<Navigate to="/" replace />} />

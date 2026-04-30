@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
-import CropHealthChecker from "@/components/CropHealthChecker";
+import { DiseaseDetection } from "@/components/DiseaseDetection";
 import FarmAreaScanner from "@/components/FarmAreaScanner";
 
 export default function CropHealthMonitor() {
@@ -106,7 +106,7 @@ export default function CropHealthMonitor() {
                                 </Button>
                                 <Badge className="bg-emerald-500 text-white border-none font-black px-4 py-1.5 rounded-full uppercase italic">Single Leaf Diagnosis</Badge>
                             </div>
-                            <CropHealthChecker />
+                            <DiseaseDetection />
                         </motion.div>
                     )}
 

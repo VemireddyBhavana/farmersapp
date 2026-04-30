@@ -35,15 +35,18 @@ export const handleDiseaseDetect = [
                     "Brown Spot",
                     "Leaf Smut",
                     "Blast",
-                    "Sheath Blight"
+                    "Sheath Blight",
+                    "Rust",
+                    "Mosaic Virus",
+                    "Powdery Mildew"
                 ];
                 const randomDisease = mockDiseases[Math.floor(Math.random() * mockDiseases.length)];
                 
                 return res.json({
                     disease: randomDisease,
-                    confidence: 0.85 + Math.random() * 0.1,
-                    treatment: "Apply fungicide according to local agricultural guidelines.",
-                    recommendation: "Maintain proper water levels and avoid excessive nitrogen fertilizer."
+                    confidence: Number((0.85 + Math.random() * 0.1).toFixed(4)),
+                    cure: "Apply fungicide according to local agricultural guidelines.",
+                    prevention: "Maintain proper water levels and avoid excessive nitrogen fertilizer."
                 });
             }
         } catch (error) {
