@@ -1,6 +1,7 @@
 import React, { useState, forwardRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { useLanguage } from "@/lib/LanguageContext";
 import { 
     Search, Filter, Sprout, Star, ChevronRight, Leaf, Droplets, Sun, TrendingUp, 
     MapPin, ArrowUpRight, BadgeCheck, ArrowRight, BookOpen, ShoppingBag, 
@@ -118,7 +119,8 @@ const SidebarFilters = ({
             <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-xs uppercase tracking-widest h-12 rounded-xl">{t("upgradeNow")}</Button>
         </div>
     </div>
-);
+    );
+};
 
 const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: any) => {
     const navigate = useNavigate();
