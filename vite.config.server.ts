@@ -55,6 +55,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
     },
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".mjs"],
   },
   define: {
     "process.env.NODE_ENV": '"production"',
