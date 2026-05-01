@@ -24,18 +24,18 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/LanguageContext";
 
 const navItems = [
-  { id: "overview", name: "Agriculture Overview", path: "/agriculture", icon: Leaf },
-  { id: "dashboard", name: "Dashboard", path: "/agriculture/dashboard", icon: LayoutGrid },
-  { id: "recommendation", name: "Crop Recommendation", path: "/agriculture/crop-recommendation", icon: Sprout },
-  { id: "doctor", name: "AI Crop Doctor", path: "/agriculture/crop-doctor", icon: Stethoscope },
-  { id: "cost", name: "Cost Calculator", path: "/agriculture/costs", icon: Calculator },
-  { id: "profit", name: "Crop Profitability", path: "/agriculture/profitability", icon: TrendingUp },
-  { id: "loans", name: "Loans", path: "/agriculture/loans", icon: Landmark },
-  { id: "schemes", name: "Government Schemes", path: "/agriculture/schemes", icon: FileText },
-  { id: "prices", name: "Market Prices", path: "/agriculture/market-prices", icon: BarChart3 },
-  { id: "irrigation", name: "Water & Irrigation", path: "/agriculture/water-irrigation", icon: Droplets },
-  { id: "alerts", name: "Alerts", path: "/agriculture/alerts", icon: Bell },
-  { id: "experts", name: "Expert Consultation", path: "/agriculture/experts", icon: UserCheck },
+  { id: "overview", name: "agriOverview", path: "/agriculture", icon: Leaf },
+  { id: "dashboard", name: "dashboard", path: "/agriculture/dashboard", icon: LayoutGrid },
+  { id: "recommendation", name: "cropRecommendation", path: "/agriculture/crop-recommendation", icon: Sprout },
+  { id: "doctor", name: "aiCropDoctor", path: "/agriculture/crop-doctor", icon: Stethoscope },
+  { id: "cost", name: "costCalculator", path: "/agriculture/costs", icon: Calculator },
+  { id: "profit", name: "cropProfitability", path: "/agriculture/profitability", icon: TrendingUp },
+  { id: "loans", name: "loans", path: "/agriculture/loans", icon: Landmark },
+  { id: "schemes", name: "schemes", path: "/agriculture/schemes", icon: FileText },
+  { id: "prices", name: "marketPrices", path: "/agriculture/market-prices", icon: BarChart3 },
+  { id: "irrigation", name: "waterAndIrrigation", path: "/agriculture/water-irrigation", icon: Droplets },
+  { id: "alerts", name: "alerts", path: "/agriculture/alerts", icon: Bell },
+  { id: "experts", name: "expertConsultation", path: "/agriculture/experts", icon: UserCheck },
 ];
 
 export const Sidebar = () => {
@@ -107,7 +107,7 @@ export const Sidebar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   className="flex flex-col flex-1"
                 >
-                  <span className="text-sm font-bold tracking-tight whitespace-nowrap">{item.name}</span>
+                  <span className="text-sm font-bold tracking-tight whitespace-nowrap">{t(item.name)}</span>
                 </motion.div>
               )}
               {!isCollapsed && isActive && (
@@ -122,15 +122,15 @@ export const Sidebar = () => {
       <div className="p-4 border-t border-white/5">
         <Link to="/" className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/5 transition-all text-slate-500 hover:text-white">
           <Home className="h-5 w-5" />
-          {!isCollapsed && <span className="text-sm font-bold">Back to Home</span>}
+          {!isCollapsed && <span className="text-sm font-bold">{t("backToHome")}</span>}
         </Link>
         {!isCollapsed && (
           <div className="mt-4 px-3 py-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Official Data Live</span>
+              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{t("officialDataLive")}</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-medium">Synced with State & National Agricultural Datasets</p>
+            <p className="text-[10px] text-slate-500 font-medium">{t("syncedWithDatasets")}</p>
           </div>
         )}
       </div>

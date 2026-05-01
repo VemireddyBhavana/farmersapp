@@ -50,7 +50,7 @@ export default function Index() {
   return (
     <div className="overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
@@ -62,7 +62,7 @@ export default function Index() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 py-20 text-center">
+        <div className="container relative z-10 mx-auto px-4 py-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -163,7 +163,7 @@ export default function Index() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-16 relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="grid gap-12 lg:grid-cols-4 sm:grid-cols-2">
             {stats.map((stat, idx) => (
@@ -183,7 +183,7 @@ export default function Index() {
       </section>
 
       {/* AgroStar Numbers */}
-      <section className="py-24 bg-muted/20">
+      <section className="py-16 bg-muted/20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center mb-16 space-y-4">
             <p className="text-xs font-black uppercase tracking-widest text-emerald-600">{t('agroStarNetwork')}</p>
@@ -225,7 +225,7 @@ export default function Index() {
       </section>
 
       {/* Investors Section */}
-      <section className="py-24">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -316,7 +316,7 @@ export default function Index() {
       </section>
 
       {/* Smart Suite Section */}
-      <section className="py-24 overflow-hidden">
+      <section className="py-16 overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <motion.div
@@ -371,7 +371,7 @@ export default function Index() {
       </section>
 
       {/* How it Works Redesign */}
-      <section className="py-24 bg-background transition-colors">
+      <section className="py-16 bg-background transition-colors">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-20 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight text-foreground lg:text-5xl font-black italic">

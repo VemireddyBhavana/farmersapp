@@ -75,13 +75,13 @@ export default function Dashboard() {
 
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-16">
+    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Main Dashboard Features (Weather, Mandi, etc.) */}
-      <section className="grid gap-10 lg:grid-cols-4 pt-8">
-        <div className="lg:col-span-3 space-y-12">
+      <section className="grid gap-6 lg:grid-cols-12 pt-4">
+        <div className="lg:col-span-9 space-y-6">
           {/* Welcome & Weather Mixed */}
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="md:col-span-2 rounded-xl bg-primary text-primary-foreground p-8 md:p-12 overflow-hidden relative border border-primary/20 shadow-lg flex flex-col justify-center min-h-[320px]">
+            <Card className="md:col-span-2 rounded-[2rem] bg-primary text-primary-foreground p-6 md:p-10 overflow-hidden relative border border-primary/20 shadow-2xl flex flex-col justify-center min-h-[300px] hover-lift">
               <div className="relative z-10 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-card/10 text-primary-foreground/90 rounded text-xs font-semibold tracking-wider uppercase border border-white/20">
                   <HeartHandshake className="w-4 h-4" /> {t('empoweringFarmers')}
@@ -115,7 +115,7 @@ export default function Dashboard() {
             </Card>
 
             {/* Official Weather Data Table Panel */}
-            <Card className="rounded-xl border border-border shadow-sm bg-card overflow-hidden flex flex-col">
+            <Card className="rounded-[2rem] border border-border/50 shadow-xl bg-card overflow-hidden flex flex-col hover-lift">
               <div className="bg-muted border-b border-border px-4 py-3 flex justify-between items-center">
                 <span className="text-sm font-bold text-slate-700 uppercase tracking-widest">{t('meteorologicalData')}</span>
                 {weather && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium border border-primary/20">{t('live')}</span>}
@@ -186,42 +186,10 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-
-          {/* Disease Detection */}
-          <section className="space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-2">
-              <h2 className="text-xl font-bold tracking-tight text-foreground uppercase italic tracking-tighter">{t('aiCropDiagnostics')}</h2>
-              <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{t("realWorldToolBadge")}</span>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <Link to="/crop-doctor" className="block group">
-                <Card className="rounded-[2rem] border-2 border-primary/10 shadow-sm overflow-hidden bg-card hover:border-primary transition-all p-6 flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
-                    <Leaf className="h-7 w-7 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-foreground uppercase italic tracking-tighter">{t('checkCropHealth')}</h3>
-                    <p className="text-[10px] font-bold text-muted-foreground/60">{t('identifyFromLeaf')}</p>
-                  </div>
-                </Card>
-              </Link>
-              <Link to="/crop-doctor" className="block group">
-                <Card className="rounded-[2rem] border-2 border-secondary/10 shadow-sm overflow-hidden bg-card hover:border-secondary transition-all p-6 flex items-center gap-4">
-                  <div className="h-14 w-14 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-secondary/20 group-hover:scale-110 transition-transform">
-                    <Scan className="h-7 w-7 text-secondary-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-foreground uppercase italic tracking-tighter">{t('scanFarmAreaOption')}</h3>
-                    <p className="text-[10px] font-bold text-muted-foreground/60">{t('scanFieldArea')}</p>
-                  </div>
-                </Card>
-              </Link>
-            </div>
-          </section>
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-8">
+        <aside className="lg:col-span-3 space-y-6">
           {/* Mandi Rates */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-border pb-2">
@@ -237,7 +205,7 @@ export default function Dashboard() {
                 mandiRates.slice(0, 5).map((item, idx) => (
                   <Link key={idx} to="/market" className="block p-3 hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-semibold text-foreground">{item.crop}</span>
+                      <span className="font-semibold text-foreground">{t(item.crop.toLowerCase())}</span>
                       <span className="font-bold text-slate-900">{item.rate}</span>
                     </div>
                   </Link>
@@ -266,13 +234,50 @@ export default function Dashboard() {
               </Link>
             </div>
           </div>
-
-          <CropTrends />
         </aside>
       </section>
 
-      {/* Tractor Rental Teaser */}
-      <section className="space-y-6 pt-8 border-t border-border">
+      {/* Full Width Sections Below the Main Grid */}
+      <div className="space-y-10">
+        {/* AI Crop Diagnostics */}
+        <section className="space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-2">
+            <h2 className="text-xl font-bold tracking-tight text-foreground uppercase italic tracking-tighter">{t('aiCropDiagnostics')}</h2>
+            <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{t("realWorldToolBadge")}</span>
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link to="/crop-doctor" className="block group">
+              <Card className="rounded-[2rem] border-2 border-primary/10 shadow-sm overflow-hidden bg-card hover:border-primary transition-all p-6 flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                  <Leaf className="h-7 w-7 text-primary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-black text-foreground uppercase italic tracking-tighter">{t('checkCropHealth')}</h3>
+                  <p className="text-[10px] font-bold text-muted-foreground/60">{t('identifyFromLeaf')}</p>
+                </div>
+              </Card>
+            </Link>
+            <Link to="/crop-doctor" className="block group">
+              <Card className="rounded-[2rem] border-2 border-secondary/10 shadow-sm overflow-hidden bg-card hover:border-secondary transition-all p-6 flex items-center gap-4">
+                <div className="h-14 w-14 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-secondary/20 group-hover:scale-110 transition-transform">
+                  <Scan className="h-7 w-7 text-secondary-foreground" />
+                </div>
+                <div>
+                  <h3 className="font-black text-foreground uppercase italic tracking-tighter">{t('scanFarmAreaOption')}</h3>
+                  <p className="text-[10px] font-bold text-muted-foreground/60">{t('scanFieldArea')}</p>
+                </div>
+              </Card>
+            </Link>
+          </div>
+        </section>
+
+        {/* Nearby Crop Trends - Full Width */}
+        <CropTrends />
+      </div>
+
+      {/* Machinery Teaser */}
+      <section className="space-y-4 pt-4 border-t border-border">
+
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1">
             <h2 className="text-2xl font-bold tracking-tight text-foreground">{t('agriMachineryDB')}</h2>
@@ -285,7 +290,7 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        <div className="bg-primary/5 border border-primary/10 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8 shadow-inner relative group overflow-hidden">
+        <div className="bg-primary/5 border border-primary/10 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-8 shadow-inner relative group overflow-hidden">
           <div className="flex-1 space-y-4 relative z-10">
             <Badge className="bg-primary text-primary-foreground border-none">{t('tagNew')}</Badge>
             <h3 className="text-3xl font-black text-primary">{t('premiumEquipmentDesc')}</h3>
@@ -304,10 +309,10 @@ export default function Dashboard() {
       </section>
 
       {/* AgriFarming Hub Feed */}
-      <section className="space-y-4 pt-8 border-t border-border">
+      <section className="space-y-4 pt-4 border-t border-border">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
               <BookOpen className="h-6 w-6 text-primary" /> {t('agriFarmingHub')}
             </h2>
             <p className="text-sm font-medium text-muted-foreground">{t('agriFarmingHubDesc')}</p>
