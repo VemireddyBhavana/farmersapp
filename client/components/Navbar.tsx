@@ -105,7 +105,7 @@ const Navbar = () => {
     { name: t("yieldForecast"),      path: "/yield-prediction",   icon: TrendingUp },
     { name: t("subsidyChecker"),     path: "/subsidy-finder",     icon: FileText },
     { name: t("toolSharing"),        path: "/tool-sharing",       icon: Truck },
-    { name: "Soil Predictor AI",    path: "/soil-predictor",      icon: Microscope },
+    { name: t("soilPredictorAI"),    path: "/soil-predictor",      icon: Microscope },
     { name: t("soilTestFinder"),    path: "/soil-lab-locator",   icon: Navigation },
     { name: t("loanCalculator"), path: "/agri-loan-calculator", icon: Calculator },
     { name: t("farmLedger"),         path: "/farmer-finance",     icon: Wallet },
@@ -122,10 +122,10 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 flex-shrink-0 group transition-all duration-300 hover:scale-105">
-            <div className="rounded-xl bg-emerald-500 p-1.5 shadow-md shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-all">
-              <Leaf className="h-5 w-5 text-white" />
+            <div className="rounded-xl bg-primary p-1.5 shadow-md shadow-primary/30 group-hover:shadow-primary/50 transition-all">
+              <Leaf className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-lg font-extrabold tracking-tight text-emerald-600 hidden sm:block group-hover:text-emerald-500 transition-colors">
+            <span className="text-lg font-extrabold tracking-tight text-primary hidden sm:block group-hover:text-primary/80 transition-colors">
               {brandName}
             </span>
           </Link>
@@ -178,7 +178,7 @@ const Navbar = () => {
                     >
                       <link.icon className={cn(
                         "h-3.5 w-3.5 transition-colors nav-icon-lift",
-                        location.pathname === link.path ? "text-primary-foreground" : "text-emerald-600"
+                        location.pathname === link.path ? "text-primary-foreground" : "text-primary"
                       )} />
                     </motion.div>
                     {link.name}
@@ -207,7 +207,7 @@ const Navbar = () => {
                   {moreOpen && (
                     <DropdownMenuContent asChild forceMount align="start" sideOffset={10}>
                       <motion.div
-                        className="w-52 rounded-2xl p-1.5 dropdown-glass border-emerald-500/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
+                        className="w-52 rounded-2xl p-1.5 dropdown-glass border-primary/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
                         initial="hidden"
                         animate="visible"
                         exit="exit"
@@ -230,10 +230,10 @@ const Navbar = () => {
                                     initial={false}
                                     transition={{ type: "spring", stiffness: 400, damping: 28 }}
                                   >
-                                    <div className="absolute inset-0 bg-emerald-500/10 rounded-lg" />
+                                    <div className="absolute inset-0 bg-primary/10 rounded-lg" />
                                   </motion.div>
                                 )}
-                                <l.icon className={cn("h-4 w-4 transition-colors", location.pathname === l.path ? "text-primary" : "text-emerald-600")} />
+                                <l.icon className={cn("h-4 w-4 transition-colors", location.pathname === l.path ? "text-primary" : "text-primary/70")} />
                                 {l.name}
                               </Link>
                             </DropdownMenuItem>
@@ -254,7 +254,7 @@ const Navbar = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 rounded-xl gap-1 transition-all hover:bg-emerald-50 dark:hover:bg-emerald-900/20 premium-button animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)] whitespace-nowrap">
+                    <Button variant="ghost" className="h-8 px-3 text-xs font-bold text-primary hover:text-primary/90 rounded-xl gap-1 transition-all hover:bg-primary/5 premium-button animate-pulse shadow-[0_0_15px_rgba(var(--primary),0.2)] whitespace-nowrap">
                       <motion.div
                         animate={{ y: premiumOpen ? -2 : 0, scale: premiumOpen ? 1.1 : 1 }}
                         className="flex items-center gap-1"
@@ -268,7 +268,7 @@ const Navbar = () => {
                   {premiumOpen && (
                     <DropdownMenuContent asChild forceMount align="end" sideOffset={10}>
                       <motion.div
-                        className="w-72 rounded-2xl p-2 dropdown-glass border-emerald-500/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
+                        className="w-72 rounded-2xl p-2 dropdown-glass border-primary/20 shadow-2xl overflow-hidden z-50 pointer-events-auto"
                         initial="hidden"
                         animate="visible"
                         exit="exit"
@@ -279,7 +279,7 @@ const Navbar = () => {
                             <DropdownMenuItem asChild>
                               <Link to={item.path} className={cn(
                                 "relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all group dropdown-item-hover z-10",
-                                location.pathname === item.path ? "bg-emerald-50/50 dark:bg-emerald-900/10 text-emerald-700" : "hover:bg-gray-100 text-foreground group-hover:text-emerald-600"
+                                location.pathname === item.path ? "bg-primary/10 text-primary" : "hover:bg-muted/50 text-foreground group-hover:text-primary"
                               )}>
                                 {location.pathname === item.path && (
                                   <motion.div
@@ -288,10 +288,10 @@ const Navbar = () => {
                                     initial={false}
                                     transition={{ type: "spring", stiffness: 400, damping: 28 }}
                                   >
-                                    <div className="absolute inset-0 bg-emerald-500/10 rounded-lg" />
+                                    <div className="absolute inset-0 bg-primary/10 rounded-lg" />
                                   </motion.div>
                                 )}
-                                <item.icon className="h-4 w-4 text-emerald-600" />
+                                <item.icon className="h-4 w-4 text-primary" />
                                 <span className="text-sm font-semibold">{item.name}</span>
                               </Link>
                             </DropdownMenuItem>
@@ -315,7 +315,7 @@ const Navbar = () => {
             {isLoaded && (
               isAuthenticated ? <UserButton afterSignOutUrl="/" /> : (
                 <Link to="/login">
-                  <Button size="sm" className="rounded-xl px-4 h-9 font-bold bg-emerald-600 hover:bg-emerald-700 text-white hidden sm:flex">
+                  <Button size="sm" className="rounded-xl px-4 h-9 font-bold bg-primary hover:bg-primary/90 text-primary-foreground hidden sm:flex">
                     {t("login")}
                   </Button>
                 </Link>
@@ -354,11 +354,11 @@ const Navbar = () => {
               ))}
 
               <div className="pt-2 border-t">
-                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-600 italic">{t("smartFarmingTools")}</p>
+                <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-primary italic">{t("smartFarmingTools")}</p>
                 {premiumLinks.map((link) => (
                   <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
-                    className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-emerald-100 text-emerald-700" : "text-muted-foreground hover:bg-muted")}>
-                    <link.icon className="h-4 w-4 flex-shrink-0 text-emerald-600" /> 
+                    className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>
+                    <link.icon className="h-4 w-4 flex-shrink-0 text-primary" /> 
                     <span>{link.name}</span>
                   </Link>
                 ))}
