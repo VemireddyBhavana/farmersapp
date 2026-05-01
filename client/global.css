@@ -103,10 +103,10 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/30 backdrop-blur-md border border-white/20 shadow-xl;
+    @apply bg-white/30 dark:bg-black/40 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-xl;
   }
   .glass-dark {
-    @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-xl;
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
@@ -125,8 +125,53 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
     font-family: 'Inter', 'Noto Sans Devanagari', 'Noto Sans Telugu', 'Noto Sans Tamil', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Bengali', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+  }
+
+  /* Global Theme Overrides for Hardcoded Tailwind Classes */
+  .dark {
+    /* Background Overrides */
+    .bg-white:not(.keep-white) {
+      @apply bg-card;
+    }
+    .bg-stone-50:not(.keep-stone) {
+      @apply bg-background;
+    }
+    .bg-slate-50:not(.keep-slate) {
+      @apply bg-muted/20;
+    }
+    .bg-muted\/30:not(.keep-muted) {
+      @apply bg-muted/10;
+    }
+    
+    /* Text Overrides */
+    .text-slate-900:not(.keep-dark),
+    .text-slate-800:not(.keep-dark),
+    .text-slate-700:not(.keep-dark) {
+      @apply text-foreground;
+    }
+    .text-slate-600:not(.keep-muted),
+    .text-slate-500:not(.keep-muted) {
+      @apply text-muted-foreground;
+    }
+    .text-black:not(.keep-dark) {
+      @apply text-foreground;
+    }
+
+    /* Border Overrides */
+    .border-slate-200:not(.keep-border),
+    .border-slate-100:not(.keep-border) {
+      @apply border-border;
+    }
+    .border-primary\/5:not(.keep-border) {
+      @apply border-primary/20;
+    }
+
+    /* Card Overrides */
+    .bg-card {
+      @apply bg-slate-900/50 border-white/10;
+    }
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
