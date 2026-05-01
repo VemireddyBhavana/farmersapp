@@ -51,40 +51,36 @@ export default function Pests() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const ALL_PESTS = [
-    { name: "Aphids", icon: "🦟", risk: "medium", tags: ["general"] },
-    { name: "Whiteflies", icon: "🦗", risk: "high", tags: ["general"] },
-    { name: "Spider Mites", icon: "🕷️", risk: "high", tags: ["dry"] },
-    { name: "Cutworms", icon: "🐛", risk: "medium", tags: ["soil"] },
-    { name: "Thrips", icon: "🦟", risk: "low", tags: ["general"] },
-    { name: "Bollworm", icon: "🐛", risk: "high", tags: ["cotton", "corn"] },
-    { name: "Leafhopper", icon: "🦗", risk: "medium", tags: ["general"] },
-    { name: "Fruit Borer", icon: "🐛", risk: "high", tags: ["tomato", "brinjal"] },
-    { name: "Root Maggot", icon: "🐛", risk: "medium", tags: ["soil"] },
-    { name: "Japanese Beetle", icon: "🪲", risk: "low", tags: ["general"] }
+    { name: "Whiteflies", icon: "🦟", risk: "high", desc: "Tiny white flying insects that cause yellowing leaves", action: "Immediate monitoring and treatment recommended" },
+    { name: "Spider Mites", icon: "🕷️", risk: "high", desc: "Microscopic pests that cause stippling on leaves", action: "Immediate monitoring and treatment recommended" },
+    { name: "Armyworms", icon: "🐛", risk: "high", desc: "Caterpillars that destroy crops by eating leaves and stems", action: "Immediate monitoring and treatment recommended" },
+    { name: "Bollworm", icon: "🐛", risk: "high", desc: "Larvae that bore into bolls and fruits", action: "Immediate monitoring and treatment recommended" },
+    { name: "Brown Planthopper", icon: "🦗", risk: "high", desc: "Sucks plant sap and transmits viral diseases", action: "Immediate monitoring and treatment recommended" },
+    { name: "Aphids", icon: "🦟", risk: "medium", desc: "Small sap-sucking insects that transmit viruses", action: "Regular monitoring and soap-based spray recommended" },
+    { name: "Thrips", icon: "🦟", risk: "low", desc: "Insects that cause scarring and distortion", action: "Check undersides of leaves" }
   ];
 
   const ALL_DISEASES = [
-    { name: "Powdery Mildew", icon: "🌫️", risk: "medium", tags: ["humid"] },
-    { name: "Blight", icon: "🍂", risk: "high", tags: ["wet"] },
-    { name: "Root Rot", icon: "💧", risk: "high", tags: ["soil"] },
-    { name: "Leaf Spot", icon: "🌑", risk: "medium", tags: ["general"] },
-    { name: "Rust", icon: "🟧", risk: "medium", tags: ["general"] },
-    { name: "Wilt", icon: "🥀", risk: "high", tags: ["soil"] },
-    { name: "Mosaic Virus", icon: "🧬", risk: "high", tags: ["general"] },
-    { name: "Downy Mildew", icon: "🌿", risk: "medium", tags: ["humid"] }
+    { name: "Blight", icon: "🍂", risk: "high", desc: "Fungal disease causing brown spots and wilting", action: "Preventive measures should be taken immediately" },
+    { name: "Powdery Mildew", icon: "🌫️", risk: "medium", desc: "White powdery fungal growth on leaves", action: "Improve air circulation" },
+    { name: "Root Rot", icon: "💧", risk: "high", desc: "Decay of roots due to excess moisture", action: "Improve drainage immediately" },
+    { name: "Mosaic Virus", icon: "🧬", risk: "high", desc: "Viral infection causing mottled leaves", action: "Remove infected plants" },
+    { name: "Wilt", icon: "🥀", risk: "high", desc: "Vascular disease causing sudden wilting", action: "Check soil moisture and root health" }
   ];
 
-  const INITIAL_ALERTS = ALL_PESTS.slice(0, 5).map(p => ({ 
-    title: `${p.risk === "high" ? "High Risk" : "Moderate Risk"}: ${p.name}`, 
-    desc: `Active monitoring recommended for current field conditions.`, 
-    risk: p.risk, 
-    action: "Action Required" 
-  }));
+  const INITIAL_ALERTS = [
+    { title: "High Risk: Whiteflies", desc: "Tiny white flying insects that cause yellowing leaves", risk: "high", action: "Immediate monitoring and treatment recommended" },
+    { title: "High Risk: Spider Mites", desc: "Microscopic pests that cause stippling on leaves", risk: "high", action: "Immediate monitoring and treatment recommended" },
+    { title: "High Risk: Armyworms", desc: "Caterpillars that destroy crops by eating leaves and stems", risk: "high", action: "Immediate monitoring and treatment recommended" },
+    { title: "High Risk: Bollworm", desc: "Larvae that bore into bolls and fruits", risk: "high", action: "Immediate monitoring and treatment recommended" },
+    { title: "High Risk: Brown Planthopper", desc: "Sucks plant sap and transmits viral diseases", risk: "high", action: "Immediate monitoring and treatment recommended" },
+    { title: "High Risk: Blight", desc: "Fungal disease causing brown spots and wilting", risk: "high", action: "Preventive measures should be taken immediately" }
+  ];
 
   const [currentData, setCurrentData] = useState({
     alerts: INITIAL_ALERTS,
-    pests: ALL_PESTS,
-    diseases: ALL_DISEASES,
+    pests: ALL_PESTS.map(p => ({ ...p, risk: t(p.risk) || p.risk })),
+    diseases: ALL_DISEASES.map(d => ({ ...d, risk: t(d.risk) || d.risk })),
     stats: { pests: "10", diseases: "8", threats: "18", alerts: "10" },
     prevention: "",
     organic: "",
@@ -101,7 +97,6 @@ export default function Pests() {
       let alerts: any[] = [];
       let stats = { pests: "10", diseases: "8", threats: "18", alerts: "10" };
 
-      // Map weather values to translation keys
       const weatherKeyMap: Record<string, string> = {
         "hot-dry": "Dry",
         "humid": "Humid",
@@ -115,9 +110,9 @@ export default function Pests() {
         filteredPests = ALL_PESTS.filter(p => p.name === "Spider Mites");
         filteredDiseases = ALL_DISEASES.filter(d => d.name === "Wilt" || d.name === "Mosaic Virus");
         alerts = [
-          { title: "High Risk: Spider Mites", desc: "Microscopic pests that cause stippling on leaves", action: "Action Required", risk: "high" },
-          { title: "High Risk: Wilt", desc: "Vascular disease causing plant wilting and death", action: "Action Required", risk: "high" },
-          { title: "High Risk: Mosaic Virus", desc: "Viral disease causing mottled leaf patterns", action: "Action Required", risk: "high" }
+          { title: "High Risk: Spider Mites", desc: "Microscopic pests that cause stippling on leaves", action: "Immediate monitoring and treatment recommended", risk: "high" },
+          { title: "High Risk: Wilt", desc: "Vascular disease causing plant wilting and death", action: "Preventive measures should be taken immediately", risk: "high" },
+          { title: "High Risk: Mosaic Virus", desc: "Viral disease causing mottled leaf patterns", action: "Infected plants should be removed to prevent spread", risk: "high" }
         ];
         stats = { pests: "1", diseases: "2", threats: "3", alerts: "3" };
       } else if (selectedCrop === "cotton" && (weatherCondition === "humid" || weatherCondition === "wet-rainy")) {
@@ -127,26 +122,28 @@ export default function Pests() {
         stats = { pests: "0", diseases: "0", threats: "0", alerts: "0" };
       } else if (selectedCrop === "banana") {
         filteredPests = ALL_PESTS.filter(p => p.name === "Aphids" || p.name === "Thrips");
-        filteredDiseases = ALL_DISEASES.filter(d => d.name === "Wilt" || d.name === "Leaf Spot");
+        filteredDiseases = ALL_DISEASES.filter(d => d.name === "Wilt" || d.name === "Blight");
         alerts = [
-          { title: "High Risk: Panama Disease (Wilt)", desc: "Soil-borne fungal disease affecting banana roots.", action: "Action Required", risk: "high" },
-          { title: "Moderate Risk: Sigatoka (Leaf Spot)", desc: "Fungal disease causing leaf necrosis and fruit loss.", action: "Action Required", risk: "medium" }
+          { title: "High Risk: Panama Disease (Wilt)", desc: "Soil-borne fungal disease affecting banana roots.", action: "Preventive measures should be taken immediately", risk: "high" },
+          { title: "High Risk: Blight", desc: "Fungal disease causing brown spots and wilting", action: "Preventive measures should be taken immediately", risk: "high" }
         ];
         stats = { pests: "2", diseases: "2", threats: "4", alerts: "2" };
       } else {
-        alerts = ALL_PESTS.slice(0, 3).map(p => ({ title: `Moderate Risk: ${p.name}`, desc: `Standard monitoring required.`, risk: p.risk, action: "Action Required" }));
-        filteredPests = ALL_PESTS.slice(0, 6);
-        filteredDiseases = ALL_DISEASES.slice(0, 5);
-        stats = { pests: "6", diseases: "5", threats: "11", alerts: "3" };
+        alerts = INITIAL_ALERTS;
+        filteredPests = ALL_PESTS;
+        filteredDiseases = ALL_DISEASES;
+        stats = { pests: "7", diseases: "5", threats: "12", alerts: "6" };
       }
 
       // Dynamic Strategy Selection based on BOTH Crop and Weather
       const getStrategy = (type: string) => {
         const specific = t(`${selectedCrop}${type}${weatherSuffix}`);
         const cropOnly = t(`${selectedCrop}${type}`);
-        return specific && specific !== `${selectedCrop}${type}${weatherSuffix}` 
-          ? specific 
-          : (cropOnly && cropOnly !== `${selectedCrop}${type}` ? cropOnly : "");
+        const defaultStrat = t(`default${type}`);
+
+        if (specific && specific !== `${selectedCrop}${type}${weatherSuffix}`) return specific;
+        if (cropOnly && cropOnly !== `${selectedCrop}${type}`) return cropOnly;
+        return defaultStrat || "";
       };
 
       setCurrentData({
@@ -194,13 +191,13 @@ export default function Pests() {
                   </SelectTrigger>
                   <SelectContent className="rounded-xl max-h-[300px]">
                     <SelectItem value="all">{t("allCrops") || "All Crops"}</SelectItem>
-                    <SelectItem value="banana">{t("bananaWithScript")}</SelectItem>
-                    <SelectItem value="tomato">{t("tomatoWithScript")}</SelectItem>
-                    <SelectItem value="cotton">{t("cottonWithScript")}</SelectItem>
-                    <SelectItem value="maize">{t("maizeWithScript")}</SelectItem>
-                    <SelectItem value="wheat">{t("wheatWithScript")}</SelectItem>
-                    <SelectItem value="pepper">{t("pepperWithScript")}</SelectItem>
-                    <SelectItem value="rice">{t("riceWithScript")}</SelectItem>
+                    <SelectItem value="banana">{t("banana") || "Banana"}</SelectItem>
+                    <SelectItem value="tomato">{t("tomato") || "Tomato"}</SelectItem>
+                    <SelectItem value="cotton">{t("cotton") || "Cotton"}</SelectItem>
+                    <SelectItem value="maize">{t("maize") || "Maize"}</SelectItem>
+                    <SelectItem value="wheat">{t("wheat") || "Wheat"}</SelectItem>
+                    <SelectItem value="pepper">{t("pepper") || "Pepper"}</SelectItem>
+                    <SelectItem value="rice">{t("rice") || "Rice"}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -233,29 +230,37 @@ export default function Pests() {
           </CardContent>
         </Card>
 
-        {/* Active Alerts */}
+        {/* Active Alerts (Styled exactly as per image) */}
         <div className="space-y-6 mb-12">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="h-6 w-6 text-red-600" />
             <h3 className="text-2xl font-bold text-slate-900">{t("activeAlerts") || "Active Alerts"} ({currentData.alerts.length})</h3>
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-6">
             {currentData.alerts.length > 0 ? (
               currentData.alerts.map((alert, i) => (
-                <div key={i} className="bg-red-50 border border-red-100 rounded-2xl p-6 relative overflow-hidden group">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <motion.div 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  key={i} 
+                  className="bg-white border border-red-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group"
+                >
+                  <div className="flex gap-4">
+                    <div className="mt-1">
+                      <AlertTriangle className="h-6 w-6 text-red-600 shrink-0" />
+                    </div>
                     <div className="space-y-2">
                       <h4 className="text-xl font-bold text-red-600">{alert.title}</h4>
-                      <p className="text-slate-600 max-w-3xl">{alert.desc}</p>
-                      <div className="flex items-center gap-3 pt-2">
-                        <span className="bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider">Action Required</span>
-                        <span className="text-red-700 font-bold">{alert.action}</span>
+                      <p className="text-red-500 font-medium leading-relaxed">{alert.desc}</p>
+                      <div className="pt-2">
+                        <span className="text-red-800 font-bold">Action Required: </span>
+                        <span className="text-red-800 font-medium">{alert.action}</span>
                       </div>
                     </div>
-                    <Button variant="ghost" className="text-red-600 font-bold hover:bg-red-100">View Details</Button>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="py-12 bg-white border border-dashed border-slate-200 rounded-2xl text-center text-slate-400">
@@ -276,10 +281,10 @@ export default function Pests() {
           {currentData.prevention ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { title: t("preventionStrategy") || "Prevention", content: currentData.prevention, icon: ShieldCheck, color: "text-emerald-600", bg: "bg-emerald-50" },
-                { title: t("organicTreatment") || "Organic", content: currentData.organic, icon: Leaf, color: "text-green-600", bg: "bg-green-50" },
-                { title: t("monitoringTips") || "Monitoring", content: currentData.monitoring, icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
-                { title: t("ipmStrategy") || "IPM", content: currentData.ipm, icon: Stethoscope, color: "text-purple-600", bg: "bg-purple-50" }
+                { title: t("preventionStrategy") || "Prevention Strategies", content: currentData.prevention, icon: ShieldCheck, color: "text-emerald-600", bg: "bg-emerald-50" },
+                { title: t("organicTreatment") || "Organic Treatments", content: currentData.organic, icon: Leaf, color: "text-green-600", bg: "bg-green-50" },
+                { title: t("monitoringTips") || "Monitoring Tips", content: currentData.monitoring, icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
+                { title: t("ipmStrategy") || "Integrated Pest Management", content: currentData.ipm, icon: Stethoscope, color: "text-purple-600", bg: "bg-purple-50" }
               ].map((strat, i) => (
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
@@ -356,13 +361,13 @@ export default function Pests() {
                     <div>
                       <h4 className="font-bold text-slate-900">{item.name}</h4>
                       <div className="flex gap-2 mt-1">
-                        {item.tags.map(tag => <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase">{tag}</span>)}
+                        {item.tags?.map(tag => <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase">{tag}</span>)}
                       </div>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
-                    {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
-                    {item.risk}
+                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" || item.risk === t("high") ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                    {item.risk === "high" || item.risk === t("high") ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
+                    {String(item.risk).toUpperCase()}
                   </Badge>
                 </div>
               )) : <div className="p-8 bg-white border border-dashed rounded-2xl text-center text-slate-300">No pests found.</div>}
@@ -384,13 +389,13 @@ export default function Pests() {
                     <div>
                       <h4 className="font-bold text-slate-900">{item.name}</h4>
                       <div className="flex gap-2 mt-1">
-                        {item.tags.map(tag => <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase">{tag}</span>)}
+                        {item.tags?.map(tag => <span key={tag} className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase">{tag}</span>)}
                       </div>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
-                    {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
-                    {item.risk}
+                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" || item.risk === t("high") ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                    {item.risk === "high" || item.risk === t("high") ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
+                    {String(item.risk).toUpperCase()}
                   </Badge>
                 </div>
               )) : <div className="p-8 bg-white border border-dashed rounded-2xl text-center text-slate-300">No diseases found.</div>}
