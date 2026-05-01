@@ -27,6 +27,7 @@ const PricePredictor = () => {
   };
 
   const crops = ["Wheat", "Rice", "Cotton", "Onion", "Potato", "Soybean"];
+  const marketFactorsList = ["heavyRainfall", "exportBansLifted", "festiveDemand"];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 pb-12">
@@ -48,7 +49,7 @@ const PricePredictor = () => {
           {/* Controls */}
           <div className="lg:col-span-4 space-y-6">
             <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900">
-               <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter mb-6">Select Commodity</h3>
+               <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter mb-6">{t("selectCommodity")}</h3>
                <div className="flex flex-wrap gap-3 mb-8">
                  {crops.map(c => (
                    <button 
@@ -56,27 +57,27 @@ const PricePredictor = () => {
                      onClick={() => { setSelectedCrop(c); handlePredict(); }}
                      className={cn("px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest italic transition-all", selectedCrop === c ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 scale-105" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200")}
                    >
-                     {c}
+                     {t(c.toLowerCase())}
                    </button>
                  ))}
                </div>
 
                <div className="relative group mb-6">
                   <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <input type="text" placeholder="Search other crops (e.g. Maize)" className="w-full h-14 pl-14 pr-6 bg-slate-50 dark:bg-slate-800 border-none shadow-inner rounded-2xl text-xs font-bold italic outline-none focus:ring-2 focus:ring-indigo-500/50" />
+                  <input type="text" placeholder={t("searchOtherCrops")} className="w-full h-14 pl-14 pr-6 bg-slate-50 dark:bg-slate-800 border-none shadow-inner rounded-2xl text-xs font-bold italic outline-none focus:ring-2 focus:ring-indigo-500/50" />
                </div>
 
                <Button onClick={handlePredict} className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-xs font-black uppercase tracking-widest italic shadow-xl shadow-indigo-500/20">
-                 Run AI Forecast
+                 {t("runAiForecast")}
                </Button>
             </Card>
 
             <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-indigo-600 text-white space-y-4">
-               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200 italic">Current Mandi Rate (Avg)</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200 italic">{t("currentMandiRate")}</p>
                <h4 className="text-5xl font-black italic tracking-tighter leading-none flex items-center">
                  <IndianRupee className="h-8 w-8 mr-1 opacity-80" /> 2,450
                </h4>
-               <p className="text-xs font-bold text-indigo-100 uppercase tracking-widest">Per Quintal (100kg)</p>
+               <p className="text-xs font-bold text-indigo-100 uppercase tracking-widest">{t("perQuintal")}</p>
             </Card>
           </div>
 
@@ -89,8 +90,8 @@ const PricePredictor = () => {
                      <BarChart3 className="h-6 w-6" />
                    </div>
                    <div>
-                     <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">30-Day Forecast</h3>
-                     <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Analysis for {selectedCrop}</p>
+                     <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">{t("thirtyDayForecast")}</h3>
+                     <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">{t("analysisFor")} {t(selectedCrop.toLowerCase())}</p>
                    </div>
                  </div>
                  <div className="flex gap-2">
@@ -107,7 +108,7 @@ const PricePredictor = () => {
                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }} className="absolute inset-0 rounded-full border-4 border-indigo-500/20 border-t-indigo-600" />
                        <BrainCircuit className="absolute inset-0 m-auto h-8 w-8 text-indigo-600 animate-pulse" />
                      </div>
-                     <p className="text-xs font-black uppercase tracking-widest text-indigo-600 italic animate-pulse">Processing 10 Years Market Data...</p>
+                     <p className="text-xs font-black uppercase tracking-widest text-indigo-600 italic animate-pulse">{t("processingMarketData")}</p>
                    </motion.div>
                  ) : (
                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex-1 flex flex-col">
@@ -124,7 +125,7 @@ const PricePredictor = () => {
                               initial={{ height: 0 }} animate={{ height: `${height}%` }} transition={{ duration: 0.5, delay: i * 0.1 }}
                               className={cn("w-full max-w-[40px] rounded-t-xl transition-all", i === 6 ? "bg-indigo-600" : "bg-slate-200 dark:bg-slate-800 group-hover:bg-indigo-400")}
                             />
-                            <span className="text-[9px] font-black uppercase text-slate-400 italic">Day {i * 5}</span>
+                            <span className="text-[9px] font-black uppercase text-slate-400 italic">{t("dayLabel")} {i * 5}</span>
                           </div>
                         ))}
                      </div>
@@ -133,19 +134,19 @@ const PricePredictor = () => {
                         <div className="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-900/10 border-2 border-emerald-500/20">
                            <div className="flex justify-between items-start mb-4">
                              <TrendingUp className="h-8 w-8 text-emerald-600" />
-                             <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest">+12% Expected</span>
+                             <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-widest">{t("expectedRise")}</span>
                            </div>
-                           <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2">AI Verdict: HOLD</h4>
-                           <p className="text-xs font-bold text-slate-600 dark:text-slate-400 leading-relaxed italic">Prices are expected to rise to Rs. 2,750 within the next 14 days due to low market arrival. Store harvest in cold storage.</p>
+                           <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2">{t("aiVerdictHold")}</h4>
+                           <p className="text-xs font-bold text-slate-600 dark:text-slate-400 leading-relaxed italic">{t("pricePredictorInsight")}</p>
                         </div>
 
                         <div className="p-6 rounded-3xl bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700">
-                           <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4 italic flex items-center gap-2"><AlertCircle className="h-4 w-4" /> Market Factors</h4>
+                           <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4 italic flex items-center gap-2"><AlertCircle className="h-4 w-4" /> {t("marketFactors")}</h4>
                            <ul className="space-y-3">
-                             {["Heavy rainfall in producing states", "Export bans lifted by Govt", "High festive demand approaching"].map((f, i) => (
+                             {marketFactorsList.map((f, i) => (
                                <li key={i} className="flex items-start gap-2 text-xs font-bold text-slate-700 dark:text-slate-300 italic">
                                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="h-1.5 w-1.5 rounded-full bg-indigo-500 mt-1.5 flex-shrink-0" />
-                                 {f}
+                                 {t(f)}
                                </li>
                              ))}
                            </ul>

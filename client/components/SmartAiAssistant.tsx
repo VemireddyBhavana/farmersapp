@@ -158,7 +158,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
       const response = await axios.post("/api/smart-assistant", {
         text: query,
         imageData: newMessage.image,
-        language: currentLang
+        language: i18n.language
       }, { 
         timeout: 25000,
         headers: { "Content-Type": "application/json" }

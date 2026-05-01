@@ -87,7 +87,7 @@ export default function Dashboard() {
                   <HeartHandshake className="w-4 h-4" /> {t('empoweringFarmers')}
                 </div>
                 <h2 className="text-4xl font-extrabold leading-tight">
-                  {t('nationalAgriPortal')}, {user?.username || "Farmer"}
+                  {t('nationalAgriPortal')}, {user?.username || t("farmer")}
                 </h2>
                 <p className="text-lg text-primary-foreground/80 max-w-lg leading-relaxed border-l-2 border-primary-foreground/40 pl-4 mt-2">
                   {t('dashboardDesc')}
@@ -191,7 +191,7 @@ export default function Dashboard() {
           <section className="space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-2">
               <h2 className="text-xl font-bold tracking-tight text-foreground uppercase italic tracking-tighter">{t('aiCropDiagnostics')}</h2>
-              <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">REAL-WORLD TOOL</span>
+              <span className="bg-primary/5 text-primary border border-primary/10 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">{t("realWorldToolBadge")}</span>
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <Link to="/crop-doctor" className="block group">
@@ -297,7 +297,7 @@ export default function Dashboard() {
             </Link>
           </div>
           <div className="w-full md:w-1/2 aspect-video rounded-xl overflow-hidden shadow-2xl relative z-10 border-4 border-white/20">
-            <img src="/tractor_premium.png" className="w-full h-full object-cover" alt="Premium Tractor" />
+            <img src="/tractor_premium.png" className="w-full h-full object-cover" alt={t("premiumTractorAlt")} />
           </div>
           <TractorIcon className="absolute right-[-40px] top-[-40px] h-80 w-80 text-primary/10 opacity-50 -rotate-12 group-hover:rotate-0 transition-transform duration-700" />
         </div>

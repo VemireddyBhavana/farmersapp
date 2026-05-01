@@ -136,7 +136,7 @@ export default function HistoryDashboard() {
                       </h4>
                       <p className="text-xs text-slate-500 font-bold uppercase tracking-tight truncate max-w-md">
                         {item.type === "soil" ? `N:${item.inputData.n} P:${item.inputData.p} K:${item.inputData.k}` : 
-                         item.type === "disease" ? result.treatment : `Forecast for ${item.inputData.crop}`}
+                         item.type === "disease" ? item.result.treatment : `Forecast for ${item.inputData.crop}`}
                       </p>
                     </div>
                     <div className="pr-6">

@@ -52,6 +52,53 @@ export default function Pests() {
     organic: t("regularMonitoringOrganic") || "Monitor regularly."
   };
 
+  const CROP_DATA: Record<string, any> = {
+    tomato: {
+      pests: [
+        { name: t("pest_fruit_borer"), icon: "🐛", desc: t("pest_fruit_borer_desc"), risk: t("high") },
+        { name: t("pest_whitefly"), icon: "🦟", desc: t("pest_whitefly_desc"), risk: t("medium") }
+      ],
+      diseases: [
+        { name: t("dis_early_blight"), icon: "🍂", desc: t("dis_early_blight_desc"), risk: t("high") },
+        { name: t("dis_fusarium_wilt"), icon: "🥀", desc: t("dis_fusarium_wilt_desc"), risk: t("medium") }
+      ],
+      stats: { pests: "2", diseases: "2", threats: "4", alerts: "2" }
+    },
+    cotton: {
+      pests: [
+        { name: t("pest_pink_bollworm"), icon: "🐛", desc: t("pest_pink_bollworm_desc"), risk: t("high") },
+        { name: t("pest_jassids"), icon: "🦗", desc: t("pest_jassids_desc"), risk: t("medium") }
+      ],
+      diseases: [
+        { name: t("dis_bacterial_blight"), icon: "💧", desc: t("dis_bacterial_blight_desc"), risk: t("medium") },
+        { name: t("dis_grey_mildew"), icon: "🌫️", desc: t("dis_grey_mildew_desc"), risk: t("low") }
+      ],
+      stats: { pests: "2", diseases: "2", threats: "4", alerts: "1" }
+    },
+    maize: {
+      pests: [
+        { name: t("pest_fall_armyworm"), icon: "🐛", desc: t("pest_fall_armyworm_desc"), risk: t("high") },
+        { name: t("pest_stem_borer"), icon: "🦗", desc: t("pest_stem_borer_desc"), risk: t("medium") }
+      ],
+      diseases: [
+        { name: t("dis_turcicum_blight"), icon: "🍂", desc: t("dis_turcicum_blight_desc"), risk: t("medium") },
+        { name: t("dis_downy_mildew"), icon: "🌿", desc: t("dis_downy_mildew_desc"), risk: t("low") }
+      ],
+      stats: { pests: "2", diseases: "2", threats: "4", alerts: "1" }
+    },
+    wheat: {
+      pests: [
+        { name: t("pest_aphids"), icon: "🦟", desc: t("pest_aphids_desc"), risk: t("medium") },
+        { name: t("pest_termites"), icon: "🐜", desc: t("pest_termites_desc"), risk: t("low") }
+      ],
+      diseases: [
+        { name: t("dis_yellow_rust"), icon: "🟧", desc: t("dis_yellow_rust_desc"), risk: t("high") },
+        { name: t("dis_loose_smut"), icon: "⬛", desc: t("dis_loose_smut_desc"), risk: t("medium") }
+      ],
+      stats: { pests: "2", diseases: "2", threats: "4", alerts: "2" }
+    }
+  };
+
   const [currentData, setCurrentData] = useState(DEFAULT_DATA);
   const [analysisMetrics, setAnalysisMetrics] = useState({ confidence: 0, timestamp: "" });
   const recommendationsRef = useRef<HTMLDivElement>(null);
@@ -61,7 +108,23 @@ export default function Pests() {
     setShowRecommendations(false); 
     
     setTimeout(() => {
-      setCurrentData(DEFAULT_DATA);
+      const cropInfo = CROP_DATA[selectedCrop] || DEFAULT_DATA;
+      const weatherKey = weatherCondition === "hot-dry" ? "hot" : weatherCondition === "humid" ? "rain" : "clear";
+      const recKey = `rec_${selectedCrop}_${weatherKey}`;
+      
+      setCurrentData({
+        ...cropInfo,
+        alerts: [
+          { 
+            title: t("expertRecommendation") || "AI Expert Advisory", 
+            desc: t(recKey) || t("noSpecificThreats"), 
+            action: t("followIpmsGuidelines") || "Follow IPM Guidelines" 
+          }
+        ],
+        prevention: t(`${selectedCrop}Prevention`) || t("maintainFieldHygiene"),
+        organic: t(`${selectedCrop}Organic`) || t("regularMonitoringOrganic")
+      });
+
       setAnalysisMetrics({
         confidence: Number((94 + Math.random() * 5).toFixed(1)),
         timestamp: new Date().toLocaleTimeString()

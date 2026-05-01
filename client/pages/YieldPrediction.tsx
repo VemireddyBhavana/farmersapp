@@ -26,6 +26,7 @@ import {
   ExternalLink,
   BarChart3
 } from "lucide-react";
+import { useLanguage } from "@/lib/LanguageContext";
 import {
   LineChart,
   Line,
@@ -40,6 +41,7 @@ import {
 import { useLocation } from "@/lib/LocationContext";
 
 const YieldPrediction = () => {
+  const { t } = useLanguage();
   const { location } = useLocation();
   const [formData, setFormData] = useState({
     crop: "Rice",
@@ -104,8 +106,8 @@ const YieldPrediction = () => {
                 <Sprout size={20} />
              </div>
              <div>
-                <h1 className="font-bold text-slate-800 tracking-tight leading-none">Agri Intelligence Suite</h1>
-                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-1">Production Hub v4.8</p>
+                <h1 className="font-bold text-slate-800 tracking-tight leading-none">{t("agriIntelligenceSuite")}</h1>
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mt-1">{t("productionHub")} v4.8</p>
              </div>
           </div>
 
@@ -120,10 +122,10 @@ const YieldPrediction = () => {
             </div>
             <div className="h-8 w-[1px] bg-slate-200"></div>
             <div className="text-right">
-                <p className="text-[10px] text-slate-400 font-bold uppercase">Status</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase">{t("status")}</p>
                 <div className="flex items-center gap-1.5 justify-end">
                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                   <span className="text-xs font-bold text-emerald-600">SECURE CONNECT</span>
+                   <span className="text-xs font-bold text-emerald-600">{t("secureConnect")}</span>
                 </div>
             </div>
           </div>
@@ -143,12 +145,12 @@ const YieldPrediction = () => {
                <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-lg shadow-emerald-200">
                   <Zap size={22} />
                </div>
-               <h3 className="text-xl font-extrabold tracking-tight text-slate-800">Intelligence Parameters</h3>
+               <h3 className="text-xl font-extrabold tracking-tight text-slate-800">{t("intelligenceParameters")}</h3>
             </div>
 
             <form onSubmit={handlePredict} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Crop Selection</label>
+                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">{t("cropSelection")}</label>
                 <div className="grid grid-cols-2 gap-2">
                    {["Rice", "Wheat", "Cotton", "Maize"].map(c => (
                      <button 
@@ -157,7 +159,7 @@ const YieldPrediction = () => {
                        onClick={() => setFormData({...formData, crop: c})}
                        className={`py-3 rounded-2xl text-xs font-bold border-2 transition-all ${formData.crop === c ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-md shadow-emerald-100" : "border-slate-100 bg-slate-50 text-slate-500 hover:border-slate-200"}`}
                      >
-                        {c}
+                        {t(c.toLowerCase())}
                      </button>
                    ))}
                 </div>
@@ -165,7 +167,7 @@ const YieldPrediction = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Land Area (Acres)</label>
+                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">{t("landAreaAcres")}</label>
                   <input 
                     type="number"
                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
@@ -174,31 +176,31 @@ const YieldPrediction = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Soil Type</label>
+                  <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">{t("soilTypeLabel")}</label>
                   <select 
                     className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
                     value={formData.soil}
                     onChange={(e) => setFormData({...formData, soil: e.target.value})}
                   >
-                    <option>Alluvial</option>
-                    <option>Black</option>
-                    <option>Clay</option>
-                    <option>Loamy</option>
+                    <option value="Alluvial">{t("alluvial")}</option>
+                    <option value="Black">{t("blackSoil")}</option>
+                    <option value="Clay">{t("clay")}</option>
+                    <option value="Loamy">{t("loamy")}</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">Irrigation</label>
+                <label className="text-[11px] font-black uppercase text-slate-400 tracking-wider">{t("irrigationLabel")}</label>
                 <select 
                   className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-4 text-sm font-bold focus:border-emerald-500 outline-none transition-all"
                   value={formData.irrigation}
                   onChange={(e) => setFormData({...formData, irrigation: e.target.value})}
                 >
-                  <option>Borewell</option>
-                  <option>Canal</option>
-                  <option>Rain-fed</option>
-                  <option>Drip</option>
+                  <option value="Borewell">{t("borewell")}</option>
+                  <option value="Canal">{t("canal")}</option>
+                  <option value="Rain-fed">{t("rainFed")}</option>
+                  <option value="Drip">{t("drip")}</option>
                 </select>
               </div>
 
@@ -210,12 +212,12 @@ const YieldPrediction = () => {
                 {isCalculating ? (
                   <>
                     <Activity className="animate-spin" size={20} />
-                    Calculating ML Insights...
+                    {t("calculatingMlInsights")}
                   </>
                 ) : (
                   <>
                     <Target size={20} />
-                    RUN PREDICTIVE ENGINE
+                    {t("runPredictiveEngine")}
                   </>
                 )}
               </button>
@@ -232,13 +234,13 @@ const YieldPrediction = () => {
                     <MapIcon size={24} className="text-emerald-400" />
                 </div>
                 <div>
-                   <h4 className="font-extrabold text-lg">Sentinel Hub Link</h4>
-                   <p className="text-xs text-emerald-300 font-medium">Real-World NDVI Stream Active</p>
+                   <h4 className="font-extrabold text-lg">{t("sentinelHubLink")}</h4>
+                   <p className="text-xs text-emerald-300 font-medium">{t("ndviStreamActive")}</p>
                 </div>
              </div>
              <div className="mt-6 flex items-center gap-2 bg-emerald-800/50 w-fit px-3 py-1 rounded-full border border-emerald-700/50">
                 <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">Satellite Sync 100%</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">{t("satelliteSync")} 100%</span>
              </div>
           </div>
         </div>
@@ -257,8 +259,8 @@ const YieldPrediction = () => {
                   <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-6">
                     <History size={48} className="text-slate-300" />
                   </div>
-                  <h2 className="text-2xl font-black text-slate-500">Ready for Analysis</h2>
-                  <p className="max-w-xs mt-4 text-sm font-medium leading-relaxed"> Configure your farm parameters to sync with ML models and satellite metrics.</p>
+                  <h2 className="text-2xl font-black text-slate-500">{t("readyForAnalysis")}</h2>
+                  <p className="max-w-xs mt-4 text-sm font-medium leading-relaxed"> {t("configureFarmParams")}</p>
                </motion.div>
              ) : isCalculating ? (
                <motion.div 
@@ -273,8 +275,8 @@ const YieldPrediction = () => {
                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-600 font-black text-2xl">ML</div>
                   </div>
                   <div className="text-center">
-                     <h3 className="text-2xl font-black text-slate-800">Processing Yield Matrix</h3>
-                     <p className="text-slate-400 font-bold text-sm tracking-widest uppercase mt-2">Syncing satellite vegetation health...</p>
+                     <h3 className="text-2xl font-black text-slate-800">{t("processingYieldMatrix")}</h3>
+                     <p className="text-slate-400 font-bold text-sm tracking-widest uppercase mt-2">{t("syncingSatelliteHealth")}</p>
                   </div>
                </motion.div>
              ) : (
@@ -287,26 +289,26 @@ const YieldPrediction = () => {
                  {/* METRICS GRID */}
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
-                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Predicted Yield</p>
-                       <h2 className="text-5xl font-black text-slate-800 relative z-10">{result.yield} <span className="text-base font-bold text-slate-400">Tons</span></h2>
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">{t("predictedYieldLabel")}</p>
+                       <h2 className="text-5xl font-black text-slate-800 relative z-10">{result.yield} <span className="text-base font-bold text-slate-400">{t("tons")}</span></h2>
                        <div className="mt-4 flex items-center gap-2 text-emerald-600 font-bold text-xs relative z-10 bg-emerald-50 w-fit px-3 py-1 rounded-full">
                           <TrendingUp size={14} /> AI Model Confirmed
                        </div>
                     </div>
 
                     <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
-                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Market Revenue</p>
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">{t("marketRevenue")}</p>
                        <h2 className="text-5xl font-black text-blue-600 relative z-10">{result.profit}</h2>
                        <div className="mt-4 flex items-center gap-2 text-blue-600 font-bold text-xs relative z-10 bg-blue-50 w-fit px-3 py-1 rounded-full">
-                          <Wallet size={14} /> Projected Price
+                          <Wallet size={14} /> {t("projectedPrice")}
                        </div>
                     </div>
 
                     <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-200 relative overflow-hidden group">
-                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">Farm Risk Index</p>
+                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1 relative z-10">{t("farmRiskIndex")}</p>
                        <h2 className={`text-5xl font-black relative z-10 ${result.risk === "Low" ? "text-emerald-600" : "text-red-500"}`}>{result.risk}</h2>
                        <div className="mt-4 flex items-center gap-2 text-slate-400 font-bold text-xs relative z-10">
-                          <AlertTriangle size={14} /> Climate Validated
+                          <AlertTriangle size={14} /> {t("climateValidated")}
                        </div>
                     </div>
                  </div>
@@ -316,8 +318,8 @@ const YieldPrediction = () => {
                     <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-200 h-[400px]">
                        <div className="flex items-center justify-between mb-8">
                           <div>
-                            <h4 className="font-extrabold text-lg">Growth Trajectory</h4>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ML Predicted Curve</p>
+                            <h4 className="font-extrabold text-lg">{t("growthTrajectory")}</h4>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t("mlPredictedCurve")}</p>
                           </div>
                           <BarChart3 size={20} className="text-slate-400" />
                        </div>
@@ -345,8 +347,8 @@ const YieldPrediction = () => {
                     <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-200 h-[400px]">
                        <div className="flex items-center justify-between mb-8">
                           <div>
-                            <h4 className="font-extrabold text-lg">Vegetation Health</h4>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">NDVI Index Trend</p>
+                            <h4 className="font-extrabold text-lg">{t("vegetationHealth")}</h4>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t("ndviIndexTrend")}</p>
                           </div>
                           <Activity size={20} className="text-blue-500" />
                        </div>
@@ -375,7 +377,7 @@ const YieldPrediction = () => {
                        <div className="p-3 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20">
                           <Cpu size={24} />
                        </div>
-                       <h3 className="text-3xl font-black tracking-tight">AI Tactical Advisor</h3>
+                       <h3 className="text-3xl font-black tracking-tight">{t("aiTacticalAdvisor")}</h3>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

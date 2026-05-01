@@ -34,7 +34,7 @@ export default function CropHealthMonitor() {
                                 {t('aiCropDoctor')}
                             </h1>
                             <p className="text-lg md:text-xl font-bold text-emerald-100/80 max-w-2xl mx-auto italic">
-                                “Analyze crop and farm health instantly using smart detection”
+                                {t("analyzeCropHealthTagline")}
                             </p>
                         </div>
                     </div>
@@ -79,8 +79,8 @@ export default function CropHealthMonitor() {
                             exit={{ opacity: 0, x: -20 }}
                             className="bg-white/40 backdrop-blur-lg rounded-[3rem] p-12 border-2 border-dashed border-emerald-200 text-center space-y-6"
                         >
-                            <h3 className="text-3xl font-black text-slate-800 uppercase italic tracking-tighter">Ready to Begin?</h3>
-                            <p className="text-slate-500 font-bold text-lg max-w-md mx-auto">Select a mode above to start analyzing your crops or scanning your entire farm area.</p>
+                            <h3 className="text-3xl font-black text-slate-800 uppercase italic tracking-tighter">{t("readyToBegin")}</h3>
+                            <p className="text-slate-500 font-bold text-lg max-w-md mx-auto">{t("selectModeToStart")}</p>
                             <div className="flex justify-center gap-4 opacity-20">
                                 <Leaf className="h-12 w-12" />
                                 <Scan className="h-12 w-12" />
@@ -102,9 +102,9 @@ export default function CropHealthMonitor() {
                                     onClick={() => setMode("hub")}
                                     className="font-black uppercase text-xs italic text-slate-500 hover:text-emerald-600"
                                 >
-                                    <ArrowLeft className="mr-2 h-4 w-4" /> Change Mode
+                                    <ArrowLeft className="mr-2 h-4 w-4" /> {t("changeMode")}
                                 </Button>
-                                <Badge className="bg-emerald-500 text-white border-none font-black px-4 py-1.5 rounded-full uppercase italic">Single Leaf Diagnosis</Badge>
+                                <Badge className="bg-emerald-500 text-white border-none font-black px-4 py-1.5 rounded-full uppercase italic">{t("singleLeafDiagnosis")}</Badge>
                             </div>
                             <DiseaseDetection />
                         </motion.div>
@@ -126,7 +126,7 @@ export default function CropHealthMonitor() {
                                 >
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Change Mode
                                 </Button>
-                                <Badge className="bg-blue-500 text-white border-none font-black px-4 py-1.5 rounded-full uppercase italic">Whole Farm Scan</Badge>
+                                <Badge className="bg-blue-500 text-white border-none font-black px-4 py-1.5 rounded-full uppercase italic">{t("wholeFarmScan")}</Badge>
                             </div>
                             <FarmAreaScanner />
                         </motion.div>
