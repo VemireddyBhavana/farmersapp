@@ -161,11 +161,11 @@ export default function Pests() {
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 text-slate-900 pb-20 font-sans">
+    <div className="min-h-screen bg-background text-foreground pb-20 font-sans">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tight">
             {t("pestsAndDisease")}
           </h1>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
@@ -174,18 +174,18 @@ export default function Pests() {
         </div>
 
         {/* Monitoring Setup Card */}
-        <Card className="bg-white border-none shadow-sm rounded-2xl mb-12 overflow-hidden">
+        <Card className="bg-card border-none shadow-sm rounded-2xl mb-12 overflow-hidden">
           <CardContent className="p-8">
             <div className="flex items-center gap-2 mb-8">
               <Eye className="h-6 w-6 text-orange-500" />
-              <h3 className="text-xl font-bold text-slate-900">{t("fieldInputCenter")}</h3>
+              <h3 className="text-xl font-bold text-foreground">{t("fieldInputCenter")}</h3>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 items-end">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 ml-1">{t("selectYourCrop")}</label>
+                <label className="text-sm font-bold text-muted-foreground ml-1">{t("selectYourCrop")}</label>
                 <Select value={selectedCrop} onValueChange={(val) => { setSelectedCrop(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-white border-slate-200 h-12 rounded-xl focus:ring-orange-500 text-slate-700">
+                  <SelectTrigger className="bg-background border-border h-12 rounded-xl focus:ring-orange-500 text-foreground">
                     <SelectValue placeholder={t("selectYourCrop")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl max-h-[300px]">
@@ -202,9 +202,9 @@ export default function Pests() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-slate-700 ml-1">{t("currentWeather")}</label>
+                <label className="text-sm font-bold text-muted-foreground ml-1">{t("currentWeather")}</label>
                 <Select value={weatherCondition} onValueChange={(val) => { setWeatherCondition(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-white border-slate-200 h-12 rounded-xl focus:ring-orange-500 text-slate-700">
+                  <SelectTrigger className="bg-background border-border h-12 rounded-xl focus:ring-orange-500 text-foreground">
                     <SelectValue placeholder={t("currentWeather")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
@@ -233,7 +233,7 @@ export default function Pests() {
         <div className="space-y-6 mb-12">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="h-6 w-6 text-red-600" />
-            <h3 className="text-2xl font-bold text-slate-900">{t("activeAlerts")} ({currentData.alerts.length})</h3>
+            <h3 className="text-2xl font-bold text-foreground">{t("activeAlerts")} ({currentData.alerts.length})</h3>
           </div>
 
           <div className="grid gap-6">
@@ -244,7 +244,7 @@ export default function Pests() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                   key={i} 
-                  className="bg-white border border-red-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group"
+                  className="bg-card border border-red-100 dark:border-red-900/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group"
                 >
                   <div className="flex gap-4">
                     <div className="mt-1">
@@ -305,7 +305,7 @@ export default function Pests() {
               ))}
             </div>
           ) : (
-            <div className="bg-stone-50 border border-dashed border-slate-200 rounded-xl p-12 text-center text-slate-400">
+            <div className="bg-muted/30 border border-dashed border-border rounded-xl p-12 text-center text-muted-foreground">
                {t("inputFieldDetailsPlaceholder")}
             </div>
           )}
@@ -356,11 +356,11 @@ export default function Pests() {
             </div>
             <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.pests.length > 0 ? currentData.pests.map((item, i) => (
-                <div key={i} className="bg-white border border-slate-100 rounded-2xl p-5 flex items-center justify-between group">
+                <div key={i} className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between group">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-stone-50 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    <div className="h-12 w-12 bg-muted rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
                     <div>
-                      <h4 className="font-bold text-slate-900">{t(`${item.id}Name`)}</h4>
+                      <h4 className="font-bold text-foreground">{t(`${item.id}Name`)}</h4>
                       <div className="flex gap-2 mt-1">
                         <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase tracking-tighter">
                           {t(`${item.id}Desc`).substring(0, 15)}...
@@ -386,11 +386,11 @@ export default function Pests() {
             </div>
             <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.diseases.length > 0 ? currentData.diseases.map((item, i) => (
-                <div key={i} className="bg-white border border-slate-100 rounded-2xl p-5 flex items-center justify-between group">
+                <div key={i} className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between group">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-stone-50 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    <div className="h-12 w-12 bg-muted rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
                     <div>
-                      <h4 className="font-bold text-slate-900">{t(`${item.id}Name`)}</h4>
+                      <h4 className="font-bold text-foreground">{t(`${item.id}Name`)}</h4>
                       <div className="flex gap-2 mt-1">
                          <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase tracking-tighter">
                           {t(`${item.id}Desc`).substring(0, 15)}...

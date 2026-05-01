@@ -6,6 +6,17 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="w-10 h-10 rounded-full bg-primary/5 border border-primary/10" />
+    );
+  }
 
   return (
     <Button
