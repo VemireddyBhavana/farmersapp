@@ -5,8 +5,16 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
-    port: 8080,
+    host: true, // Enables external access
+    port: 8080, // Your app is running on this port
+    allowedHosts: [
+      "localhost",
+      ".ngrok-free.app",
+      ".ngrok-free.dev",
+      ".ngrok.io",
+      ".ngrok.dev",
+      ".gitpod.io"
+    ],
     fs: {
       allow: [".", "./client", "./shared"],
       deny: [".env", ".env.*", "*.{crt,pem}", "**/.git/**", "server/**"],

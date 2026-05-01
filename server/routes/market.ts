@@ -65,13 +65,13 @@ export const handleMarketPredict = async (req: Request, res: Response) => {
             prediction = {
                 current_price: 2200,
                 forecast: [
-                    { day: "Monday", price: 2210 },
-                    { day: "Tuesday", price: 2235 },
-                    { day: "Wednesday", price: 2220 },
-                    { day: "Thursday", price: 2240 },
-                    { day: "Friday", price: 2260 },
-                    { day: "Saturday", price: 2255 },
-                    { day: "Sunday", price: 2280 }
+                    { day: "Monday", date: "2024-05-06", price: 2210 },
+                    { day: "Tuesday", date: "2024-05-07", price: 2235 },
+                    { day: "Wednesday", date: "2024-05-08", price: 2220 },
+                    { day: "Thursday", date: "2024-05-09", price: 2240 },
+                    { day: "Friday", date: "2024-05-10", price: 2260 },
+                    { day: "Saturday", date: "2024-05-11", price: 2255 },
+                    { day: "Sunday", date: "2024-05-12", price: 2280 }
                 ]
             };
         }

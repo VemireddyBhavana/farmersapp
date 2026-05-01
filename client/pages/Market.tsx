@@ -264,8 +264,8 @@ export default function Market() {
                     <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
                       {(forecast || []).map((f, i) => (
                         <div key={i} className="flex-shrink-0 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-32 text-center">
-                          <p className="text-[10px] font-black uppercase opacity-60 mb-1">{f.day.substring(0, 3)}</p>
-                          <p className="text-sm font-bold opacity-70 mb-1">{f.date.split('-').slice(1).join('/')}</p>
+                          <p className="text-[10px] font-black uppercase opacity-60 mb-1">{f.day ? f.day.substring(0, 3) : i+1}</p>
+                          <p className="text-sm font-bold opacity-70 mb-1">{f.date ? f.date.split('-').slice(1).join('/') : "Forecast"}</p>
                           <p className="text-lg font-black italic">₹{Math.round(f.price)}</p>
                         </div>
                       ))}
@@ -370,8 +370,9 @@ export default function Market() {
           <Badge variant="outline" className="rounded-full px-4 py-2 font-bold bg-white text-emerald-700 border-emerald-100 uppercase tracking-widest text-[10px]">{t("updated")} 5m {t("ago")}</Badge>
         </div>
 
-        <div className="rounded-[2.5rem] border border-primary/5 bg-white shadow-xl overflow-hidden">
-          <Table>
+        <div className="rounded-[2.5rem] border border-primary/5 bg-white shadow-xl overflow-x-auto scrollbar-thin">
+          <div className="min-w-[1000px]">
+            <Table>
             <TableHeader className="bg-slate-50">
               <TableRow>
                 <TableHead className="font-black text-xs uppercase tracking-widest py-6 px-8">{t("commodityVarietyGrade")}</TableHead>
@@ -385,24 +386,24 @@ export default function Market() {
               {filteredMandiRates.length > 0 ? (
                 filteredMandiRates.map((item, idx) => (
                   <TableRow key={idx} className="hover:bg-slate-50 transition-colors">
-                    <TableCell className="py-6 px-8">
+                    <TableCell className="py-6 px-8 min-w-[250px]">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
                           <Leaf className="h-5 w-5" />
                         </div>
-                        <div>
-                          <p className="font-black text-lg">{item.crop}</p>
-                          <p className="text-xs text-muted-foreground font-bold">{t("standardGradeA")}</p>
+                        <div className="min-w-0">
+                          <p className="font-black text-lg truncate">{item.crop}</p>
+                          <p className="text-xs text-muted-foreground font-bold whitespace-nowrap">{t("standardGradeA")}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="py-6 px-8">
+                    <TableCell className="py-6 px-8 min-w-[200px]">
                       <div className="flex items-center gap-2">
-                        <div className="flex flex-col items-start">
-                          <Link to={`/mandi/${encodeURIComponent(item.id)}`}>
+                        <div className="flex flex-col items-start min-w-0">
+                          <Link to={`/mandi/${encodeURIComponent(item.id)}`} className="w-full">
                             <Button 
                               variant="link" 
-                              className="p-0 h-auto font-bold text-emerald-600 hover:text-emerald-700 decoration-emerald-600"
+                              className="p-0 h-auto font-bold text-emerald-600 hover:text-emerald-700 decoration-emerald-600 truncate w-full justify-start"
                             >
                               {item.mandi}
                             </Button>
@@ -411,33 +412,33 @@ export default function Market() {
                             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mandi + ", " + item.district + ", " + item.state)}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center text-[10px] text-emerald-500 hover:text-emerald-700 font-bold transition-colors"
+                            className="flex items-center text-[10px] text-emerald-500 hover:text-emerald-700 font-bold transition-colors whitespace-nowrap"
                           >
                             <MapPin className="h-3 w-3 mr-1" />
                             {t("viewOnMaps")}
                           </a>
                         </div>
-                        <Badge variant="secondary" className="text-[10px] font-black uppercase bg-slate-100">{item.state.toUpperCase()}</Badge>
+                        <Badge variant="secondary" className="text-[10px] font-black uppercase bg-slate-100 whitespace-nowrap shrink-0">{item.state.toUpperCase()}</Badge>
                       </div>
                     </TableCell>
                     <TableCell className="py-6 px-8 text-right">
                       <span className="font-black text-slate-700">{(Math.random() * 50 + 10).toFixed(2)}</span>
                     </TableCell>
-                    <TableCell className="py-6 px-8">
+                    <TableCell className="py-6 px-8 min-w-[300px]">
                       <div className="flex items-center justify-center gap-4">
-                        <div className="text-center">
-                          <p className="text-[10px] uppercase font-black text-muted-foreground">{t("min")}</p>
-                          <p className="font-bold text-slate-500">{item.min_price ? item.min_price.toLocaleString() : (parseInt(String(item.rate).replace(/[^0-9]/g, '')) - 200).toLocaleString()}</p>
+                        <div className="text-center min-w-[60px]">
+                          <p className="text-[10px] uppercase font-black text-muted-foreground whitespace-nowrap">{t("min")}</p>
+                          <p className="font-bold text-slate-500 whitespace-nowrap">{item.min_price ? item.min_price.toLocaleString() : (parseInt(String(item.rate).replace(/[^0-9]/g, '')) - 200).toLocaleString()}</p>
                         </div>
-                        <div className="h-8 w-px bg-slate-200" />
-                        <div className="text-center">
-                          <p className="text-[10px] uppercase font-black text-emerald-600">{t("modalPrice")}</p>
-                          <p className="font-black text-xl text-emerald-600">{typeof item.rate === 'number' ? `₹${item.rate.toLocaleString()}` : item.rate}</p>
+                        <div className="h-8 w-px bg-slate-200 shrink-0" />
+                        <div className="text-center min-w-[80px]">
+                          <p className="text-[10px] uppercase font-black text-emerald-600 whitespace-nowrap">{t("modalPrice")}</p>
+                          <p className="font-black text-xl text-emerald-600 whitespace-nowrap">{typeof item.rate === 'number' ? `₹${item.rate.toLocaleString()}` : item.rate}</p>
                         </div>
-                        <div className="h-8 w-px bg-slate-200" />
-                        <div className="text-center">
-                          <p className="text-[10px] uppercase font-black text-muted-foreground">{t("max")}</p>
-                          <p className="font-bold text-slate-500">{item.max_price ? item.max_price.toLocaleString() : (parseInt(String(item.rate).replace(/[^0-9]/g, '')) + 300).toLocaleString()}</p>
+                        <div className="h-8 w-px bg-slate-200 shrink-0" />
+                        <div className="text-center min-w-[60px]">
+                          <p className="text-[10px] uppercase font-black text-muted-foreground whitespace-nowrap">{t("max")}</p>
+                          <p className="font-bold text-slate-500 whitespace-nowrap">{item.max_price ? item.max_price.toLocaleString() : (parseInt(String(item.rate).replace(/[^0-9]/g, '')) + 300).toLocaleString()}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -464,7 +465,8 @@ export default function Market() {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+            </Table>
+          </div>
         </div>
       </div>
     </div>
