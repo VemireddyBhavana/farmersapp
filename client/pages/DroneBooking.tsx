@@ -22,11 +22,12 @@ const DroneBooking = () => {
   const [selectedService, setSelectedService] = useState("Pesticide");
   const [isBooking, setIsBooking] = useState(false);
 
-  const services = [
-    { name: "Pesticide", icon: Droplets, price: "₹499/Acre", desc: "Ultra-low volume precision spraying" },
-    { name: "Fertilizer", icon: Wind, price: "₹399/Acre", desc: "Nano-urea and liquid fertilizer" },
-    { name: "Mapping", icon: MapPin, price: "₹299/Acre", desc: "Multispectral crop health analysis" }
+  const serviceKeys = [
+    { key: "pesticide", icon: Droplets, price: "₹499/Acre", descKey: "pesticideSprayDesc" },
+    { key: "fertilizer", icon: Wind, price: "₹399/Acre", descKey: "fertilizerSprayDesc" },
+    { key: "mapping", icon: MapPin, price: "₹299/Acre", descKey: "mappingSprayDesc" }
   ];
+  const benefitKeys = ["coversAcre", "zeroCropDamage", "savesWater", "safeFromChemicals"];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 pb-12 overflow-hidden">
@@ -52,25 +53,25 @@ const DroneBooking = () => {
           {/* Booking Form */}
           <div className="lg:col-span-5 space-y-6">
              <Card className="p-8 rounded-[3rem] border-none shadow-xl bg-white dark:bg-slate-900">
-               <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter mb-6">Select Service</h3>
+               <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter mb-6">{t("selectService")}</h3>
                
                <div className="space-y-4 mb-8">
-                 {services.map((s) => (
+                 {serviceKeys.map((s) => (
                    <div 
-                     key={s.name}
-                     onClick={() => setSelectedService(s.name)}
-                     className={cn("p-4 rounded-2xl border-2 flex items-center justify-between cursor-pointer transition-all group", selectedService === s.name ? "border-cyan-500 bg-cyan-50 dark:bg-cyan-900/10" : "border-slate-100 dark:border-slate-800 hover:border-cyan-300")}
+                     key={s.key}
+                     onClick={() => setSelectedService(s.key)}
+                     className={cn("p-4 rounded-2xl border-2 flex items-center justify-between cursor-pointer transition-all group", selectedService === s.key ? "border-cyan-500 bg-cyan-50 dark:bg-cyan-900/10" : "border-slate-100 dark:border-slate-800 hover:border-cyan-300")}
                    >
                      <div className="flex items-center gap-4">
-                        <div className={cn("h-12 w-12 rounded-xl flex items-center justify-center transition-colors", selectedService === s.name ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/30" : "bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:bg-cyan-100 group-hover:text-cyan-600")}>
+                        <div className={cn("h-12 w-12 rounded-xl flex items-center justify-center transition-colors", selectedService === s.key ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/30" : "bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:bg-cyan-100 group-hover:text-cyan-600")}>
                            <s.icon className="h-5 w-5" />
                         </div>
                         <div>
-                           <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">{s.name} Spray</h4>
-                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{s.desc}</p>
+                           <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">{t(s.key)} {t("spray")}</h4>
+                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t(s.descKey)}</p>
                         </div>
                      </div>
-                     <span className={cn("text-lg font-black italic tracking-tighter", selectedService === s.name ? "text-cyan-600" : "text-slate-900 dark:text-white")}>{s.price}</span>
+                     <span className={cn("text-lg font-black italic tracking-tighter", selectedService === s.key ? "text-cyan-600" : "text-slate-900 dark:text-white")}>{s.price}</span>
                    </div>
                  ))}
                </div>
@@ -78,14 +79,14 @@ const DroneBooking = () => {
                <div className="space-y-4 mb-8">
                   <div className="flex justify-between">
                      <div className="w-[48%]">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">Date</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">{t("dateLabel")}</label>
                         <div className="relative group">
                           <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-cyan-500" />
                           <input type="date" className="w-full h-12 pl-10 pr-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs font-bold italic outline-none border-none focus:ring-2 focus:ring-cyan-500/50" />
                         </div>
                      </div>
                      <div className="w-[48%]">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">Time Slot</label>
+                        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">{t("timeSlot")}</label>
                         <div className="relative group">
                           <Clock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-cyan-500" />
                           <select className="w-full h-12 pl-10 pr-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs font-bold italic outline-none border-none focus:ring-2 focus:ring-cyan-500/50 appearance-none">
@@ -98,7 +99,7 @@ const DroneBooking = () => {
                   </div>
 
                   <div>
-                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">Total Area (Acres)</label>
+                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 italic mb-2 block">{t("totalArea")}</label>
                      <div className="relative group">
                         <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 group-focus-within:text-cyan-500" />
                         <input type="number" placeholder="e.g. 5" className="w-full h-12 pl-10 pr-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs font-bold italic outline-none border-none focus:ring-2 focus:ring-cyan-500/50" />
@@ -110,9 +111,9 @@ const DroneBooking = () => {
                  onClick={() => { setIsBooking(true); setTimeout(() => setIsBooking(false), 2000); }} 
                  className="w-full h-14 bg-cyan-600 hover:bg-cyan-700 text-white rounded-2xl text-xs font-black uppercase tracking-widest italic shadow-xl shadow-cyan-500/20"
                >
-                 {isBooking ? "Confirming..." : "Confirm Booking - ₹2495"}
+                 {isBooking ? t("confirming") : t("confirmBooking")}
                </Button>
-               <p className="text-[9px] font-bold text-slate-400 mt-4 text-center flex items-center justify-center gap-1 uppercase tracking-widest"><ShieldCheck className="h-3 w-3" /> 100% Certified Drone Pilots</p>
+               <p className="text-[9px] font-bold text-slate-400 mt-4 text-center flex items-center justify-center gap-1 uppercase tracking-widest"><ShieldCheck className="h-3 w-3" /> {t("certifiedPilots")}</p>
              </Card>
           </div>
 
@@ -124,18 +125,13 @@ const DroneBooking = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/80 to-transparent" />
                 
                 <div className="relative z-10 space-y-6">
-                   <div className="inline-flex px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-[10px] font-black uppercase tracking-widest animate-pulse">Save 30% Chemicals</div>
-                   <h2 className="text-4xl font-black uppercase italic tracking-tighter leading-none">The Future of <br/>Farming is Here</h2>
+                   <div className="inline-flex px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-[10px] font-black uppercase tracking-widest animate-pulse">{t("saveChemicals")}</div>
+                   <h2 className="text-4xl font-black uppercase italic tracking-tighter leading-none">{t("droneFuture")}</h2>
                    <div className="grid md:grid-cols-2 gap-4">
-                      {[
-                        "Covers 1 acre in just 7 mins",
-                        "Zero crop damage from tires",
-                        "Saves water and manual labor",
-                        "Safe from toxic chemicals"
-                      ].map((b, i) => (
+                      {benefitKeys.map((b, i) => (
                         <div key={i} className="flex items-center gap-2">
                            <CheckCircle2 className="h-5 w-5 text-cyan-500 drop-shadow-lg flex-shrink-0" />
-                           <span className="text-xs font-bold uppercase tracking-widest text-slate-200">{b}</span>
+                           <span className="text-xs font-bold uppercase tracking-widest text-slate-200">{t(b)}</span>
                         </div>
                       ))}
                    </div>
@@ -148,8 +144,8 @@ const DroneBooking = () => {
                      <Info className="h-5 w-5" />
                    </div>
                    <div>
-                     <h5 className="text-sm font-black uppercase tracking-tighter text-slate-900 dark:text-white mb-1">Pre-Flight Instructions</h5>
-                     <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Ensure no power lines cross your field. The pilot needs a 5x5m flat area for takeoff.</p>
+                     <h5 className="text-sm font-black uppercase tracking-tighter text-slate-900 dark:text-white mb-1">{t("preFlightInstructions")}</h5>
+                     <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">{t("preFlightDesc")}</p>
                    </div>
                  </Card>
                  <Card className="p-6 rounded-[2rem] border-none shadow-xl bg-slate-50 dark:bg-slate-800 flex items-start gap-4">
@@ -157,8 +153,8 @@ const DroneBooking = () => {
                      <Droplets className="h-5 w-5" />
                    </div>
                    <div>
-                     <h5 className="text-sm font-black uppercase tracking-tighter text-slate-900 dark:text-white mb-1">Chemical Mixing</h5>
-                     <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">Provide your own chemicals. Pilot will mix with RO water on site.</p>
+                     <h5 className="text-sm font-black uppercase tracking-tighter text-slate-900 dark:text-white mb-1">{t("chemicalMixing")}</h5>
+                     <p className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">{t("chemicalMixingDesc")}</p>
                    </div>
                  </Card>
              </div>

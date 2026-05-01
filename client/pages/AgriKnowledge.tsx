@@ -114,7 +114,7 @@ function EggProfitCalculator() {
         </div>
       </div>
       <div className="mt-6 p-5 bg-blue-600 text-white rounded-2xl text-center shadow-lg shadow-blue-200">
-        <p className="text-[10px] font-black uppercase tracking-widest opacity-80">Daily Feed Requirement</p>
+        <p className="text-[10px] font-black uppercase tracking-widest opacity-80">{t("dailyFeedRequirement")}</p>
         <p className="text-4xl font-black mt-1">{totalFeed.toFixed(2)} kg</p>
       </div>
     </div>
@@ -151,7 +151,7 @@ function ShrimpGrowthEstimator() {
         </div>
       </div>
       <div className="mt-6 p-5 bg-cyan-600 text-white rounded-2xl text-center shadow-lg shadow-cyan-200">
-        <p className="text-[10px] font-black uppercase tracking-widest opacity-80">Estimated Biomass Gain</p>
+        <p className="text-[10px] font-black uppercase tracking-widest opacity-80">{t("estimatedBiomassGain")}</p>
         <p className="text-4xl font-black mt-1">{growth.toFixed(2)} kg</p>
       </div>
     </div>
@@ -291,14 +291,14 @@ export default function AgriKnowledgeHub() {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <span className="inline-block px-5 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-8 shadow-2xl shadow-emerald-200/50">
-            Intelligent Farming Platform
+            {t("intelligentFarmingPlatform")}
           </span>
           <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter mb-8 leading-[0.9] lg:max-w-4xl mx-auto flex items-center justify-center gap-6">
             <BookOpen className="w-12 h-12 md:w-20 md:h-20 text-emerald-600" />
-            <span>Agri <span className="text-emerald-600">Farming</span> Knowledge Hub</span>
+            <span>{t("agriFarmingKnowledgeHubTitle")}</span>
           </h1>
           <p className="text-lg md:text-2xl text-slate-500 max-w-3xl mx-auto font-medium leading-relaxed">
-            Latest farming techniques, project reports, and livestock management guides.
+            {t("agriFarmingHubDesc")}
           </p>
         </motion.div>
       </div>
@@ -314,8 +314,8 @@ export default function AgriKnowledgeHub() {
         <section className="space-y-12">
           <SectionHeader 
             icon={Settings} 
-            title="Smart Farming Tools" 
-            subtitle="Use AI-powered tools to improve your farming decisions and maximize ROI" 
+            title={t("smartFarmingToolsTitle")} 
+            subtitle={t("smartFarmingToolsSubtitle")} 
           />
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -325,35 +325,35 @@ export default function AgriKnowledgeHub() {
                 <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
                   <Leaf className="w-5 h-5" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors">AI Crop Planning</h3>
+                <h3 className="text-xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors">{t("aiCropPlanningTitle")}</h3>
               </div>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black uppercase text-slate-400">Soil Type</label>
+                     <label className="text-[10px] font-black uppercase text-slate-400">{t("soilTypeLabel")}</label>
                      <select className="w-full rounded-xl border border-slate-200 text-sm py-2 px-3 bg-white font-bold outline-none focus:border-emerald-500" value={cropSoil} onChange={e => setCropSoil(e.target.value)}>
-                      <option value="">Type...</option>
-                      <option value="Black">Black Soil</option>
-                      <option value="Red">Red Soil</option>
-                      <option value="Sandy">Sandy Soil</option>
+                      <option value="">{t("typePlaceholder")}</option>
+                      <option value="Black">{t("blackSoilSimple")}</option>
+                      <option value="Red">{t("redSoilSimple")}</option>
+                      <option value="Sandy">{t("sandySoilSimple")}</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black uppercase text-slate-400">Season</label>
+                     <label className="text-[10px] font-black uppercase text-slate-400">{t("seasonLabel")}</label>
                      <select className="w-full rounded-xl border border-slate-200 text-sm py-2 px-3 bg-white font-bold outline-none focus:border-emerald-500" value={cropSeason} onChange={e => setCropSeason(e.target.value)}>
-                      <option value="">Select...</option>
-                      <option value="Kharif">Kharif</option>
-                      <option value="Rabi">Rabi</option>
-                      <option value="Summer">Summer</option>
+                      <option value="">{t("selectSeason")}</option>
+                      <option value="Kharif">{t("kharifLabel")}</option>
+                      <option value="Rabi">{t("rabiLabel")}</option>
+                      <option value="Summer">{t("summerLabel")}</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                     <label className="text-[10px] font-black uppercase text-slate-400">Water</label>
+                     <label className="text-[10px] font-black uppercase text-slate-400">{t("waterLabel")}</label>
                      <select className="w-full rounded-xl border border-slate-200 text-sm py-2 px-3 bg-white font-bold outline-none focus:border-emerald-500" value={cropWater} onChange={e => setCropWater(e.target.value)}>
-                      <option value="">Availability...</option>
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
+                      <option value="">{t("selectWaterAvailability")}</option>
+                      <option value="Low">{t("lowWaterLabel")}</option>
+                      <option value="Medium">{t("mediumWaterLabel")}</option>
+                      <option value="High">{t("highWaterLabel")}</option>
                     </select>
                   </div>
                 </div>
@@ -365,9 +365,9 @@ export default function AgriKnowledgeHub() {
                   {isPlanning ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Processing AI Data...</span>
+                      <span>{t("processingAiData")}</span>
                     </>
-                  ) : "Analyze Soil Potential"}
+                  ) : t("analyzeSoilPotential")}
                 </Button>
                 <AnimatePresence>
                   {cropSuggestion && !isPlanning && (
@@ -380,7 +380,7 @@ export default function AgriKnowledgeHub() {
                       <div className="absolute top-0 right-0 p-2 opacity-10">
                         <Leaf className="w-12 h-12" />
                       </div>
-                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Recommended Crop</p>
+                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">{t("recommendedCropLabel")}</p>
                       <p className="text-2xl font-black text-emerald-900">{cropSuggestion.crop}</p>
                       <p className="text-xs text-emerald-800/70 mt-2 font-medium leading-relaxed">{cropSuggestion.tip}</p>
                     </motion.div>
@@ -395,21 +395,21 @@ export default function AgriKnowledgeHub() {
                 <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center">
                   <Calculator className="w-5 h-5" />
                 </div>
-                <h3 className="text-xl font-black text-slate-900">Profit & Loss Analyzer</h3>
+                <h3 className="text-xl font-black text-slate-900">{t("profitLossAnalyzerTitle")}</h3>
               </div>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400">Total Investment</label>
+                    <label className="text-[9px] font-black uppercase text-slate-400">{t("totalInvestmentLabel")}</label>
                     <input type="number" placeholder="₹ Value" className="w-full rounded-xl border border-slate-200 py-2.5 px-4 text-sm font-bold outline-none focus:border-slate-900 transition-colors" value={investment} onChange={e => setInvestment(e.target.value)} />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[9px] font-black uppercase text-slate-400">Recurring Expenses</label>
+                    <label className="text-[9px] font-black uppercase text-slate-400">{t("recurringExpensesLabel")}</label>
                     <input type="number" placeholder="₹ Value" className="w-full rounded-xl border border-slate-200 py-2.5 px-4 text-sm font-bold outline-none focus:border-slate-900 transition-colors" value={expenses} onChange={e => setExpenses(e.target.value)} />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black uppercase text-slate-400">Projected Gross Revenue</label>
+                  <label className="text-[9px] font-black uppercase text-slate-400">{t("projectedGrossRevenueLabel")}</label>
                   <input type="number" placeholder="₹ Total Earnings" className="w-full rounded-xl border border-slate-200 py-2.5 px-4 text-sm font-bold outline-none focus:border-slate-900 transition-colors" value={revenue} onChange={e => setRevenue(e.target.value)} />
                 </div>
                 <Button 
@@ -417,7 +417,7 @@ export default function AgriKnowledgeHub() {
                   disabled={!isCalcValid} 
                   className="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white font-black rounded-xl shadow-lg transition-transform active:scale-95"
                 >
-                  Run Fiscal Analysis
+                  {t("runFiscalAnalysis")}
                 </Button>
                 <AnimatePresence>
                   {profitResult !== null && (
@@ -435,7 +435,7 @@ export default function AgriKnowledgeHub() {
                         {Math.abs(profitResult).toLocaleString('en-IN')}
                       </p>
                       <span className={cn("text-[10px] font-black uppercase tracking-[0.2em]", profitResult >= 0 ? "text-emerald-600" : "text-red-600")}>
-                        {profitResult >= 0 ? "Net Profit Projected" : "Operating Deficit"}
+                        {profitResult >= 0 ? t("netProfitProjected") : t("operatingDeficit")}
                       </span>
                     </motion.div>
                   )}
@@ -451,16 +451,16 @@ export default function AgriKnowledgeHub() {
                       <Beaker className="w-7 h-7" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black text-slate-900">Nutrient Optimization</h3>
-                      <p className="text-sm text-slate-500 font-medium max-w-sm">Get precise fertilization roadmaps based on your unique soil profile</p>
+                      <h3 className="text-2xl font-black text-slate-900">{t("nutrientOptimizationTitle")}</h3>
+                      <p className="text-sm text-slate-500 font-medium max-w-sm">{t("nutrientOptimizationDesc")}</p>
                     </div>
                  </div>
                  <div className="flex-1 max-w-sm">
                     <select className="w-full rounded-2xl border-2 border-emerald-100 py-3.5 px-5 text-sm font-bold outline-none bg-white shadow-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 transition-all" value={fertSoil} onChange={e => setFertSoil(e.target.value)}>
-                      <option value="">Select Soil Composition...</option>
-                      <option value="Black">Deep Black (Regur) Soil</option>
-                      <option value="Red">Laterite Red Soil</option>
-                      <option value="Sandy">Alluvial Sandy Soil</option>
+                      <option value="">{t("selectSoilComposition")}</option>
+                      <option value="Black">{t("blackSoilLabel")}</option>
+                      <option value="Red">{t("redSoilLabel")}</option>
+                      <option value="Sandy">{t("sandySoilLabel")}</option>
                     </select>
                  </div>
                </div>
@@ -474,18 +474,18 @@ export default function AgriKnowledgeHub() {
                     className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10"
                   >
                     <div className="bg-white p-5 rounded-2xl border-2 border-emerald-50 shadow-sm">
-                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Priority Crop</p>
+                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">{t("priorityCropLabel")}</p>
                       <p className="text-lg font-black text-slate-900 uppercase tracking-tight">{fertMap[fertSoil].crop}</p>
                     </div>
                     <div className="bg-white p-5 rounded-2xl border-2 border-emerald-50 shadow-sm">
-                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Recommended NPK</p>
+                      <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">{t("recommendedNpkLabel")}</p>
                       <p className="text-lg font-black text-slate-900 tracking-tight">{fertMap[fertSoil].fertilizer}</p>
                     </div>
                     <div className="bg-slate-900 p-6 rounded-2xl text-emerald-50 flex items-center">
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                            <Info className="w-4 h-4 text-emerald-400" />
-                           <span className="text-[10px] font-black uppercase text-emerald-400 tracking-widest">Agronomy Tip</span>
+                           <span className="text-[10px] font-black uppercase text-emerald-400 tracking-widest">{t("agronomyTipLabel")}</span>
                         </div>
                         <p className="text-xs font-medium leading-relaxed italic opacity-90">"{fertMap[fertSoil].tip}"</p>
                       </div>
@@ -503,8 +503,8 @@ export default function AgriKnowledgeHub() {
         <section className="space-y-16">
           <SectionHeader 
             icon={BookOpen} 
-            title="AgriFarming Knowledge Hub" 
-            subtitle="Latest farming techniques, project reports, and livestock management guides." 
+            title={t("agriFarmingKnowledgeHubTitle")} 
+            subtitle={t("agriFarmingHubDesc")} 
           />
 
           {/* 🔍 SEARCH AND FILTERS */}
@@ -513,7 +513,7 @@ export default function AgriKnowledgeHub() {
                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
                <input 
                 type="text" 
-                placeholder="Search cultivation library by name or category..." 
+                placeholder={t("searchCultivationLibrary")} 
                 className="w-full rounded-2xl border border-slate-200 py-4 pl-12 pr-6 text-sm font-semibold outline-none bg-white shadow-sm focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 transition-all" 
                 value={guideSearch} 
                 onChange={e => setGuideSearch(e.target.value)} 
@@ -546,7 +546,7 @@ export default function AgriKnowledgeHub() {
                     <div className="bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm transition-all hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full relative group">
                       {guide.featured && (
                         <div className="absolute top-6 left-6 z-10 px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full shadow-xl shadow-emerald-200/50">
-                          Featured Guide
+                          {t("featuredGuideBadge")}
                         </div>
                       )}
                       <div className="aspect-[16/9] overflow-hidden relative">
@@ -597,8 +597,8 @@ export default function AgriKnowledgeHub() {
                   <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                     <Search className="w-10 h-10 text-slate-300" />
                   </div>
-                  <h3 className="text-2xl font-black text-slate-900">No guides found</h3>
-                  <p className="text-slate-500 font-medium">Try adjusting your search terms to find specific cultivation roadmaps</p>
+                  <h3 className="text-2xl font-black text-slate-900">{t("noGuidesFound")}</h3>
+                  <p className="text-slate-500 font-medium">{t("tryAdjustingSearch")}</p>
                 </div>
               )}
             </AnimatePresence>

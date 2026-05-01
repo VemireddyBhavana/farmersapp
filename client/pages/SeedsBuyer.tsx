@@ -34,10 +34,12 @@ import { seedsData } from "@/lib/seedsData";
 const SidebarFilters = ({ 
     filters,
     setFilters
-}: any) => (
+}: any) => {
+    const { t } = useLanguage();
+    return (
     <div className="space-y-8 py-4">
         <div className="space-y-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">Seasonal Crops</h3>
+            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("seasonalCrops")}</h3>
             <div className="grid gap-2">
                 {["All", "Kharif", "Rabi", "Zaid"].map((season) => (
                     <label key={season} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 cursor-pointer transition-colors group">
@@ -55,7 +57,7 @@ const SidebarFilters = ({
                             onChange={() => setFilters((prev: any) => ({ ...prev, season }))}
                         />
                         <span className={cn("text-sm font-bold", filters.season === season ? "text-emerald-900" : "text-emerald-600/70")}>
-                            {season === "All" ? "All Seasons" : `${season} Season`}
+                            {season === "All" ? t("allSeasons") : `${t(season.toLowerCase())} ${t("seasonSuffix")}`}
                         </span>
                     </label>
                 ))}
@@ -64,8 +66,8 @@ const SidebarFilters = ({
 
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">Budget (₹)</h3>
-                <span className="text-xs font-black text-emerald-600">Up to ₹{filters.price}</span>
+                <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("budgetLabel")}</h3>
+                <span className="text-xs font-black text-emerald-600">{t("upTo")} ₹{filters.price}</span>
             </div>
             <div className="px-2">
                 <Slider 
@@ -84,7 +86,7 @@ const SidebarFilters = ({
         </div>
 
         <div className="space-y-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">Seed Technology</h3>
+            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("seedTechnology")}</h3>
             <div className="grid gap-2">
                 {["Hybrid", "Organic", "Non-GMO"].map((type) => (
                     <label key={type} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 cursor-pointer transition-colors group">
@@ -101,7 +103,7 @@ const SidebarFilters = ({
                                 }));
                             }}
                         />
-                        <span className="text-sm font-bold text-emerald-600/70 group-hover:text-emerald-900 transition-colors">{type}</span>
+                        <span className="text-sm font-bold text-emerald-600/70 group-hover:text-emerald-900 transition-colors">{t(type.toLowerCase().replace('-', ''))}</span>
                     </label>
                 ))}
             </div>
@@ -111,15 +113,16 @@ const SidebarFilters = ({
             <div className="p-3 bg-white/10 rounded-2xl w-fit">
                 <Zap className="h-6 w-6 text-emerald-400" />
             </div>
-            <h4 className="font-black leading-tight">Farmer's Pro <br /> Subscription</h4>
-            <p className="text-xs text-emerald-100/60 leading-relaxed font-medium">Get 10% extra discount on all seeds plus free expert advice.</p>
-            <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-xs uppercase tracking-widest h-12 rounded-xl">Upgrade Now</Button>
+            <h4 className="font-black leading-tight">{t("farmersProSubscription")}</h4>
+            <p className="text-xs text-emerald-100/60 leading-relaxed font-medium">{t("farmersProDesc")}</p>
+            <Button className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-xs uppercase tracking-widest h-12 rounded-xl">{t("upgradeNow")}</Button>
         </div>
     </div>
 );
 
 const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: any) => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     return (
         <motion.div
             ref={ref}
@@ -146,11 +149,11 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                     <div className="absolute top-5 left-5 z-10 flex flex-col gap-2">
                         {seed.rating > 4.7 && (
                             <Badge className="bg-emerald-600 text-white border-none px-4 py-2 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">
-                                Best Seller
+                                {t("bestSeller")}
                             </Badge>
                         )}
                         <Badge className="bg-amber-500 text-white border-none px-4 py-1.5 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl">
-                            {seed.season[0]} Season
+                            {t(seed.season[0].toLowerCase())} {t("seasonSuffix")}
                         </Badge>
                     </div>
 
@@ -160,13 +163,13 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                                 className="flex-1 h-12 rounded-xl bg-white text-emerald-900 font-black text-xs uppercase hover:bg-emerald-100"
                                 onClick={(e) => { e.stopPropagation(); onAddToCart(seed); }}
                             >
-                                <Plus className="h-4 w-4 mr-2" /> Add 
+                                <Plus className="h-4 w-4 mr-2" /> {t("add")} 
                             </Button>
                             <Button 
                                 className="flex-1 h-12 rounded-xl bg-emerald-500 text-white font-black text-xs uppercase hover:bg-emerald-400"
                                 onClick={(e) => { e.stopPropagation(); onBuyNow(seed); }}
                             >
-                                Buy Now
+                                {t("buyNow")}
                             </Button>
                         </div>
                     </div>
@@ -193,14 +196,14 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                 <CardFooter className="p-8 pt-0 flex flex-col gap-6 mt-auto">
                     <div className="w-full flex items-center justify-between bg-emerald-50/30 p-4 rounded-3xl border border-emerald-50/50">
                         <div className="space-y-0.5">
-                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Rate / {seed.unit}</p>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t("ratePerUnit")} {seed.unit}</p>
                             <p className="text-3xl font-black text-emerald-950 tracking-tighter">₹{seed.price}</p>
                         </div>
                         <div className="text-right">
                            <div className="flex items-center gap-1 text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1 justify-end">
-                                <Truck className="h-3 w-3" /> Same day
+                                <Truck className="h-3 w-3" /> {t("sameDayDelivery")}
                            </div>
-                           <p className="text-[10px] font-bold text-emerald-600/60 bg-emerald-100/50 px-2 py-1 rounded-lg">Stock: {seed.stock} units</p>
+                           <p className="text-[10px] font-bold text-emerald-600/60 bg-emerald-100/50 px-2 py-1 rounded-lg">{t("stockLabel")}: {seed.stock} {t("stockUnits")}</p>
                         </div>
                     </div>
                     
@@ -210,13 +213,13 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                             className="h-14 rounded-2xl border-emerald-100 text-emerald-900 font-black text-xs uppercase tracking-widest hover:bg-emerald-50 transition-all"
                             onClick={(e) => { e.stopPropagation(); onAddToCart(seed); }}
                         >
-                            Add to Cart
+                            {t("addToCart")}
                         </Button>
                         <Button 
                             className="h-14 rounded-2xl bg-emerald-900 text-white font-black text-xs uppercase tracking-widest hover:bg-emerald-800 shadow-xl shadow-emerald-900/10 transition-all"
                             onClick={(e) => { e.stopPropagation(); onBuyNow(seed); }}
                         >
-                            Quick Buy
+                            {t("quickBuy")}
                         </Button>
                     </div>
                 </CardFooter>
@@ -228,6 +231,7 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
 // --- Main Page Component ---
 
 const SeedsBuyer = () => {
+    const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [mobileNumber, setMobileNumber] = useState("");
@@ -291,14 +295,13 @@ const SeedsBuyer = () => {
                         className="max-w-xl space-y-6"
                     >
                         <Badge className="bg-emerald-500 text-emerald-950 border-none px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-[0.2em]">
-                            Direct to Farm Delivery
+                            {t("directToFarmDelivery")}
                         </Badge>
                         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.85]">
-                            Farmer's First <br />
-                            <span className="text-emerald-400 italic">Marketplace</span>
+                            {t("farmersFirstMarketplace")}
                         </h1>
                         <p className="text-emerald-100/60 text-lg font-medium leading-relaxed">
-                            Certified premium seeds from India's leading agricultural scientists. Trusted by 2M+ farmers nationwide.
+                            {t("seedsMarketplaceDesc")}
                         </p>
                     </motion.div>
 
@@ -310,7 +313,7 @@ const SeedsBuyer = () => {
                                         <ShoppingBag className="h-8 w-8 text-emerald-950" />
                                      </div>
                                      <div className="text-center">
-                                         <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">Items In Basket</p>
+                                         <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest mb-1">{t("itemsInBasket")}</p>
                                          <p className="text-3xl font-black text-white leading-none">{totalItems}</p>
                                      </div>
                                      {totalItems > 0 && <span className="absolute top-0 right-0 h-4 w-full bg-emerald-500/20 animate-pulse" />}
@@ -322,10 +325,10 @@ const SeedsBuyer = () => {
                                         <div className="bg-emerald-500 p-3 rounded-2xl">
                                             <ShoppingBag className="h-6 w-6 text-emerald-900" />
                                         </div>
-                                        Your Harvest
+                                        {t("yourHarvest")}
                                     </SheetTitle>
                                     <SheetDescription className="text-emerald-200 mt-2 font-medium">
-                                        Professional quality seeds selected for your soil.
+                                        {t("seedsSelectedForSoil")}
                                     </SheetDescription>
                                 </SheetHeader>
                                 
@@ -336,10 +339,10 @@ const SeedsBuyer = () => {
                                                 <ShoppingBag className="h-12 w-12" />
                                             </div>
                                             <div className="space-y-2">
-                                                <h4 className="text-xl font-black text-emerald-900">Your basket is resting</h4>
-                                                <p className="text-emerald-600 font-medium">Add some potential to start your season.</p>
+                                                <h4 className="text-xl font-black text-emerald-900">{t("basketIsResting")}</h4>
+                                                <p className="text-emerald-600 font-medium">{t("addPotentialToStartSeason")}</p>
                                             </div>
-                                            <Button variant="outline" onClick={() => setIsCartOpen(false)} className="rounded-2xl border-emerald-200 h-14 px-8 font-black uppercase text-xs tracking-widest">Explore Seeds</Button>
+                                            <Button variant="outline" onClick={() => setIsCartOpen(false)} className="rounded-2xl border-emerald-200 h-14 px-8 font-black uppercase text-xs tracking-widest">{t("exploreSeeds")}</Button>
                                         </div>
                                     ) : (
                                         <div className="space-y-8">
@@ -376,14 +379,14 @@ const SeedsBuyer = () => {
                                 <div className="p-8 border-t border-emerald-100 bg-emerald-50/30 space-y-6">
                                     <div className="flex justify-between items-end">
                                         <div>
-                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Grand Total</p>
+                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">{t("grandTotal")}</p>
                                             <p className="text-4xl font-black text-emerald-950 tracking-tighter">₹{totalPrice.toLocaleString()}</p>
                                         </div>
                                         <div className="text-right">
                                             <p className="text-[10px] font-black text-emerald-600/60 uppercase tracking-widest flex items-center gap-1.5 justify-end">
-                                               <Truck className="h-3 w-3" /> Free Delivery
+                                               <Truck className="h-3 w-3" /> {t("freeDelivery")}
                                             </p>
-                                            <p className="text-xs font-bold text-emerald-400">Next-day arrival</p>
+                                            <p className="text-xs font-bold text-emerald-400">{t("nextDayArrival")}</p>
                                         </div>
                                     </div>
                                     <Button 
@@ -394,9 +397,9 @@ const SeedsBuyer = () => {
                                         Proceed to Buy <ArrowRight className="ml-3 h-6 w-6" />
                                     </Button>
                                     <div className="flex items-center justify-center gap-4 text-[10px] font-black text-emerald-900/40 uppercase tracking-widest">
-                                        <div className="flex items-center gap-1"><Package className="h-3 w-3" /> Secure Packing</div>
+                                        <div className="flex items-center gap-1"><Package className="h-3 w-3" /> {t("securePacking")}</div>
                                         <div className="w-1 h-1 bg-emerald-200 rounded-full" />
-                                        <div className="flex items-center gap-1"><Truck className="h-3 w-3" /> Farm Track</div>
+                                        <div className="flex items-center gap-1"><Truck className="h-3 w-3" /> {t("farmTrack")}</div>
                                     </div>
                                 </div>
                             </SheetContent>
@@ -419,7 +422,7 @@ const SeedsBuyer = () => {
                             <div className="relative group">
                                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500 transition-transform group-focus-within:scale-110" />
                                 <Input
-                                    placeholder="Find your seeds..."
+                                    placeholder={t("findYourSeeds")}
                                     className="pl-16 h-14 lg:h-16 rounded-[1.8rem] bg-emerald-50/50 border-emerald-100 focus-visible:ring-emerald-500 text-base font-medium transition-all"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -437,7 +440,7 @@ const SeedsBuyer = () => {
                                             value={cat} 
                                             className="rounded-2xl px-8 h-full bg-emerald-50/50 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border border-emerald-100/30"
                                         >
-                                            {cat === "All" ? "All Crops" : cat}
+                                            {cat === "All" ? t("allCrops") : t(cat.toLowerCase().replace(' ', ''))}
                                         </TabsTrigger>
                                     ))}
                                 </TabsList>
@@ -503,13 +506,13 @@ const SeedsBuyer = () => {
                     <div className="flex-1 space-y-12 pb-32">
                         <div className="flex items-end justify-between border-b border-emerald-50 pb-8">
                              <div>
-                                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-2 font-mono">Marketplace Feed</h4>
-                                <h1 className="text-4xl font-black text-emerald-950 tracking-tighter">Certified Seed Catalog</h1>
+                                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-2 font-mono">{t("marketplaceFeed")}</h4>
+                                <h1 className="text-4xl font-black text-emerald-950 tracking-tighter">{t("certifiedSeedCatalog")}</h1>
                              </div>
                              <div className="text-right">
-                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1 italic">Now Browsing</p>
+                                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1 italic">{t("nowBrowsing")}</p>
                                 <Badge className="bg-emerald-900 text-emerald-400 border-none px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest">
-                                    {filteredSeeds.length} Varietal Clones
+                                    {filteredSeeds.length} {t("varietalClones")}
                                 </Badge>
                              </div>
                         </div>
@@ -520,8 +523,8 @@ const SeedsBuyer = () => {
                                     <Search className="h-12 w-12 text-emerald-200" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-emerald-900">Crop Not Found</h3>
-                                    <p className="text-emerald-600/70 font-medium max-w-sm mx-auto">We couldn't find seeds matching your filters. Try expanding your season or budget range.</p>
+                                    <h3 className="text-2xl font-black text-emerald-900">{t("cropNotFound")}</h3>
+                                    <p className="text-emerald-600/70 font-medium max-w-sm mx-auto">{t("noSeedsMatchingFilters")}</p>
                                 </div>
                                 <Button 
                                     variant="outline" 
@@ -536,7 +539,7 @@ const SeedsBuyer = () => {
                                     }}
                                     className="rounded-2xl border-emerald-200 h-16 px-10 font-black uppercase text-xs tracking-[0.2em] hover:bg-emerald-600 hover:text-white transition-all shadow-lg shadow-emerald-900/5"
                                 >
-                                    Reset Discovery
+                                    {t("resetDiscovery")}
                                 </Button>
                             </div>
                         ) : (
@@ -562,17 +565,17 @@ const SeedsBuyer = () => {
                                     <CheckCircle2 className="h-8 w-8 text-emerald-400" />
                                 </div>
                                 <h2 className="text-4xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter">
-                                    Scientific Crop <br /> <span className="text-emerald-400 italic">Intelligence</span>
+                                    {t("scientificCropIntelligence")}
                                 </h2>
                                 <p className="text-emerald-100/60 text-lg font-medium">
-                                    Enter your 10-digit number for free soil-specific seed recommendations via WhatsApp.
+                                    {t("whatsappRecDesc")}
                                 </p>
 
                                 <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto w-full pt-6">
                                     <Input
                                         type="tel"
                                         maxLength={10}
-                                        placeholder="Mobile Number"
+                                        placeholder={t("mobileNumberPlaceholder")}
                                         className="h-16 rounded-2xl bg-white/5 border-white/10 text-white placeholder:text-white/40 text-xl px-8 flex-1 focus-visible:ring-emerald-500 transition-all font-black tracking-widest text-center"
                                         value={mobileNumber}
                                         onChange={(e) => {
@@ -584,7 +587,7 @@ const SeedsBuyer = () => {
                                         className="h-16 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-lg px-10 shadow-2xl shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
                                         onClick={handleGetAdvice}
                                     >
-                                        Advice
+                                        {t("adviceBtn")}
                                     </Button>
                                 </div>
                             </div>

@@ -114,8 +114,8 @@ export default function Market() {
       setForecast(forecastData);
       
       toast({
-        title: "AI Analysis Complete",
-        description: `Predicted 7-day trend for ${selectedCrop}`,
+        title: t("aiAnalysisComplete"),
+        description: `${t("predictedTrendFor")} ${selectedCrop}`,
       });
     } catch (error) {
       console.error("Prediction failed", error);
@@ -125,13 +125,13 @@ export default function Market() {
       if (unit === "kg") multiplier = 0.01;
       setEstimate(2150 * qty * multiplier);
       setForecast([
-        { day: "Tomorrow", date: "Forecast", price: 2160 },
-        { day: "Next Day", date: "Forecast", price: 2180 }
+        { day: t("tomorrow"), date: t("forecast"), price: 2160 },
+        { day: t("nextDay"), date: t("forecast"), price: 2180 }
       ]);
 
       toast({
-        title: "Market Insight Mode",
-        description: `Showing typical trends for ${selectedCrop}`,
+        title: t("marketInsightMode"),
+        description: `${t("showingTypicalTrends")} ${selectedCrop}`,
       });
     }
   };
@@ -260,7 +260,7 @@ export default function Market() {
                     </h3>
                   </div>
                   <div className="mt-8 pt-8 border-t border-white/20">
-                    <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-6">7-Day AI Price Forecast</p>
+                    <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80 mb-6">{t("sevenDayForecastTitle")}</p>
                     <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
                       {(forecast || []).map((f, i) => (
                         <div key={i} className="flex-shrink-0 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-32 text-center">
@@ -367,7 +367,7 @@ export default function Market() {
       <div className="space-y-8 pt-6">
         <div className="flex items-center justify-between">
           <h3 className="text-3xl font-black tracking-tight">{t("marketWiseReport")}</h3>
-          <Badge variant="outline" className="rounded-full px-4 py-2 font-bold bg-white text-emerald-700 border-emerald-100 uppercase tracking-widest text-[10px]">{t("updated")} 5m ago</Badge>
+          <Badge variant="outline" className="rounded-full px-4 py-2 font-bold bg-white text-emerald-700 border-emerald-100 uppercase tracking-widest text-[10px]">{t("updated")} 5m {t("ago")}</Badge>
         </div>
 
         <div className="rounded-[2.5rem] border border-primary/5 bg-white shadow-xl overflow-hidden">
@@ -392,7 +392,7 @@ export default function Market() {
                         </div>
                         <div>
                           <p className="font-black text-lg">{item.crop}</p>
-                          <p className="text-xs text-muted-foreground font-bold">Standard / Grade A</p>
+                          <p className="text-xs text-muted-foreground font-bold">{t("standardGradeA")}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -414,7 +414,7 @@ export default function Market() {
                             className="flex items-center text-[10px] text-emerald-500 hover:text-emerald-700 font-bold transition-colors"
                           >
                             <MapPin className="h-3 w-3 mr-1" />
-                            View on Maps
+                            {t("viewOnMaps")}
                           </a>
                         </div>
                         <Badge variant="secondary" className="text-[10px] font-black uppercase bg-slate-100">{item.state.toUpperCase()}</Badge>

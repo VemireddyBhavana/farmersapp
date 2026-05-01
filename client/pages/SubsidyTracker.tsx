@@ -19,10 +19,10 @@ const SubsidyTracker = () => {
       date: "2024-02-15",
       status: "Approved",
       steps: [
-        { label: "Application Submitted", date: "2024-02-15", done: true },
-        { label: "Village Verification", date: "2024-02-20", done: true },
-        { label: "District Approval", date: "2024-02-28", done: true },
-        { label: "Benefit Credited", date: "2024-03-10", done: true },
+        { label: t("applicationSubmitted"), date: "2024-02-15", done: true },
+        { label: t("villageVerification"), date: "2024-02-20", done: true },
+        { label: t("districtApproval"), date: "2024-02-28", done: true },
+        { label: t("benefitCredited"), date: "2024-03-10", done: true },
       ],
       payment: "₹2,000 Credited on 10/03/2024"
     },
@@ -32,10 +32,10 @@ const SubsidyTracker = () => {
       date: "2024-03-01",
       status: "Processing",
       steps: [
-        { label: "Application Submitted", date: "2024-03-01", done: true },
-        { label: "Technical Audit", date: "2024-03-05", done: true },
-        { label: "Subsidy Allocation", date: "Pending", done: false },
-        { label: "Installation", date: "Pending", done: false },
+        { label: t("applicationSubmitted"), date: "2024-03-01", done: true },
+        { label: t("technicalAudit"), date: "2024-03-05", done: true },
+        { label: t("subsidyAllocation"), date: "Pending", done: false },
+        { label: t("installation"), date: "Pending", done: false },
       ],
       payment: "₹54,000 (Subsidy Amount)"
     }
@@ -45,7 +45,7 @@ const SubsidyTracker = () => {
     if (mockData[appId as keyof typeof mockData]) {
       setStatus(mockData[appId as keyof typeof mockData]);
     } else {
-      alert("No application found with this ID. Try PMK-12345 or KSM-67890");
+      alert(t("noApplicationFound"));
     }
   };
 
@@ -64,14 +64,14 @@ const SubsidyTracker = () => {
           <div className="relative flex-grow">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input 
-              placeholder="Enter Application ID (e.g., PMK-12345)" 
+              placeholder={t("enterApplicationId")} 
               className="pl-10 h-12 text-black bg-white/95"
               value={appId}
               onChange={(e) => setAppId(e.target.value)}
             />
           </div>
           <Button onClick={handleSearch} className="h-12 px-8 bg-yellow-500 hover:bg-yellow-600 text-green-900 font-bold">
-            Track Now
+            {t("trackNow")}
           </Button>
         </div>
       </div>
@@ -82,9 +82,9 @@ const SubsidyTracker = () => {
             <div className="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
               <Search className="h-10 w-10 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-green-800">Ready to Track</h3>
+            <h3 className="text-xl font-bold text-green-800">{t("readyToTrack")}</h3>
             <p className="text-green-700 mt-2 max-w-md mx-auto">
-              Enter your unique application ID provided during registration to see live status and payment updates.
+              {t("readyToTrackDesc")}
             </p>
           </CardContent>
         </Card>
@@ -92,30 +92,30 @@ const SubsidyTracker = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-1 border-green-100 shadow-md">
             <CardHeader className="bg-green-50/50">
-              <CardTitle className="text-xl text-green-900">Application Info</CardTitle>
+              <CardTitle className="text-xl text-green-900">{t("applicationInfo")}</CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               <div>
-                <p className="text-sm text-gray-500">Scheme Name</p>
+                <p className="text-sm text-gray-500">{t("schemeName")}</p>
                 <p className="text-lg font-bold text-gray-900">{status.scheme}</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm text-gray-500">Applicant</p>
+                  <p className="text-sm text-gray-500">{t("applicantLabel")}</p>
                   <p className="font-semibold">{status.applicant}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">App Date</p>
+                  <p className="text-sm text-gray-500">{t("appDate")}</p>
                   <p className="font-semibold">{status.date}</p>
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Current Status</p>
+                <p className="text-sm text-gray-500">{t("currentStatus")}</p>
                 <Badge className={cn(
                   "mt-1 text-sm px-3 py-1",
                   status.status === "Approved" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
                 )}>
-                  {status.status}
+                  {t(status.status.toLowerCase())}
                 </Badge>
               </div>
             </CardContent>
@@ -125,7 +125,7 @@ const SubsidyTracker = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-green-600" />
-                Track History
+                {t("trackHistory")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
@@ -143,7 +143,7 @@ const SubsidyTracker = () => {
                         <div className="font-bold text-slate-900">{step.label}</div>
                         <time className="font-caveat font-medium text-green-600">{step.date}</time>
                       </div>
-                      <div className="text-slate-500 text-sm">Update processed on {step.date}</div>
+                      <div className="text-slate-500 text-sm">{t("updateProcessedOn")} {step.date}</div>
                     </div>
                   </div>
                 ))}

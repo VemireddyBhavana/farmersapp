@@ -112,19 +112,19 @@ const AgriLoanCalculator = () => {
       setInterest(7.0);
       setTenure(12);
       setIsSubsidyActive(true);
-      toast({ title: "Kisan Credit Card Applied", description: "Interest rate locked at 7% pre-subsidy." });
+      toast({ title: t("kisanCreditCardApplied"), description: t("kisanCreditCardDesc") });
     } else if (type === "tractor") {
       setAmount(800000);
       setInterest(10.5);
       setTenure(60);
       setIsSubsidyActive(false);
-      toast({ title: "Commercial Equipment Mode", description: "Optimized for high-value machinery." });
+      toast({ title: t("commercialEquipmentMode"), description: t("commercialEquipmentDesc") });
     } else if (type === "solar") {
       setAmount(150000);
       setInterest(5.0);
       setTenure(48);
       setIsSubsidyActive(true);
-      toast({ title: "Solar Subsidy Active", description: "Reflecting PM-KUSUM low-interest rates." });
+      toast({ title: t("solarSubsidyActive"), description: t("solarSubsidyDesc") });
     }
   };
 
@@ -135,14 +135,14 @@ const AgriLoanCalculator = () => {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div className="space-y-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-widest italic border border-emerald-500/20">
-                    <ShieldCheck className="h-4 w-4" /> NABARD RECOGNIZED CALCULATOR
+                    <ShieldCheck className="h-4 w-4" /> {t("nabardRecognized")}
                 </div>
                 <h1 className="text-6xl lg:text-8xl font-black tracking-tight text-slate-800 dark:text-white uppercase italic leading-[0.85]">
-                   Financial <br /><span className="text-emerald-500">Intelligence</span>
+                   {t("financialIntelligence")} <br /><span className="text-emerald-500">{t("financialIntelligenceHighlight")}</span>
                 </h1>
             </div>
             <div className="text-right">
-                <p className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] mb-4">Effective APR</p>
+                <p className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] mb-4">{t("effectiveApr")}</p>
                 <div className="text-6xl font-black text-slate-900 dark:text-white italic tracking-tighter flex items-center justify-end gap-2">
                     {effectiveInterest.toFixed(1)}% <Percent className="h-8 w-8 text-emerald-500" />
                 </div>
@@ -152,9 +152,9 @@ const AgriLoanCalculator = () => {
         {/* PRESET CHIPS */}
         <div className="max-w-7xl mx-auto flex flex-wrap gap-4 mb-12">
             {[
-                { id: "kcc", label: "Kisan Credit Card", icon: Landmark },
-                { id: "tractor", label: "Tractor Loan", icon: Zap },
-                { id: "solar", label: "Solar Pump", icon: Calendar }
+                { id: "kcc", label: t("kisanCreditCard"), icon: Landmark },
+                { id: "tractor", label: t("tractorLoan"), icon: Zap },
+                { id: "solar", label: t("solarPump"), icon: Calendar }
             ].map(chip => (
                 <button
                     key={chip.id}
@@ -182,7 +182,7 @@ const AgriLoanCalculator = () => {
                   {/* Amount Slider */}
                   <div className="space-y-6">
                      <div className="flex justify-between items-center">
-                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">Principal Investment</Label>
+                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">{t("principalInvestment")}</Label>
                         <span className="text-2xl font-black text-slate-900 dark:text-white italic uppercase tracking-tighter">{formatCurrency(amount)}</span>
                      </div>
                      <input 
@@ -199,7 +199,7 @@ const AgriLoanCalculator = () => {
                   {/* Interest Slider */}
                   <div className="space-y-6">
                      <div className="flex justify-between items-center">
-                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">Base Interest (p.a)</Label>
+                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">{t("baseInterest")}</Label>
                         <span className="text-2xl font-black text-amber-500 italic uppercase tracking-tighter">{interest}%</span>
                      </div>
                      <input 
@@ -212,8 +212,8 @@ const AgriLoanCalculator = () => {
                   {/* Tenure Slider */}
                   <div className="space-y-6">
                      <div className="flex justify-between items-center">
-                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">Tenure Duration</Label>
-                        <span className="text-2xl font-black text-blue-500 italic uppercase tracking-tighter">{tenure} Months</span>
+                        <Label className="text-[11px] font-black uppercase tracking-widest text-slate-400">{t("tenureDuration")}</Label>
+                        <span className="text-2xl font-black text-blue-500 italic uppercase tracking-tighter">{tenure} {t("months")}</span>
                      </div>
                      <input 
                        type="range" min="3" max="120" step="3"
@@ -234,8 +234,8 @@ const AgriLoanCalculator = () => {
                            <ShieldCheck className="h-6 w-6" />
                         </div>
                         <div>
-                           <h4 className="font-black italic uppercase text-sm -mb-1">Prompt Repayment</h4>
-                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">3% GOI Subvention</p>
+                           <h4 className="font-black italic uppercase text-sm -mb-1">{t("promptRepayment")}</h4>
+                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t("goiSubvention")}</p>
                         </div>
                      </div>
                      <div className={`h-6 w-12 rounded-full relative transition-colors ${isSubsidyActive ? "bg-emerald-500" : "bg-slate-200"}`}>
@@ -258,12 +258,12 @@ const AgriLoanCalculator = () => {
                      <div className="h-10 w-10 bg-emerald-500 rounded-xl flex items-center justify-center">
                         <Wallet className="h-5 w-5" />
                      </div>
-                     <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400 italic">Projected Monthly EMI</span>
+                     <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400 italic">{t("projectedMonthlyEmi")}</span>
                   </div>
                   <h4 className="text-7xl font-black italic tracking-tighter leading-none mb-4">{formatCurrency(financialData.emi)}</h4>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-10">Total Commitment: {formatCurrency(financialData.totalPayment)}</p>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-10">{t("totalCommitment")}: {formatCurrency(financialData.totalPayment)}</p>
                   <Button className="w-full bg-white hover:bg-emerald-500 hover:text-white text-slate-900 h-16 rounded-[2rem] font-black uppercase tracking-widest italic text-xs transition-all flex items-center justify-center gap-3">
-                     Finalize Loan Package <ArrowUpRight className="h-5 w-5" />
+                     {t("finalizeLoanPackage")} <ArrowUpRight className="h-5 w-5" />
                   </Button>
                </Card>
 
@@ -287,17 +287,17 @@ const AgriLoanCalculator = () => {
                       </PieChart>
                     </ResponsiveContainer>
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                       <span className="text-[10px] font-black text-slate-400 uppercase italic">Interest Ratio</span>
+                       <span className="text-[10px] font-black text-slate-400 uppercase italic">{t("interestRatio")}</span>
                        <span className="text-xl font-black text-amber-500 italic">{Math.round((financialData.totalInterest / financialData.totalPayment) * 100)}%</span>
                     </div>
                   </div>
                   <div className="w-full space-y-3 mt-4">
                      <div className="flex justify-between items-center text-[10px] font-black uppercase italic tracking-widest">
-                        <span className="text-emerald-500 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-emerald-500" /> Principal</span>
+                        <span className="text-emerald-500 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-emerald-500" /> {t("principalLabel")}</span>
                         <span className="text-slate-900 dark:text-white">{formatCurrency(amount)}</span>
                      </div>
                      <div className="flex justify-between items-center text-[10px] font-black uppercase italic tracking-widest">
-                        <span className="text-amber-500 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-amber-500" /> Interest</span>
+                        <span className="text-amber-500 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-amber-500" /> {t("interestLabel")}</span>
                         <span className="text-slate-900 dark:text-white">{formatCurrency(financialData.totalInterest)}</span>
                      </div>
                   </div>
@@ -310,13 +310,13 @@ const AgriLoanCalculator = () => {
                  onClick={() => setActiveTab("summary")}
                  className={`flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-xs italic transition-all ${activeTab === "summary" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : "text-slate-400 hover:text-slate-600"}`}
                >
-                 <TrendingDown className="inline-block mr-2 h-4 w-4" /> Debt Progress
+                 <TrendingDown className="inline-block mr-2 h-4 w-4" /> {t("debtProgress")}
                </button>
                <button 
                  onClick={() => setActiveTab("timeline")}
                  className={`flex-1 h-14 rounded-2xl font-black uppercase tracking-widest text-xs italic transition-all ${activeTab === "timeline" ? "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white" : "text-slate-400 hover:text-slate-600"}`}
                >
-                 <Calendar className="inline-block mr-2 h-4 w-4" /> Amortization
+                 <Calendar className="inline-block mr-2 h-4 w-4" /> {t("amortization")}
                </button>
             </div>
 
@@ -329,7 +329,7 @@ const AgriLoanCalculator = () => {
                    exit={{ opacity: 0, y: -10 }}
                  >
                     <Card className="p-8 rounded-[4rem] border-none shadow-xl bg-white dark:bg-slate-900 h-[300px] overflow-hidden">
-                       <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-6 italic">Balance Reduction Map</h4>
+                       <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-6 italic">{t("balanceReductionMap")}</h4>
                        <ResponsiveContainer width="100%" height="80%">
                           <AreaChart data={financialData.timeline}>
                              <defs>
@@ -356,9 +356,9 @@ const AgriLoanCalculator = () => {
                  >
                     <Card className="p-8 rounded-[4rem] border-none shadow-xl bg-white dark:bg-slate-900 h-[400px] scrollbar-hide overflow-y-auto">
                        <div className="flex justify-between items-center mb-8 sticky top-0 bg-white dark:bg-slate-900 py-2 z-10">
-                          <h4 className="text-xl font-black italic uppercase tracking-tighter">Full Payment Schedule</h4>
+                          <h4 className="text-xl font-black italic uppercase tracking-tighter">{t("fullPaymentSchedule")}</h4>
                           <Button variant="ghost" size="sm" className="rounded-xl border border-slate-100 h-10 px-4 text-[10px] font-black italic uppercase italic tracking-widest">
-                             <Download className="h-4 w-4 mr-2" /> Export PDF
+                             <Download className="h-4 w-4 mr-2" /> {t("exportPdf")}
                           </Button>
                        </div>
                        <div className="space-y-4">
@@ -369,14 +369,14 @@ const AgriLoanCalculator = () => {
                                       M{row.month}
                                    </div>
                                    <div>
-                                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Principal / Interest</p>
+                                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("principalSlashInterest")}</p>
                                       <p className="text-sm font-black text-slate-900 dark:text-white tracking-tighter italic">
                                          {formatCurrency(row.principal)} <span className="text-amber-500">/ {formatCurrency(row.interest)}</span>
                                       </p>
                                    </div>
                                 </div>
                                 <div className="text-right">
-                                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest italic">Closing Balance</p>
+                                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest italic">{t("closingBalance")}</p>
                                    <p className="text-lg font-black text-slate-900 dark:text-white tracking-tighter italic leading-none">{formatCurrency(row.balance)}</p>
                                 </div>
                              </div>

@@ -54,10 +54,10 @@ export function createServer() {
   app.post("/api/market/predict/:crop", handleMarketPredict);
 
   // Disease Module
-  app.post("/api/disease/detect", handleDiseaseDetect);
+  app.post("/api/disease/detect", handleDiseaseDetect as any);
 
   // Soil Module
-  app.post("/api/soil/analyze", handleSoilAnalyze);
+  app.post("/api/soil/analyze", handleSoilAnalyze as any);
 
   // Assistant & Expert Modules
   app.post("/api/expert-consult", handleExpertConsult);

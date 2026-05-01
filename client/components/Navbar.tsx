@@ -345,7 +345,7 @@ const Navbar = () => {
             className="lg:hidden border-t bg-background overflow-y-auto max-h-[85vh]"
           >
             <div className="px-4 py-4 space-y-1">
-              <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">Navigation</p>
+              <p className="px-2 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">{t("navigation")}</p>
               {[...primaryLinks, ...moreLinks].map((link) => (
                 <Link key={link.path} to={link.path} onClick={() => setIsOpen(false)}
                   className={cn("flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-colors", location.pathname === link.path ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted")}>

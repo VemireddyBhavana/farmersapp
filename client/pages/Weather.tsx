@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 import { 
   Cloud, 
@@ -113,7 +114,7 @@ function AnimatedTemp({ value }: { value: number }) {
 }
 
 export default function Weather() {
-  const { t } = useLanguage();
+  const { t } = useTranslation();
   const { weather, loading, error, getLocationAndFetch } = useWeather();
   const [selectedDay, setSelectedDay] = useState(0);
 
@@ -175,9 +176,9 @@ export default function Weather() {
             {/* Weather Insights Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { label: t('temperatureTrend'), value: "Rising from 17.5°C to 18.5°C over the week", color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
-                { label: t('precipitation'), value: "Low chance of precipitation through the week (5-10%)", color: "from-blue-400 to-blue-100", percent: 15, icon: <CloudRain className="h-5 w-5" /> },
-                { label: t('windConditions'), value: "Gentle breeze throughout the week, ranging from 8-14 km/h", color: "from-emerald-400 to-emerald-100", percent: 40, icon: <Wind className="h-5 w-5" /> }
+                { label: t('temperatureTrend'), value: t("tempTrendDesc"), color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
+                { label: t('precipitation'), value: t("precipDesc"), color: "from-blue-400 to-blue-100", percent: 15, icon: <CloudRain className="h-5 w-5" /> },
+                { label: t('windConditions'), value: t("windDesc"), color: "from-emerald-400 to-emerald-100", percent: 40, icon: <Wind className="h-5 w-5" /> }
               ].map((insight) => (
                 <Card key={insight.label} className="bg-card border-border rounded-[2.5rem] p-8 shadow-lg hover:shadow-xl transition-all group overflow-hidden relative">
                   <div className={cn("absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-[0.03] rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150", insight.color)} />
@@ -194,7 +195,7 @@ export default function Weather() {
 
                   <div className="space-y-2">
                     <div className="flex justify-between text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                      <span>Intensity</span>
+                      <span>{t("intensityLabel")}</span>
                       <span className="text-foreground">{insight.percent}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
@@ -258,7 +259,7 @@ export default function Weather() {
 
                   <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
                     <p className="text-sm font-bold text-primary-foreground/90 italic leading-relaxed">
-                      {weather.advisory || "Optimal conditions for crop growth. Ideal for fertilizer application."}
+                      {weather.advisory || t("defaultWeatherAdvisory")}
                     </p>
                   </div>
 
@@ -266,7 +267,7 @@ export default function Weather() {
                     <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{t('agriculturalInsight')}</p>
                     <div className="flex items-start gap-3">
                       <div className="h-2 w-2 rounded-full bg-emerald-400 mt-1.5 animate-pulse" />
-                      <p className="text-xs font-bold text-primary-foreground/60 italic">Stable humidity levels predicted for the next 48 hours. Good for sensitive saplings.</p>
+                      <p className="text-xs font-bold text-primary-foreground/60 italic">{t("stableHumidityInsight")}</p>
                     </div>
                   </div>
 

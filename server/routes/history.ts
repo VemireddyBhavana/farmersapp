@@ -32,7 +32,7 @@ export const handleGetHistory = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "UserId is required" });
         }
 
-        const history = await PredictionHistory.find({ userId }).sort({ timestamp: -1 });
+        const history = await PredictionHistory.find({ userId: userId as string }).sort({ timestamp: -1 });
         res.json(history);
     } catch (error: any) {
         console.error("❌ [History] Fetch error:", error.message);

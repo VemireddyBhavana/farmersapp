@@ -41,10 +41,10 @@ export default function Index() {
   ];
 
   const stats = [
-    { label: t('activeFarmers'), value: "10,000+" },
-    { label: t('tractorsListed'), value: "2,500+" },
-    { label: t('districtsCovered'), value: "150+" },
-    { label: t('averageRating'), value: "4.9/5" },
+    { label: t('activeFarmers'), value: t('farmersCountValue') },
+    { label: t('tractorsListed'), value: t('tractorsCountValue') },
+    { label: t('districtsCovered'), value: t('districtsCountValue') },
+    { label: t('averageRating'), value: t('ratingValue') },
   ];
 
   return (
@@ -55,7 +55,7 @@ export default function Index() {
         <div className="absolute inset-0 z-0">
           <img
             src="/hero_rice_field.png"
-            alt="Rice Field"
+            alt={t("riceField")}
             className="w-full h-full object-cover scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-transparent" />
@@ -193,10 +193,10 @@ export default function Index() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Store, value: "10,000+", label: t('saathiRetailStores'), color: "bg-emerald-100 text-emerald-600", desc: t('saathiRetailDesc') },
-              { icon: Globe, value: "11", label: t('localLanguages'), color: "bg-blue-100 text-blue-600", desc: t('localLanguagesDesc') },
-              { icon: TrendingUp, value: "100K+ MT", label: t('produceProcessed'), color: "bg-amber-100 text-amber-600", desc: t('produceProcessedDesc') },
-              { icon: Leaf, value: "5M+", label: t('farmersEmpowered'), color: "bg-rose-100 text-rose-600", desc: t('farmersEmpoweredDesc') },
+              { icon: Store, value: t('saathiCountValue'), label: t('saathiRetailStores'), color: "bg-emerald-100 text-emerald-600", desc: t('saathiRetailDesc') },
+              { icon: Globe, value: t('languagesCountValue'), label: t('localLanguages'), color: "bg-blue-100 text-blue-600", desc: t('localLanguagesDesc') },
+              { icon: TrendingUp, value: t('produceCountValue'), label: t('produceProcessed'), color: "bg-amber-100 text-amber-600", desc: t('produceProcessedDesc') },
+              { icon: Leaf, value: t('empoweredCountValue'), label: t('farmersEmpowered'), color: "bg-rose-100 text-rose-600", desc: t('farmersEmpoweredDesc') },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -304,7 +304,7 @@ export default function Index() {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <img
                       src="https://api.dicebear.com/7.x/bottts/svg?seed=smartfarmer"
-                      alt="AI Assistant"
+                      alt={t("aiAssistantAlt")}
                       className="h-40 w-40 drop-shadow-2xl"
                     />
                   </div>
@@ -326,7 +326,7 @@ export default function Index() {
               className="lg:w-1/2 space-y-8"
             >
               <h2 className="text-4xl lg:text-6xl font-black tracking-tight leading-tight">
-                {t('moreThanRentals').split('.')[0]} <span className="text-emerald-500 italic">Rentals.</span>
+                {t('moreThanRentals').split('.')[0]} <span className="text-emerald-500 italic">{t("rentals")}.</span>
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {t('moreThanRentalsDesc')}
@@ -356,7 +356,7 @@ export default function Index() {
               <div className="aspect-video rounded-[3rem] bg-primary/10 border border-primary/10 shadow-2xl overflow-hidden relative group">
                 <img
                   src="/vision_banner.png"
-                  alt="Farmer using tablet"
+                  alt={t("farmerTabletAlt")}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent" />
@@ -389,7 +389,7 @@ export default function Index() {
             <div className="grid gap-8 md:grid-cols-3 relative z-10">
               {[
                 { 
-                  step: "01", 
+                  step: t("stepOne"), 
                   title: t('browseSelect'), 
                   desc: t('browseSelectDesc'),
                   icon: Bot,
@@ -397,7 +397,7 @@ export default function Index() {
                   shadow: "shadow-blue-200"
                 },
                 { 
-                  step: "02", 
+                  step: t("stepTwo"), 
                   title: t('bookInstantly'), 
                   desc: t('bookInstantlyDesc'),
                   icon: Sprout,
@@ -405,7 +405,7 @@ export default function Index() {
                   shadow: "shadow-emerald-200"
                 },
                 { 
-                  step: "03", 
+                  step: t("stepThree"), 
                   title: t('happyFarming'), 
                   desc: t('happyFarmingDesc'),
                   icon: TrendingUp,
