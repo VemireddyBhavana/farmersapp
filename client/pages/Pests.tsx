@@ -161,11 +161,11 @@ export default function Pests() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-20 font-sans">
-      <div className="container mx-auto px-4 py-12 max-w-6xl">
+    <div className="min-h-screen bg-background text-foreground pb-12 font-sans">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-black text-foreground mb-4 tracking-tight">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-black text-foreground mb-3 tracking-tight">
             {t("pestsAndDisease")}
           </h1>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
@@ -174,9 +174,9 @@ export default function Pests() {
         </div>
 
         {/* Monitoring Setup Card */}
-        <Card className="bg-card border-none shadow-sm rounded-2xl mb-12 overflow-hidden">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-2 mb-8">
+        <Card className="bg-card border-none shadow-sm rounded-2xl mb-8 overflow-hidden">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-2 mb-6">
               <Eye className="h-6 w-6 text-orange-500" />
               <h3 className="text-xl font-bold text-foreground">{t("fieldInputCenter")}</h3>
             </div>
@@ -229,8 +229,8 @@ export default function Pests() {
           </CardContent>
         </Card>
 
-        {/* Active Alerts */}
-        <div className="space-y-6 mb-12">
+        {/* Analysis Results */}
+        <div className="space-y-6 mb-8">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="h-6 w-6 text-red-600" />
             <h3 className="text-2xl font-bold text-foreground">{t("activeAlerts")} ({currentData.alerts.length})</h3>
