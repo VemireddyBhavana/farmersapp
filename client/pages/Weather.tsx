@@ -113,6 +113,7 @@ function AnimatedTemp({ value }: { value: number }) {
 }
 
 export default function Weather() {
+  const { t } = useLanguage();
   const { weather, loading, error, getLocationAndFetch } = useWeather();
   const [selectedDay, setSelectedDay] = useState(0);
 
@@ -121,24 +122,24 @@ export default function Weather() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F5F2] text-slate-800 font-sans selection:bg-emerald-200">
+    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-primary/20">
       <div className="container mx-auto px-4 py-12 max-w-6xl">
         
         {/* Header */}
         <header className="mb-12">
-          <h1 className="text-3xl font-black text-[#2D4534] flex items-center gap-3 italic uppercase tracking-tighter">
-            <Cloud className="h-8 w-8 text-emerald-600" />
-            Weather Forecast
+          <h1 className="text-3xl font-black text-foreground flex items-center gap-3 italic uppercase tracking-tighter">
+            <Cloud className="h-8 w-8 text-primary" />
+            {t('weatherForecast')}
           </h1>
         </header>
 
         {loading ? (
           <div className="text-center py-40 space-y-6">
             <div className="relative inline-block">
-               <Loader2 className="h-24 w-24 text-emerald-600 animate-spin mx-auto" />
-               <Satellite className="h-10 w-10 text-emerald-400 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+               <Loader2 className="h-24 w-24 text-primary animate-spin mx-auto" />
+               <Satellite className="h-10 w-10 text-primary/50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
             </div>
-            <p className="text-2xl font-black text-emerald-600 uppercase italic tracking-widest animate-pulse">Syncing with orbital satellites...</p>
+            <p className="text-2xl font-black text-primary uppercase italic tracking-widest animate-pulse">{t('syncingSatellites')}</p>
           </div>
         ) : weather ? (
           <div className="space-y-12">
@@ -152,12 +153,12 @@ export default function Weather() {
                     className={cn(
                       "flex-shrink-0 w-32 h-44 rounded-[2.5rem] p-6 flex flex-col items-center justify-between transition-all relative overflow-hidden group border-2",
                       selectedDay === i 
-                        ? "bg-[#2D4534] border-[#2D4534] text-white shadow-2xl scale-105" 
-                        : "bg-white border-white text-slate-600 hover:bg-emerald-50 shadow-md"
+                        ? "bg-primary border-primary text-primary-foreground shadow-2xl scale-105" 
+                        : "bg-card border-card text-muted-foreground hover:bg-primary/5 shadow-md"
                     )}
                   >
                     <p className="text-[10px] font-black uppercase tracking-widest opacity-60">
-                      {i === 0 ? "Today" : formatDate(day.dt).split(",")[0]}
+                      {i === 0 ? t('today') : formatDate(day.dt).split(",")[0]}
                     </p>
                     <div className={cn("transition-transform group-hover:scale-110", selectedDay === i ? "drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" : "")}>
                       {getWeatherIcon(day.weather[0]?.main, "h-12 w-12")}
@@ -174,11 +175,11 @@ export default function Weather() {
             {/* Weather Insights Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { label: "Temperature Trend", value: "Rising from 17.5°C to 18.5°C over the week", color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
-                { label: "Precipitation", value: "Low chance of precipitation through the week (5-10%)", color: "from-blue-400 to-blue-100", percent: 15, icon: <CloudRain className="h-5 w-5" /> },
-                { label: "Wind Conditions", value: "Gentle breeze throughout the week, ranging from 8-14 km/h", color: "from-emerald-400 to-emerald-100", percent: 40, icon: <Wind className="h-5 w-5" /> }
+                { label: t('temperatureTrend'), value: "Rising from 17.5°C to 18.5°C over the week", color: "from-orange-400 to-amber-200", percent: 65, icon: <Thermometer className="h-5 w-5" /> },
+                { label: t('precipitation'), value: "Low chance of precipitation through the week (5-10%)", color: "from-blue-400 to-blue-100", percent: 15, icon: <CloudRain className="h-5 w-5" /> },
+                { label: t('windConditions'), value: "Gentle breeze throughout the week, ranging from 8-14 km/h", color: "from-emerald-400 to-emerald-100", percent: 40, icon: <Wind className="h-5 w-5" /> }
               ].map((insight) => (
-                <Card key={insight.label} className="bg-white border-white rounded-[2.5rem] p-8 shadow-lg hover:shadow-xl transition-all group overflow-hidden relative">
+                <Card key={insight.label} className="bg-card border-border rounded-[2.5rem] p-8 shadow-lg hover:shadow-xl transition-all group overflow-hidden relative">
                   <div className={cn("absolute top-0 right-0 w-32 h-32 bg-gradient-to-br opacity-[0.03] rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150", insight.color)} />
                   
                   <div className="flex items-center gap-4 mb-6">
@@ -186,17 +187,17 @@ export default function Weather() {
                       {insight.icon}
                     </div>
                     <div>
-                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">{insight.label}</h3>
-                      <p className="text-sm font-bold text-slate-800 italic leading-tight">{insight.value}</p>
+                      <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest">{insight.label}</h3>
+                      <p className="text-sm font-bold text-foreground italic leading-tight">{insight.value}</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <div className="flex justify-between text-[10px] font-black text-muted-foreground uppercase tracking-widest">
                       <span>Intensity</span>
-                      <span className="text-slate-600">{insight.percent}%</span>
+                      <span className="text-foreground">{insight.percent}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${insight.percent}%` }}
@@ -212,31 +213,31 @@ export default function Weather() {
             {/* Daily Breakdown & Advisory */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Daily Breakdown */}
-              <Card className="lg:col-span-8 bg-white border-white rounded-[3rem] p-10 shadow-xl overflow-hidden relative">
+              <Card className="lg:col-span-8 bg-card border-border rounded-[3rem] p-10 shadow-xl overflow-hidden relative">
                 <div className="flex items-center justify-between mb-10">
                   <div>
-                    <h3 className="text-xl font-black text-slate-800 italic uppercase tracking-tighter">Daily Breakdown</h3>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Temperature & Conditions per period</p>
+                    <h3 className="text-xl font-black text-foreground italic uppercase tracking-tighter">{t('dailyBreakdown')}</h3>
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">{t('tempAndCondPeriod')}</p>
                   </div>
-                  <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center">
-                    <RefreshCw className="h-5 w-5 text-slate-400" />
+                  <div className="h-10 w-10 rounded-xl bg-muted flex items-center justify-center">
+                    <RefreshCw className="h-5 w-5 text-muted-foreground" />
                   </div>
                 </div>
 
                 {/* Day Breakdown Cards */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                   {[
-                    { label: "Morning", time: "06:00", temp: weather.daily[selectedDay].temp.morn, icon: <Sunrise className="h-8 w-8 text-orange-400" /> },
-                    { label: "Afternoon", time: "12:00", temp: weather.daily[selectedDay].temp.day, icon: <Sun className="h-8 w-8 text-amber-400" /> },
-                    { label: "Evening", time: "18:00", temp: weather.daily[selectedDay].temp.eve, icon: <Sunset className="h-8 w-8 text-rose-400" /> },
-                    { label: "Night", time: "22:00", temp: weather.daily[selectedDay].temp.night, icon: <Moon className="h-8 w-8 text-indigo-400" /> }
+                    { label: t('morning'), time: "06:00", temp: weather.daily[selectedDay].temp.morn, icon: <Sunrise className="h-8 w-8 text-orange-400" /> },
+                    { label: t('afternoon'), time: "12:00", temp: weather.daily[selectedDay].temp.day, icon: <Sun className="h-8 w-8 text-amber-400" /> },
+                    { label: t('evening'), time: "18:00", temp: weather.daily[selectedDay].temp.eve, icon: <Sunset className="h-8 w-8 text-rose-400" /> },
+                    { label: t('night'), time: "22:00", temp: weather.daily[selectedDay].temp.night, icon: <Moon className="h-8 w-8 text-indigo-400" /> }
                   ].map((time) => (
-                    <div key={time.label} className="bg-white rounded-3xl p-6 flex flex-col items-center gap-4 border border-slate-50 shadow-sm transition-all hover:shadow-md hover:scale-105">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{time.label}</p>
+                    <div key={time.label} className="bg-background rounded-3xl p-6 flex flex-col items-center gap-4 border border-border shadow-sm transition-all hover:shadow-md hover:scale-105">
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{time.label}</p>
                       <div className="py-2">{time.icon}</div>
                       <div className="text-center">
-                        <p className="text-2xl font-black text-slate-800 italic">{Math.round(time.temp)}°C</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{time.time}</p>
+                        <p className="text-2xl font-black text-foreground italic">{Math.round(time.temp)}°C</p>
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{time.time}</p>
                       </div>
                     </div>
                   ))}
@@ -244,7 +245,7 @@ export default function Weather() {
               </Card>
 
               {/* Weather Advisory */}
-              <Card className="lg:col-span-4 bg-[#2D4534] border-[#2D4534] rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
+              <Card className="lg:col-span-4 bg-primary border-primary rounded-[3rem] p-10 shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-150 transition-transform duration-700" />
                 
                 <div className="relative z-10 space-y-8">
@@ -252,25 +253,25 @@ export default function Weather() {
                     <div className="h-14 w-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center">
                       <Sprout className="h-8 w-8 text-emerald-400" />
                     </div>
-                    <h3 className="text-xl font-black text-white italic uppercase tracking-tighter">Weather Advisory</h3>
+                    <h3 className="text-xl font-black text-primary-foreground italic uppercase tracking-tighter">{t('pestAdvisory')}</h3>
                   </div>
 
                   <div className="p-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10">
-                    <p className="text-sm font-bold text-white/90 italic leading-relaxed">
+                    <p className="text-sm font-bold text-primary-foreground/90 italic leading-relaxed">
                       {weather.advisory || "Optimal conditions for crop growth. Ideal for fertilizer application."}
                     </p>
                   </div>
 
                   <div className="space-y-4">
-                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Agricultural Insight</p>
+                    <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">{t('agriculturalInsight')}</p>
                     <div className="flex items-start gap-3">
                       <div className="h-2 w-2 rounded-full bg-emerald-400 mt-1.5 animate-pulse" />
-                      <p className="text-xs font-bold text-white/60 italic">Stable humidity levels predicted for the next 48 hours. Good for sensitive saplings.</p>
+                      <p className="text-xs font-bold text-primary-foreground/60 italic">Stable humidity levels predicted for the next 48 hours. Good for sensitive saplings.</p>
                     </div>
                   </div>
 
                   <Button className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase italic tracking-widest text-xs shadow-xl shadow-emerald-950/20">
-                    Detailed PDF Report
+                    {t('detailedPdfReport')}
                   </Button>
                 </div>
               </Card>
@@ -278,15 +279,15 @@ export default function Weather() {
           </div>
         ) : error ? (
           <div className="text-center py-40">
-             <AlertTriangle className="h-12 w-12 text-rose-500 mx-auto mb-4" />
-             <p className="text-rose-500 font-bold">{error}</p>
-             <Button onClick={getLocationAndFetch} className="mt-6 bg-emerald-600 text-white font-bold rounded-full px-8 h-12">Try Again</Button>
+             <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
+             <p className="text-destructive font-bold">{error}</p>
+             <Button onClick={getLocationAndFetch} className="mt-6 bg-primary text-primary-foreground font-bold rounded-full px-8 h-12">{t('tryAgain')}</Button>
           </div>
         ) : (
-          <div className="text-center py-40 bg-white/50 rounded-3xl border border-white">
-            <Navigation className="h-12 w-12 text-emerald-600 mx-auto mb-6 animate-bounce" />
-            <h3 className="text-2xl font-black text-slate-800 italic uppercase mb-4">Establish Coordinate Lock</h3>
-            <Button onClick={getLocationAndFetch} className="bg-[#2D4534] hover:bg-[#1A2E1F] text-white font-black rounded-full px-12 h-16 text-lg italic uppercase tracking-tighter">Sync Coordinates</Button>
+          <div className="text-center py-40 bg-card rounded-3xl border border-border">
+            <Navigation className="h-12 w-12 text-primary mx-auto mb-6 animate-bounce" />
+            <h3 className="text-2xl font-black text-foreground italic uppercase mb-4">{t('establishCoordinateLock')}</h3>
+            <Button onClick={getLocationAndFetch} className="bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-full px-12 h-16 text-lg italic uppercase tracking-tighter">{t('syncCoordinates')}</Button>
           </div>
         )}
       </div>

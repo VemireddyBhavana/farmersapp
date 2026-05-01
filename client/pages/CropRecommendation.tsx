@@ -48,26 +48,26 @@ export default function CropRecommendation() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
-      <div className="bg-[#106A3A] text-white py-12 px-4 mb-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground pb-20">
+      <div className="bg-primary text-primary-foreground py-12 px-4 mb-8 relative overflow-hidden">
         <div className="container mx-auto relative z-10">
           <Link to="/dashboard">
-            <Button variant="ghost" className="text-white hover:bg-white/10 p-0 h-auto font-bold flex items-center gap-2 mb-4">
-              <ArrowLeft className="h-5 w-5" /> {t('navDashboard')}
+            <Button variant="ghost" className="text-primary-foreground hover:bg-primary-foreground/10 p-0 h-auto font-bold flex items-center gap-2 mb-4">
+              <ArrowLeft className="h-5 w-5" /> {t('backToHub')}
             </Button>
           </Link>
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
-              <Lightbulb className="h-8 w-8 text-white" />
+            <div className="p-3 bg-primary-foreground/20 rounded-2xl backdrop-blur-md">
+              <Lightbulb className="h-8 w-8 text-primary-foreground" />
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-black">{t('smartCropRecommendation')}</h1>
-              <p className="text-emerald-100 font-medium">{t('smartCropRecommendationDesc')}</p>
+              <p className="text-primary-foreground/80 font-medium">{t('smartCropRecommendationDesc')}</p>
             </div>
           </div>
         </div>
         <div className="absolute right-[-5%] bottom-[-20%] opacity-10">
-           <Lightbulb className="h-64 w-64 text-white -rotate-12" />
+           <Lightbulb className="h-64 w-64 text-primary-foreground -rotate-12" />
         </div>
       </div>
 
@@ -76,40 +76,40 @@ export default function CropRecommendation() {
           <div className="md:col-span-1 space-y-6">
             <SoilImageUpload onSoilDetected={handleSoilDetected} />
             
-            <Card className="border-emerald-100 shadow-lg h-fit">
+            <Card className="border-border shadow-lg h-fit bg-card">
             <CardHeader>
-              <CardTitle className="text-lg font-bold text-emerald-800">{t('farmDetails') || "Farm Details"}</CardTitle>
-              <CardDescription>{t('enterFarmData') || "Provide soil and location details"}</CardDescription>
+              <CardTitle className="text-lg font-bold text-foreground">{t('farmDetails')}</CardTitle>
+              <CardDescription className="text-muted-foreground">{t('enterFarmData')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-700">Nitrogen (N)</label>
-                  <Input type="number" value={n} onChange={(e) => setN(e.target.value)} />
+                  <label className="text-xs font-bold text-muted-foreground">{t('nitrogens')}</label>
+                  <Input className="bg-background" type="number" value={n} onChange={(e) => setN(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-700">Phosphorus (P)</label>
-                  <Input type="number" value={p} onChange={(e) => setP(e.target.value)} />
+                  <label className="text-xs font-bold text-muted-foreground">{t('phosphorus')}</label>
+                  <Input className="bg-background" type="number" value={p} onChange={(e) => setP(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-700">Potassium (K)</label>
-                  <Input type="number" value={k} onChange={(e) => setK(e.target.value)} />
+                  <label className="text-xs font-bold text-muted-foreground">{t('potassiums')}</label>
+                  <Input className="bg-background" type="number" value={k} onChange={(e) => setK(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-700">pH Level</label>
-                  <Input type="number" step="0.1" value={ph} onChange={(e) => setPh(e.target.value)} />
+                  <label className="text-xs font-bold text-muted-foreground">{t('phLevel')}</label>
+                  <Input className="bg-background" type="number" step="0.1" value={ph} onChange={(e) => setPh(e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-700">Moisture Content</label>
-                <Input type="number" value={moisture} onChange={(e) => setMoisture(e.target.value)} />
+                <label className="text-xs font-bold text-muted-foreground">{t('moistureContent')}</label>
+                <Input className="bg-background" type="number" value={moisture} onChange={(e) => setMoisture(e.target.value)} />
               </div>
               <Button 
-                className="w-full bg-emerald-600 hover:bg-emerald-700 font-bold h-12"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12"
                 onClick={handleRecommend}
                 disabled={loading}
               >
-                {loading ? "Analyzing Soil..." : "Analyze Soil"}
+                {loading ? t('analyzingSoil') : t('analyzeSoil')}
               </Button>
             </CardContent>
           </Card>
@@ -121,14 +121,14 @@ export default function CropRecommendation() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-white rounded-3xl border-2 border-dashed border-emerald-200 p-12 flex flex-col items-center justify-center text-center space-y-4"
+                  className="bg-card rounded-3xl border-2 border-dashed border-primary/20 p-12 flex flex-col items-center justify-center text-center space-y-4"
                 >
-                  <div className="h-20 w-20 rounded-full bg-emerald-50 flex items-center justify-center">
-                    <Sprout className="h-10 w-10 text-emerald-300" />
+                  <div className="h-20 w-20 rounded-full bg-primary/5 flex items-center justify-center">
+                    <Sprout className="h-10 w-10 text-primary/30" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-400">{t('waitingForDetails') || "Waiting for Farm Details"}</h3>
-                    <p className="text-slate-400 max-w-xs">{t('fillFormDesc') || "Fill in the details to receive AI-powered crop recommendations."}</p>
+                    <h3 className="text-xl font-bold text-muted-foreground">{t('waitingForDetails')}</h3>
+                    <p className="text-muted-foreground max-w-xs">{t('fillFormDesc')}</p>
                   </div>
                 </motion.div>
               ) : loading ? (
@@ -139,7 +139,7 @@ export default function CropRecommendation() {
                    className="space-y-4"
                 >
                   {[1, 2, 3].map(i => (
-                    <div key={i} className="h-24 w-full bg-emerald-100/50 animate-pulse rounded-2xl" />
+                    <div key={i} className="h-24 w-full bg-primary/5 animate-pulse rounded-2xl" />
                   ))}
                 </motion.div>
               ) : (
@@ -149,37 +149,37 @@ export default function CropRecommendation() {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  <h2 className="text-2xl font-black text-slate-800 flex items-center gap-2">
-                    <CheckCircle2 className="h-6 w-6 text-emerald-500" /> Analysis Results
+                  <h2 className="text-2xl font-black text-foreground flex items-center gap-2">
+                    <CheckCircle2 className="h-6 w-6 text-primary" /> {t('analysisResults')}
                   </h2>
-                  <Card className="rounded-[2rem] border-emerald-100 bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shadow-xl overflow-hidden p-8">
-                     <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">Soil Fertility</p>
-                     <h2 className="text-5xl font-black mb-4">{recommendations.fertility_level} Level</h2>
+                  <Card className="rounded-[2rem] border-primary/20 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-xl overflow-hidden p-8">
+                     <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-2">{t('soilFertility')}</p>
+                     <h2 className="text-5xl font-black mb-4">{recommendations.fertility_level} {t('level')}</h2>
                      <p className="text-sm font-bold italic opacity-90">{recommendations.fertilizer_recommendation}</p>
                   </Card>
                   
                   <div className="grid gap-6">
                     {recommendations.suitable_crops.map((crop: string, idx: number) => (
-                      <Card key={idx} className="overflow-hidden border-emerald-100 hover:border-emerald-500 transition-all group shadow-md hover:shadow-xl">
+                      <Card key={idx} className="overflow-hidden border-border bg-card hover:border-primary transition-all group shadow-md hover:shadow-xl">
                         <CardContent className="p-0 flex items-center">
-                          <div className="bg-emerald-50 p-6 flex flex-col items-center justify-center w-24 group-hover:bg-emerald-600 transition-colors">
-                            <Sprout className="h-8 w-8 text-emerald-600 group-hover:text-white" />
+                          <div className="bg-primary/5 p-6 flex flex-col items-center justify-center w-24 group-hover:bg-primary transition-colors">
+                            <Sprout className="h-8 w-8 text-primary group-hover:text-primary-foreground" />
                           </div>
                           <div className="p-6 flex-1">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Recommended Crop</p>
-                            <h4 className="text-xl font-black text-slate-800">{crop}</h4>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t('recommendedCrop')}</p>
+                            <h4 className="text-xl font-black text-foreground">{crop}</h4>
                           </div>
                           <div className="pr-8 text-right">
-                             <Badge className="bg-emerald-100 text-emerald-700 border-none font-black">High Suitability</Badge>
+                             <Badge className="bg-primary/10 text-primary border-none font-black">{t('highSuitability')}</Badge>
                           </div>
                         </CardContent>
                       </Card>
                     ))}
                   </div>
-                  <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl flex gap-3 italic">
-                    <Info className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-                    <p className="text-xs text-amber-800 leading-relaxed font-medium">
-                      Disclaimer: Suggestions are based on regional historical data and generalized soil profiles. We recommend conducting a professional soil test for precise planning.
+                  <div className="p-4 bg-secondary/5 border border-secondary/10 rounded-2xl flex gap-3 italic">
+                    <Info className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
+                    <p className="text-xs text-muted-foreground leading-relaxed font-medium">
+                      {t('disclaimer')}: {t('disclaimerText')}
                     </p>
                   </div>
                 </motion.div>
