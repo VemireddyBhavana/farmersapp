@@ -331,7 +331,6 @@ export default function Pests() {
 
 
 
-
         {/* Pest Library Section */}
         <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-slate-200">
           <div className="space-y-6">
