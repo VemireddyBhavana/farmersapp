@@ -176,17 +176,17 @@ export default function Pests() {
         {/* Summary Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
-            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: Bug, color: "text-red-600", bg: "bg-red-50" },
-            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: Leaf, color: "text-orange-600", bg: "bg-orange-50" },
-            { label: t("totalThreats"), value: currentData.stats.threats, icon: ShieldAlert, color: "text-green-600", bg: "bg-green-50" },
-            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: AlertTriangle, color: "text-blue-600", bg: "bg-blue-50" }
+            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: Bug, color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-900/20" },
+            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: Leaf, color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-900/20" },
+            { label: t("totalThreats"), value: currentData.stats.threats, icon: ShieldAlert, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
+            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: AlertTriangle, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" }
           ].map((stat, i) => (
-            <div key={i} className={cn("rounded-2xl p-6 text-center space-y-2 border border-slate-100", stat.bg)}>
-              <div className={cn("mx-auto h-10 w-10 rounded-full flex items-center justify-center bg-white shadow-sm")}>
+            <div key={i} className={cn("rounded-2xl p-6 text-center space-y-2 border border-slate-100 dark:border-slate-800", stat.bg)}>
+              <div className={cn("mx-auto h-10 w-10 rounded-full flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm")}>
                 <stat.icon className={cn("h-5 w-5", stat.color)} />
               </div>
               <div className={cn("text-3xl font-black", stat.color)}>{stat.value}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -282,7 +282,7 @@ export default function Pests() {
                 </motion.div>
               ))
             ) : (
-              <div className="py-12 bg-white border border-dashed border-slate-200 rounded-2xl text-center text-slate-400">
+              <div className="py-12 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">
                 <FileSearch className="h-12 w-12 mx-auto mb-4 opacity-20" />
                 <p>{t("noAnalysisResults")}</p>
               </div>
@@ -294,29 +294,29 @@ export default function Pests() {
         <div className="space-y-8 mb-12">
           <div className="flex items-center gap-2 mb-4">
             <Lightbulb className="h-6 w-6 text-orange-500" />
-            <h3 className="text-2xl font-bold text-slate-900">{t("expertAiStrategy")}</h3>
+            <h3 className="text-2xl font-bold text-foreground">{t("expertAiStrategy")}</h3>
           </div>
           
           {currentData.prevention ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "text-emerald-600", bg: "bg-emerald-50" },
-                { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "text-green-600", bg: "bg-green-50" },
-                { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "text-blue-600", bg: "bg-blue-50" },
-                { title: t("ipmStrategy"), content: currentData.ipm, icon: Stethoscope, color: "text-purple-600", bg: "bg-purple-50" }
+                { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
+                { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
+                { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" },
+                { title: t("ipmStrategy"), content: currentData.ipm, icon: Stethoscope, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-900/20" }
               ].map((strat, i) => (
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={i} 
-                  className="bg-white rounded-2xl p-6 space-y-4 shadow-sm border border-slate-100 h-full"
+                  className="bg-card rounded-2xl p-6 space-y-4 shadow-sm border border-border h-full"
                 >
                   <div className={cn("h-12 w-12 rounded-xl flex items-center justify-center", strat.bg)}>
                     <strat.icon className={cn("h-6 w-6", strat.color)} />
                   </div>
-                  <h4 className="font-bold text-slate-900">{strat.title}</h4>
-                  <p className="text-sm text-slate-500 leading-relaxed italic">
+                  <h4 className="font-bold text-foreground">{strat.title}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed italic">
                     "{strat.content}"
                   </p>
                 </motion.div>
@@ -335,10 +335,10 @@ export default function Pests() {
         <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-slate-200">
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-orange-100 rounded-xl">
-                <Bug className="h-6 w-6 text-orange-600" />
+              <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
+                <Bug className="h-6 w-6 text-orange-600 dark:text-orange-400" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">{t("commonPests")}</h3>
+              <h3 className="text-2xl font-bold text-foreground">{t("commonPests")}</h3>
             </div>
             <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.pests.length > 0 ? currentData.pests.map((item, i) => (
@@ -354,21 +354,21 @@ export default function Pests() {
                       </div>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400" : "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400")}>
                     {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
                     {t(`${item.risk}RiskPrefix`)}
                   </Badge>
                 </div>
-              )) : <div className="p-8 bg-white border border-dashed rounded-2xl text-center text-slate-300">{t("noPestsFound")}</div>}
+              )) : <div className="p-8 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">{t("noPestsFound")}</div>}
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-green-100 rounded-xl">
-                <Leaf className="h-6 w-6 text-green-600" />
+              <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-xl">
+                <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">{t("plantDiseases")}</h3>
+              <h3 className="text-2xl font-bold text-foreground">{t("plantDiseases")}</h3>
             </div>
             <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.diseases.length > 0 ? currentData.diseases.map((item, i) => (
@@ -384,12 +384,12 @@ export default function Pests() {
                       </div>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400" : "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400")}>
                     {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
                     {t(`${item.risk}RiskPrefix`)}
                   </Badge>
                 </div>
-              )) : <div className="p-8 bg-white border border-dashed rounded-2xl text-center text-slate-300">{t("noDiseasesFound")}</div>}
+              )) : <div className="p-8 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">{t("noDiseasesFound")}</div>}
             </div>
           </div>
         </div>
