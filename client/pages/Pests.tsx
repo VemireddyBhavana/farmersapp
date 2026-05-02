@@ -173,6 +173,24 @@ export default function Pests() {
           </p>
         </div>
 
+        {/* Summary Statistics */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          {[
+            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: Bug, color: "text-red-600", bg: "bg-red-50" },
+            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: Leaf, color: "text-orange-600", bg: "bg-orange-50" },
+            { label: t("totalThreats"), value: currentData.stats.threats, icon: ShieldAlert, color: "text-green-600", bg: "bg-green-50" },
+            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: AlertTriangle, color: "text-blue-600", bg: "bg-blue-50" }
+          ].map((stat, i) => (
+            <div key={i} className={cn("rounded-2xl p-6 text-center space-y-2 border border-slate-100", stat.bg)}>
+              <div className={cn("mx-auto h-10 w-10 rounded-full flex items-center justify-center bg-white shadow-sm")}>
+                <stat.icon className={cn("h-5 w-5", stat.color)} />
+              </div>
+              <div className={cn("text-3xl font-black", stat.color)}>{stat.value}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
         {/* Monitoring Setup Card */}
         <Card className="bg-card border-none shadow-sm rounded-2xl mb-8 overflow-hidden">
           <CardContent className="p-6">
@@ -312,23 +330,7 @@ export default function Pests() {
         </div>
 
 
-        {/* Summary Statistics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          {[
-            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: Bug, color: "text-red-600", bg: "bg-red-50" },
-            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: Leaf, color: "text-orange-600", bg: "bg-orange-50" },
-            { label: t("totalThreats"), value: currentData.stats.threats, icon: ShieldAlert, color: "text-green-600", bg: "bg-green-50" },
-            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: AlertTriangle, color: "text-blue-600", bg: "bg-blue-50" }
-          ].map((stat, i) => (
-            <div key={i} className={cn("rounded-2xl p-6 text-center space-y-2 border border-slate-100", stat.bg)}>
-              <div className={cn("mx-auto h-10 w-10 rounded-full flex items-center justify-center bg-white shadow-sm")}>
-                <stat.icon className={cn("h-5 w-5", stat.color)} />
-              </div>
-              <div className={cn("text-3xl font-black", stat.color)}>{stat.value}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+
 
         {/* Pest Library Section */}
         <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-slate-200">
