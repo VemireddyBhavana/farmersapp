@@ -61,14 +61,6 @@ const Explore = () => {
       image: "/pulses_farm.png"
     },
     {
-      title: t('agriKnowledgeHubTitle'),
-      description: t('agriKnowledgeDesc'),
-      icon: BookOpen,
-      color: "bg-indigo-500/10 text-indigo-600",
-      link: "/knowledge",
-      image: "/explore_knowledge.png"
-    },
-    {
       title: t('pestDiseaseDetectionTitle'),
       description: t('pestsDesc'),
       icon: AlertTriangle,
