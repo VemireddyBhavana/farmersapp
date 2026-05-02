@@ -117,7 +117,7 @@ export default function Dashboard() {
             {/* Official Weather Data Table Panel */}
             <Card className="rounded-[2rem] border border-border/50 shadow-xl bg-card overflow-hidden flex flex-col hover-lift">
               <div className="bg-muted border-b border-border px-4 py-3 flex justify-between items-center">
-                <span className="text-sm font-bold text-slate-700 uppercase tracking-widest">{t('meteorologicalData')}</span>
+                <span className="text-sm font-bold text-foreground uppercase tracking-widest">{t('meteorologicalData')}</span>
                 {weather && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium border border-primary/20">{t('live')}</span>}
               </div>
               <CardContent className="flex-1 flex flex-col p-4 justify-between">
@@ -139,11 +139,11 @@ export default function Dashboard() {
                       </div>
                     </div>
                     {/* Official Advisory Block */}
-                    <div className="p-3 bg-yellow-50 border border-yellow-100 rounded">
-                      <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mb-1.5 flex items-center gap-1">
+                    <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 rounded">
+                      <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-1.5 flex items-center gap-1">
                         <AlertTriangle className="h-3 w-3" /> {t('officialAdvisory')}
                       </p>
-                      <p className="text-xs font-medium text-amber-900">
+                      <p className="text-xs font-medium text-amber-900 dark:text-amber-100">
                         {weather.current.temp > 35 ? t('criticalHeatWarning') : t('nominalConditions')}
                       </p>
                     </div>
@@ -157,7 +157,7 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="flex-1 flex flex-col items-center justify-center text-center space-y-2">
-                    <MapPin className="h-6 w-6 text-slate-300" />
+                    <MapPin className="h-6 w-6 text-muted-foreground/30" />
                     <button onClick={getLocationAndFetch} className="px-4 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground rounded transition-colors text-xs font-bold">{t('authorizeGPS')}</button>
                   </div>
                 )}
@@ -180,7 +180,7 @@ export default function Dashboard() {
                     <div className={cn("p-2 rounded max-w-fit border", item.color)}>
                       <item.icon className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-semibold tracking-wide text-slate-700">{item.name}</span>
+                    <span className="text-sm font-semibold tracking-wide text-foreground">{item.name}</span>
                   </div>
                 </Link>
               ))}
@@ -206,7 +206,7 @@ export default function Dashboard() {
                   <Link key={idx} to="/market" className="block p-3 hover:bg-muted/50 transition-colors">
                     <div className="flex justify-between items-center text-sm">
                       <span className="font-semibold text-foreground">{t(item.crop.toLowerCase())}</span>
-                      <span className="font-bold text-slate-900">{item.rate}</span>
+                      <span className="font-bold text-foreground">{item.rate}</span>
                     </div>
                   </Link>
                 ))
@@ -225,8 +225,8 @@ export default function Dashboard() {
                 { title: t('pmfbySchemeTitle'), detail: t('pmfbySchemeDetail') },
               ].map((scheme, i) => (
                 <div key={i} className="p-4 hover:bg-muted/50 transition-colors cursor-pointer group">
-                  <p className="text-sm font-bold text-emerald-800 group-hover:underline">{scheme.title}</p>
-                  <p className="text-xs text-slate-600 mt-1">{scheme.detail}</p>
+                  <p className="text-sm font-bold text-primary dark:text-emerald-400 group-hover:underline">{scheme.title}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{scheme.detail}</p>
                 </div>
               ))}
               <Link to="/agri-schemes" className="block p-3 text-center text-sm font-bold text-primary hover:bg-muted/50">

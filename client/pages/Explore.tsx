@@ -69,10 +69,10 @@ const Explore = () => {
       image: "/explore_pests.png"
     },
     {
-      title: "🌿 Crop Health Monitor",
-      description: "Analyze crop and farm health instantly using smart detection",
+      title: t('cropHealthMonitor'),
+      description: t('analyzeCropHealthTagline'),
       icon: Leaf,
-      color: "bg-emerald-500/10 text-emerald-600",
+      color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       link: "/satellite-analysis",
       image: "/pulses_farm.png"
     },
@@ -119,14 +119,14 @@ const Explore = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-20 pb-12">
+    <div className="min-h-screen bg-background pt-20 pb-12">
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="max-w-4xl mx-auto text-center mb-16 pt-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center space-x-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full text-sm font-bold mb-6"
+            className="inline-flex items-center space-x-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-full text-sm font-bold mb-6"
           >
             <Zap className="h-4 w-4 fill-emerald-500 animate-pulse" />
             <span>{t('ourEcosystem')}</span>
@@ -135,7 +135,7 @@ const Explore = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl lg:text-6xl font-black tracking-tight text-slate-900 mb-6"
+            className="text-4xl lg:text-6xl font-black tracking-tight text-foreground mb-6"
           >
             {t('exploreTitlePrefix')} <span className="text-emerald-600">{t('pureInnovation')}</span> {t('exploreTitleSuffix')}
           </motion.h1>
@@ -143,7 +143,7 @@ const Explore = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-xl text-slate-600 leading-relaxed"
+            className="text-xl text-muted-foreground leading-relaxed"
           >
             {t('exploreSubtitle')}
           </motion.p>
@@ -159,7 +159,7 @@ const Explore = () => {
               transition={{ delay: idx * 0.1 }}
               key={idx}
             >
-              <Card className="overflow-hidden border-none shadow-xl hover:shadow-2xl transition-all duration-500 group rounded-3xl bg-white">
+              <Card className="overflow-hidden border-none shadow-xl hover:shadow-2xl transition-all duration-500 group rounded-3xl bg-card">
                 <div className="flex flex-col md:flex-row">
                   <div className="md:w-2/5 relative overflow-hidden h-48 md:h-auto">
                     <img 
@@ -167,7 +167,7 @@ const Explore = () => {
                       alt={feature.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-slate-900/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-background/60 to-transparent" />
                     <div className="absolute bottom-4 left-4 p-3 rounded-2xl bg-white/20 backdrop-blur-md text-white border border-white/30">
                       <feature.icon className="h-6 w-6" />
                     </div>
@@ -177,10 +177,10 @@ const Explore = () => {
                       <div className={`inline-flex px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider mb-4 ${feature.color}`}>
                         {feature.title}
                       </div>
-                      <h3 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">
+                      <h3 className="text-2xl font-black text-foreground mb-3 group-hover:text-emerald-600 transition-colors">
                         {feature.title}
                       </h3>
-                      <p className="text-slate-600 leading-relaxed mb-6">
+                      <p className="text-muted-foreground leading-relaxed mb-6">
                         {feature.description}
                       </p>
                     </div>
@@ -219,7 +219,7 @@ const Explore = () => {
               </Link>
               <Link to="/contact">
                 <Button variant="outline" className="h-20 px-12 rounded-3xl border-white/30 bg-white/10 text-xl font-black text-white backdrop-blur-md hover:bg-white/20 transition-all">
-                  Contact Support
+                  {t('contactSupport')}
                 </Button>
               </Link>
             </div>
