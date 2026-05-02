@@ -311,21 +311,6 @@ export default function Pests() {
           )}
         </div>
 
-        {/* Chemical Warning Banner */}
-        <div className="bg-red-50 border border-red-100 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6 mb-12">
-          <div className="h-14 w-14 rounded-full bg-red-600 flex items-center justify-center shrink-0 shadow-lg shadow-red-200">
-            <ShieldAlert className="h-8 w-8 text-white" />
-          </div>
-          <div className="space-y-1 text-center md:text-left flex-1">
-            <h4 className="text-xl font-bold text-red-600">{t("chemicalWarningTitle")}</h4>
-            <p className="text-sm text-red-700 leading-relaxed">
-              {t("chemicalWarningDesc")}
-            </p>
-          </div>
-          <Button variant="outline" className="border-red-200 text-red-600 font-bold hover:bg-red-100 rounded-xl shrink-0">
-            {t("readSafetyProtocols")}
-          </Button>
-        </div>
 
         {/* Summary Statistics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
