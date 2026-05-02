@@ -31,7 +31,6 @@ import Location from "./pages/Location";
 import SeedsBuyer from "./pages/SeedsBuyer";
 import WhatsAppChat from "./pages/WhatsAppChat";
 import { FloatingChatbot } from "./components/FloatingChatbot";
-import AgriKnowledge from "./pages/AgriKnowledge";
 import Explore from "./pages/Explore";
 import Community from "./pages/Community";
 import ExpertHelpFull from "./pages/ExpertHelpFull";
@@ -75,8 +74,6 @@ const AppRoutes = () => {
       <Route path="/calendar" element={<Calendar />} />
       <Route path="/pests" element={<Pests />} />
       <Route path="/chat" element={<Chat />} />
-      <Route path="/knowledge" element={<AgriKnowledge />} />
-      <Route path="/guide/:guideId" element={<AgriKnowledge />} />
       <Route path="/agri-schemes" element={<AgriSchemes />} />
       <Route path="/help-center" element={<HelpCenter />} />
       <Route path="/growing-guide" element={<GrowingGuide />} />

@@ -308,58 +308,6 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* AgriFarming Hub Feed */}
-      <section className="space-y-4 pt-4 border-t border-border">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              <BookOpen className="h-6 w-6 text-primary" /> {t('agriFarmingHub')}
-            </h2>
-            <p className="text-sm font-medium text-muted-foreground">{t('agriFarmingHubDesc')}</p>
-          </div>
-          <Link to="/knowledge">
-            <button className="border border-primary/20 text-primary hover:bg-primary/5 font-bold px-4 py-2 rounded-lg transition-colors flex items-center justify-center">
-              {t('viewAllTopics')} <ArrowUpRight className="ml-2 h-4 w-4" />
-            </button>
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { id: "saffron", title: t('indoorSaffronTitle'), category: t('agricultureCategory'), catKey: "agriculture", tag: t('tagNew'), icon: TractorIcon, color: "bg-primary/10 text-primary", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSY1evynbsc_tYbIqXBMj7q4v_WG56ve2SSCA&s" },
-            { id: "egg-production", title: t('eggProductionTitle'), category: t('poultryCategory'), catKey: "livestock", tag: t('tagGuide'), icon: Bird, color: "bg-primary/10 text-primary", img: "https://images.unsplash.com/photo-1569288052389-dac9b01c9c05?auto=format&fit=crop&q=80&w=800" },
-            { id: "vannamei-shrimp", title: t('shrimpFarmingTitle'), category: t('aquacultureCategory'), catKey: "aquaculture", tag: t('tagExpert'), icon: Fish, color: "bg-primary/10 text-primary", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQrho1VB3WThsItYUa1WLYOugvC4LCfv7mAg&s" },
-            { id: "solar-pump", title: t('solarPumpTitle'), category: t('subsidiesCategory'), catKey: "business", tag: t('tagScheme'), icon: Landmark, color: "bg-primary/10 text-primary", img: "https://solarizeindia.in/wp-content/uploads/2024/07/kusum-solar-pump-yojana.jpg" },
-            { id: "aloe-vera", title: t('aloeVeraTitle'), category: t('horticultureCategory'), catKey: "horticulture", tag: t('tagBusiness'), icon: Sprout, color: "bg-primary/10 text-primary", img: "https://pbs.twimg.com/media/FMLdOWGXsAUOIkY.jpg" },
-            { id: "curry-leaves", title: t('curryLeavesTitle'), category: t('gardeningCategory'), catKey: "horticulture", tag: t('tagTips'), icon: SunIcon, color: "bg-primary/10 text-primary", img: "https://blog.suvie.com/wp-content/uploads/2021/08/kadipatta-2701445_1920-1360x907.jpg" }
-          ].map((post, idx) => (
-            <div 
-              key={idx} 
-              onClick={() => navigate(`/guide/${post.id}`)} 
-              className="block group cursor-pointer"
-            >
-              <div className="rounded overflow-hidden border border-border bg-card hover:border-primary hover:shadow-lg transition-all flex flex-col h-full">
-                <div className="h-40 w-full overflow-hidden relative">
-                  <img src={post.img} alt={post.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute top-2 left-2 bg-card/95 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-foreground flex items-center gap-1.5 shadow-sm">
-                    <post.icon className={cn("h-3 w-3", post.color.split(' ')[1])} /> {post.category}
-                  </div>
-                </div>
-                <div className="p-4 flex flex-col flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={cn("px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest leading-none", post.color)}>{post.tag}</span>
-                    <span className="text-[10px] text-muted-foreground/60 font-semibold leading-none">{t('today')}</span>
-                  </div>
-                  <h3 className="font-bold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">{post.title}</h3>
-                  <div className="mt-auto pt-4 text-xs font-semibold text-primary group-hover:underline flex items-center">
-                    {t('cultivationGuide')} →
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
