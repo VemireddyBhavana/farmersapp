@@ -59,17 +59,17 @@ const AIChat = () => {
 
       const lowerContent = content.toLowerCase();
       if (lowerContent.includes("ysr") || lowerContent.includes("bharosa")) {
-        response = "The YSR Rythu Bharosa scheme provides ₹13,500 per year to farmers in Andhra Pradesh. You can apply through our 'Agri Schemes' section or visit the official portal at https://ysrrythubharosa.ap.gov.in/";
+        response = ct("chatYsrResponse");
       } else if (lowerContent.includes("paddy") || lowerContent.includes("rice") || lowerContent.includes("sowing")) {
-        response = "For Paddy sowing, ensure you use 25-30 day old seedlings for transplanting. Maintain 5cm water level and apply urea in 3 splits. For a full guide, check: /growing-guide?crop=rice";
+        response = ct("chatPaddyAdvice");
       } else if (lowerContent.includes("tractor") || lowerContent.includes("rent") || lowerContent.includes("soil")) {
-        response = "For heavy or wet soil, many farmers prefer the John Deere 5310 or Mahindra 275 DI. You can find several models for rent in Chittoor and Tirupati on the Dashboard starting at ₹600/hr.";
+        response = ct("chatTractorAdvice");
       } else if (lowerContent.includes("tomato") || lowerContent.includes("trend") || lowerContent.includes("price")) {
-        response = "Tomato prices are currently high at approx ₹1,800/quintal in AP mandis. It's a good time to harvest if your crop is ready. Check the 'Market' page for real-time daily updates.";
+        response = ct("chatTomatoPrice");
       } else if (lowerContent.includes("track") || lowerContent.includes("application")) {
-        response = "You can track your scheme applications by clicking 'Track My Applications' on the Agri Schemes page. It shows your ID, location, and current verification status.";
+        response = ct("chatTrackAdvice");
       } else if (lowerContent.includes("seed") || lowerContent.includes("variety")) {
-        response = "For the current season, high-yielding Rice varieties like BPT-5204 or MTU-1010 are recommended for your region. Ensure seeds are treated before sowing.";
+        response = ct("chatSeedRecommendation");
       }
 
       setMessages((prev) => [

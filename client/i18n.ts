@@ -39,6 +39,7 @@ i18n
     },
     detection: {
       order: ['localStorage', 'cookie', 'htmlTag', 'path', 'subdomain'],
+      lookupLocalStorage: 'Kisan_lang',
       caches: ['localStorage'],
     },
   });

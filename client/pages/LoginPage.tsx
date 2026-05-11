@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/clerk-react";
 import { Chrome } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LoginPage() {
   const { signIn, isLoaded } = useSignIn();
@@ -56,6 +58,12 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0c]">
+      {/* ── Top Controls ── */}
+      <div className="absolute top-6 right-6 z-50 flex items-center gap-3">
+        <LanguageSwitcher />
+        <ThemeToggle />
+      </div>
+
       {/* ── Floating Animated Background Circles ── */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div

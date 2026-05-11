@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import path from "path";
 
 // Ensure .env is loaded before MONGODB_URI is accessed
-dotenv.config({ path: path.join(process.cwd(), "..", ".env") });
+dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 let isDbConnected = false;
 export const getDbStatus = () => isDbConnected;

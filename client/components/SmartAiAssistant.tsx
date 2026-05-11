@@ -16,8 +16,9 @@ interface Message {
 }
 
 const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
+  const { t, i18n } = useTranslation();
   const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "Hello! I am your Smart Farming Assistant. You can speak to me, type your problem, or upload a photo of your crop for instant analysis.", timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+    { role: "ai", text: t("botWelcome"), timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
   ]);
   const [inputText, setInputText] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -212,10 +213,10 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
               <Sparkles className="text-white h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-white">Smart AI Assistant</h2>
+              <h2 className="text-xl font-black text-white">{t("aiAssistant")}</h2>
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-xs text-emerald-400/60 font-bold uppercase tracking-wider">Online & Listening</span>
+                <span className="text-xs text-emerald-400/60 font-bold uppercase tracking-wider">{t("aiAssistantOnline")}</span>
               </div>
             </div>
           </div>
@@ -266,7 +267,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
           {isThinking && (
             <div className="flex items-center gap-3 text-emerald-400/40">
               <Loader2 className="h-5 w-5 animate-spin" />
-              <span className="text-sm font-black uppercase tracking-tighter">AI is thinking...</span>
+              <span className="text-sm font-black uppercase tracking-tighter">{t("analyzing")}</span>
             </div>
           )}
         </div>
@@ -311,7 +312,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Describe your crop problem..."
+              placeholder={t("chatPlaceholder")}
               className="flex-1 bg-transparent border-none text-white placeholder:text-white/20 h-12 focus-visible:ring-0 text-base font-bold px-4"
             />
 
@@ -330,7 +331,7 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
               className="h-12 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest shadow-lg shadow-emerald-900/40"
             >
               <Send size={18} className="mr-2" />
-              Send
+              {t("send")}
             </Button>
           </div>
           <div className="mt-4 flex items-center justify-center gap-6 text-[10px] text-white/20 font-black uppercase tracking-[0.2em]">
