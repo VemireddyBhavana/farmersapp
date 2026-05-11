@@ -28,7 +28,6 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { i18n } = useTranslation();
 
   // Auto-scroll to bottom
   useEffect(() => {
