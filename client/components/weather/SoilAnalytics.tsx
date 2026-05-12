@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { 
   ResponsiveContainer, AreaChart, Area, XAxis, 
   Tooltip, PieChart, Pie, Cell 
