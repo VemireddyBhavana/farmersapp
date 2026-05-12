@@ -1,23 +1,20 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { WiDaySunny, WiCloudy, WiRain, WiThunderstorm, WiSnow, WiDayCloudy, WiStrongWind } from "react-icons/wi";
-import { useTranslation } from "react-i18next";
+import { WiDaySunny, WiCloudy, WiRain, WiSnow, WiDayCloudy } from "react-icons/wi";
 
 interface ForecastCardsProps {
   daily: any[];
 }
 
 const ForecastCards: React.FC<ForecastCardsProps> = ({ daily }) => {
-  const { t } = useTranslation();
-
   const getIcon = (condition: string) => {
-    const iconClass = "text-6xl group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]";
+    const iconClass = "text-6xl text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-1000";
     switch (condition.toLowerCase()) {
-      case 'rain': return <WiRain className={`${iconClass} text-blue-400`} />;
-      case 'clouds': return <WiCloudy className={`${iconClass} text-slate-300`} />;
-      case 'clear': return <WiDaySunny className={`${iconClass} text-amber-400`} />;
-      case 'snow': return <WiSnow className={`${iconClass} text-white`} />;
-      default: return <WiDayCloudy className={`${iconClass} text-emerald-300`} />;
+      case 'rain': return <WiRain className={iconClass} />;
+      case 'clouds': return <WiCloudy className={iconClass} />;
+      case 'clear': return <WiDaySunny className={iconClass} />;
+      case 'snow': return <WiSnow className={iconClass} />;
+      default: return <WiDayCloudy className={iconClass} />;
     }
   };
 
@@ -25,85 +22,79 @@ const ForecastCards: React.FC<ForecastCardsProps> = ({ daily }) => {
     return new Date(dt * 1000).toLocaleDateString(undefined, { weekday: 'short' });
   };
 
-  const getDayNum = (dt: number) => {
-    return new Date(dt * 1000).getDate();
+  const getFullDate = (dt: number) => {
+    return new Date(dt * 1000).toLocaleDateString(undefined, { day: '2-digit', month: 'short' });
   };
 
   return (
-    <div className="mt-20">
-      <div className="flex items-end justify-between mb-12">
-        <div className="space-y-2">
-            <motion.p 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.5em]"
-            >
-                Orbital Projection
-            </motion.p>
-            <motion.h3 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl md:text-5xl font-black text-emerald-950 dark:text-white tracking-tighter italic"
-            >
-                7-Day <span className="text-emerald-500 underline decoration-emerald-500/30 underline-offset-8">Forecast</span>
-            </motion.h3>
+    <div className="mt-32">
+      <div className="flex items-end justify-between mb-16">
+        <div className="space-y-1">
+            <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.5em]">Future Projections</p>
+            <h3 className="text-4xl font-black text-emerald-950 dark:text-white tracking-tighter uppercase italic">7-Day <span className="text-emerald-500">Timeline</span></h3>
         </div>
-        <div className="hidden md:flex items-center gap-4 text-[10px] text-black/40 dark:text-white/40 font-black tracking-widest uppercase">
-            <span>Mar 12 — 19</span>
-            <div className="h-px w-12 bg-black/10 dark:bg-white/10" />
-            <span>Telemetry Active</span>
+        <div className="h-px flex-1 mx-12 bg-black/5 dark:bg-white/5 hidden lg:block" />
+        <div className="text-right space-y-1">
+            <p className="text-[10px] font-black text-black/30 dark:text-white/30 uppercase tracking-widest">Active Forecast</p>
+            <p className="text-xs font-bold text-black/60 dark:text-white/60 italic">"Plan your harvest window"</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 lg:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-6 lg:gap-8">
         {daily.slice(1, 8).map((day, i) => (
           <motion.div
             key={day.dt}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.8 }}
-            whileHover={{ y: -8 }}
-            className="relative group p-6 lg:p-8 rounded-[2.5rem] bg-white/40 dark:bg-white/[0.03] backdrop-blur-[50px] border border-white/20 dark:border-white/5 flex flex-col items-center gap-6 cursor-pointer overflow-hidden"
+            transition={{ delay: i * 0.1, duration: 1 }}
+            whileHover={{ y: -15, scale: 1.05 }}
+            className="group relative aspect-[1/2] rounded-[3.5rem] bg-gradient-to-b from-white/20 to-white/5 dark:from-white/10 dark:to-transparent backdrop-blur-[40px] border-t border-l border-white/30 border-b border-r border-white/10 flex flex-col items-center justify-between p-8 cursor-pointer overflow-hidden shadow-2xl transition-all"
           >
-            {/* Hover Glow Effect */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.08)_0%,transparent_70%)] animate-slow-spin" />
-            </div>
+            {/* Refractive border effect */}
+            <div className="absolute inset-0 border border-white/5 rounded-[3.5rem] pointer-events-none" />
+            
+            {/* Background Glow */}
+            <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)] animate-slow-spin opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-            <div className="text-center relative z-10">
-              <p className="text-[11px] font-black text-black/40 dark:text-white/30 uppercase tracking-[0.3em] mb-1 group-hover:text-emerald-500 transition-colors">
+            {/* Top: Day & Date */}
+            <div className="text-center space-y-1 relative z-10">
+              <p className="text-[10px] font-black text-black/30 dark:text-white/30 uppercase tracking-[0.3em] group-hover:text-emerald-400 transition-colors">
                 {getDayName(day.dt)}
               </p>
-              <p className="text-lg font-black text-emerald-950 dark:text-white/60 group-hover:text-white transition-colors">
-                {getDayNum(day.dt)}
+              <p className="text-xs font-black text-emerald-950 dark:text-white/60">
+                {getFullDate(day.dt)}
               </p>
             </div>
 
-            <div className="py-2 group-hover:scale-110 transition-transform duration-700 ease-out relative z-10">
-              {getIcon(day.weather[0].main)}
-              {/* Rain Drop Overlay */}
-              {day.pop > 0 && (
-                 <div className="absolute -bottom-2 -right-2 bg-blue-500/20 backdrop-blur-md px-2 py-0.5 rounded-full border border-blue-500/20 flex items-center gap-1">
-                    <span className="text-[9px] font-black text-blue-400">{Math.round(day.pop * 100)}%</span>
-                 </div>
-              )}
+            {/* Middle: Icon & Temp */}
+            <div className="flex flex-col items-center gap-6 relative z-10 w-full">
+              <div className="relative group-hover:scale-125 transition-transform duration-1000 ease-out">
+                {getIcon(day.weather[0].main)}
+                {day.pop > 0 && (
+                   <motion.div 
+                     animate={{ y: [0, -5, 0] }}
+                     transition={{ duration: 2, repeat: Infinity }}
+                     className="absolute -bottom-2 -right-2 bg-blue-500/30 backdrop-blur-md px-2 py-1 rounded-full border border-white/10"
+                   >
+                     <span className="text-[8px] font-black text-white">{Math.round(day.pop * 100)}%</span>
+                   </motion.div>
+                )}
+              </div>
+              <div className="text-center">
+                <h4 className="text-6xl font-black text-emerald-950 dark:text-white group-hover:text-emerald-400 transition-colors tracking-tighter">
+                    {Math.round(day.temp.max)}°
+                </h4>
+                <p className="text-[10px] font-black text-black/20 dark:text-white/20 uppercase tracking-[0.2em] mt-1">
+                    Forecast
+                </p>
+              </div>
             </div>
 
-            <div className="space-y-4 w-full relative z-10">
-                <div className="flex flex-col items-center">
-                    <p className="text-4xl font-black text-emerald-950 dark:text-white group-hover:text-emerald-400 transition-colors">
-                        {Math.round(day.temp.max)}°
-                    </p>
-                    <p className="text-sm font-bold text-black/20 dark:text-white/20">
-                        {Math.round(day.temp.min)}°
-                    </p>
-                </div>
-
-                <div className="pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-center gap-2 text-black/30 dark:text-white/20">
-                    <WiStrongWind className="text-xl" />
-                    <p className="text-[10px] font-black uppercase tracking-widest">{Math.round(day.wind_speed)} km/h</p>
-                </div>
+            {/* Bottom: Subtext */}
+            <div className="w-full relative z-10 pt-6 border-t border-white/10">
+                <p className="text-[8px] font-black text-black/30 dark:text-white/20 uppercase text-center tracking-[0.4em]">
+                    Bio-Sync Active
+                </p>
             </div>
           </motion.div>
         ))}
