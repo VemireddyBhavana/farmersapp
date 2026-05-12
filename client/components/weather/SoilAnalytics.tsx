@@ -1,4 +1,8 @@
 import React from "react";
+import { 
+  ResponsiveContainer, AreaChart, Area, XAxis, 
+  Tooltip, PieChart, Pie, Cell 
+} from "recharts";
 import { FiDroplet, FiWind, FiThermometer, FiSettings, FiActivity, FiMapPin, FiZap, FiBox } from "react-icons/fi";
 import { WiDaySunny, WiHumidity, WiThermometer } from "react-icons/wi";
 
