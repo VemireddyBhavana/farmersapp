@@ -130,7 +130,7 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
                 {Math.round(current.temp)}<span className="text-2xl text-emerald-500 ml-1">°C</span>
             </h2>
             <p className="text-emerald-500 font-bold uppercase tracking-[0.5em] text-[10px] mt-2">
-                {t(current.weather?.[0]?.description || "weather.stable")}
+                {t(current.weather?.[0]?.description || "weather_data.stable")}
             </p>
         </div>
       </div>
@@ -157,7 +157,7 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
                     <WiStrongWind />
                 </div>
                 <div>
-                    <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">{t('weather.velocity')}</p>
+                    <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">{t('weather_data.velocity')}</p>
                     <p className="text-xl font-black text-white">{current.wind_speed} <span className="text-[10px] text-emerald-500">KM/H</span></p>
                 </div>
             </div>
@@ -166,7 +166,7 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
                     <WiDaySunny />
                 </div>
                 <div>
-                    <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">{t('weather.solar_uv')}</p>
+                    <p className="text-[8px] font-black text-white/40 uppercase tracking-widest">{t('weather_data.solar_uv')}</p>
                     <p className="text-xl font-black text-white">{current.uvi || 0} <span className="text-[10px] text-amber-500">INDEX</span></p>
                 </div>
             </div>
@@ -179,8 +179,8 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
 
         {/* Right: Gauges Panel */}
         <div className="lg:col-span-4 flex justify-end gap-8 bg-black/20 p-6 rounded-3xl backdrop-blur-xl border border-white/5">
-            <HUDGauge value={current.humidity} label={t('weather.humidity')} unit="%" color="#10b981" />
-            <HUDGauge value={Math.round(current.pressure || 1013)} label={t('weather.pressure')} unit="MBAR" color="#3b82f6" max={1100} />
+            <HUDGauge value={current.humidity} label={t('weather_data.humidity')} unit="%" color="#10b981" />
+            <HUDGauge value={Math.round(current.pressure || 1013)} label={t('weather_data.pressure')} unit="MBAR" color="#3b82f6" max={1100} />
         </div>
       </div>
     </motion.div>
