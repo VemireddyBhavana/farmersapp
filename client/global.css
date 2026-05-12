@@ -108,6 +108,15 @@
   .glass-dark {
     @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
   }
+  .glass-premium {
+    @apply bg-white/40 dark:bg-white/[0.03] backdrop-blur-[40px] border border-white/30 dark:border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5)];
+  }
+  .glass-card {
+    @apply bg-white/10 dark:bg-white/[0.02] backdrop-blur-md border border-white/20 dark:border-white/5 hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-500;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
@@ -379,4 +388,60 @@
   background-size: 40px 40px;
   mask-image: linear-gradient(to bottom, transparent, black, transparent);
   animation: bg-scroll 30s linear infinite;
+}
+
+/* Weather Specific Animations */
+@keyframes rain {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+.animate-rain {
+  animation: rain 1s linear infinite;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* HUD & Radar Animations */
+@keyframes radar-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-radar {
+  animation: radar-spin 4s linear infinite;
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.animate-scan {
+  animation: scan-line 3s ease-in-out infinite;
+}
+
+.hud-dashed-circle {
+  stroke-dasharray: 4 4;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@keyframes slow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-slow-spin {
+  animation: slow-spin 20s linear infinite;
 }

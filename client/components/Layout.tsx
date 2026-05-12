@@ -15,7 +15,8 @@ const Layout = ({ children }: LayoutProps) => {
   const { isSignedIn, isLoaded } = useUser();
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
 
-  const showUI = isLoaded && isSignedIn && !isAuthPage;
+  const isWeatherPage = location.pathname === "/weather";
+  const showUI = isLoaded && isSignedIn && !isAuthPage && !isWeatherPage;
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans antialiased">

@@ -2732,4 +2732,13 @@ export const en = {
     chatTomatoPrice: "Tomato prices are currently high at approx ₹1,800/quintal in AP mandis. It's a good time to harvest if your crop is ready.",
     chatTrackAdvice: "You can track your scheme applications by clicking 'Track My Applications' on the Agri Schemes page.",
     chatSeedRecommendation: "For the current season, high-yielding Rice varieties like BPT-5204 or MTU-1010 are recommended for your region.",
+    weather: {
+        velocity: "Wind Velocity",
+        solar_uv: "Solar UV",
+        humidity: "Atmosphere Humidity",
+        pressure: "Air Pressure",
+        stable: "Stable Environment",
+        daybreak: "Daybreak",
+        eventide: "Eventide",
+    }
 };

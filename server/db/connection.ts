@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs";
 
 // Ensure .env is loaded before MONGODB_URI is accessed
-dotenv.config({ path: path.join(process.cwd(), ".env") });
+const envPath = fs.existsSync(path.join(process.cwd(), ".env")) 
+  ? path.join(process.cwd(), ".env") 
+  : path.join(process.cwd(), "..", ".env");
+dotenv.config({ path: envPath });
 
 let isDbConnected = false;
 export const getDbStatus = () => isDbConnected;

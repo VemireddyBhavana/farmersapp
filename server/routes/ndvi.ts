@@ -8,7 +8,9 @@ export const initEarthEngine = () => {
   return new Promise<void>((resolve, reject) => {
     try {
       let credentials: any;
-      const saPath = path.join(process.cwd(), "service-account.json");
+      const saPath = fs.existsSync(path.join(process.cwd(), "service-account.json"))
+        ? path.join(process.cwd(), "service-account.json")
+        : path.join(process.cwd(), "..", "service-account.json");
 
       if (fs.existsSync(saPath)) {
         console.log("📂 [Earth Engine] Loading credentials from service-account.json");

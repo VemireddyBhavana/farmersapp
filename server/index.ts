@@ -1,12 +1,16 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env from project root
-dotenv.config({ path: path.join(process.cwd(), ".env") });
+// Load .env - check current and parent directory
+const envPath = fs.existsSync(path.join(process.cwd(), ".env")) 
+  ? path.join(process.cwd(), ".env") 
+  : path.join(process.cwd(), "..", ".env");
+dotenv.config({ path: envPath });
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./db/connection";

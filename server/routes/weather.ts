@@ -32,62 +32,88 @@ export const handleWeather = async (req: Request, res: Response) => {
     }
 
     // 2. Check Cache
-    const cacheKey = `weather_${queryLat}_${queryLon}`;
+    const cacheKey = `weather_v2_${queryLat}_${queryLon}`;
     const cachedData = weatherCache.get(cacheKey);
     if (cachedData) {
-      console.log(`[Weather] Serving from cache: ${cacheKey}`);
       return res.json(cachedData);
     }
 
-    // 3. Fetch from One Call 3.0
-    const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${queryLat}&lon=${queryLon}&units=metric&appid=${API_KEY}`;
-    const response = await fetch(url);
+    // 3. Fetch REAL DATA using Free 2.5 API (Supported by all keys)
+    // A. Current Weather
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${queryLat}&lon=${queryLon}&units=metric&appid=${API_KEY}`;
+    const currentRes = await fetch(currentUrl);
+    const currentData = await currentRes.json();
 
-    // Handle 401 Unauthorized smoothly (Demo Fallback)
-    if (response.status === 401) {
-      if (!req.app.get('weather_fallback_logged')) {
-        console.info("ℹ️ [Weather] One Call 3.0 API key not active. Running in Simulation Mode.");
-        req.app.set('weather_fallback_logged', true);
+    if (!currentRes.ok) throw new Error(currentData.message || "Failed to fetch current weather");
+
+    // B. 5-Day Forecast (3-hour intervals)
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${queryLat}&lon=${queryLon}&units=metric&appid=${API_KEY}`;
+    const forecastRes = await fetch(forecastUrl);
+    const forecastData = await forecastRes.json();
+
+    if (!forecastRes.ok) throw new Error(forecastData.message || "Failed to fetch forecast");
+
+    // 4. TRANSFORM DATA to match expected frontend structure
+    const combinedData: any = {
+      lat: parseFloat(queryLat),
+      lon: parseFloat(queryLon),
+      locationName: locationName || currentData.name || "Current Location",
+      current: {
+        dt: currentData.dt,
+        temp: currentData.main.temp,
+        feels_like: currentData.main.feels_like,
+        pressure: currentData.main.pressure,
+        humidity: currentData.main.humidity,
+        uvi: 0, // Not available in 2.5 Free
+        visibility: currentData.visibility,
+        wind_speed: currentData.wind.speed,
+        sunrise: currentData.sys.sunrise,
+        sunset: currentData.sys.sunset,
+        weather: currentData.weather
+      },
+      // Map 3-hour forecast to hourly (first 24 hours)
+      hourly: forecastData.list.slice(0, 8).map((item: any) => ({
+        dt: item.dt,
+        temp: item.main.temp,
+        pop: item.pop || 0,
+        weather: item.weather
+      })),
+      // Map to Daily (pick one entry per day)
+      daily: []
+    };
+
+    // Filter for daily forecast (one per day, around noon)
+    const dailyMap = new Map();
+    forecastData.list.forEach((item: any) => {
+      const date = new Date(item.dt * 1000).toLocaleDateString();
+      if (!dailyMap.has(date)) {
+        dailyMap.set(date, {
+          dt: item.dt,
+          temp: {
+            max: item.main.temp_max,
+            min: item.main.temp_min,
+            day: item.main.temp // Approximation
+          },
+          pop: item.pop || 0,
+          weather: item.weather,
+          humidity: item.main.humidity,
+          wind_speed: item.wind.speed
+        });
       }
-      const demoData = getDemoWeather(queryLat, queryLon, locationName);
-      return res.json(demoData);
-    }
+    });
+    combinedData.daily = Array.from(dailyMap.values());
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return res.status(response.status).json({ error: errorText });
-    }
+    // 5. Add Advisory
+    combinedData.advisory = getFarmingAdvisory(combinedData);
+    combinedData.alerts = getFarmingAlerts(combinedData);
 
-    const data = await response.json();
-    
-    // Add location name if we have it
-    if (locationName) {
-      data.locationName = locationName;
-    } else {
-        // Reverse geocoding to get location name if only lat/lon provided
-        try {
-            const revGeoUrl = `https://api.openweathermap.org/geo/1.0/reverse?lat=${queryLat}&lon=${queryLon}&limit=1&appid=${API_KEY}`;
-            const revRes = await fetch(revGeoUrl);
-            const revData = await revRes.json();
-            if (revData && revData.length > 0) {
-                data.locationName = revData[0].name || "Current Location";
-            }
-        } catch (e) {
-            data.locationName = "Current Location";
-        }
-    }
-
-    // 4. Enhanced AI Farming Advisory
-    data.advisory = getFarmingAdvisory(data);
-    data.alerts = getFarmingAlerts(data);
-
-    // 5. Update Cache
-    weatherCache.set(cacheKey, data);
-    res.json(data);
+    // 6. Update Cache
+    weatherCache.set(cacheKey, combinedData);
+    res.json(combinedData);
 
   } catch (error: any) {
     console.error("[Weather Error]", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 };
 
