@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiAlertCircle, FiDroplet, FiSun, FiWind, FiBug, FiActivity } from "react-icons/fi";
+import { FiAlertCircle, FiDroplet, FiSun, FiWind, FiActivity } from "react-icons/fi";
+import { Bug } from "lucide-react";
 
 interface FarmerAlertsProps {
   weather: any;
@@ -44,7 +45,7 @@ const FarmerAlerts: React.FC<FarmerAlertsProps> = ({ weather }) => {
       priority: "AI INTEL",
       msg: "Humidity levels favor Locust swarm migration in Zone C-12.",
       risk: 92,
-      icon: <FiBug />,
+      icon: <Bug />,
       color: "border-emerald-500/30 text-emerald-500 bg-emerald-500/5",
       accent: "bg-emerald-500"
     }
