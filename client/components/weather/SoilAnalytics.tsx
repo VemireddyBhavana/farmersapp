@@ -225,7 +225,6 @@ const SoilAnalytics: React.FC<SoilAnalyticsProps> = ({ weather }) => {
             </div>
         </div>
       </div>
-      </div>
     </div>
   );
 };
