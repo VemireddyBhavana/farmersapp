@@ -92,13 +92,13 @@ export default function AgriTools() {
                <div className="p-2 bg-emerald-500/20 rounded-xl">
                  <Calculator className="h-6 w-6 text-emerald-400" />
                </div>
-               <Badge className="bg-white/5 text-emerald-400 border-emerald-500/20 uppercase font-black tracking-widest text-[10px]">ISMIGS RESOURCE INTEL</Badge>
+               <Badge className="bg-white/5 text-emerald-400 border-emerald-500/20 uppercase font-black tracking-widest text-[10px]">{t("ismigsResourceIntel")}</Badge>
             </div>
             <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic uppercase leading-none">
-               {t("agriToolsLabel") || "Agricultural Resource Intelligence"}
+               {t("agriToolsLabel")}
             </h1>
             <p className="text-slate-400 text-sm font-medium leading-relaxed">
-              Precision calculators for hydraulic resource management and cultivation fiscal projections. Powered by <span className="text-white font-bold">India State Macro Intelligence & Governance Systems.</span>
+              {t("agriIntelligenceDesc")}
             </p>
           </div>
         </div>
@@ -109,10 +109,10 @@ export default function AgriTools() {
           <div className="flex justify-center mb-12">
             <TabsList className="bg-white/5 backdrop-blur-xl p-2 rounded-[2rem] border border-white/5 h-auto gap-4">
               <TabsTrigger value="costs" className="rounded-[1.5rem] px-10 py-4 data-[state=active]:bg-emerald-500 data-[state=active]:text-slate-950 transition-all font-black uppercase text-[10px] tracking-widest gap-2 italic">
-                <Coins className="h-4 w-4" /> Cultivation Costs
+                <Coins className="h-4 w-4" /> {t("cultivationCosts")}
               </TabsTrigger>
               <TabsTrigger value="hydraulic" className="rounded-[1.5rem] px-10 py-4 data-[state=active]:bg-blue-500 data-[state=active]:text-white transition-all font-black uppercase text-[10px] tracking-widest gap-2 italic">
-                <Droplets className="h-4 w-4" /> Hydraulic Resource
+                <Droplets className="h-4 w-4" /> {t("hydraulicResource")}
               </TabsTrigger>
             </TabsList>
           </div>
@@ -130,9 +130,9 @@ export default function AgriTools() {
                   <CardHeader className="p-8 pb-4">
                     <div className="flex items-center gap-3 mb-2">
                        <BarChart3 className="h-4 w-4 text-emerald-400" />
-                       <CardTitle className="text-sm font-black uppercase tracking-widest text-white italic">Fiscal Parameters</CardTitle>
+                       <CardTitle className="text-sm font-black uppercase tracking-widest text-white italic">{t("fiscalParameters")}</CardTitle>
                     </div>
-                    <CardDescription className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Define your financial exposure</CardDescription>
+                    <CardDescription className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">{t("defineFinancialExposure")}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-8 pt-0 space-y-6">
                     <div className="space-y-2">
@@ -163,7 +163,7 @@ export default function AgriTools() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-2">Market Price (₹/Qtl)</Label>
+                      <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 ml-2">{t("marketPriceQtl")}</Label>
                       <div className="relative">
                         <Input 
                           type="number" 
@@ -176,7 +176,7 @@ export default function AgriTools() {
                     </div>
 
                     <Button className="w-full h-14 rounded-2xl bg-emerald-500 text-slate-950 hover:bg-emerald-400 font-black text-sm uppercase tracking-widest italic group">
-                      Analyze Exposure <Zap className="h-4 w-4 ml-2 group-hover:fill-current" />
+                      {t("analyzeExposure")} <Zap className="h-4 w-4 ml-2 group-hover:fill-current" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -202,25 +202,25 @@ export default function AgriTools() {
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">{t("netProfit")}</p>
                             <p className="text-5xl font-black italic tracking-tighter text-emerald-400">₹{Math.round(profitResults.profit).toLocaleString()}</p>
                           </div>
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-none font-black italic uppercase text-[10px] tracking-widest px-4 py-1.5">Efficiency Rating: 9.4A</Badge>
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-none font-black italic uppercase text-[10px] tracking-widest px-4 py-1.5">{t("efficiencyRating")}: 9.4A</Badge>
                         </div>
                       </div>
 
                       <div className="mt-16 pt-12 border-t border-white/5 grid grid-cols-2 sm:grid-cols-4 gap-8">
                         <div className="space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">Total Yield</p>
-                          <p className="font-black text-white italic">{Math.round(CROPS.find(c => c.id === profitCropId)?.yieldPerAcre! * profitLandSize)} <span className="text-[10px] text-white/20 font-bold uppercase ml-1">Qtl</span></p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">{t("totalYield")}</p>
+                          <p className="font-black text-white italic">{Math.round(CROPS.find(c => c.id === profitCropId)?.yieldPerAcre! * profitLandSize)} <span className="text-[10px] text-white/20 font-bold uppercase ml-1">{t("quintalAbbr") || "Qtl"}</span></p>
                         </div>
                         <div className="space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">Biomass Cost</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">{t("biomassCost")}</p>
                           <p className="font-black text-white italic">₹{Math.round(profitResults.cost * 0.15).toLocaleString()}</p>
                         </div>
                         <div className="space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">Supplementation</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">{t("supplementation")}</p>
                           <p className="font-black text-white italic">₹{Math.round(profitResults.cost * 0.35).toLocaleString()}</p>
                         </div>
                         <div className="space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">Human CapEx</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-white/20">{t("humanCapex")}</p>
                           <p className="font-black text-white italic">₹{Math.round(profitResults.cost * 0.50).toLocaleString()}</p>
                         </div>
                       </div>
@@ -232,8 +232,8 @@ export default function AgriTools() {
                           <Info className="h-5 w-5 text-emerald-400" />
                         </div>
                         <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                           <span className="text-white font-black uppercase tracking-widest text-[10px] block mb-2">Macro Intel Bulletin</span>
-                           Current algorithmic data indicates a <span className="text-emerald-400 font-black">12% Index Lift</span> in {CROPS.find(c => c.id === profitCropId)?.name} value across this sector. Secure output for Q4 optimization.
+                           <span className="text-white font-black uppercase tracking-widest text-[10px] block mb-2">{t("macroIntelBulletin")}</span>
+                           {t("algorithmicDataLift")?.replace("{crop}", CROPS.find(c => c.id === profitCropId)?.name || "")}
                         </p>
                       </div>
                    </div>
@@ -252,9 +252,9 @@ export default function AgriTools() {
                   <CardHeader className="p-8 pb-4">
                     <div className="flex items-center gap-3 mb-2">
                        <Droplets className="h-4 w-4 text-blue-400" />
-                       <CardTitle className="text-sm font-black uppercase tracking-widest text-white italic">Hydraulic Configuration</CardTitle>
+                       <CardTitle className="text-sm font-black uppercase tracking-widest text-white italic">{t("hydraulicConfiguration")}</CardTitle>
                     </div>
-                    <CardDescription className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">Define your irrigation matrix</CardDescription>
+                    <CardDescription className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">{t("defineIrrigationMatrix")}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-8 pt-0 space-y-6">
                     <div className="space-y-2">
@@ -299,7 +299,7 @@ export default function AgriTools() {
                     </div>
 
                     <Button className="w-full h-14 rounded-2xl bg-blue-500 text-white hover:bg-blue-400 font-black text-sm uppercase tracking-widest italic group shadow-xl shadow-blue-500/20">
-                      Sync Hydro Cycle <Zap className="h-4 w-4 ml-2 group-hover:fill-current" />
+                      {t("syncHydroCycle")} <Zap className="h-4 w-4 ml-2 group-hover:fill-current" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -312,11 +312,11 @@ export default function AgriTools() {
                           <div className="absolute top-6 right-6 text-blue-500/10 group-hover:scale-110 transition-transform">
                             <Droplets className="h-16 w-16" />
                           </div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-4">{t("dailyWaterNeed") || "DAILY HYDRIC LOAD"}</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-4">{t("dailyHydricLoad")}</p>
                           <h4 className="text-6xl font-black text-blue-400 italic tracking-tighter mb-2">
                             {Math.round(waterResults.dailyLiters).toLocaleString()}
                           </h4>
-                          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">{t("litersPerDay") || "LITERS / 24HR"}</p>
+                          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">{t("liters24Hr")}</p>
                         </CardContent>
                       </Card>
 
@@ -325,11 +325,11 @@ export default function AgriTools() {
                           <div className="absolute top-6 right-6 text-white/5 group-hover:scale-110 transition-transform">
                             <Waves className="h-16 w-16" />
                           </div>
-                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-4">PRECIPITATION DEPTH</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20 mb-4">{t("precipitationDepth")}</p>
                           <h4 className="text-6xl font-black text-white italic tracking-tighter mb-2">
                             {waterResults.dailyMm.toFixed(1)}
                           </h4>
-                          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">MM PER SECTOR</p>
+                          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">{t("mmPerSector")}</p>
                         </CardContent>
                       </Card>
                    </div>
@@ -337,10 +337,10 @@ export default function AgriTools() {
                    <Card className="glass-card rounded-[3rem] border-white/5 p-10 bg-white/5">
                       <div className="flex items-center justify-between mb-10">
                         <div className="space-y-1">
-                          <h4 className="text-sm font-black uppercase tracking-widest text-white italic">{t("irrigationSchedule") || "HYDRAULIC PHASING"}</h4>
-                          <p className="text-[10px] font-black uppercase tracking-tighter text-white/20">Temporal water management protocol</p>
+                          <h4 className="text-sm font-black uppercase tracking-widest text-white italic">{t("hydraulicPhasing")}</h4>
+                          <p className="text-[10px] font-black uppercase tracking-tighter text-white/20">{t("temporalWaterManagement")}</p>
                         </div>
-                        <Badge variant="outline" className="border-blue-500/20 text-blue-400 font-black uppercase text-[9px] px-3 py-1 italic tracking-widest">Link Active</Badge>
+                        <Badge variant="outline" className="border-blue-500/20 text-blue-400 font-black uppercase text-[9px] px-3 py-1 italic tracking-widest">{t("linkActive")}</Badge>
                       </div>
                       
                       <div className="relative px-4">
@@ -349,13 +349,13 @@ export default function AgriTools() {
                         </div>
                         
                         <div className="grid grid-cols-5 gap-4 relative z-10">
-                           {["Sowing", "Tillering", "Heading", "Flowering", "Dough"].map((stage, idx) => (
+                           {["sowing", "tillering", "heading", "flowering", "dough"].map((stage, idx) => (
                              <div key={idx} className="flex flex-col items-center group">
                                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-[10px] font-black shadow-2xl mb-4 transition-all border shrink-0", idx === 0 ? "bg-blue-500 text-white border-blue-400 rotate-45 scale-110" : "bg-white/5 text-white/20 border-white/5")}>
                                   <div className={cn(idx === 0 ? "-rotate-45" : "")}>{idx + 1}</div>
                                </div>
-                               <h5 className="font-black text-[10px] text-center uppercase tracking-widest italic text-white/40 group-hover:text-blue-400 transition-colors">{stage}</h5>
-                               <p className="text-[8px] text-white/10 text-center mt-1 font-bold uppercase tracking-tighter">Phase {idx + 1}</p>
+                               <h5 className="font-black text-[10px] text-center uppercase tracking-widest italic text-white/40 group-hover:text-blue-400 transition-colors">{t(stage)}</h5>
+                               <p className="text-[8px] text-white/10 text-center mt-1 font-bold uppercase tracking-tighter">{t("phase")} {idx + 1}</p>
                              </div>
                            ))}
                         </div>
@@ -377,26 +377,26 @@ export default function AgriTools() {
           <div className="relative z-10 grid lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-10">
                <div className="space-y-4">
-                 <Badge className="bg-blue-500/20 text-blue-400 border-none px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-[0.3em] italic">System Philosophy</Badge>
+                 <Badge className="bg-blue-500/20 text-blue-400 border-none px-4 py-1.5 rounded-xl font-black uppercase text-[10px] tracking-[0.3em] italic">{t("systemPhilosophy")}</Badge>
                  <h2 className="text-5xl lg:text-7xl font-black text-white italic tracking-tighter leading-[0.9] uppercase">
-                   Empowering Farmers with <span className="text-blue-500">Macro Intelligence.</span>
+                   {t("empoweringFarmersWithMacro")}
                  </h2>
                </div>
                <p className="text-slate-400 text-lg leading-relaxed font-medium">
-                 Interrogating India State Macro Intelligence & Governance System (ISMIGS) datasets to deliver precision hydraulic modeling and fiscal exposure analysis. TechSpark AI transforms raw governance data into <span className="text-white font-bold">survival strategies for the modern agronomist.</span>
+                 {t("interrogatingIsmigs")}
                </p>
                <div className="flex flex-wrap gap-6 pt-6">
                  <Button className="h-16 rounded-3xl bg-blue-500 hover:bg-blue-400 text-white px-10 py-6 font-black text-sm uppercase tracking-widest italic shadow-2xl shadow-blue-500/20 transition-all hover:scale-105">
-                   Export Data Manifest <ChevronRight className="ml-2 h-4 w-4" />
+                   {t("exportDataManifest")} <ChevronRight className="ml-2 h-4 w-4" />
                  </Button>
                </div>
             </div>
             <div className="grid grid-cols-2 gap-8">
               {[
-                { icon: Droplets, title: "Hydraulic Load", desc: "40% Resource Optimization", color: "text-blue-400", bg: "bg-blue-500/10" },
-                { icon: Coins, title: "Fiscal Exposure", desc: "Real-time CapEx Tracking", color: "text-emerald-400", bg: "bg-emerald-500/10" },
-                { icon: BarChart3, title: "Data Integrity", desc: "Verified State Datasets", color: "text-purple-400", bg: "bg-purple-500/10" },
-                { icon: Sprout, title: "Yield Intelligence", desc: "Neural Crop Projections", color: "text-amber-400", bg: "bg-amber-500/10" },
+                { icon: Droplets, title: t("hydraulicLoad"), desc: t("resourceOptimization"), color: "text-blue-400", bg: "bg-blue-500/10" },
+                { icon: Coins, title: t("fiscalExposure"), desc: t("realTimeCapexTracking"), color: "text-emerald-400", bg: "bg-emerald-500/10" },
+                { icon: BarChart3, title: t("dataIntegrity"), desc: t("verifiedStateDatasets"), color: "text-purple-400", bg: "bg-purple-500/10" },
+                { icon: Sprout, title: t("yieldIntelligence"), desc: t("neuralCropProjections"), color: "text-amber-400", bg: "bg-amber-500/10" },
               ].map((item, i) => (
                 <div key={i} className={cn("p-8 rounded-[2.5rem] glass-card border-white/5 space-y-4 hover:bg-white/5 transition-all group", i % 2 !== 0 && "mt-12")}>
                   <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl", item.bg)}>

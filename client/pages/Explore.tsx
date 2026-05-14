@@ -109,12 +109,12 @@ const Explore = () => {
       image: "/subsidy_finder.png"
     },
     {
-      title: t('toolSharingTitle'),
-      description: t('toolSharingDesc'),
-      icon: Truck,
-      color: "bg-blue-500/10 text-blue-600",
-      link: "/tool-sharing",
-      image: "/tool_sharing.png"
+      title: t('agriIntelligenceSuite'),
+      description: t('agriIntelligenceDesc'),
+      icon: Zap,
+      color: "bg-emerald-500/10 text-emerald-600",
+      link: "/agri-tools",
+      image: "/hero_rice_field.png"
     }
   ];
 
