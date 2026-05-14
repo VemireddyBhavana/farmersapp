@@ -1,74 +1,62 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { WiDaySunny, WiCloudy, WiRain, WiDayCloudy, WiRaindrops } from "react-icons/wi";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { FiCalendar, FiSun, FiCloud, FiCloudRain, FiDroplets, FiWind } from "react-icons/fi";
+import { motion } from "framer-motion";
 
 interface ForecastCardsProps {
   daily: any[];
 }
 
 const ForecastCards: React.FC<ForecastCardsProps> = ({ daily }) => {
-  const getIcon = (condition: string) => {
-    const iconClass = "text-3xl";
-    switch (condition.toLowerCase()) {
-      case 'rain': return <WiRain className={`${iconClass} text-blue-500`} />;
-      case 'clouds': return <WiCloudy className={`${iconClass} text-slate-400`} />;
-      case 'clear': return <WiDaySunny className={`${iconClass} text-amber-500`} />;
-      default: return <WiDayCloudy className={`${iconClass} text-slate-400`} />;
-    }
-  };
-
-  const getDayName = (dt: number) => {
-    return new Date(dt * 1000).toLocaleDateString(undefined, { weekday: 'long' });
-  };
+  if (!daily) return null;
 
   return (
-    <Card className="rounded-[2rem] border border-border/50 shadow-xl bg-card overflow-hidden flex flex-col hover-lift h-full">
-      <CardHeader className="bg-muted border-b border-border px-8 py-4">
-        <div className="flex justify-between items-center">
-            <CardTitle className="text-sm font-bold text-foreground uppercase tracking-widest">7-Day Forecast</CardTitle>
-            <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground/40">Outlook</span>
-        </div>
+    <Card className="rounded-[2.5rem] border-none bg-card/40 backdrop-blur-xl shadow-xl overflow-hidden h-full">
+      <CardHeader className="p-8">
+        <CardTitle className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground/60 flex items-center gap-2">
+          <FiCalendar className="text-primary" /> 7-Day Outlook
+        </CardTitle>
       </CardHeader>
-
-      <CardContent className="p-2 divide-y divide-border/50">
-        {daily.slice(0, 7).map((day, i) => (
-          <motion.div
-            key={day.dt}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="flex items-center justify-between px-6 py-4 hover:bg-muted/50 transition-colors group"
-          >
-            <div className="w-1/3">
-              <p className="text-sm font-bold text-foreground">
-                {i === 0 ? "Today" : getDayName(day.dt)}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 w-1/3 justify-center">
-              <div>
-                {getIcon(day.weather[0].main)}
-              </div>
-              {day.pop > 0 && (
-                <div className="flex items-center gap-0.5 text-blue-500 min-w-[40px]">
-                  <span className="text-[10px] font-black">{Math.round(day.pop * 100)}%</span>
+      <CardContent className="p-8 pt-0">
+        <div className="space-y-4">
+          {daily.slice(0, 7).map((day, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="flex items-center justify-between p-4 rounded-3xl hover:bg-primary/5 transition-all group"
+            >
+              <div className="flex items-center gap-4 w-1/3">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest w-10">
+                  {i === 0 ? "TODAY" : new Date(day.dt * 1000).toLocaleDateString([], { weekday: 'short' }).toUpperCase()}
+                </p>
+                <div className="text-2xl text-primary group-hover:scale-110 transition-transform">
+                  {day.weather[0].main === 'Rain' ? <FiCloudRain /> : day.weather[0].main === 'Clear' ? <FiSun /> : <FiCloud />}
                 </div>
-              )}
-            </div>
+              </div>
 
-            <div className="flex items-center gap-4 w-1/3 justify-end text-sm font-black">
-              <span className="text-foreground">{Math.round(day.temp.max)}°</span>
-              <span className="text-muted-foreground/40">{Math.round(day.temp.min)}°</span>
-            </div>
-          </motion.div>
-        ))}
+              <div className="flex items-center gap-4 w-1/3 justify-center">
+                 <div className="flex items-center gap-1">
+                    <FiDroplets className="text-[10px] text-blue-500" />
+                    <span className="text-[10px] font-black text-blue-500">{Math.round(day.pop * 100)}%</span>
+                 </div>
+                 <div className="flex items-center gap-1">
+                    <FiWind className="text-[10px] text-muted-foreground/40" />
+                    <span className="text-[10px] font-black text-muted-foreground/40">{Math.round(day.wind_speed)}</span>
+                 </div>
+              </div>
+
+              <div className="flex items-center gap-3 w-1/3 justify-end">
+                <span className="text-lg font-black text-foreground italic">{Math.round(day.temp.max)}°</span>
+                <span className="text-lg font-black text-muted-foreground/30 italic">{Math.round(day.temp.min)}°</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
 };
 
 export default ForecastCards;
-
-
-
