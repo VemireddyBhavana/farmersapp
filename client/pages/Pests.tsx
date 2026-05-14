@@ -1,38 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ShieldAlert, 
-  Bug, 
-  Leaf, 
-  Search, 
-  MapPin, 
-  ArrowRight, 
-  ShieldCheck, 
-  Activity, 
-  Eye, 
-  Info, 
-  AlertTriangle,
-  ChevronDown,
-  Droplets,
-  Wind,
-  Zap,
-  FlaskConical,
-  Sprout,
-  X,
-  Plus,
-  ArrowUpRight,
-  TrendingUp,
-  Microscope,
-  Stethoscope,
-  Lightbulb,
-  RefreshCcw,
-  CheckCircle2,
-  AlertCircle,
-  XCircle,
-  FileSearch
-} from "lucide-react";
+  FiShield, FiBug, FiType, FiSearch, FiMapPin, FiArrowRight, 
+  FiCheckCircle, FiActivity, FiEye, FiInfo, FiAlertTriangle,
+  FiChevronDown, FiDroplet, FiWind, FiZap, FiBox, 
+  FiTrendingUp, FiCheck, FiAlertCircle, FiXCircle, FiRefreshCw,
+  FiChevronRight, FiNavigation, FiPlay
+} from "react-icons/fi";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   Select, 
@@ -161,49 +137,80 @@ export default function Pests() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-12 font-sans">
+    <div className="min-h-screen bg-[#f1f2f3] dark:bg-[#0b111a] font-['Open_Sans'] pb-20">
+      {/* Exact Header Style from Weather Page */}
+      <nav className="bg-[#004d73] shadow-md border-b border-white/10 sticky top-0 z-50">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+             <div className="text-white font-black text-xl tracking-tighter italic flex items-center gap-1">
+                Pest<span className="text-[#ffcc00]">&</span>Disease
+             </div>
+          </div>
+          <div className="hidden md:flex items-center gap-6 text-white text-[11px] font-bold uppercase tracking-wider">
+             <a href="#" className="hover:text-[#ffcc00]">{t("allCrops")}</a>
+             <a href="#" className="hover:text-[#ffcc00]">{t("activeAlerts")}</a>
+             <a href="#" className="hover:text-[#ffcc00]">{t("organicTreatment")}</a>
+          </div>
+        </div>
+      </nav>
+
       <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Breadcrumbs */}
+        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-8">
+           <span className="hover:text-[#004d73] cursor-pointer">{t("home")}</span>
+           <FiChevronRight />
+           <span className="text-[#004d73]">{t("pestsAndDisease")}</span>
+        </div>
+
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-black text-foreground mb-3 tracking-tight">
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-5xl font-black text-[#004d73] dark:text-white mb-4 tracking-tight uppercase italic leading-none">
             {t("pestsAndDisease")}
           </h1>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-sm font-semibold text-slate-500 max-w-2xl dark:text-white/60">
             {t("pestAdvisoryDesc")}
           </p>
         </div>
 
-        {/* Summary Statistics */}
+        {/* Summary Statistics - Matching Weather Style */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
-            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: Bug, color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-900/20" },
-            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: Leaf, color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-900/20" },
-            { label: t("totalThreats"), value: currentData.stats.threats, icon: ShieldAlert, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
-            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: AlertTriangle, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" }
+            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: FiBug, color: "text-[#004d73]", bg: "bg-white" },
+            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: FiActivity, color: "text-[#004d73]", bg: "bg-white" },
+            { label: t("totalThreats"), value: currentData.stats.threats, icon: FiAlertTriangle, color: "text-[#ef4444]", bg: "bg-white" },
+            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: FiZap, color: "text-[#ffcc00]", bg: "bg-[#004d73]" }
           ].map((stat, i) => (
-            <div key={i} className={cn("rounded-2xl p-6 text-center space-y-2 border border-slate-100 dark:border-slate-800", stat.bg)}>
-              <div className={cn("mx-auto h-10 w-10 rounded-full flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm")}>
-                <stat.icon className={cn("h-5 w-5", stat.color)} />
+            <div key={i} className={cn("rounded-xl p-6 shadow-sm border border-slate-100 dark:border-white/5", stat.bg)}>
+              <div className="flex justify-between items-start mb-4">
+                 <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center text-lg", i === 3 ? "bg-white/10 text-white" : "bg-slate-50 dark:bg-white/5", stat.color)}>
+                    <stat.icon />
+                 </div>
+                 {i === 3 && <div className="text-[10px] font-black text-[#ffcc00] uppercase tracking-widest">Live</div>}
               </div>
-              <div className={cn("text-3xl font-black", stat.color)}>{stat.value}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{stat.label}</div>
+              <div className={cn("text-3xl font-black mb-1", i === 3 ? "text-white" : "text-[#333] dark:text-white")}>{stat.value}</div>
+              <div className={cn("text-[10px] font-bold uppercase tracking-widest", i === 3 ? "text-white/60" : "text-slate-400")}>{stat.label}</div>
             </div>
           ))}
         </div>
 
         {/* Monitoring Setup Card */}
-        <Card className="bg-card border-none shadow-sm rounded-2xl mb-8 overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <Eye className="h-6 w-6 text-orange-500" />
-              <h3 className="text-xl font-bold text-foreground">{t("fieldInputCenter")}</h3>
+        <Card className="bg-white dark:bg-slate-900 border-none shadow-sm rounded-xl mb-8 overflow-hidden border border-slate-100 dark:border-white/5">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-[#004d73] rounded-lg flex items-center justify-center text-white shadow-lg">
+                 <FiEye className="text-xl" />
+              </div>
+              <div>
+                 <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("fieldInputCenter")}</h3>
+                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Environmental Analysis</p>
+              </div>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6 items-end">
+            <div className="grid md:grid-cols-3 gap-8 items-end">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-muted-foreground ml-1">{t("selectYourCrop")}</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t("selectYourCrop")}</label>
                 <Select value={selectedCrop} onValueChange={(val) => { setSelectedCrop(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-background border-border h-12 rounded-xl focus:ring-orange-500 text-foreground">
+                  <SelectTrigger className="bg-slate-50 dark:bg-white/5 border-none h-12 rounded-lg focus:ring-[#004d73] text-[#333] dark:text-white font-bold">
                     <SelectValue placeholder={t("selectYourCrop")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl max-h-[300px]">
@@ -220,9 +227,9 @@ export default function Pests() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-muted-foreground ml-1">{t("currentWeather")}</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t("currentWeather")}</label>
                 <Select value={weatherCondition} onValueChange={(val) => { setWeatherCondition(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-background border-border h-12 rounded-xl focus:ring-orange-500 text-foreground">
+                  <SelectTrigger className="bg-slate-50 dark:bg-white/5 border-none h-12 rounded-lg focus:ring-[#004d73] text-[#333] dark:text-white font-bold">
                     <SelectValue placeholder={t("currentWeather")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
@@ -237,9 +244,9 @@ export default function Pests() {
               <div>
                 <Button 
                   onClick={getRecommendations}
-                  className="w-full h-12 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                  className="w-full h-12 bg-[#004d73] hover:bg-[#003a57] text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-lg flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg"
                 >
-                  {isAnalyzing ? <RefreshCcw className="h-5 w-5 animate-spin" /> : <Bug className="h-5 w-5" />}
+                  {isAnalyzing ? <FiRefreshCw className="h-4 w-4 animate-spin" /> : <FiSearch className="h-4 w-4" />}
                   {isAnalyzing ? t("analyzing") : t("fetchAdvisory")}
                 </Button>
               </div>
@@ -248,43 +255,49 @@ export default function Pests() {
         </Card>
 
         {/* Analysis Results */}
-        <div className="space-y-6 mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle className="h-6 w-6 text-red-600" />
-            <h3 className="text-2xl font-bold text-foreground">{t("activeAlerts")} ({currentData.alerts.length})</h3>
+        <div className="space-y-6 mb-12">
+          <div className="flex items-center justify-between mb-8 px-1">
+             <div className="flex items-center gap-3">
+                <FiAlertTriangle className="text-xl text-[#ef4444]" />
+                <h3 className="text-lg font-black text-[#333] dark:text-white uppercase tracking-tight">{t("activeAlerts")}</h3>
+             </div>
+             <span className="bg-[#ef4444] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{currentData.alerts.length} Detected</span>
           </div>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4">
             {currentData.alerts.length > 0 ? (
               currentData.alerts.map((alert, i) => (
                 <motion.div 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.05 }}
                   key={i} 
-                  className="bg-card border border-red-100 dark:border-red-900/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all group"
+                  className="bg-white dark:bg-slate-900 border-none rounded-xl p-6 shadow-sm border border-slate-100 dark:border-white/5 flex gap-6 group hover:border-[#ef4444]/20 transition-all"
                 >
-                  <div className="flex gap-4">
-                    <div className="mt-1">
-                      <AlertTriangle className="h-6 w-6 text-red-600 shrink-0" />
+                  <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-center justify-center text-red-600 text-xl shrink-0 group-hover:scale-110 transition-transform">
+                    <FiAlertTriangle />
+                  </div>
+                  <div className="space-y-2 flex-1">
+                    <div className="flex justify-between items-start">
+                       <h4 className="text-lg font-black text-[#333] dark:text-white leading-none">
+                         {t(`${alert.id}Name`)}
+                       </h4>
+                       <span className="text-[10px] font-black text-red-600 uppercase tracking-widest bg-red-50 dark:bg-red-900/40 px-2 py-0.5 rounded">
+                          {t(`${alert.risk}RiskPrefix`)}
+                       </span>
                     </div>
-                    <div className="space-y-2">
-                      <h4 className="text-xl font-bold text-red-600">
-                        {t(`${alert.risk}RiskPrefix`)}: {t(`${alert.id}Name`)}
-                      </h4>
-                      <p className="text-red-500 font-medium leading-relaxed">{t(`${alert.id}Desc`)}</p>
-                      <div className="pt-2">
-                        <span className="text-red-800 font-bold">{t("actionRequiredLabel")}: </span>
-                        <span className="text-red-800 font-medium">{t(`${alert.id}Action`)}</span>
-                      </div>
+                    <p className="text-sm font-semibold text-slate-500 dark:text-white/60 leading-relaxed">{t(`${alert.id}Desc`)}</p>
+                    <div className="pt-3 flex items-center gap-3 border-t border-slate-50 dark:border-white/5">
+                      <span className="text-[10px] font-black text-[#004d73] dark:text-[#ffcc00] uppercase tracking-widest">{t("actionRequiredLabel")}:</span>
+                      <span className="text-xs font-bold text-slate-700 dark:text-white/80">{t(`${alert.id}Action`)}</span>
                     </div>
                   </div>
                 </motion.div>
               ))
             ) : (
-              <div className="py-12 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">
-                <FileSearch className="h-12 w-12 mx-auto mb-4 opacity-20" />
-                <p>{t("noAnalysisResults")}</p>
+              <div className="py-20 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm border border-dashed border-slate-200 dark:border-white/10">
+                <FiSearch className="h-12 w-12 mx-auto mb-4 text-slate-200" />
+                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t("noAnalysisResults")}</p>
               </div>
             )}
           </div>
@@ -292,39 +305,46 @@ export default function Pests() {
 
         {/* AI Powered Recommendations Strategy */}
         <div className="space-y-8 mb-12">
-          <div className="flex items-center gap-2 mb-4">
-            <Lightbulb className="h-6 w-6 text-orange-500" />
-            <h3 className="text-2xl font-bold text-foreground">{t("expertAiStrategy")}</h3>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-[#ffcc00] rounded-lg flex items-center justify-center text-[#004d73] shadow-lg">
+               <FiZap className="text-xl" />
+            </div>
+            <div>
+               <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("expertAiStrategy")}</h3>
+               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Curated Treatment Plan</p>
+            </div>
           </div>
           
           {currentData.prevention ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
-                { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
-                { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" },
-                { title: t("ipmStrategy"), content: currentData.ipm, icon: Stethoscope, color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-900/20" }
+                { title: t("preventionStrategy"), content: currentData.prevention, icon: FiShield, color: "text-emerald-600", bg: "bg-emerald-50" },
+                { title: t("organicTreatment"), content: currentData.organic, icon: FiDroplet, color: "text-blue-600", bg: "bg-blue-50" },
+                { title: t("monitoringTips"), content: currentData.monitoring, icon: FiEye, color: "text-[#004d73]", bg: "bg-slate-50" },
+                { title: t("ipmStrategy"), content: currentData.ipm, icon: FiActivity, color: "text-[#ffcc00]", bg: "bg-[#004d73]" }
               ].map((strat, i) => (
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={i} 
-                  className="bg-card rounded-2xl p-6 space-y-4 shadow-sm border border-border h-full"
+                  className={cn("bg-white dark:bg-slate-900 rounded-xl p-6 space-y-6 shadow-sm border border-slate-100 dark:border-white/5 h-full group hover:shadow-md transition-all", i === 3 && "bg-[#004d73] border-none")}
                 >
-                  <div className={cn("h-12 w-12 rounded-xl flex items-center justify-center", strat.bg)}>
-                    <strat.icon className={cn("h-6 w-6", strat.color)} />
+                  <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center text-xl transition-transform group-hover:scale-110", i === 3 ? "bg-white/10 text-[#ffcc00]" : strat.bg, strat.color)}>
+                    <strat.icon />
                   </div>
-                  <h4 className="font-bold text-foreground">{strat.title}</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed italic">
-                    "{strat.content}"
-                  </p>
+                  <div className="space-y-2">
+                    <h4 className={cn("text-xs font-black uppercase tracking-widest", i === 3 ? "text-white" : "text-[#004d73]")}>{strat.title}</h4>
+                    <p className={cn("text-xs font-bold leading-relaxed italic", i === 3 ? "text-white/80" : "text-slate-500 dark:text-white/60")}>
+                      "{strat.content}"
+                    </p>
+                  </div>
                 </motion.div>
               ))}
             </div>
           ) : (
-            <div className="bg-muted/30 border border-dashed border-border rounded-xl p-12 text-center text-muted-foreground">
-               {t("inputFieldDetailsPlaceholder")}
+            <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-white/10 rounded-xl p-16 text-center shadow-sm">
+               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest italic">{t("inputFieldDetailsPlaceholder")}</p>
             </div>
           )}
         </div>
@@ -332,64 +352,64 @@ export default function Pests() {
 
 
         {/* Pest Library Section */}
-        <div className="grid md:grid-cols-2 gap-12 pt-8 border-t border-slate-200">
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
-                <Bug className="h-6 w-6 text-orange-600 dark:text-orange-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">{t("commonPests")}</h3>
+        <div className="grid md:grid-cols-2 gap-12 pt-12 border-t border-slate-200 dark:border-white/5">
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 mb-8 px-1">
+               <div className="w-10 h-10 bg-white dark:bg-slate-900 rounded-lg flex items-center justify-center text-[#004d73] shadow-sm border border-slate-100 dark:border-white/5">
+                  <FiBug className="text-xl" />
+               </div>
+               <div>
+                  <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("commonPests")}</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Entomological Database</p>
+               </div>
             </div>
-            <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.pests.length > 0 ? currentData.pests.map((item, i) => (
-                <div key={i} className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between group">
+                <div key={i} className="bg-white dark:bg-slate-900 border-none rounded-xl p-4 flex items-center justify-between group shadow-sm border border-slate-100 dark:border-white/5 hover:border-[#004d73]/20 transition-all">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-muted rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    <div className="h-12 w-12 bg-slate-50 dark:bg-white/5 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">{item.icon}</div>
                     <div>
-                      <h4 className="font-bold text-foreground">{t(`${item.id}Name`)}</h4>
-                      <div className="flex gap-2 mt-1">
-                        <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase tracking-tighter">
-                          {t(`${item.id}Desc`).substring(0, 15)}...
-                        </span>
-                      </div>
+                      <h4 className="text-sm font-black text-[#333] dark:text-white leading-none mb-1">{t(`${item.id}Name`)}</h4>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                        {t(`${item.id}Desc`).substring(0, 30)}...
+                      </p>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400" : "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400")}>
-                    {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
-                    {t(`${item.risk}RiskPrefix`)}
+                  <Badge className={cn("px-2 py-1 rounded border-none text-[9px] font-black uppercase tracking-widest", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                    {item.risk} risk
                   </Badge>
                 </div>
-              )) : <div className="p-8 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">{t("noPestsFound")}</div>}
+              )) : <div className="p-12 bg-white dark:bg-slate-900 rounded-xl text-center border border-dashed border-slate-200 dark:border-white/10 text-slate-400 text-xs font-bold uppercase">{t("noPestsFound")}</div>}
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-xl">
-                <Leaf className="h-6 w-6 text-green-600 dark:text-green-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground">{t("plantDiseases")}</h3>
+          <div className="space-y-8">
+            <div className="flex items-center gap-3 mb-8 px-1">
+               <div className="w-10 h-10 bg-white dark:bg-slate-900 rounded-lg flex items-center justify-center text-emerald-600 shadow-sm border border-slate-100 dark:border-white/5">
+                  <FiActivity className="text-xl" />
+               </div>
+               <div>
+                  <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("plantDiseases")}</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pathology Archive</p>
+               </div>
             </div>
-            <div className="grid gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
               {currentData.diseases.length > 0 ? currentData.diseases.map((item, i) => (
-                <div key={i} className="bg-card border border-border rounded-2xl p-5 flex items-center justify-between group">
+                <div key={i} className="bg-white dark:bg-slate-900 border-none rounded-xl p-4 flex items-center justify-between group shadow-sm border border-slate-100 dark:border-white/5 hover:border-emerald-500/20 transition-all">
                   <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-muted rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                    <div className="h-12 w-12 bg-slate-50 dark:bg-white/5 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">{item.icon}</div>
                     <div>
-                      <h4 className="font-bold text-foreground">{t(`${item.id}Name`)}</h4>
-                      <div className="flex gap-2 mt-1">
-                         <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md uppercase tracking-tighter">
-                          {t(`${item.id}Desc`).substring(0, 15)}...
-                        </span>
-                      </div>
+                      <h4 className="text-sm font-black text-[#333] dark:text-white leading-none mb-1">{t(`${item.id}Name`)}</h4>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                        {t(`${item.id}Desc`).substring(0, 30)}...
+                      </p>
                     </div>
                   </div>
-                  <Badge className={cn("px-2 py-1 rounded-md text-[10px] font-black uppercase", item.risk === "high" ? "bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400" : "bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400")}>
-                    {item.risk === "high" ? <XCircle className="h-3 w-3 mr-1" /> : <AlertCircle className="h-3 w-3 mr-1" />}
-                    {t(`${item.risk}RiskPrefix`)}
+                  <Badge className={cn("px-2 py-1 rounded border-none text-[9px] font-black uppercase tracking-widest", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
+                    {item.risk} risk
                   </Badge>
                 </div>
-              )) : <div className="p-8 bg-muted/10 border border-dashed border-border rounded-2xl text-center text-muted-foreground">{t("noDiseasesFound")}</div>}
+              )) : <div className="p-12 bg-white dark:bg-slate-900 rounded-xl text-center border border-dashed border-slate-200 dark:border-white/10 text-slate-400 text-xs font-bold uppercase">{t("noDiseasesFound")}</div>}
             </div>
           </div>
         </div>
