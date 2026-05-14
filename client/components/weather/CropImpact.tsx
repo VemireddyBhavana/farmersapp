@@ -1,16 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FiActivity, FiArrowUpRight, FiArrowDownRight, FiShield } from "react-icons/fi";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface CropImpactProps {
   weather: any;
 }
 
 const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
+  const { t } = useLanguage();
+  
   const crops = [
-    { name: "Basmati Rice", health: 92, status: "Optimal", impact: "High humidity favoring rapid leaf development.", trend: "up" },
-    { name: "Wheat (HD-2967)", health: 78, status: "Stress", impact: "Temperature surge detected. Monitoring for terminal heat stress.", trend: "down" },
-    { name: "Organic Corn", health: 85, status: "Stable", impact: "Solar radiation levels ideal for photosynthesis.", trend: "up" }
+    { name: t("basmatiRice"), health: 92, status: t("optimal"), impact: t("basmatiImpact"), trend: "up" },
+    { name: t("wheatHD2967"), health: 78, status: t("stress"), impact: t("wheatImpact"), trend: "down" },
+    { name: t("organicCorn"), health: 85, status: t("stable"), impact: t("cornImpact"), trend: "up" }
   ];
 
   return (
@@ -18,11 +21,11 @@ const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
             <FiActivity className="text-emerald-500 text-xl" />
-            <h3 className="text-white font-black text-xl tracking-tighter uppercase italic">Crop Weather Impact</h3>
+            <h3 className="text-slate-900 dark:text-white font-black text-xl tracking-tighter uppercase italic">{t("cropWeatherImpact")}</h3>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-black text-white/40 uppercase tracking-widest">
+        <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 dark:text-white/40 uppercase tracking-widest">
             <FiShield className="text-emerald-500" />
-            AI Protection Active
+            {t("aiProtectionActive")}
         </div>
       </div>
 
@@ -34,7 +37,7 @@ const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ scale: 1.02 }}
-            className="p-8 rounded-[3rem] bg-white/5 border border-white/5 backdrop-blur-3xl relative overflow-hidden group shadow-2xl"
+            className="p-8 rounded-[3rem] bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5 backdrop-blur-3xl relative overflow-hidden group shadow-xl dark:shadow-2xl"
           >
             <div className="absolute top-0 right-0 p-6">
                 {crop.trend === 'up' ? 
@@ -46,15 +49,15 @@ const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
             <div className="space-y-6">
                 <div>
                     <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">{crop.status}</p>
-                    <h4 className="text-2xl font-black text-white tracking-tighter">{crop.name}</h4>
+                    <h4 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">{crop.name}</h4>
                 </div>
 
                 <div className="space-y-2">
                     <div className="flex justify-between items-end">
-                        <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Health Index</span>
-                        <span className="text-xl font-black text-white">{crop.health}%</span>
+                        <span className="text-[10px] font-black text-slate-400 dark:text-white/40 uppercase tracking-widest">{t("healthIndex")}</span>
+                        <span className="text-xl font-black text-slate-900 dark:text-white">{crop.health}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                         <motion.div 
                             initial={{ width: 0 }}
                             animate={{ width: `${crop.health}%` }}
@@ -64,7 +67,7 @@ const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
                     </div>
                 </div>
 
-                <p className="text-xs font-medium text-white/60 leading-relaxed italic border-t border-white/5 pt-6">
+                <p className="text-xs font-medium text-slate-600 dark:text-white/60 leading-relaxed italic border-t border-slate-100 dark:border-white/5 pt-6">
                     "{crop.impact}"
                 </p>
             </div>
@@ -79,3 +82,4 @@ const CropImpact: React.FC<CropImpactProps> = ({ weather }) => {
 };
 
 export default CropImpact;
+

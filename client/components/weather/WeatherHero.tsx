@@ -27,14 +27,14 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
           <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#004d73] dark:text-white flex items-center gap-2">
             {location} · {weather.country || 'India'}
           </h1>
-          <p className="text-xs font-semibold text-slate-500 dark:text-white/60">
+          <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
             {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit' })} {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
           </p>
         </div>
         <div className="flex flex-col items-end gap-2">
            <div className="bg-[#ff9900] text-white px-3 py-1 rounded-md text-[11px] font-black flex items-center gap-2 shadow-sm">
              <span>{Math.round(weather.current.aqi || 260)}</span>
-             <span className="opacity-80 uppercase tracking-tighter">Poor</span>
+             <span className="opacity-80 uppercase tracking-tighter">{t("aqiPoor")}</span>
            </div>
         </div>
       </div>
@@ -43,14 +43,14 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
       <div className="flex items-center justify-between py-6">
         <div className="flex items-start gap-4">
           <div className="relative">
-            <div className="absolute -top-6 left-0 bg-[#004d73] text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">now</div>
+            <div className="absolute -top-6 left-0 bg-[#004d73] text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">{t("now")}</div>
             <span className="text-[6rem] md:text-[8rem] font-black leading-none tracking-tighter text-[#333] dark:text-white tabular-nums">
               {Math.round(current.temp)}°
             </span>
           </div>
           <div className="mt-4 flex flex-col gap-1">
              <div className="text-2xl font-bold text-slate-700 dark:text-white/90 capitalize leading-none">{description}</div>
-             <div className="text-sm font-semibold text-slate-400">Feels like {Math.round(current.feels_like)}°</div>
+             <div className="text-sm font-semibold text-slate-400 dark:text-slate-500">{t("feelsLike")} {Math.round(current.feels_like)}°</div>
           </div>
         </div>
         
@@ -68,8 +68,8 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
                  <FiPlay className="ml-1 fill-current" />
               </div>
               <div className="space-y-0.5">
-                 <p className="text-[10px] font-bold uppercase text-[#004d73] dark:text-[#ffcc00] tracking-widest">90 Min. Weather</p>
-                 <p className="text-[11px] font-black text-slate-500">Live Forecast</p>
+                 <p className="text-[10px] font-bold uppercase text-[#004d73] dark:text-[#ffcc00] tracking-widest">{t("ninetyMinWeather")}</p>
+                 <p className="text-[11px] font-black text-slate-500 dark:text-slate-400">{t("liveForecast")}</p>
               </div>
            </div>
            <FiChevronRight className="text-slate-300 group-hover/90:translate-x-1 transition-transform" />

@@ -11,6 +11,7 @@ import WeatherHero from "@/components/weather/WeatherHero";
 import ForecastCards from "@/components/weather/ForecastCards";
 import HourlyChart from "@/components/weather/HourlyChart";
 import WeatherMap from "@/components/weather/WeatherMap";
+import CropImpact from "@/components/weather/CropImpact";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -92,6 +93,8 @@ const Weather: React.FC = () => {
             <div className="lg:col-span-8 space-y-6">
                <WeatherHero weather={weather} location={weather.locationName} />
                
+               <CropImpact />
+               
                <HourlyChart hourly={weather.hourly} />
 
                <div className="space-y-4">
@@ -137,13 +140,13 @@ const Weather: React.FC = () => {
                      </h4>
                      <div className="space-y-8 pt-4">
                         <div className="relative h-2 w-full bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 rounded-full">
-                           <div className="absolute top-[-12px] left-[70%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-[#333]" />
+                           <div className="absolute top-[-12px] left-[70%] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-[#333] dark:border-t-white" />
                            <div className="absolute top-4 left-[70%] -translate-x-1/2 text-center">
                               <p className="text-lg font-black text-[#333] dark:text-white">8</p>
                               <p className="text-[10px] font-bold text-red-500 uppercase">{t("veryHigh")}</p>
                            </div>
                         </div>
-                        <p className="text-[11px] font-medium text-slate-500 leading-relaxed pt-8">
+                        <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed pt-8">
                            {t("uvProtectionAdvice")}
                         </p>
                      </div>
@@ -156,7 +159,7 @@ const Weather: React.FC = () => {
                <AstroWidget current={weather.current} />
                
                {/* Regional News / Text Section */}
-               <Card className="rounded-xl bg-[#004d73] text-white p-6 shadow-sm border-none overflow-hidden relative">
+               <Card className="rounded-xl bg-[#004d73] dark:bg-slate-800 text-white p-6 shadow-sm border-none overflow-hidden relative">
                   <FiZap className="absolute top-[-20px] right-[-20px] text-8xl opacity-10" />
                   <h4 className="text-sm font-bold uppercase tracking-widest mb-4 border-b border-white/10 pb-4">{t("regionalWeatherNews")}</h4>
                   <p className="text-xs font-bold leading-relaxed text-white/80 italic mb-6">

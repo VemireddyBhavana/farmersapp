@@ -57,7 +57,7 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#0a0a0c]">
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background">
       {/* ── Top Controls ── */}
       <div className="absolute top-6 right-6 z-50 flex items-center gap-3">
         <LanguageSwitcher />
@@ -65,7 +65,7 @@ export default function LoginPage() {
       </div>
 
       {/* ── Floating Animated Background Circles ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50 dark:opacity-100">
         <motion.div
           animate={{
             x: [0, 80, 0],
@@ -116,10 +116,10 @@ export default function LoginPage() {
         transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
         className="relative z-10 w-full max-w-md px-8"
       >
-        <div className="glow-card shadow-[0_32px_80px_-16px_rgba(0,0,0,0.8)]">
-          <div className="glow-card-inner">
+        <div className="glow-card shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] dark:shadow-[0_32px_80px_-16px_rgba(0,0,0,0.8)]">
+          <div className="glow-card-inner bg-white/70 dark:bg-[#0a0a0c]/70">
             {/* Subtle reflection effect */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-white/20 dark:from-white/5 to-transparent pointer-events-none" />
             
             <div className="relative z-10 space-y-12 text-center">
               <div className="space-y-4">
@@ -127,7 +127,7 @@ export default function LoginPage() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 1, ease: [0.4, 0, 0.2, 1] }}
-                  className="text-5xl font-black text-white tracking-tighter"
+                  className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter"
                 >
                   {t("loginWelcome")}
                 </motion.h1>
@@ -135,7 +135,7 @@ export default function LoginPage() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7, duration: 1, ease: [0.4, 0, 0.2, 1] }}
-                  className="text-slate-400 text-lg font-medium tracking-tight"
+                  className="text-slate-600 dark:text-slate-400 text-lg font-medium tracking-tight"
                 >
                   {t("loginSubtitle")}
                 </motion.p>
@@ -146,11 +146,11 @@ export default function LoginPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-                  whileHover={{ scale: 1.02, backgroundColor: "#f8fafc", boxShadow: "0 0 30px rgba(255,255,255,0.15)" }}
+                  whileHover={{ scale: 1.02, backgroundColor: "#f8fafc", boxShadow: "0 0 30px rgba(0,0,0,0.05)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleGoogleLogin}
                   disabled={!isLoaded}
-                  className="w-full h-16 flex items-center justify-center gap-4 bg-white text-slate-950 rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-shadow disabled:opacity-50 group/google"
+                  className="w-full h-16 flex items-center justify-center gap-4 bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-shadow disabled:opacity-50 group/google"
                 >
                   <div className="group-hover/google:scale-110 transition-transform duration-500 ease-[0.4, 0, 0.2, 1]">
                     <GoogleIcon />
@@ -162,11 +162,11 @@ export default function LoginPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.1, duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-                  whileHover={{ scale: 1.02, backgroundColor: "#1e1e24", borderColor: "rgba(255,255,255,0.2)" }}
+                  whileHover={{ scale: 1.02, backgroundColor: "#f1f5f9", borderColor: "rgba(0,0,0,0.1)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAppleLogin}
                   disabled={!isLoaded}
-                  className="w-full h-16 flex items-center justify-center gap-4 bg-[#121216]/80 border border-white/10 text-white rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-all disabled:opacity-50 group/apple"
+                  className="w-full h-16 flex items-center justify-center gap-4 bg-white dark:bg-[#121216]/80 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-[1.25rem] font-bold text-sm uppercase tracking-[0.2em] transition-all disabled:opacity-50 group/apple"
                 >
                   <div className="group-hover/apple:scale-110 transition-transform duration-500 ease-[0.4, 0, 0.2, 1]">
                     <AppleIcon />
@@ -181,7 +181,8 @@ export default function LoginPage() {
       </motion.div>
 
       {/* Background radial highlight */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.01),transparent)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
     </div>
+
   );
 }

@@ -148,26 +148,26 @@ export default function Pests() {
       </div>
 
       {/* Field Input Center - Matching AgriSchemes Search Card */}
-      <Card className="rounded-[2.5rem] border-primary/5 bg-white shadow-sm overflow-hidden">
+      <Card className="rounded-[2.5rem] border-primary/5 bg-white dark:bg-slate-900 shadow-sm overflow-hidden transition-colors">
         <CardContent className="p-10 md:p-14 text-center">
           <div className="space-y-4 mb-10">
-            <div className="flex items-center justify-center gap-3 text-2xl font-black text-emerald-600 uppercase italic tracking-tight">
+            <div className="flex items-center justify-center gap-3 text-2xl font-black text-emerald-600 dark:text-emerald-400 uppercase italic tracking-tight">
               <Search className="h-7 w-7" />
               {t("fieldInputCenter")}
             </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto font-medium italic">
+            <p className="text-muted-foreground dark:text-slate-400 max-w-2xl mx-auto font-medium italic">
               {t("analyzing")}
             </p>
           </div>
 
           <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 max-w-5xl mx-auto">
              <div className="flex-1 text-left space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2 block">{t("selectYourCrop")}</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 dark:text-slate-500 ml-2 block">{t("selectYourCrop")}</label>
                 <Select value={selectedCrop} onValueChange={(val) => { setSelectedCrop(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm dark:text-white transition-colors">
                     <SelectValue placeholder={t("selectYourCrop")} />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-primary/10">
+                  <SelectContent className="rounded-2xl border-primary/10 dark:bg-slate-800 dark:border-white/10">
                     <SelectItem value="all" className="font-bold uppercase text-xs">{t("allCrops")}</SelectItem>
                     <SelectItem value="banana" className="font-bold uppercase text-xs">{t("banana")}</SelectItem>
                     <SelectItem value="tomato" className="font-bold uppercase text-xs">{t("tomato")}</SelectItem>
@@ -177,12 +177,12 @@ export default function Pests() {
              </div>
 
              <div className="flex-1 text-left space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2 block">{t("currentWeather")}</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 dark:text-slate-500 ml-2 block">{t("currentWeather")}</label>
                 <Select value={weatherCondition} onValueChange={(val) => { setWeatherCondition(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm dark:text-white transition-colors">
                     <SelectValue placeholder={t("currentWeather")} />
                   </SelectTrigger>
-                  <SelectContent className="rounded-2xl border-primary/10">
+                  <SelectContent className="rounded-2xl border-primary/10 dark:bg-slate-800 dark:border-white/10">
                     <SelectItem value="all" className="font-bold uppercase text-xs">{t("allSeasons")}</SelectItem>
                     <SelectItem value="hot-dry" className="font-bold uppercase text-xs">{t("hotAndDry")}</SelectItem>
                     <SelectItem value="humid" className="font-bold uppercase text-xs">{t("humidAndRainy")}</SelectItem>
@@ -211,11 +211,11 @@ export default function Pests() {
           {/* Active Alerts */}
           <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
-               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800">
+               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800 dark:text-white">
                   <AlertTriangle className="h-7 w-7 text-red-600" />
                   {t("activeAlerts")}
                </h2>
-               <div className="h-px flex-1 mx-8 bg-slate-200 hidden md:block" />
+               <div className="h-px flex-1 mx-8 bg-slate-200 dark:bg-white/10 hidden md:block" />
             </div>
             <div className="grid gap-4">
               {currentData.alerts.length > 0 ? currentData.alerts.map((alert, i) => (
@@ -225,28 +225,28 @@ export default function Pests() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <Card className="rounded-[2.5rem] border-primary/5 hover:border-red-500/20 transition-all hover:shadow-xl cursor-default group overflow-hidden bg-white">
+                  <Card className="rounded-[2.5rem] border-primary/5 dark:border-white/5 hover:border-red-500/20 dark:hover:border-red-500/40 transition-all hover:shadow-xl cursor-default group overflow-hidden bg-white dark:bg-slate-900">
                     <CardHeader className="p-6 md:p-8 pb-4">
                       <div className="flex justify-between items-start mb-4">
-                         <div className="p-4 rounded-2xl bg-red-50 text-red-600 transition-transform group-hover:scale-110 shadow-sm">
+                         <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 transition-transform group-hover:scale-110 shadow-sm">
                             <ShieldAlert className="h-7 w-7" />
                          </div>
-                         <Badge className="rounded-full bg-red-600 text-white border-none font-black text-[10px] uppercase tracking-[0.2em] px-5 py-2 shadow-lg shadow-red-600/20">{alert.risk} risk</Badge>
+                         <Badge className="rounded-full bg-red-600 text-white border-none font-black text-[10px] uppercase tracking-[0.2em] px-5 py-2 shadow-lg shadow-red-600/20">{t(alert.risk)} {t("risk")}</Badge>
                       </div>
-                      <CardTitle className="text-2xl font-black group-hover:text-red-600 transition-colors leading-tight uppercase italic">{t(`${alert.id}Name`)}</CardTitle>
+                      <CardTitle className="text-2xl font-black group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors leading-tight uppercase italic dark:text-white">{t(`${alert.id}Name`)}</CardTitle>
                       <div className="flex items-center gap-2 mt-2">
                          <div className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
-                         <CardDescription className="text-xs font-black text-red-600 uppercase tracking-widest">{t("actionRequiredLabel")}: {t(`${alert.id}Action`)}</CardDescription>
+                         <CardDescription className="text-xs font-black text-red-600 dark:text-red-400 uppercase tracking-widest">{t("actionRequiredLabel")}: {t(`${alert.id}Action`)}</CardDescription>
                       </div>
                     </CardHeader>
                     <CardContent className="p-6 md:p-8 pt-0">
-                       <p className="text-muted-foreground font-medium leading-relaxed italic border-l-4 border-red-100 pl-4 py-2 bg-red-50/30 rounded-r-xl">"{t(`${alert.id}Desc`)}"</p>
+                       <p className="text-muted-foreground dark:text-slate-400 font-medium leading-relaxed italic border-l-4 border-red-100 dark:border-red-900 pl-4 py-2 bg-red-50/30 dark:bg-red-900/10 rounded-r-xl">"{t(`${alert.id}Desc`)}"</p>
                     </CardContent>
                   </Card>
                 </motion.div>
               )) : (
-                <div className="p-20 text-center bg-muted/10 rounded-[3rem] border-2 border-dashed border-muted/30">
-                   <p className="text-xl font-black text-muted-foreground/30 uppercase italic tracking-widest">Clean Zone - No Threats Detected</p>
+                <div className="p-20 text-center bg-muted/10 dark:bg-white/5 rounded-[3rem] border-2 border-dashed border-muted/30 dark:border-white/10">
+                   <p className="text-xl font-black text-muted-foreground/30 dark:text-white/20 uppercase italic tracking-widest">Clean Zone - No Threats Detected</p>
                 </div>
               )}
             </div>
@@ -255,27 +255,27 @@ export default function Pests() {
           {/* Expert Strategy */}
           <div className="space-y-6">
             <div className="flex items-center justify-between px-2">
-               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800">
+               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800 dark:text-white">
                   <Lightbulb className="h-7 w-7 text-amber-500" />
                   {t("expertAiStrategy")}
                </h2>
-               <div className="h-px flex-1 mx-8 bg-slate-200 hidden md:block" />
+               <div className="h-px flex-1 mx-8 bg-slate-200 dark:bg-white/10 hidden md:block" />
             </div>
             <div className="grid sm:grid-cols-2 gap-6">
                {[
-                 { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "bg-blue-50 text-blue-600", shadow: "shadow-blue-500/10" },
-                 { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "bg-emerald-50 text-emerald-600", shadow: "shadow-emerald-500/10" },
-                 { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "bg-amber-50 text-amber-600", shadow: "shadow-amber-500/10" },
-                 { title: t("ipmStrategy"), content: currentData.ipm, icon: Activity, color: "bg-indigo-50 text-indigo-600", shadow: "shadow-indigo-500/10" }
+                 { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400", shadow: "shadow-blue-500/10" },
+                 { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400", shadow: "shadow-emerald-500/10" },
+                 { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400", shadow: "shadow-amber-500/10" },
+                 { title: t("ipmStrategy"), content: currentData.ipm, icon: Activity, color: "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400", shadow: "shadow-indigo-500/10" }
                ].map((strat, i) => (
-                 <Card key={i} className="rounded-[2.5rem] border-primary/5 p-8 md:p-10 space-y-6 hover:shadow-2xl transition-all h-full bg-white group">
+                 <Card key={i} className="rounded-[2.5rem] border-primary/5 dark:border-white/5 p-8 md:p-10 space-y-6 hover:shadow-2xl transition-all h-full bg-white dark:bg-slate-900 group">
                     <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-all group-hover:rotate-12 group-hover:scale-110", strat.color, strat.shadow)}>
                        <strat.icon className="h-8 w-8" />
                     </div>
                     <div className="space-y-4">
-                       <h4 className="text-xl font-black uppercase italic tracking-tight">{strat.title}</h4>
-                       <p className="text-sm text-muted-foreground font-medium leading-relaxed italic border-t border-muted/20 pt-4">
-                         "{strat.content || "Input field details above to generate specialized strategy"}"
+                       <h4 className="text-xl font-black uppercase italic tracking-tight dark:text-white">{strat.title}</h4>
+                       <p className="text-sm text-muted-foreground dark:text-slate-400 font-medium leading-relaxed italic border-t border-muted/20 dark:border-white/10 pt-4">
+                         "{strat.content || t("pestsFallback")}"
                        </p>
                     </div>
                  </Card>
@@ -316,41 +316,41 @@ export default function Pests() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-6 bg-white">
-             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
+          <Card className="rounded-[2.5rem] border-primary/10 dark:border-white/5 shadow-xl p-8 space-y-6 bg-white dark:bg-slate-900">
+             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground dark:text-slate-400 italic border-b dark:border-white/10 pb-4 flex items-center gap-3">
                 <Microscope className="h-5 w-5 text-primary" /> {t("commonPests")}
              </h3>
              <div className="space-y-5 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                 {currentData.pests.map((p, idx) => (
                   <div key={idx} className="flex items-center justify-between group cursor-pointer hover:translate-x-2 transition-transform">
                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-primary/10 transition-colors">{p.icon}</div>
+                        <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xl group-hover:bg-primary/10 transition-colors">{p.icon}</div>
                         <div>
-                           <p className="text-xs font-black uppercase italic leading-none group-hover:text-primary transition-colors">{t(`${p.id}Name`)}</p>
-                           <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mt-1">{p.risk} risk</p>
+                           <p className="text-xs font-black uppercase italic leading-none group-hover:text-primary dark:group-hover:text-emerald-400 transition-colors dark:text-white">{t(`${p.id}Name`)}</p>
+                           <p className="text-[9px] font-black text-muted-foreground dark:text-slate-500 uppercase tracking-widest mt-1">{t(p.risk)} {t("risk")}</p>
                         </div>
                      </div>
-                     <ChevronRight className="h-4 w-4 text-muted-foreground opacity-20 group-hover:opacity-100 group-hover:text-primary transition-all" />
+                     <ChevronRight className="h-4 w-4 text-muted-foreground dark:text-slate-600 opacity-20 group-hover:opacity-100 group-hover:text-primary dark:group-hover:text-emerald-400 transition-all" />
                   </div>
                 ))}
              </div>
           </Card>
 
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-6 bg-white">
-             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
+          <Card className="rounded-[2.5rem] border-primary/10 dark:border-white/5 shadow-xl p-8 space-y-6 bg-white dark:bg-slate-900">
+             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground dark:text-slate-400 italic border-b dark:border-white/10 pb-4 flex items-center gap-3">
                 <FlaskConical className="h-5 w-5 text-emerald-600" /> {t("plantDiseases")}
              </h3>
              <div className="space-y-5 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                 {currentData.diseases.map((d, idx) => (
                   <div key={idx} className="flex items-center justify-between group cursor-pointer hover:translate-x-2 transition-transform">
                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center text-xl group-hover:bg-emerald-100 transition-colors">{d.icon}</div>
+                        <div className="h-10 w-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-xl group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/30 transition-colors">{d.icon}</div>
                         <div>
-                           <p className="text-xs font-black uppercase italic leading-none group-hover:text-emerald-600 transition-colors">{t(`${d.id}Name`)}</p>
-                           <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mt-1">{d.risk} risk</p>
+                           <p className="text-xs font-black uppercase italic leading-none group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors dark:text-white">{t(`${d.id}Name`)}</p>
+                           <p className="text-[9px] font-black text-muted-foreground dark:text-slate-500 uppercase tracking-widest mt-1">{t(d.risk)} {t("risk")}</p>
                         </div>
                      </div>
-                     <ChevronRight className="h-4 w-4 text-muted-foreground opacity-20 group-hover:opacity-100 group-hover:text-emerald-600 transition-all" />
+                     <ChevronRight className="h-4 w-4 text-muted-foreground dark:text-slate-600 opacity-20 group-hover:opacity-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-all" />
                   </div>
                 ))}
              </div>

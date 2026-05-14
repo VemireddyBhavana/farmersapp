@@ -2,12 +2,14 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FiClock, FiCloud, FiSun, FiCloudRain, FiArrowUp } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/LanguageContext";
 
 interface HourlyChartProps {
   hourly: any[];
 }
 
 const HourlyChart: React.FC<HourlyChartProps> = ({ hourly }) => {
+  const { t } = useLanguage();
   if (!hourly) return null;
 
   return (
@@ -15,10 +17,10 @@ const HourlyChart: React.FC<HourlyChartProps> = ({ hourly }) => {
       <CardHeader className="p-6 pb-4 border-b border-slate-50 dark:border-white/5">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-bold text-[#004d73] dark:text-white flex items-center gap-2">
-            <FiClock className="text-[#004d73] dark:text-[#ffcc00]" /> Hourly Weather
+            <FiClock className="text-[#004d73] dark:text-[#ffcc00]" /> {t("hourlyWeather")}
           </CardTitle>
           <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            Next 24 Hours
+            {t("next24Hours")}
           </div>
         </div>
       </CardHeader>
@@ -39,7 +41,6 @@ const HourlyChart: React.FC<HourlyChartProps> = ({ hourly }) => {
               <p className="text-xl font-black text-[#333] dark:text-white tabular-nums mb-3">
                 {Math.round(hour.temp)}°
               </p>
-
               <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">
                 {hour.weather[0].main === 'Rain' ? <FiCloudRain className="text-blue-400" /> : hour.weather[0].main === 'Clear' ? <FiSun className="text-amber-500" /> : <FiCloud className="text-slate-400" />}
               </div>
