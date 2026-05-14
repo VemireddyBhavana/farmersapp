@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { 
-  Cloud, Sun, Wind, Droplets, Thermometer, Gauge, Zap
-} from "lucide-react";
+  FiSun, FiCloud, FiPlay, FiChevronRight, FiSunrise, FiSunset
+} from "react-icons/fi";
 import { Card } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
 import { cn } from "@/lib/utils";
@@ -18,67 +18,78 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
 
   const current = weather.current;
   const description = current.weather?.[0]?.description || "stable";
-  const iconCode = current.weather?.[0]?.icon || "01d";
-
+  
   return (
-    <Card className="rounded-[2.5rem] bg-[#004d73] text-white p-8 md:p-10 overflow-hidden relative border-none shadow-2xl h-full flex flex-col justify-between group">
-      {/* Background Accent */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none" />
-      
-      <div className="relative z-10">
-        <div className="flex justify-between items-start mb-8">
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#ffcc00] rounded-md text-[10px] font-black uppercase tracking-wider text-[#004d73] shadow-lg">
-              {t('live')} Radar
-            </div>
-            <h1 className="text-3xl md:text-5xl font-black tracking-tight uppercase leading-none">{location}</h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-lg font-bold text-white/90 capitalize">{description}</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            </div>
-          </div>
-          <div className="text-right">
-             <div className="bg-black/20 backdrop-blur-md rounded-2xl p-4 border border-white/10">
-                <p className="text-[10px] font-bold opacity-60 uppercase tracking-widest mb-1">Humidity</p>
-                <p className="text-3xl font-black">{current.humidity}%</p>
-             </div>
-          </div>
+    <Card className="rounded-xl border-none bg-gradient-to-br from-[#f5f7f8] to-[#e8eef2] dark:from-slate-800 dark:to-slate-900 text-[#333] dark:text-white p-6 md:p-8 shadow-sm overflow-hidden relative group h-full flex flex-col justify-between border border-slate-200 dark:border-white/5">
+      {/* Top Section: City & Time */}
+      <div className="flex justify-between items-start">
+        <div className="space-y-1">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-[#004d73] dark:text-white flex items-center gap-2">
+            {location} · {weather.country || 'India'}
+          </h1>
+          <p className="text-xs font-semibold text-slate-500 dark:text-white/60">
+            {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit' })} {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+          </p>
         </div>
-
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mt-4">
-          <div className="flex items-start gap-4">
-            <div className="relative">
-              <span className="text-8xl md:text-[10rem] font-black leading-none tracking-tighter tabular-nums">
-                {Math.round(current.temp)}
-              </span>
-              <span className="text-4xl md:text-6xl font-black absolute top-4 -right-10 opacity-40">°C</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 w-full md:w-[450px]">
-            {[
-              { label: "Wind Speed", value: `${current.wind_speed} km/h`, icon: <Wind className="w-4 h-4" /> },
-              { label: "Feels Like", value: `${Math.round(current.feels_like)}°C`, icon: <Thermometer className="w-4 h-4" /> },
-              { label: "Pressure", value: `${current.pressure} hPa`, icon: <Gauge className="w-4 h-4" /> },
-              { label: "Visibility", value: `${(current.visibility / 1000).toFixed(1)} km`, icon: <Zap className="w-4 h-4" /> }
-            ].map((item, i) => (
-              <div key={i} className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/10 transition-all flex items-center gap-4 group/item">
-                <div className="p-2 bg-white/10 rounded-xl text-[#ffcc00] group-hover/item:scale-110 transition-transform">
-                  {item.icon}
-                </div>
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-widest text-white/40 leading-none mb-1">{item.label}</p>
-                  <p className="text-base font-black text-white">{item.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="flex flex-col items-end gap-2">
+           <div className="bg-[#ff9900] text-white px-3 py-1 rounded-md text-[11px] font-black flex items-center gap-2 shadow-sm">
+             <span>{Math.round(weather.current.aqi || 260)}</span>
+             <span className="opacity-80 uppercase tracking-tighter">Poor</span>
+           </div>
         </div>
       </div>
 
-      {/* Floating Weather Icon */}
-      <div className="absolute right-[5%] bottom-[10%] opacity-10 pointer-events-none group-hover:scale-110 transition-transform [transition-duration:3s]">
-         {iconCode.includes('d') ? <Sun className="w-64 h-64" /> : <Cloud className="w-64 h-64" />}
+      {/* Middle Section: Temp & Description */}
+      <div className="flex items-center justify-between py-6">
+        <div className="flex items-start gap-4">
+          <div className="relative">
+            <div className="absolute -top-6 left-0 bg-[#004d73] text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">now</div>
+            <span className="text-[6rem] md:text-[8rem] font-black leading-none tracking-tighter text-[#333] dark:text-white tabular-nums">
+              {Math.round(current.temp)}°
+            </span>
+          </div>
+          <div className="mt-4 flex flex-col gap-1">
+             <div className="text-2xl font-bold text-slate-700 dark:text-white/90 capitalize leading-none">{description}</div>
+             <div className="text-sm font-semibold text-slate-400">Feels like {Math.round(current.feels_like)}°</div>
+          </div>
+        </div>
+        
+        {/* Large Weather Icon Placeholder */}
+        <div className="w-32 h-32 bg-white/40 dark:bg-white/5 rounded-3xl flex items-center justify-center text-6xl shadow-inner">
+           {current.weather[0].main === 'Clear' ? <FiSun className="text-amber-500" /> : <FiCloud className="text-slate-400" />}
+        </div>
+      </div>
+
+      {/* Bottom Section: 90min & Astro */}
+      <div className="grid md:grid-cols-2 gap-4 border-t border-slate-200 dark:border-white/5 pt-6 mt-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-100 dark:border-white/10 flex items-center justify-between group/90">
+           <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#004d73] rounded-full flex items-center justify-center text-white shadow-lg group-hover/90:scale-110 transition-transform">
+                 <FiPlay className="ml-1 fill-current" />
+              </div>
+              <div className="space-y-0.5">
+                 <p className="text-[10px] font-bold uppercase text-[#004d73] dark:text-[#ffcc00] tracking-widest">90 Min. Weather</p>
+                 <p className="text-[11px] font-black text-slate-500">Live Forecast</p>
+              </div>
+           </div>
+           <FiChevronRight className="text-slate-300 group-hover/90:translate-x-1 transition-transform" />
+        </div>
+
+        <div className="flex items-center justify-around bg-slate-100 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-white/10">
+           <div className="flex items-center gap-2">
+              <FiSunrise className="text-amber-500 text-lg" />
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                {new Date(current.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+           </div>
+           <div className="w-px h-6 bg-slate-200 dark:bg-white/10" />
+           <div className="flex items-center gap-2">
+              <FiSunset className="text-indigo-500 text-lg" />
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                {new Date(current.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+           </div>
+        </div>
       </div>
     </Card>
   );
