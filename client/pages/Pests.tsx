@@ -5,7 +5,7 @@ import {
   FiCheckCircle, FiActivity, FiEye, FiInfo, FiAlertTriangle,
   FiChevronDown, FiDroplet, FiWind, FiZap, FiBox, 
   FiTrendingUp, FiCheck, FiAlertCircle, FiXCircle, FiRefreshCw,
-  FiChevronRight, FiNavigation, FiPlay
+  FiChevronRight, FiNavigation, FiPlay, FiLeaf
 } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -137,281 +137,221 @@ export default function Pests() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f2f3] dark:bg-[#0b111a] font-['Open_Sans'] pb-20">
-      {/* Exact Header Style from Weather Page */}
-      <nav className="bg-[#004d73] shadow-md border-b border-white/10 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-6">
-             <div className="text-white font-black text-xl tracking-tighter italic flex items-center gap-1">
-                Pest<span className="text-[#ffcc00]">&</span>Disease
-             </div>
-          </div>
-          <div className="hidden md:flex items-center gap-6 text-white text-[11px] font-bold uppercase tracking-wider">
-             <a href="#" className="hover:text-[#ffcc00]">{t("allCrops")}</a>
-             <a href="#" className="hover:text-[#ffcc00]">{t("activeAlerts")}</a>
-             <a href="#" className="hover:text-[#ffcc00]">{t("organicTreatment")}</a>
-          </div>
-        </div>
-      </nav>
-
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400 mb-8">
-           <span className="hover:text-[#004d73] cursor-pointer">{t("home")}</span>
-           <FiChevronRight />
-           <span className="text-[#004d73]">{t("pestsAndDisease")}</span>
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b111a] pb-24">
+      {/* Hero Section - Matching Home Index UI */}
+      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden mb-12">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/hero_rice_field.png"
+            alt="Pest Background"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent" />
         </div>
 
-        {/* Header Section */}
-        <div className="mb-12">
-          <h1 className="text-3xl md:text-5xl font-black text-[#004d73] dark:text-white mb-4 tracking-tight uppercase italic leading-none">
-            {t("pestsAndDisease")}
-          </h1>
-          <p className="text-sm font-semibold text-slate-500 max-w-2xl dark:text-white/60">
-            {t("pestAdvisoryDesc")}
-          </p>
-        </div>
-
-        {/* Summary Statistics - Matching Weather Style */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-          {[
-            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: FiBug, color: "text-[#004d73]", bg: "bg-white" },
-            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: FiActivity, color: "text-[#004d73]", bg: "bg-white" },
-            { label: t("totalThreats"), value: currentData.stats.threats, icon: FiAlertTriangle, color: "text-[#ef4444]", bg: "bg-white" },
-            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: FiZap, color: "text-[#ffcc00]", bg: "bg-[#004d73]" }
-          ].map((stat, i) => (
-            <div key={i} className={cn("rounded-xl p-6 shadow-sm border border-slate-100 dark:border-white/5", stat.bg)}>
-              <div className="flex justify-between items-start mb-4">
-                 <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center text-lg", i === 3 ? "bg-white/10 text-white" : "bg-slate-50 dark:bg-white/5", stat.color)}>
-                    <stat.icon />
-                 </div>
-                 {i === 3 && <div className="text-[10px] font-black text-[#ffcc00] uppercase tracking-widest">Live</div>}
-              </div>
-              <div className={cn("text-3xl font-black mb-1", i === 3 ? "text-white" : "text-[#333] dark:text-white")}>{stat.value}</div>
-              <div className={cn("text-[10px] font-bold uppercase tracking-widest", i === 3 ? "text-white/60" : "text-slate-400")}>{stat.label}</div>
+        <div className="container relative z-10 mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center space-y-6"
+          >
+            <div className="w-16 h-16 rounded-[2rem] bg-emerald-600 flex items-center justify-center text-white shadow-2xl">
+               <FiShield className="text-3xl" />
             </div>
+            <div className="space-y-2">
+               <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight uppercase italic">
+                 {t('pestsAndDisease')}
+               </h1>
+               <p className="max-w-2xl mx-auto text-lg text-white/80 font-medium italic">
+                 {t('pestAdvisoryDesc')}
+               </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 max-w-6xl">
+        {/* Stats Section - Matching Home Style */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16 -mt-24 relative z-20">
+          {[
+            { label: t("pestsIdentified"), value: currentData.stats.pests, icon: FiBug, color: "text-red-600", bg: "bg-red-100" },
+            { label: t("diseaseRisks"), value: currentData.stats.diseases, icon: FiLeaf, color: "text-emerald-600", bg: "bg-emerald-100" },
+            { label: t("totalThreats"), value: currentData.stats.threats, icon: FiAlertTriangle, color: "text-amber-600", bg: "bg-amber-100" },
+            { label: t("activeAlertsCount"), value: currentData.stats.alerts, icon: FiZap, color: "text-blue-600", bg: "bg-blue-100" }
+          ].map((stat, i) => (
+            <motion.div 
+              key={i} 
+              whileHover={{ y: -5 }}
+              className="bg-card rounded-[2.5rem] p-8 border border-primary/5 shadow-xl transition-all"
+            >
+              <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center text-xl mb-4", stat.bg, stat.color)}>
+                <stat.icon />
+              </div>
+              <p className="text-4xl font-black text-foreground tabular-nums">{stat.value}</p>
+              <p className="font-bold text-slate-500 uppercase tracking-widest text-[10px] mt-1">{stat.label}</p>
+            </motion.div>
           ))}
         </div>
 
-        {/* Monitoring Setup Card */}
-        <Card className="bg-white dark:bg-slate-900 border-none shadow-sm rounded-xl mb-8 overflow-hidden border border-slate-100 dark:border-white/5">
-          <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 bg-[#004d73] rounded-lg flex items-center justify-center text-white shadow-lg">
-                 <FiEye className="text-xl" />
-              </div>
-              <div>
-                 <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("fieldInputCenter")}</h3>
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Environmental Analysis</p>
-              </div>
+        {/* Input Center - Matching Home Glass Look */}
+        <Card className="rounded-[3rem] bg-white dark:bg-slate-900 border-none shadow-2xl p-8 mb-12 overflow-hidden relative">
+          <div className="absolute top-0 right-0 p-8 opacity-5">
+             <FiBug className="text-[12rem] rotate-12" />
+          </div>
+          <CardContent className="p-0 relative z-10">
+            <div className="flex items-center gap-4 mb-8">
+               <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl shadow-lg">
+                  <FiSearch />
+               </div>
+               <div>
+                  <h3 className="text-2xl font-black text-slate-800 dark:text-white uppercase italic">{t("fieldInputCenter")}</h3>
+                  <p className="text-xs font-bold text-emerald-600 uppercase tracking-[0.2em]">{t("analyzing")}</p>
+               </div>
             </div>
-            
+
             <div className="grid md:grid-cols-3 gap-8 items-end">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t("selectYourCrop")}</label>
+              <div className="space-y-3">
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">{t("selectYourCrop")}</label>
                 <Select value={selectedCrop} onValueChange={(val) => { setSelectedCrop(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-slate-50 dark:bg-white/5 border-none h-12 rounded-lg focus:ring-[#004d73] text-[#333] dark:text-white font-bold">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 dark:bg-white/5 border-none font-bold text-lg focus:ring-emerald-500">
                     <SelectValue placeholder={t("selectYourCrop")} />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl max-h-[300px]">
+                  <SelectContent className="rounded-2xl">
                     <SelectItem value="all">{t("allCrops")}</SelectItem>
                     <SelectItem value="banana">{t("banana")}</SelectItem>
                     <SelectItem value="tomato">{t("tomato")}</SelectItem>
                     <SelectItem value="cotton">{t("cotton")}</SelectItem>
-                    <SelectItem value="maize">{t("maize")}</SelectItem>
-                    <SelectItem value="wheat">{t("wheat")}</SelectItem>
-                    <SelectItem value="pepper">{t("pepper")}</SelectItem>
-                    <SelectItem value="rice">{t("rice")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{t("currentWeather")}</label>
+              <div className="space-y-3">
+                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">{t("currentWeather")}</label>
                 <Select value={weatherCondition} onValueChange={(val) => { setWeatherCondition(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="bg-slate-50 dark:bg-white/5 border-none h-12 rounded-lg focus:ring-[#004d73] text-[#333] dark:text-white font-bold">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 dark:bg-white/5 border-none font-bold text-lg focus:ring-emerald-500">
                     <SelectValue placeholder={t("currentWeather")} />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl">
+                  <SelectContent className="rounded-2xl">
                     <SelectItem value="all">{t("allSeasons")}</SelectItem>
                     <SelectItem value="hot-dry">{t("hotAndDry")}</SelectItem>
                     <SelectItem value="humid">{t("humidAndRainy")}</SelectItem>
-                    <SelectItem value="wet-rainy">{t("coolAndMoist")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div>
-                <Button 
-                  onClick={getRecommendations}
-                  className="w-full h-12 bg-[#004d73] hover:bg-[#003a57] text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-lg flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg"
-                >
-                  {isAnalyzing ? <FiRefreshCw className="h-4 w-4 animate-spin" /> : <FiSearch className="h-4 w-4" />}
-                  {isAnalyzing ? t("analyzing") : t("fetchAdvisory")}
-                </Button>
-              </div>
+              <Button 
+                onClick={getRecommendations}
+                className="h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-widest shadow-xl shadow-emerald-600/20 gap-3"
+              >
+                {isAnalyzing ? <FiRefreshCw className="animate-spin" /> : <FiZap />}
+                {isAnalyzing ? t("analyzing") : t("fetchAdvisory")}
+              </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Analysis Results */}
-        <div className="space-y-6 mb-12">
-          <div className="flex items-center justify-between mb-8 px-1">
-             <div className="flex items-center gap-3">
-                <FiAlertTriangle className="text-xl text-[#ef4444]" />
-                <h3 className="text-lg font-black text-[#333] dark:text-white uppercase tracking-tight">{t("activeAlerts")}</h3>
-             </div>
-             <span className="bg-[#ef4444] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{currentData.alerts.length} Detected</span>
+        {/* Active Alerts - High Contrast Like Home CTA */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+             <div className="w-1 h-10 bg-red-600 rounded-full" />
+             <h3 className="text-3xl font-black text-slate-800 dark:text-white uppercase italic">{t("activeAlerts")}</h3>
           </div>
 
-          <div className="grid gap-4">
-            {currentData.alerts.length > 0 ? (
-              currentData.alerts.map((alert, i) => (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  key={i} 
-                  className="bg-white dark:bg-slate-900 border-none rounded-xl p-6 shadow-sm border border-slate-100 dark:border-white/5 flex gap-6 group hover:border-[#ef4444]/20 transition-all"
-                >
-                  <div className="w-12 h-12 bg-red-50 dark:bg-red-900/20 rounded-lg flex items-center justify-center text-red-600 text-xl shrink-0 group-hover:scale-110 transition-transform">
-                    <FiAlertTriangle />
-                  </div>
-                  <div className="space-y-2 flex-1">
-                    <div className="flex justify-between items-start">
-                       <h4 className="text-lg font-black text-[#333] dark:text-white leading-none">
-                         {t(`${alert.id}Name`)}
-                       </h4>
-                       <span className="text-[10px] font-black text-red-600 uppercase tracking-widest bg-red-50 dark:bg-red-900/40 px-2 py-0.5 rounded">
-                          {t(`${alert.risk}RiskPrefix`)}
-                       </span>
-                    </div>
-                    <p className="text-sm font-semibold text-slate-500 dark:text-white/60 leading-relaxed">{t(`${alert.id}Desc`)}</p>
-                    <div className="pt-3 flex items-center gap-3 border-t border-slate-50 dark:border-white/5">
-                      <span className="text-[10px] font-black text-[#004d73] dark:text-[#ffcc00] uppercase tracking-widest">{t("actionRequiredLabel")}:</span>
-                      <span className="text-xs font-bold text-slate-700 dark:text-white/80">{t(`${alert.id}Action`)}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))
-            ) : (
-              <div className="py-20 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm border border-dashed border-slate-200 dark:border-white/10">
-                <FiSearch className="h-12 w-12 mx-auto mb-4 text-slate-200" />
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{t("noAnalysisResults")}</p>
+          <div className="grid gap-6">
+            {currentData.alerts.length > 0 ? currentData.alerts.map((alert, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="rounded-[2.5rem] bg-white dark:bg-slate-900 p-8 border border-red-500/10 shadow-xl flex flex-col md:flex-row gap-8 items-start md:items-center relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 h-full w-2 bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-16 h-16 rounded-3xl bg-red-50 dark:bg-red-900/20 text-red-600 flex items-center justify-center text-3xl shrink-0">
+                   <FiAlertTriangle />
+                </div>
+                <div className="flex-1 space-y-2">
+                   <div className="flex items-center gap-3">
+                      <h4 className="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">{t(`${alert.id}Name`)}</h4>
+                      <Badge className="bg-red-600 text-white border-none px-3 py-1 font-black uppercase text-[10px] tracking-widest">{alert.risk} risk</Badge>
+                   </div>
+                   <p className="text-slate-500 dark:text-white/60 font-medium italic leading-relaxed">{t(`${alert.id}Desc`)}</p>
+                   <div className="pt-4 flex items-center gap-4 text-sm">
+                      <span className="font-black text-red-600 uppercase tracking-widest">{t("actionRequiredLabel")}:</span>
+                      <span className="font-bold text-slate-700 dark:text-white/80">{t(`${alert.id}Action`)}</span>
+                   </div>
+                </div>
+                <Button className="rounded-full bg-slate-900 text-white px-8 h-12 font-black uppercase text-xs tracking-widest hover:bg-emerald-600 transition-colors">
+                   Analyze
+                </Button>
+              </motion.div>
+            )) : (
+              <div className="rounded-[3rem] p-20 text-center bg-slate-50 dark:bg-white/5 border-2 border-dashed border-slate-200">
+                 <p className="text-xl font-black text-slate-300 uppercase italic">Clean Zone - No Active Alerts</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* AI Powered Recommendations Strategy */}
-        <div className="space-y-8 mb-12">
+        {/* Expert AI Strategy - Grid Like Home Features */}
+        <div className="mb-16">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-[#ffcc00] rounded-lg flex items-center justify-center text-[#004d73] shadow-lg">
-               <FiZap className="text-xl" />
-            </div>
-            <div>
-               <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("expertAiStrategy")}</h3>
-               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Curated Treatment Plan</p>
-            </div>
+             <div className="w-1 h-10 bg-emerald-600 rounded-full" />
+             <h3 className="text-3xl font-black text-slate-800 dark:text-white uppercase italic">{t("expertAiStrategy")}</h3>
           </div>
-          
-          {currentData.prevention ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: t("preventionStrategy"), content: currentData.prevention, icon: FiShield, color: "text-emerald-600", bg: "bg-emerald-50" },
-                { title: t("organicTreatment"), content: currentData.organic, icon: FiDroplet, color: "text-blue-600", bg: "bg-blue-50" },
-                { title: t("monitoringTips"), content: currentData.monitoring, icon: FiEye, color: "text-[#004d73]", bg: "bg-slate-50" },
-                { title: t("ipmStrategy"), content: currentData.ipm, icon: FiActivity, color: "text-[#ffcc00]", bg: "bg-[#004d73]" }
-              ].map((strat, i) => (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  key={i} 
-                  className={cn("bg-white dark:bg-slate-900 rounded-xl p-6 space-y-6 shadow-sm border border-slate-100 dark:border-white/5 h-full group hover:shadow-md transition-all", i === 3 && "bg-[#004d73] border-none")}
-                >
-                  <div className={cn("h-12 w-12 rounded-lg flex items-center justify-center text-xl transition-transform group-hover:scale-110", i === 3 ? "bg-white/10 text-[#ffcc00]" : strat.bg, strat.color)}>
-                    <strat.icon />
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className={cn("text-xs font-black uppercase tracking-widest", i === 3 ? "text-white" : "text-[#004d73]")}>{strat.title}</h4>
-                    <p className={cn("text-xs font-bold leading-relaxed italic", i === 3 ? "text-white/80" : "text-slate-500 dark:text-white/60")}>
-                      "{strat.content}"
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-200 dark:border-white/10 rounded-xl p-16 text-center shadow-sm">
-               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest italic">{t("inputFieldDetailsPlaceholder")}</p>
-            </div>
-          )}
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { title: t("preventionStrategy"), content: currentData.prevention, icon: FiShield, color: "bg-blue-600", shadow: "shadow-blue-500/20" },
+              { title: t("organicTreatment"), content: currentData.organic, icon: FiLeaf, color: "bg-emerald-600", shadow: "shadow-emerald-500/20" },
+              { title: t("monitoringTips"), content: currentData.monitoring, icon: FiEye, color: "bg-amber-600", shadow: "shadow-amber-500/20" },
+              { title: t("ipmStrategy"), content: currentData.ipm, icon: FiActivity, color: "bg-indigo-600", shadow: "shadow-indigo-500/20" }
+            ].map((strat, i) => (
+              <motion.div 
+                key={i}
+                whileHover={{ y: -10 }}
+                className="rounded-[2.5rem] bg-white dark:bg-slate-900 p-8 shadow-xl border border-primary/5 h-full space-y-6 group"
+              >
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center text-2xl text-white shadow-2xl transition-transform group-hover:rotate-12", strat.color, strat.shadow)}>
+                   <strat.icon />
+                </div>
+                <div className="space-y-3">
+                   <h4 className="text-lg font-black text-slate-800 dark:text-white uppercase italic">{strat.title}</h4>
+                   <p className="text-sm font-medium text-slate-500 dark:text-white/60 leading-relaxed italic">
+                     "{strat.content || "Analyze environment for specific guidance"}"
+                   </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-
-
-        {/* Pest Library Section */}
-        <div className="grid md:grid-cols-2 gap-12 pt-12 border-t border-slate-200 dark:border-white/5">
-          <div className="space-y-8">
-            <div className="flex items-center gap-3 mb-8 px-1">
-               <div className="w-10 h-10 bg-white dark:bg-slate-900 rounded-lg flex items-center justify-center text-[#004d73] shadow-sm border border-slate-100 dark:border-white/5">
-                  <FiBug className="text-xl" />
-               </div>
-               <div>
-                  <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("commonPests")}</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Entomological Database</p>
-               </div>
-            </div>
-            <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-              {currentData.pests.length > 0 ? currentData.pests.map((item, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900 border-none rounded-xl p-4 flex items-center justify-between group shadow-sm border border-slate-100 dark:border-white/5 hover:border-[#004d73]/20 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-slate-50 dark:bg-white/5 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">{item.icon}</div>
-                    <div>
-                      <h4 className="text-sm font-black text-[#333] dark:text-white leading-none mb-1">{t(`${item.id}Name`)}</h4>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                        {t(`${item.id}Desc`).substring(0, 30)}...
-                      </p>
-                    </div>
-                  </div>
-                  <Badge className={cn("px-2 py-1 rounded border-none text-[9px] font-black uppercase tracking-widest", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
-                    {item.risk} risk
-                  </Badge>
+        {/* Library Section - Vertical Tabular List */}
+        <div className="grid lg:grid-cols-2 gap-12 pt-16 border-t border-slate-200">
+           {[
+             { title: t("commonPests"), icon: FiBug, data: currentData.pests, color: "text-red-600" },
+             { title: t("plantDiseases"), icon: FiLeaf, data: currentData.diseases, color: "text-emerald-600" }
+           ].map((section, i) => ( section.data.length > 0 && 
+             <div key={i} className="space-y-8">
+                <div className="flex items-center gap-3">
+                   <section.icon className={cn("text-3xl", section.color)} />
+                   <h3 className="text-2xl font-black text-slate-800 dark:text-white uppercase italic">{section.title}</h3>
                 </div>
-              )) : <div className="p-12 bg-white dark:bg-slate-900 rounded-xl text-center border border-dashed border-slate-200 dark:border-white/10 text-slate-400 text-xs font-bold uppercase">{t("noPestsFound")}</div>}
-            </div>
-          </div>
-
-          <div className="space-y-8">
-            <div className="flex items-center gap-3 mb-8 px-1">
-               <div className="w-10 h-10 bg-white dark:bg-slate-900 rounded-lg flex items-center justify-center text-emerald-600 shadow-sm border border-slate-100 dark:border-white/5">
-                  <FiActivity className="text-xl" />
-               </div>
-               <div>
-                  <h3 className="text-lg font-black text-[#004d73] dark:text-white uppercase tracking-tight">{t("plantDiseases")}</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pathology Archive</p>
-               </div>
-            </div>
-            <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-              {currentData.diseases.length > 0 ? currentData.diseases.map((item, i) => (
-                <div key={i} className="bg-white dark:bg-slate-900 border-none rounded-xl p-4 flex items-center justify-between group shadow-sm border border-slate-100 dark:border-white/5 hover:border-emerald-500/20 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 bg-slate-50 dark:bg-white/5 rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">{item.icon}</div>
-                    <div>
-                      <h4 className="text-sm font-black text-[#333] dark:text-white leading-none mb-1">{t(`${item.id}Name`)}</h4>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                        {t(`${item.id}Desc`).substring(0, 30)}...
-                      </p>
-                    </div>
-                  </div>
-                  <Badge className={cn("px-2 py-1 rounded border-none text-[9px] font-black uppercase tracking-widest", item.risk === "high" ? "bg-red-50 text-red-600" : "bg-yellow-50 text-yellow-600")}>
-                    {item.risk} risk
-                  </Badge>
+                <div className="space-y-4">
+                   {section.data.map((item, idx) => (
+                     <div key={idx} className="rounded-3xl bg-white dark:bg-slate-900 p-6 flex items-center justify-between border border-primary/5 hover:shadow-xl transition-all group">
+                        <div className="flex items-center gap-6">
+                           <div className="text-4xl group-hover:scale-110 transition-transform">{item.icon}</div>
+                           <div>
+                              <h4 className="text-lg font-black text-slate-800 dark:text-white uppercase italic">{t(`${item.id}Name`)}</h4>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.risk} Risk Level</p>
+                           </div>
+                        </div>
+                        <FiChevronRight className="text-slate-300 group-hover:translate-x-2 transition-transform" />
+                     </div>
+                   ))}
                 </div>
-              )) : <div className="p-12 bg-white dark:bg-slate-900 rounded-xl text-center border border-dashed border-slate-200 dark:border-white/10 text-slate-400 text-xs font-bold uppercase">{t("noDiseasesFound")}</div>}
-            </div>
-          </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>
