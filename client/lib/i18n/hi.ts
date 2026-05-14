@@ -10,7 +10,7 @@ export const hi = {
     "aboutUs": "हमारे बारे में",
     "aboutUsDesc": "हमारे मिशन और कहानी के बारे में जानें",
     "acCabin": "एसी केबिन",
-    "acceptanceTermsText": "By accessing or using Kisan AI (the \\\\"Service\\\\"), you agree to be bound by these Terms of Service. If you do not agree to all of the terms and conditions, then you may not access the Service.",
+    "acceptanceTermsText": "By accessing or using Kisan AI (the \"Service\"), you agree to be bound by these Terms of Service. If you do not agree to all of the terms and conditions, then you may not access the Service.",
     "acceptanceTermsTitle": "1. Acceptance of Terms",
     "accessFullCatalog": "पूरा कैटलॉग देखें",
     "accessSchemeDirectory": "योजना निर्देशिका तक पहुंचें →",

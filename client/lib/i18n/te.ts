@@ -10,7 +10,7 @@ export const te = {
     "aboutUs": "మా గురించి",
     "aboutUsDesc": "మా మిషన్ మరియు కథ గురించి తెలుసుకోండి",
     "acCabin": "AC క్యాబిన్",
-    "acceptanceTermsText": "By accessing or using Kisan AI (the \\\\"Service\\\\"), you agree to be bound by these Terms of Service. If you do not agree to all of the terms and conditions, then you may not access the Service.",
+    "acceptanceTermsText": "By accessing or using Kisan AI (the \"Service\"), you agree to be bound by these Terms of Service. If you do not agree to all of the terms and conditions, then you may not access the Service.",
     "acceptanceTermsTitle": "1. Acceptance of Terms",
     "accessFullCatalog": "Access Full Catalog",
     "accessSchemeDirectory": "Access Scheme Directory →",
