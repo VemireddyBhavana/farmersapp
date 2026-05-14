@@ -77,8 +77,7 @@ const WeatherHero: React.FC<WeatherHeroProps> = ({ weather, location }) => {
         </div>
       </div>
 
-      {/* Large Floating Icon */}
-      <div className="absolute right-[-10%] bottom-[-10%] opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-[3000ms]">
+      <div className="absolute right-[-10%] bottom-[-10%] opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-[3s]">
          {iconCode.includes('d') ? <Sun className="w-96 h-96" /> : <Cloud className="w-96 h-96" />}
       </div>
     </Card>

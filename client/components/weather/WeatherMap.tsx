@@ -10,7 +10,7 @@ const WeatherMap: React.FC = () => {
       <img 
         src="/weather_radar_map_1778740324092.png" 
         alt="Live Radar" 
-        className="w-full h-full object-cover transition-transform duration-[10000ms] group-hover:scale-110"
+        className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110"
       />
       
       {/* Overlay UI */}
