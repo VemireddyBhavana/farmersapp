@@ -149,22 +149,22 @@ export default function Pests() {
 
       {/* Field Input Center - Matching AgriSchemes Search Card */}
       <Card className="rounded-[2.5rem] border-primary/5 bg-white shadow-sm overflow-hidden">
-        <CardContent className="p-12 text-center space-y-8">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="flex items-center gap-3 text-2xl font-black text-emerald-600 uppercase italic tracking-tight">
+        <CardContent className="p-10 md:p-14 text-center">
+          <div className="space-y-4 mb-10">
+            <div className="flex items-center justify-center gap-3 text-2xl font-black text-emerald-600 uppercase italic tracking-tight">
               <Search className="h-7 w-7" />
               {t("fieldInputCenter")}
             </div>
-            <p className="text-muted-foreground max-w-2xl font-medium italic">
+            <p className="text-muted-foreground max-w-2xl mx-auto font-medium italic">
               {t("analyzing")}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto items-end">
-             <div className="text-left space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2">{t("selectYourCrop")}</label>
+          <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 max-w-5xl mx-auto">
+             <div className="flex-1 text-left space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2 block">{t("selectYourCrop")}</label>
                 <Select value={selectedCrop} onValueChange={(val) => { setSelectedCrop(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-inner">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm">
                     <SelectValue placeholder={t("selectYourCrop")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-primary/10">
@@ -176,10 +176,10 @@ export default function Pests() {
                 </Select>
              </div>
 
-             <div className="text-left space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2">{t("currentWeather")}</label>
+             <div className="flex-1 text-left space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 ml-2 block">{t("currentWeather")}</label>
                 <Select value={weatherCondition} onValueChange={(val) => { setWeatherCondition(val); setIsAnalyzing(false); }}>
-                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-inner">
+                  <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-black text-sm uppercase tracking-wider focus:ring-2 focus:ring-primary/20 shadow-sm">
                     <SelectValue placeholder={t("currentWeather")} />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl border-primary/10">
@@ -190,31 +190,34 @@ export default function Pests() {
                 </Select>
              </div>
 
-             <Button
-                onClick={getRecommendations}
-                disabled={isAnalyzing}
-                className="rounded-2xl bg-primary hover:bg-emerald-700 h-14 text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
-              >
-                {isAnalyzing ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 fill-current" />}
-                {isAnalyzing ? t("analyzing") : t("fetchAdvisory")}
-              </Button>
+             <div className="flex-1 text-left space-y-3 flex flex-col justify-end">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-transparent ml-2 block hidden md:block">.</label>
+                <Button
+                  onClick={getRecommendations}
+                  disabled={isAnalyzing}
+                  className="rounded-2xl bg-primary hover:bg-emerald-700 h-14 w-full text-xs font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-600/20 flex items-center justify-center gap-3 transition-all active:scale-95"
+                >
+                  {isAnalyzing ? <RefreshCcw className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 fill-current" />}
+                  {isAnalyzing ? t("analyzing") : t("fetchAdvisory")}
+                </Button>
+             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Main Content Grid */}
-      <div className="grid gap-12 lg:grid-cols-4">
+      <div className="grid gap-8 lg:grid-cols-4 items-start">
         <div className="lg:col-span-3 space-y-12">
           {/* Active Alerts */}
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-               <h2 className="text-3xl font-black tracking-tight flex items-center gap-3 uppercase italic">
-                  <AlertTriangle className="h-8 w-8 text-red-600" />
+          <div className="space-y-6">
+            <div className="flex items-center justify-between px-2">
+               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800">
+                  <AlertTriangle className="h-7 w-7 text-red-600" />
                   {t("activeAlerts")}
                </h2>
-               <div className="h-1 flex-1 mx-8 bg-red-100/50 rounded-full hidden md:block" />
+               <div className="h-px flex-1 mx-8 bg-slate-200 hidden md:block" />
             </div>
-            <div className="grid gap-6">
+            <div className="grid gap-4">
               {currentData.alerts.length > 0 ? currentData.alerts.map((alert, i) => (
                 <motion.div 
                   layout
@@ -223,10 +226,10 @@ export default function Pests() {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <Card className="rounded-[2.5rem] border-primary/5 hover:border-red-500/20 transition-all hover:shadow-xl cursor-default group overflow-hidden bg-white">
-                    <CardHeader className="p-8 pb-4">
+                    <CardHeader className="p-6 md:p-8 pb-4">
                       <div className="flex justify-between items-start mb-4">
                          <div className="p-4 rounded-2xl bg-red-50 text-red-600 transition-transform group-hover:scale-110 shadow-sm">
-                            <ShieldAlert className="h-8 w-8" />
+                            <ShieldAlert className="h-7 w-7" />
                          </div>
                          <Badge className="rounded-full bg-red-600 text-white border-none font-black text-[10px] uppercase tracking-[0.2em] px-5 py-2 shadow-lg shadow-red-600/20">{alert.risk} risk</Badge>
                       </div>
@@ -236,7 +239,7 @@ export default function Pests() {
                          <CardDescription className="text-xs font-black text-red-600 uppercase tracking-widest">{t("actionRequiredLabel")}: {t(`${alert.id}Action`)}</CardDescription>
                       </div>
                     </CardHeader>
-                    <CardContent className="p-8 pt-0">
+                    <CardContent className="p-6 md:p-8 pt-0">
                        <p className="text-muted-foreground font-medium leading-relaxed italic border-l-4 border-red-100 pl-4 py-2 bg-red-50/30 rounded-r-xl">"{t(`${alert.id}Desc`)}"</p>
                     </CardContent>
                   </Card>
@@ -250,22 +253,22 @@ export default function Pests() {
           </div>
 
           {/* Expert Strategy */}
-          <div className="space-y-8 pt-8">
-            <div className="flex items-center justify-between">
-               <h2 className="text-3xl font-black tracking-tight flex items-center gap-3 uppercase italic">
-                  <Lightbulb className="h-8 w-8 text-amber-500" />
+          <div className="space-y-6">
+            <div className="flex items-center justify-between px-2">
+               <h2 className="text-2xl font-black tracking-tight flex items-center gap-3 uppercase italic text-slate-800">
+                  <Lightbulb className="h-7 w-7 text-amber-500" />
                   {t("expertAiStrategy")}
                </h2>
-               <div className="h-1 flex-1 mx-8 bg-amber-100/50 rounded-full hidden md:block" />
+               <div className="h-px flex-1 mx-8 bg-slate-200 hidden md:block" />
             </div>
-            <div className="grid sm:grid-cols-2 gap-8">
+            <div className="grid sm:grid-cols-2 gap-6">
                {[
                  { title: t("preventionStrategy"), content: currentData.prevention, icon: ShieldCheck, color: "bg-blue-50 text-blue-600", shadow: "shadow-blue-500/10" },
                  { title: t("organicTreatment"), content: currentData.organic, icon: Leaf, color: "bg-emerald-50 text-emerald-600", shadow: "shadow-emerald-500/10" },
                  { title: t("monitoringTips"), content: currentData.monitoring, icon: Eye, color: "bg-amber-50 text-amber-600", shadow: "shadow-amber-500/10" },
                  { title: t("ipmStrategy"), content: currentData.ipm, icon: Activity, color: "bg-indigo-50 text-indigo-600", shadow: "shadow-indigo-500/10" }
                ].map((strat, i) => (
-                 <Card key={i} className="rounded-[2.5rem] border-primary/5 p-10 space-y-8 hover:shadow-2xl transition-all h-full bg-white group">
+                 <Card key={i} className="rounded-[2.5rem] border-primary/5 p-8 md:p-10 space-y-6 hover:shadow-2xl transition-all h-full bg-white group">
                     <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center transition-all group-hover:rotate-12 group-hover:scale-110", strat.color, strat.shadow)}>
                        <strat.icon className="h-8 w-8" />
                     </div>
@@ -282,17 +285,17 @@ export default function Pests() {
         </div>
 
         {/* Sidebar Stats & Library */}
-        <aside className="space-y-8">
+        <aside className="space-y-6 lg:sticky lg:top-24">
           <Card className="rounded-[2.5rem] border-none shadow-2xl bg-slate-900 text-white overflow-hidden relative group">
             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-               <Zap className="h-32 w-32 rotate-12 fill-current" />
+               <Zap className="h-32 w-32 rotate-12 fill-current text-emerald-500" />
             </div>
-            <CardContent className="p-10 space-y-10 relative z-10">
-              <div className="space-y-4 text-center">
+            <CardContent className="p-8 space-y-8 relative z-10">
+              <div className="space-y-2 text-center">
                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">{t("totalThreats")}</p>
                  <p className="text-7xl font-black tracking-tighter tabular-nums">{currentData.stats.threats}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 border-y border-white/10 py-8">
+              <div className="grid grid-cols-2 gap-4 border-y border-white/10 py-6">
                  <div className="text-center space-y-1">
                     <p className="text-[9px] font-black uppercase tracking-widest text-white/40">{t("pests")}</p>
                     <p className="text-3xl font-black text-white">{currentData.stats.pests}</p>
@@ -313,11 +316,11 @@ export default function Pests() {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-8 bg-white">
-             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
+          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-6 bg-white">
+             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
                 <Microscope className="h-5 w-5 text-primary" /> {t("commonPests")}
              </h3>
-             <div className="space-y-5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+             <div className="space-y-5 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                 {currentData.pests.map((p, idx) => (
                   <div key={idx} className="flex items-center justify-between group cursor-pointer hover:translate-x-2 transition-transform">
                      <div className="flex items-center gap-4">
@@ -333,11 +336,11 @@ export default function Pests() {
              </div>
           </Card>
 
-          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-8 bg-white">
-             <h3 className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
+          <Card className="rounded-[2.5rem] border-primary/10 shadow-xl p-8 space-y-6 bg-white">
+             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground italic border-b pb-4 flex items-center gap-3">
                 <FlaskConical className="h-5 w-5 text-emerald-600" /> {t("plantDiseases")}
              </h3>
-             <div className="space-y-5 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+             <div className="space-y-5 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                 {currentData.diseases.map((d, idx) => (
                   <div key={idx} className="flex items-center justify-between group cursor-pointer hover:translate-x-2 transition-transform">
                      <div className="flex items-center gap-4">
