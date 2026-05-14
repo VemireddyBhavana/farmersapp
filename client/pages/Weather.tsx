@@ -12,6 +12,7 @@ import ForecastCards from "@/components/weather/ForecastCards";
 import HourlyChart from "@/components/weather/HourlyChart";
 import WeatherMap from "@/components/weather/WeatherMap";
 import CropImpact from "@/components/weather/CropImpact";
+import VerticalForecast from "@/components/weather/VerticalForecast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
@@ -42,10 +43,20 @@ const Weather: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f1f2f3] dark:bg-[#0b111a] font-['Open_Sans']">
       {/* Exact Header Style */}
-      <nav className="bg-[#004d73] shadow-md border-b border-white/10 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <nav className="bg-[#004d73] shadow-lg border-b border-white/10 sticky top-0 z-50 overflow-hidden">
+        {/* Topographic Background Overlay */}
+        <div 
+          className="absolute inset-0 opacity-20 pointer-events-none mix-blend-overlay"
+          style={{ 
+            backgroundImage: `url('https://www.transparenttextures.com/patterns/topography.png')`,
+            backgroundSize: '400px'
+          }}
+        />
+        
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4 relative z-10">
           <div className="flex items-center gap-6">
-             <div className="text-white font-black text-xl tracking-tighter italic flex items-center gap-1">
+             <div className="text-white font-black text-2xl tracking-tighter italic flex items-center gap-2">
+                <FiZap className="text-[#ffcc00] fill-[#ffcc00]" />
                 {t("weatherRadarTitle")}
              </div>
           </div>
@@ -56,18 +67,19 @@ const Weather: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t("searchPlaceholder")}
-              className="w-full h-10 bg-white border-none rounded px-4 text-sm font-bold text-[#333] focus:ring-2 focus:ring-[#ffcc00] transition-all"
+              className="w-full h-11 bg-white border-none rounded-lg px-6 text-sm font-bold text-[#333] shadow-inner focus:ring-4 focus:ring-[#ffcc00]/30 transition-all"
             />
-            <button type="submit" className="absolute right-0 top-0 h-10 w-12 bg-[#ffcc00] rounded-r flex items-center justify-center text-[#004d73] hover:bg-[#ffb300] transition-colors">
+            <button type="submit" className="absolute right-1 top-1 h-9 w-14 bg-[#ffcc00] rounded-md flex items-center justify-center text-[#004d73] hover:bg-[#ffb300] transition-all shadow-sm">
               <FiNavigation className="text-lg" />
             </button>
           </form>
 
-          <div className="hidden md:flex items-center gap-6 text-white text-[11px] font-bold uppercase tracking-wider">
-             <a href="#" className="hover:text-[#ffcc00]">{t("navRain")}</a>
-             <a href="#" className="hover:text-[#ffcc00]">{t("navWind")}</a>
-             <a href="#" className="hover:text-[#ffcc00]">{t("navRadar")}</a>
-             <a href="#" className="hover:text-[#ffcc00]">{t("nav14Day")}</a>
+          <div className="hidden lg:flex items-center gap-8 text-white text-[11px] font-black uppercase tracking-[0.2em]">
+             <a href="#" className="hover:text-[#ffcc00] transition-colors">{t("navRain")}</a>
+             <a href="#" className="hover:text-[#ffcc00] transition-colors">{t("navWind")}</a>
+             <a href="#" className="hover:text-[#ffcc00] transition-colors">{t("navRadar")}</a>
+             <div className="h-4 w-px bg-white/20" />
+             <a href="#" className="bg-white/10 px-4 py-2 rounded-full border border-white/10 hover:bg-white/20 transition-all">{t("login")}</a>
           </div>
         </div>
       </nav>
@@ -99,13 +111,27 @@ const Weather: React.FC = () => {
 
                <div className="space-y-4">
                   <div className="flex items-center justify-between px-1">
-                     <h3 className="text-sm font-bold text-[#004d73] dark:text-white">{t("weatherRadarSection")}</h3>
-                     <a href="#" className="text-xs font-bold text-blue-500 hover:underline">{t("interactiveMap")}</a>
+                     <h3 className="text-sm font-black text-[#004d73] dark:text-white uppercase tracking-widest">{t("weatherRadarSection")}</h3>
+                     <a href="#" className="text-xs font-bold text-blue-500 hover:underline flex items-center gap-1">
+                        {t("interactiveMap")} <FiChevronRight />
+                     </a>
                   </div>
                   <WeatherMap />
                </div>
 
-               <ForecastCards daily={weather.daily} />
+               <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                     <h3 className="text-sm font-black text-[#004d73] dark:text-white uppercase tracking-widest px-1">{t("hourlyForecast")}</h3>
+                     <HourlyChart hourly={weather.hourly} />
+                  </div>
+                  <div className="space-y-4">
+                     <h3 className="text-sm font-black text-[#004d73] dark:text-white uppercase tracking-widest px-1">{t("dailyForecast")}</h3>
+                     <ForecastCards daily={weather.daily} />
+                  </div>
+               </div>
+
+               <VerticalForecast daily={weather.daily} />
+
                
                {/* Health & Pollen (Mimicking the reference style) */}
                <div className="grid md:grid-cols-2 gap-6">

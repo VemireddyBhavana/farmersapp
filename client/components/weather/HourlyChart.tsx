@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { FiClock, FiCloud, FiSun, FiCloudRain, FiArrowUp } from "react-icons/fi";
+import { FiClock, FiCloud, FiSun, FiCloudRain, FiArrowUp, FiDroplet } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -29,33 +29,33 @@ const HourlyChart: React.FC<HourlyChartProps> = ({ hourly }) => {
           {hourly.slice(0, 24).map((hour, i) => (
             <motion.div 
               key={i}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: i * 0.02 }}
-              className="flex flex-col items-center min-w-[85px] py-6 border-r border-slate-50 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.01 }}
+              className="flex flex-col items-center min-w-[75px] py-8 border-r border-slate-50 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/5 transition-all cursor-pointer group"
             >
-              <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-4">
                 {new Date(hour.dt * 1000).getHours()}:00
               </p>
               
-              <p className="text-xl font-black text-[#333] dark:text-white tabular-nums mb-3">
-                {Math.round(hour.temp)}°
-              </p>
-              <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">
-                {hour.weather[0].main === 'Rain' ? <FiCloudRain className="text-blue-400" /> : hour.weather[0].main === 'Clear' ? <FiSun className="text-amber-500" /> : <FiCloud className="text-slate-400" />}
+              <div className="text-2xl mb-6 group-hover:scale-125 transition-transform duration-300">
+                {hour.weather[0].main === 'Rain' ? <FiCloudRain className="text-blue-400" /> : hour.weather[0].main === 'Clear' ? <FiSun className="text-amber-500" /> : <FiCloud className="text-slate-300" />}
               </div>
 
-              <div className="flex flex-col items-center gap-1">
-                 <FiArrowUp 
-                   className="text-slate-300 dark:text-slate-600 transition-transform duration-500" 
-                   style={{ transform: `rotate(${hour.wind_deg}deg)` }} 
+              <p className="text-xl font-black text-[#004d73] dark:text-white tabular-nums mb-6">
+                {Math.round(hour.temp)}°
+              </p>
+
+              <div className="flex flex-col items-center gap-2 mt-auto">
+                 <div className="flex items-center gap-1">
+                    <FiDroplet className="text-blue-300 text-[10px]" />
+                    <span className="text-[9px] font-bold text-slate-400">{Math.round((hour.pop || 0) * 100)}%</span>
+                 </div>
+                 <div 
+                    className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.5)]" 
+                    title="Good AQI"
                  />
-                 <span className="text-[9px] font-bold text-slate-400 uppercase">{Math.round(hour.wind_speed)}</span>
               </div>
-              
-              {i === 0 && (
-                <div className="absolute top-0 left-0 right-0 h-0.5 bg-[#004d73] dark:bg-[#ffcc00]" />
-              )}
             </motion.div>
           ))}
         </div>

@@ -30,7 +30,7 @@ export const seedsData = [
     {
         id: 5, name: "Alphonso Mango Graft", brand: "FarmDirect", crop: "mango", category: "Fruits",
         variety: "Grafted Sapling", price: 350, unit: "sapling", rating: 4.9, reviews: 42, image: "/mango_orchard.png",
-        tags: ["Premium Quality", "Fruitful"], season: "Zaid", soil: "Alluvial/Loamy", duration: "3-5 years", stock: 120,
+        tags: ["Premium Quality", "Fruitful"], season: "Perennial", soil: "Alluvial/Loamy", duration: "3-5 years", stock: 120,
         seedType: "Organic",
         description: "Healthy grafted Alphonso mango saplings. High survival rate and disease resistance."
     },
@@ -280,9 +280,9 @@ export const seedsData = [
         description: "Bold black sesame seeds. Rich in minerals and high oil yield."
     },
     {
-        id: 41, name: "Co-86032 Sugarcane Setts", brand: "VSI Pune", crop: "sugarcane", category: "Grains",
+        id: 41, name: "Co-86032 Sugarcane Setts", brand: "VSI Pune", crop: "sugarcane", category: "Plantation",
         variety: "High Sugar", price: 15, unit: "sett", rating: 4.8, reviews: 320, image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=600&auto=format&fit=crop",
-        tags: ["Cash Crop", "High Sucrose"], season: "Rabi", soil: "Deep Heavy Soils", duration: "12 months", stock: 1000,
+        tags: ["Cash Crop", "High Sucrose"], season: "Perennial", soil: "Deep Heavy Soils", duration: "12 months", stock: 1000,
         seedType: "Hybrid",
         description: "Fresh cane setts with high germination. Excellent ratoonability."
     },
@@ -301,16 +301,16 @@ export const seedsData = [
         description: "Fast-growing jute seeds with high fiber quality and length."
     },
     {
-        id: 44, name: "Salem Turmeric Rhizomes", brand: "Erode Agri", crop: "turmeric", category: "Vegetables",
+        id: 44, name: "Salem Turmeric Rhizomes", brand: "Erode Agri", crop: "turmeric", category: "Spices",
         variety: "High Curcumin", price: 85, unit: "kg", rating: 4.9, reviews: 430, image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?q=80&w=600&auto=format&fit=crop",
-        tags: ["Medicinal", "Yellow Gold"], season: "Kharif", soil: "Sandy Loam", duration: "9 months", stock: 500,
+        tags: ["Medicinal", "Yellow Gold"], season: "Annual", soil: "Sandy Loam", duration: "9 months", stock: 500,
         seedType: "Organic",
         description: "Fresh mother rhizomes with high curcumin content."
     },
     {
-        id: 45, name: "Ginger - Rio-de-Janeiro", brand: "IISR", crop: "ginger", category: "Vegetables",
+        id: 45, name: "Ginger - Rio-de-Janeiro", brand: "IISR", crop: "ginger", category: "Spices",
         variety: "Less Fiber", price: 120, unit: "kg", rating: 4.8, reviews: 215, image: "https://images.unsplash.com/photo-1591543620767-58262e76aa67?q=80&w=600&auto=format&fit=crop",
-        tags: ["Spices", "Pungent"], season: "Kharif", soil: "Lateritic Soils", duration: "8 months", stock: 300,
+        tags: ["Spices", "Pungent"], season: "Annual", soil: "Lateritic Soils", duration: "8 months", stock: 300,
         seedType: "Organic",
         description: "Bold ginger rhizomes suitable for fresh market and dehydration."
     },
@@ -378,7 +378,7 @@ export const seedsData = [
         description: "Low-chill apple variety that fruits well in hotter plains."
     },
     {
-        id: 55, name: "Cotton Seeds - Bt3 Hybrid", brand: "Ganga", crop: "cotton", category: "Oil seeds",
+        id: 55, name: "Cotton Seeds - Bt3 Hybrid", brand: "Ganga", crop: "cotton", category: "Fiber",
         variety: "Bollworm Resistant", price: 860, unit: "450g", rating: 4.8, reviews: 1200, image: "https://images.unsplash.com/photo-1594900572653-af12519d96bb?q=80&w=600&auto=format&fit=crop",
         tags: ["High Ginning", "Long Staple"], season: "Kharif", soil: "Deep Black", duration: "160 days", stock: 1000,
         seedType: "Hybrid",

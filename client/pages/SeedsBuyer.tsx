@@ -42,7 +42,7 @@ const SidebarFilters = ({
         <div className="space-y-4">
             <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("seasonalCrops")}</h3>
             <div className="grid gap-2">
-                {["All", "Kharif", "Rabi", "Zaid"].map((season) => (
+                {["All", "Kharif", "Rabi", "Zaid", "Pre-Kharif", "Late Rabi", "Perennial", "Annual"].map((season) => (
                     <label key={season} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 cursor-pointer transition-colors group">
                         <div className={cn(
                             "h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all",
@@ -57,7 +57,7 @@ const SidebarFilters = ({
                             checked={filters.season === season}
                             onChange={() => setFilters((prev: any) => ({ ...prev, season }))}
                         />
-                        <span className={cn("text-sm font-bold", filters.season === season ? "text-emerald-900" : "text-emerald-600/70")}>
+                        <span className={cn("text-sm font-black", filters.season === season ? "text-emerald-950" : "text-emerald-600")}>
                             {season === "All" ? t("allSeasons") : `${t(season.toLowerCase())} ${t("seasonSuffix")}`}
                         </span>
                     </label>
@@ -104,7 +104,7 @@ const SidebarFilters = ({
                                 }));
                             }}
                         />
-                        <span className="text-sm font-bold text-emerald-600/70 group-hover:text-emerald-900 transition-colors">{t(type.toLowerCase().replace('-', ''))}</span>
+                        <span className="text-sm font-black text-emerald-800 group-hover:text-emerald-600 transition-colors">{t(type.toLowerCase().replace('-', ''))}</span>
                     </label>
                 ))}
             </div>
@@ -134,7 +134,7 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ delay: idx * 0.05 }}
         >
-            <Card className="group overflow-hidden rounded-[2.5rem] border-emerald-50 hover:border-emerald-200 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/10 cursor-pointer bg-white h-full flex flex-col">
+            <Card className="group overflow-hidden rounded-[2.5rem] border-2 border-emerald-100 hover:border-emerald-500 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer bg-white h-full flex flex-col">
                 <div className="relative aspect-[4/5] overflow-hidden shrink-0">
                     <img
                         src={seed.image}
@@ -302,7 +302,7 @@ const SeedsBuyer = () => {
                         <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.85]">
                             {t("farmersFirstMarketplace")}
                         </h1>
-                        <p className="text-emerald-100/60 text-lg font-medium leading-relaxed">
+                        <p className="text-emerald-50 text-lg font-bold leading-relaxed">
                             {t("seedsMarketplaceDesc")}
                         </p>
                     </motion.div>
@@ -329,7 +329,7 @@ const SeedsBuyer = () => {
                                         </div>
                                         {t("yourHarvest")}
                                     </SheetTitle>
-                                    <SheetDescription className="text-emerald-200 mt-2 font-medium">
+                                    <SheetDescription className="text-emerald-100 mt-2 font-black">
                                         {t("seedsSelectedForSoil")}
                                     </SheetDescription>
                                 </SheetHeader>
@@ -416,82 +416,94 @@ const SeedsBuyer = () => {
             </header>
 
             {/* 2. Top Filter Bar (Sticky with Glass Effect) */}
-            <div className="sticky top-0 z-40 px-6 py-6 transition-all duration-500 bg-[#fafcfb]/60 backdrop-blur-xl border-b border-emerald-100/50">
+            <div className="sticky top-0 z-40 px-6 py-4 transition-all duration-500 bg-[#fafcfb]/80 backdrop-blur-xl border-b border-emerald-100/50 shadow-sm">
                 <div className="container mx-auto">
-                    <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] p-3 shadow-2xl shadow-emerald-900/10 border border-white/50 flex flex-nowrap items-center justify-between gap-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
-                        {/* Search */}
-                        <div className="shrink-0 w-full max-w-[280px] lg:max-w-[360px]">
-                            <div className="relative group">
-                                <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-500 transition-transform group-focus-within:scale-110" />
+                    <div className="flex flex-col lg:flex-row items-center gap-4">
+                        {/* Search & Categories Container */}
+                        <div className="flex-1 w-full bg-white rounded-[2rem] p-2 shadow-2xl shadow-emerald-900/10 border-2 border-emerald-50 flex items-center gap-2 overflow-hidden">
+                            {/* Crops Label/Search Trigger */}
+                            <div className="bg-emerald-600 text-white px-8 h-12 rounded-2xl flex items-center gap-3 shrink-0 font-black text-[11px] uppercase tracking-widest shadow-xl shadow-emerald-600/30">
+                                <Search className="h-4 w-4" />
+                                <span className="hidden sm:inline">Crops</span>
+                            </div>
+
+                            {/* Search Input */}
+                            <div className="shrink-0 w-40 md:w-60">
                                 <Input
                                     placeholder={t("findYourSeeds")}
-                                    className="pl-16 h-14 lg:h-16 rounded-[1.8rem] bg-emerald-50/50 border-emerald-100 focus-visible:ring-emerald-500 text-base font-medium transition-all"
+                                    className="h-12 border-none bg-transparent focus-visible:ring-0 shadow-none text-sm font-bold placeholder:text-emerald-900/30"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                             </div>
+
+                            <div className="h-8 w-px bg-emerald-100 shrink-0 mx-2" />
+
+                            {/* Scrollable Categories */}
+                            <div className="flex-1 overflow-x-auto scrollbar-hide">
+                                <Tabs defaultValue="All" onValueChange={setSelectedCategory} className="w-full">
+                                    <TabsList className="bg-transparent p-0 h-12 flex flex-nowrap gap-1">
+                                        {["All", "Grains", "Vegetables", "Fruits", "Pulses", "Oil seeds", "Spices", "Medicinal", "Fiber", "Flowers", "Plantation", "Fodder"].map((cat) => (
+                                            <TabsTrigger 
+                                                key={cat}
+                                                value={cat} 
+                                                className="rounded-xl px-6 h-full data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border-none shadow-md text-emerald-900/60 hover:text-emerald-700"
+                                            >
+                                                {cat === "All" ? t("all") : t(cat.toLowerCase().replace(' ', ''))}
+                                            </TabsTrigger>
+                                        ))}
+                                    </TabsList>
+                                </Tabs>
+                            </div>
                         </div>
 
-                        {/* Centered Categories */}
-                        <div className="flex-1 flex justify-center min-w-0">
-                            <Tabs defaultValue="All" onValueChange={setSelectedCategory} className="w-auto">
-                                <TabsList className="bg-transparent p-0 h-16 flex flex-nowrap gap-4 overflow-x-auto whitespace-nowrap scrollbar-hide">
-                                    {["All", "Grains", "Vegetables", "Fruits", "Pulses", "Oil seeds"].map((cat) => (
-                                        <TabsTrigger 
-                                            key={cat}
-                                            value={cat} 
-                                            className="rounded-2xl px-8 h-full bg-emerald-50/50 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border border-emerald-100/30"
-                                        >
-                                            {cat === "All" ? t("allCrops") : t(cat.toLowerCase().replace(' ', ''))}
-                                        </TabsTrigger>
-                                    ))}
-                                </TabsList>
-                            </Tabs>
-                        </div>
-
-                        {/* Mobile Side Filter Toggle */}
-                        <div className="lg:hidden shrink-0">
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button variant="outline" className="h-16 w-16 rounded-full border-emerald-100 text-emerald-600 shadow-xl bg-white">
-                                        <Filter className="h-6 w-6" />
-                                    </Button>
-                                </SheetTrigger>
-                                <SheetContent side="left" className="w-80 bg-white p-0">
-                                    <div className="p-8 bg-emerald-900 text-white flex justify-between items-center shrink-0">
-                                        <h3 className="text-xl font-black flex items-center gap-2"><Filter className="h-5 w-5" /> Filters</h3>
-                                        <SheetClose className="p-2 border border-white/20 rounded-xl hover:bg-white/10 transition-colors"><X className="h-4 w-4" /></SheetClose>
-                                    </div>
-                                    <ScrollArea className="h-[calc(100vh-5rem)] p-8">
-                                        <SidebarFilters 
-                                            filters={filters}
-                                            setFilters={setFilters}
-                                        />
-                                    </ScrollArea>
-                                </SheetContent>
-                            </Sheet>
-                        </div>
-
-                        {/* Right Quick Filter (Desktop) */}
-                        <div className="hidden lg:flex items-center gap-4 shrink-0">
-                             <div className="flex items-center gap-2 bg-emerald-50/50 px-6 h-16 rounded-[1.8rem] border border-emerald-100 shadow-sm">
-                                <Filter className="h-4 w-4 text-emerald-500" />
-                                <span className="text-[10px] font-black text-emerald-900 uppercase tracking-widest">Sort By:</span>
+                        <div className="shrink-0 flex items-center gap-3">
+                            <div className="bg-emerald-50 px-6 h-14 rounded-[1.8rem] border-2 border-emerald-100 shadow-xl shadow-emerald-900/5 flex items-center gap-3 group cursor-pointer hover:bg-emerald-100 transition-all">
+                                <Filter className="h-4 w-4 text-emerald-700" />
+                                <span className="text-[10px] font-black text-emerald-950 uppercase tracking-widest">{t("sortBy")}:</span>
                                 <select 
-                                    className="bg-transparent font-black text-[10px] uppercase tracking-widest text-emerald-600 focus:outline-none cursor-pointer"
+                                    className="bg-transparent font-black text-[10px] uppercase tracking-widest text-emerald-800 focus:outline-none cursor-pointer pr-2"
                                     value={filters.season}
                                     onChange={(e) => setFilters(prev => ({ ...prev, season: e.target.value }))}
                                 >
-                                    <option value="All">Seasons</option>
+                                    <option value="All">{t("seasons")}</option>
                                     <option value="Kharif">Kharif</option>
                                     <option value="Rabi">Rabi</option>
                                     <option value="Zaid">Zaid</option>
+                                    <option value="Pre-Kharif">Pre-Kharif</option>
+                                    <option value="Late Rabi">Late Rabi</option>
+                                    <option value="Perennial">Perennial</option>
+                                    <option value="Annual">Annual</option>
                                 </select>
-                             </div>
+                            </div>
+
+                            {/* Mobile Toggle (Inside the sort bar area for consistency) */}
+                            <div className="lg:hidden">
+                                <Sheet>
+                                    <SheetTrigger asChild>
+                                        <Button variant="outline" className="h-14 w-14 rounded-2xl border-emerald-100 text-emerald-600 shadow-xl bg-white">
+                                            <Filter className="h-5 w-5" />
+                                        </Button>
+                                    </SheetTrigger>
+                                    <SheetContent side="left" className="w-80 bg-white p-0">
+                                        <div className="p-8 bg-emerald-900 text-white flex justify-between items-center shrink-0">
+                                            <h3 className="text-xl font-black flex items-center gap-2"><Filter className="h-5 w-5" /> Filters</h3>
+                                            <SheetClose className="p-2 border border-white/20 rounded-xl hover:bg-white/10 transition-colors"><X className="h-4 w-4" /></SheetClose>
+                                        </div>
+                                        <ScrollArea className="h-[calc(100vh-5rem)] p-8">
+                                            <SidebarFilters 
+                                                filters={filters}
+                                                setFilters={setFilters}
+                                            />
+                                        </ScrollArea>
+                                    </SheetContent>
+                                </Sheet>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/* 3. Main Interface Layout */}
             <main className="container mx-auto px-6 mt-10">
@@ -513,7 +525,7 @@ const SeedsBuyer = () => {
                              </div>
                              <div className="text-right">
                                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1 italic">{t("nowBrowsing")}</p>
-                                <Badge className="bg-emerald-900 text-emerald-400 border-none px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest">
+                                <Badge className="bg-emerald-600 text-white border-none px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest">
                                     {filteredSeeds.length} {t("varietalClones")}
                                 </Badge>
                              </div>
