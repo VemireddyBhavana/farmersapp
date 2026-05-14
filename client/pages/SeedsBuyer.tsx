@@ -40,10 +40,10 @@ const SidebarFilters = ({
     return (
     <div className="space-y-8 py-4">
         <div className="space-y-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("seasonalCrops")}</h3>
+            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-50 border-l-4 border-emerald-500 pl-3">{t("seasonalCrops")}</h3>
             <div className="grid gap-2">
                 {["All", "Kharif", "Rabi", "Zaid", "Pre-Kharif", "Late Rabi", "Perennial", "Annual"].map((season) => (
-                    <label key={season} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 cursor-pointer transition-colors group">
+                    <label key={season} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 cursor-pointer transition-colors group">
                         <div className={cn(
                             "h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all",
                             filters.season === season ? "bg-emerald-600 border-emerald-600" : "border-emerald-200 group-hover:border-emerald-400"
@@ -57,7 +57,7 @@ const SidebarFilters = ({
                             checked={filters.season === season}
                             onChange={() => setFilters((prev: any) => ({ ...prev, season }))}
                         />
-                        <span className={cn("text-sm font-black", filters.season === season ? "text-emerald-950" : "text-emerald-600")}>
+                        <span className={cn("text-sm font-black", filters.season === season ? "text-emerald-950 dark:text-emerald-50" : "text-emerald-600 dark:text-emerald-400")}>
                             {season === "All" ? t("allSeasons") : `${t(season.toLowerCase())} ${t("seasonSuffix")}`}
                         </span>
                     </label>
@@ -67,8 +67,8 @@ const SidebarFilters = ({
 
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("budgetLabel")}</h3>
-                <span className="text-xs font-black text-emerald-600">{t("upTo")} ₹{filters.price}</span>
+                <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-50 border-l-4 border-emerald-500 pl-3">{t("budgetLabel")}</h3>
+                <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">{t("upTo")} ₹{filters.price}</span>
             </div>
             <div className="px-2">
                 <Slider 
@@ -134,7 +134,7 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ delay: idx * 0.05 }}
         >
-            <Card className="group overflow-hidden rounded-[2.5rem] border-2 border-emerald-100 hover:border-emerald-500 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer bg-white h-full flex flex-col">
+            <Card className="group overflow-hidden rounded-[2.5rem] border-2 border-emerald-100 dark:border-emerald-900/30 hover:border-emerald-500 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-500/20 cursor-pointer bg-white dark:bg-emerald-950/20 h-full flex flex-col">
                 <div className="relative aspect-[4/5] overflow-hidden shrink-0">
                     <img
                         src={seed.image}
@@ -287,7 +287,7 @@ const SeedsBuyer = () => {
     });
 
     return (
-        <div className="min-h-screen bg-[#fafcfb]">
+        <div className="min-h-screen bg-[#fafcfb] dark:bg-[#0a0f0d]">
             {/* 1. Global Header with Cart */}
             <header className="bg-emerald-950 py-20 px-6 relative overflow-hidden">
                 <div className="container mx-auto relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
@@ -420,7 +420,7 @@ const SeedsBuyer = () => {
                 <div className="container mx-auto">
                     <div className="flex flex-col lg:flex-row items-center gap-4">
                         {/* Search & Categories Container */}
-                        <div className="flex-1 w-full bg-white rounded-[2rem] p-2 shadow-2xl shadow-emerald-900/10 border-2 border-emerald-50 flex items-center gap-2 overflow-hidden">
+                        <div className="flex-1 w-full bg-white dark:bg-emerald-950/20 rounded-[2rem] p-2 shadow-2xl shadow-emerald-900/10 border-2 border-emerald-50 dark:border-emerald-900/20 flex items-center gap-2 overflow-hidden">
                             {/* Crops Label/Search Trigger */}
                             <div className="bg-emerald-600 text-white px-8 h-12 rounded-2xl flex items-center gap-3 shrink-0 font-black text-[11px] uppercase tracking-widest shadow-xl shadow-emerald-600/30">
                                 <Search className="h-4 w-4" />
@@ -431,7 +431,7 @@ const SeedsBuyer = () => {
                             <div className="shrink-0 w-40 md:w-60">
                                 <Input
                                     placeholder={t("findYourSeeds")}
-                                    className="h-12 border-none bg-transparent focus-visible:ring-0 shadow-none text-sm font-bold placeholder:text-emerald-900/30"
+                                    className="h-12 border-none bg-transparent focus-visible:ring-0 shadow-none text-sm font-bold placeholder:text-emerald-900/30 dark:text-emerald-50 dark:placeholder:text-emerald-100/20"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
@@ -447,7 +447,7 @@ const SeedsBuyer = () => {
                                             <TabsTrigger 
                                                 key={cat}
                                                 value={cat} 
-                                                className="rounded-xl px-6 h-full data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border-none shadow-md text-emerald-900/60 hover:text-emerald-700"
+                                                className="rounded-xl px-6 h-full data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border-none shadow-md text-emerald-900/60 dark:text-emerald-100/60 hover:text-emerald-700 dark:hover:text-emerald-300"
                                             >
                                                 {cat === "All" ? t("all") : t(cat.toLowerCase().replace(' ', ''))}
                                             </TabsTrigger>
@@ -458,11 +458,11 @@ const SeedsBuyer = () => {
                         </div>
 
                         <div className="shrink-0 flex items-center gap-3">
-                            <div className="bg-emerald-50 px-6 h-14 rounded-[1.8rem] border-2 border-emerald-100 shadow-xl shadow-emerald-900/5 flex items-center gap-3 group cursor-pointer hover:bg-emerald-100 transition-all">
-                                <Filter className="h-4 w-4 text-emerald-700" />
-                                <span className="text-[10px] font-black text-emerald-950 uppercase tracking-widest">{t("sortBy")}:</span>
+                            <div className="bg-emerald-50 dark:bg-emerald-900/20 px-6 h-14 rounded-[1.8rem] border-2 border-emerald-100 dark:border-emerald-900/30 shadow-xl shadow-emerald-900/5 flex items-center gap-3 group cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-all">
+                                <Filter className="h-4 w-4 text-emerald-700 dark:text-emerald-300" />
+                                <span className="text-[10px] font-black text-emerald-950 dark:text-emerald-50 uppercase tracking-widest">{t("sortBy")}:</span>
                                 <select 
-                                    className="bg-transparent font-black text-[10px] uppercase tracking-widest text-emerald-800 focus:outline-none cursor-pointer pr-2"
+                                    className="bg-transparent font-black text-[10px] uppercase tracking-widest text-emerald-800 dark:text-emerald-200 focus:outline-none cursor-pointer pr-2"
                                     value={filters.season}
                                     onChange={(e) => setFilters(prev => ({ ...prev, season: e.target.value }))}
                                 >
@@ -481,7 +481,7 @@ const SeedsBuyer = () => {
                             <div className="lg:hidden">
                                 <Sheet>
                                     <SheetTrigger asChild>
-                                        <Button variant="outline" className="h-14 w-14 rounded-2xl border-emerald-100 text-emerald-600 shadow-xl bg-white">
+                                        <Button variant="outline" className="h-14 w-14 rounded-2xl border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 shadow-xl bg-white dark:bg-emerald-950">
                                             <Filter className="h-5 w-5" />
                                         </Button>
                                     </SheetTrigger>
@@ -520,8 +520,8 @@ const SeedsBuyer = () => {
                     <div className="flex-1 space-y-12 pb-32">
                         <div className="flex items-end justify-between border-b border-emerald-50 pb-8">
                              <div>
-                                <h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-2 font-mono">{t("marketplaceFeed")}</h4>
-                                <h1 className="text-4xl font-black text-emerald-950 tracking-tighter">{t("certifiedSeedCatalog")}</h1>
+                                <h4 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] mb-2 font-mono">{t("marketplaceFeed")}</h4>
+                                <h1 className="text-4xl font-black text-emerald-950 dark:text-white tracking-tighter">{t("certifiedSeedCatalog")}</h1>
                              </div>
                              <div className="text-right">
                                 <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1 italic">{t("nowBrowsing")}</p>

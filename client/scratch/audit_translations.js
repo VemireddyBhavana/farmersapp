@@ -1,41 +1,34 @@
 const fs = require('fs');
 const path = require('path');
 
-const languages = ['en', 'hi', 'te', 'ta', 'mr', 'gu', 'kn', 'ml', 'pa', 'bn'];
-const keysToCheck = [
-    'weatherRadarTitle', 'navRain', 'navWind', 'navRadar', 'nav14Day', 'world', 'feedInterrupted', 'retry',
-    'weatherRadarSection', 'interactiveMap', 'aqiPollen', 'aqiIndex', 'aqiPoor', 'grass', 'birch', 'ragweed',
-    'low', 'none', 'uvIndex', 'veryHigh', 'uvProtectionAdvice', 'regionalWeatherNews', 'heatwaveAlertText',
-    'readMore', 'nearbyLocations', 'weatherDataSource', 'pestsAndDisease', 'pestAdvisoryDesc', 'fieldInputCenter',
-    'analyzing', 'selectYourCrop', 'allCrops', 'currentWeather', 'allSeasons', 'hotAndDry', 'humidAndRainy',
-    'fetchAdvisory', 'activeAlerts', 'actionRequiredLabel', 'expertAiStrategy', 'preventionStrategy',
-    'organicTreatment', 'monitoringTips', 'ipmStrategy', 'totalThreats', 'pests', 'diseases', 'commonPests',
-    'plantDiseases', 'whitefliesName', 'whitefliesAction', 'whitefliesDesc', 'spiderMitesName', 'spiderMitesAction',
-    'spiderMitesDesc', 'armywormsName', 'armywormsAction', 'armywormsDesc', 'bollwormName', 'bollwormAction',
-    'bollwormDesc', 'brownPlanthopperName', 'brownPlanthopperAction', 'brownPlanthopperDesc', 'aphidsName',
-    'aphidsAction', 'aphidsDesc', 'thripsName', 'thripsAction', 'thripsDesc', 'blightName', 'blightAction',
-    'blightDesc', 'powderyMildewName', 'powderyMildewAction', 'powderyMildewDesc', 'rootRotName', 'rootRotAction',
-    'rootRotDesc', 'mosaicVirusName', 'mosaicVirusAction', 'mosaicVirusDesc', 'wiltName', 'wiltAction', 'wiltDesc',
-    'panamaDiseaseName', 'panamaDiseaseAction', 'panamaDiseaseDesc', 'sigatokaName', 'sigatokaAction', 'sigatokaDesc',
-    'bananaPrevention', 'bananaPreventionDry', 'bananaPreventionHumid', 'bananaOrganic', 'bananaOrganicDry',
-    'bananaOrganicHumid', 'bananaMonitoring', 'bananaMonitoringDry', 'bananaMonitoringHumid', 'bananaIpm',
-    'bananaIpmDry', 'bananaIpmHumid', 'tomatoPrevention', 'tomatoPreventionWet', 'tomatoOrganic', 'tomatoMonitoring',
-    'tomatoIpm', 'cottonPrevention', 'cottonOrganic', 'cottonMonitoring', 'cottonIpm', 'defaultPrevention',
-    'defaultOrganic', 'defaultMonitoring', 'defaultIpm'
-];
+const i18nDir = path.join(__dirname, 'client/lib/i18n');
+const enPath = path.join(i18nDir, 'en.ts');
 
-languages.forEach(lang => {
-    const filePath = path.join('d:', 'projects', 'farmersapp', 'client', 'lib', 'i18n', `${lang}.ts`);
-    if (!fs.existsSync(filePath)) {
-        console.log(`${lang}: File missing`);
-        return;
-    }
+const getKeys = (content) => {
+    const keys = [];
+    const lines = content.split('\n');
+    lines.forEach(line => {
+        const match = line.match(/^\s+["']?([a-zA-Z0-9_-]+)["']?:\s+/);
+        if (match) {
+            keys.push(match[1]);
+        }
+    });
+    return keys;
+};
+
+const enContent = fs.readFileSync(enPath, 'utf8');
+const enKeys = getKeys(enContent);
+
+const files = fs.readdirSync(i18nDir).filter(f => f.endsWith('.ts') && f !== 'en.ts');
+
+files.forEach(file => {
+    const filePath = path.join(i18nDir, file);
     const content = fs.readFileSync(filePath, 'utf8');
-    const missing = keysToCheck.filter(key => !content.includes(`${key}:`));
+    const keys = getKeys(content);
+    const missing = enKeys.filter(k => !keys.includes(k));
     if (missing.length > 0) {
-        console.log(`${lang}: Missing ${missing.length} keys`);
-        // console.log(missing);
+        console.log(`File ${file} is missing ${missing.length} keys:`, missing.slice(0, 10).join(', ') + (missing.length > 10 ? '...' : ''));
     } else {
-        console.log(`${lang}: All keys present`);
+        console.log(`File ${file} is up to date.`);
     }
 });
