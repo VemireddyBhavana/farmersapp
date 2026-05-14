@@ -2419,6 +2419,7 @@ export const te = {
     termsOfService: "సేవా నిబంధనలు",
     termsOfServiceTitle: "Terms of Service",
     theNumbersThatMatter: "ముఖ్యమైన గణాంకాలు",
+    meteorologicalData: "వాతావరణ సమాచారం",
     thinking: "ఆలోచిస్తున్నాను...",
     thirtyDayForecast: "30-Day Forecast",
     thripsAction: "ఆకుల అడుగు భాగాన్ని తనిఖీ చేయండి",

@@ -2417,6 +2417,7 @@ export const hi = {
     termsOfService: "सेवा की शर्तें",
     termsOfServiceTitle: "Terms of Service",
     theNumbersThatMatter: "आंकड़े जो मायने रखते हैं",
+    meteorologicalData: "मौसम संबंधी आंकड़े",
     thinking: "सोच रहा हूँ...",
     thirtyDayForecast: "30-Day Forecast",
     thripsAction: "पत्तियों के निचले हिस्से की जाँच करें",
