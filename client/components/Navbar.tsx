@@ -107,7 +107,6 @@ const Navbar = () => {
     { name: t("soilPredictorAI"),    path: "/soil-predictor",      icon: Microscope },
     { name: t("soilTestFinder"),    path: "/soil-lab-locator",   icon: Navigation },
     { name: t("loanCalculator"), path: "/agri-loan-calculator", icon: Calculator },
-    { name: t("farmLedger"),         path: "/farmer-finance",     icon: Wallet },
   ];
 
 

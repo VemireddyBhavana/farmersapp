@@ -40,7 +40,6 @@ import ToolSharing from "./pages/ToolSharing";
 import SoilLabLocator from "./pages/SoilLabLocator";
 import SoilPredictor from "./pages/SoilPredictor";
 import AgriLoanCalculator from "./pages/AgriLoanCalculator";
-import FarmerFinance from "./pages/FarmerFinance";
 import PricePredictor from "./pages/PricePredictor";
 import D2CMarketplace from "./pages/D2CMarketplace";
 import DroneBooking from "./pages/DroneBooking";
@@ -83,7 +82,6 @@ const AppRoutes = () => {
       <Route path="/location" element={<Location />} />
       <Route path="/irrigation" element={<IrrigationStats />} />
       <Route path="/farm-mapper" element={<FarmMapper />} />
-      <Route path="/finance" element={<FarmerFinance />} />
       <Route path="/market-place" element={<FarmerMarket />} />
       <Route path="/voice-notes" element={<VoiceNotes />} />
       <Route path="/kisan-suvidha" element={<KisanSuvidhaPortal />} />
@@ -102,7 +100,6 @@ const AppRoutes = () => {
       <Route path="/soil-predictor" element={<SoilPredictor />} />
       <Route path="/fertilizer-recommendation" element={<FertilizerRecommendation />} />
       <Route path="/agri-loan-calculator" element={<AgriLoanCalculator />} />
-      <Route path="/farmer-finance" element={<FarmerFinance />} />
       <Route path="/price-predictor" element={<PricePredictor />} />
       <Route path="/d2c-marketplace" element={<D2CMarketplace />} />
       <Route path="/drone-booking" element={<DroneBooking />} />
