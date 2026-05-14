@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { FiCalendar, FiSun, FiCloud, FiCloudRain, FiDroplets, FiWind } from "react-icons/fi";
+import { FiCalendar, FiSun, FiCloud, FiCloudRain, FiDroplet, FiWind } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 interface ForecastCardsProps {
@@ -38,7 +38,7 @@ const ForecastCards: React.FC<ForecastCardsProps> = ({ daily }) => {
 
               <div className="flex items-center gap-4 w-1/3 justify-center">
                  <div className="flex items-center gap-1">
-                    <FiDroplets className="text-[10px] text-blue-500" />
+                    <FiDroplet className="text-[10px] text-blue-500" />
                     <span className="text-[10px] font-black text-blue-500">{Math.round(day.pop * 100)}%</span>
                  </div>
                  <div className="flex items-center gap-1">

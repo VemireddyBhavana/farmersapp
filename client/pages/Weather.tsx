@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   FiRefreshCw, FiMapPin, FiCalendar, FiSun, FiWind, 
-  FiDroplets, FiEye, FiTrendingUp, FiSunrise, FiSunset, 
+  FiDroplet, FiEye, FiTrendingUp, FiSunrise, FiSunset, 
   FiCloud, FiNavigation, FiZap, FiTarget
 } from "react-icons/fi";
 import { useWeather } from "@/hooks/useWeather";
@@ -159,7 +159,7 @@ const Weather: React.FC = () => {
                       <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mb-2">Soil Moisture</p>
                       <h4 className="text-4xl font-black italic tracking-tighter">{Math.round(weather.satellite?.soil.moisture || 65)}%</h4>
                     </div>
-                    <FiDroplets className="text-4xl opacity-40" />
+                    <FiDroplet className="text-4xl opacity-40" />
                   </div>
                   <p className="text-[10px] font-black uppercase tracking-widest mt-4">Zone: Root Saturation</p>
                 </Card>
