@@ -59,6 +59,13 @@
     --sidebar-accent-foreground: 142 76% 24%;
     --sidebar-border: 142 20% 85%;
     --sidebar-ring: 142 76% 24%;
+    
+    /* WeatherAndRadar.in Palette */
+    --weather-primary: 202 100% 23%; /* #004d73 - Deep Navy */
+    --weather-secondary: 202 100% 35%; /* #0074ad - Royal Blue */
+    --weather-accent: 48 100% 50%; /* #ffcc00 - Sunny Yellow */
+    --weather-bg: 210 20% 98%;
+    --weather-card: 0 0% 100%;
   }
 
   .dark {
@@ -98,6 +105,13 @@
     --sidebar-accent-foreground: 142 76% 60%;
     --sidebar-border: 142 20% 20%;
     --sidebar-ring: 142 76% 40%;
+
+    /* WeatherAndRadar.in Palette Dark */
+    --weather-primary: 202 100% 15%;
+    --weather-secondary: 202 100% 25%;
+    --weather-accent: 48 100% 40%;
+    --weather-bg: 210 20% 5%;
+    --weather-card: 210 20% 8%;
   }
 }
 
@@ -125,6 +139,17 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-emerald-200 rounded-full hover:bg-emerald-300 transition-colors;
+  }
+  
+  /* Weather Specific Utilities */
+  .weather-card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+  .weather-gradient {
+    @apply bg-gradient-to-br from-[#004d73] to-[#0074ad] text-white;
+  }
+  .weather-grid-item {
+    @apply flex flex-col p-4 items-center justify-center text-center space-y-2 border-r last:border-r-0 border-slate-100 dark:border-slate-800;
   }
 }
 
