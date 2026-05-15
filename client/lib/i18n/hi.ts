@@ -2925,4 +2925,9 @@ export const hi = {
     "reportAlert": "समस्या की रिपोर्ट करें",
     "cropAffected": "प्रभावित फसल",
     "severity": "गंभीरता",
+    "topFarmers": "शीर्ष किसान",
+    "leaderboard": "सामुदायिक लीडरबोर्ड",
+    "leaderboardDesc": "हमारे सबसे मददगार और सक्रिय सामुदायिक सदस्यों को पहचानना।",
+    "points": "अंक",
+    "farmerOfTheMonth": "महीने का किसान",
 };

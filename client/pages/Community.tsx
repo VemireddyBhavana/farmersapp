@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, Newspaper, Tractor as TractorIcon, AlertTriangle, Bug } from "lucide-react";
+import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, Newspaper, AlertTriangle, Bug, Award, Star, Medal } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,13 @@ const localAlerts = [
   { id: 1, pest: "Fall Armyworm", crop: "Maize", location: "Karnal", distance: "5km", severity: "High", date: "2 hours ago" },
   { id: 2, pest: "Whitefly", crop: "Cotton", location: "Guntur", distance: "12km", severity: "Medium", date: "5 hours ago" },
   { id: 3, pest: "Locust Swarm", crop: "Multiple", location: "Jaisalmer", distance: "45km", severity: "Critical", date: "1 day ago" },
+];
+
+const topFarmers = [
+  { id: 1, name: "Ramesh Kumar", location: "Punjab", points: 2450, badges: ["Master Sower", "Pest Expert"], isMonthWinner: true },
+  { id: 2, name: "Venkat Rao", location: "Andhra Pradesh", points: 1820, badges: ["Irrigation Pro"], isMonthWinner: false },
+  { id: 3, name: "Suresh Patel", location: "Gujarat", points: 1650, badges: ["Organic Pioneer", "Market Guru"], isMonthWinner: false },
+  { id: 4, name: "Priya Sharma", location: "Haryana", points: 1400, badges: ["Innovator"], isMonthWinner: false },
 ];
 
 const agriNews = [
@@ -214,6 +221,7 @@ export default function Community() {
             <TabsTrigger value="discussions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("discussions")}</TabsTrigger>
             <TabsTrigger value="alerts" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("localAlerts")}</TabsTrigger>
             <TabsTrigger value="news" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("agriNews")}</TabsTrigger>
+            <TabsTrigger value="leaderboard" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("topFarmers")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="discussions" className="space-y-6">
@@ -403,6 +411,57 @@ export default function Community() {
                 </div>
               </div>
             ))}
+          </TabsContent>
+
+          <TabsContent value="leaderboard" className="space-y-6">
+            <div className="bg-gradient-to-r from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-900/10 p-6 rounded-[2rem] border border-amber-200 dark:border-amber-800/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div>
+                <h3 className="font-black text-amber-950 dark:text-amber-50 text-2xl flex items-center gap-2">
+                  <Award className="h-6 w-6 text-amber-600 dark:text-amber-400" /> {t("leaderboard")}
+                </h3>
+                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">{t("leaderboardDesc")}</p>
+              </div>
+            </div>
+
+            <div className="grid gap-4">
+              {topFarmers.map((farmer, index) => (
+                <div key={farmer.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
+                  {farmer.isMonthWinner && (
+                    <div className="absolute top-0 right-0 bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-bl-xl shadow-sm flex items-center gap-1">
+                      <Star className="h-3 w-3 fill-amber-950" /> {t("farmerOfTheMonth")}
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0">
+                    <div className="flex items-center justify-center w-8 font-black text-2xl text-slate-300 dark:text-slate-700">
+                      #{index + 1}
+                    </div>
+                    <div className="h-14 w-14 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center font-black text-2xl text-emerald-700 dark:text-emerald-400 shrink-0">
+                      {farmer.name[0]}
+                    </div>
+                    <div>
+                      <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{farmer.name}</h4>
+                      <p className="text-xs font-bold text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3 w-3" /> {farmer.location}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-start sm:items-end w-full sm:w-auto gap-2">
+                    <div className="flex gap-2">
+                      {farmer.badges.map(badge => (
+                        <span key={badge} className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
+                          <Medal className="h-3 w-3" /> {badge}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="font-black text-xl text-emerald-600 dark:text-emerald-400 mt-1">
+                      {farmer.points.toLocaleString()} <span className="text-sm text-slate-400 uppercase tracking-widest">{t("points")}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>

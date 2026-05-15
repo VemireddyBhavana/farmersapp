@@ -2925,4 +2925,9 @@ export const te = {
     "reportAlert": "సమస్యను నివేదించండి",
     "cropAffected": "ప్రభావితమైన పంట",
     "severity": "తీవ్రత",
+    "topFarmers": "ఉత్తమ రైతులు",
+    "leaderboard": "కమ్యూనిటీ లీడర్‌బోర్డ్",
+    "leaderboardDesc": "మా అత్యంత సహాయకారి మరియు క్రియాశీల సంఘ సభ్యులను గుర్తించడం.",
+    "points": "పాయింట్లు",
+    "farmerOfTheMonth": "ఈ నెల రైతు",
 };

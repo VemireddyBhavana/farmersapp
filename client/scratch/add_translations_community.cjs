@@ -6,7 +6,7 @@ const languages = ['en', 'hi', 'te', 'ta', 'kn', 'mr', 'gu', 'pa', 'bn', 'or', '
 
 const t = {
   en: {
-    kisanChaupal: "Kisan Chaupal",
+    kisanChaupal: "Kisan Community Hub",
     communityDescription: "Connect with farmers, share your progress, and get answers from verified experts.",
     createPost: "Create Post",
     createNewPost: "Create a new post",
@@ -26,13 +26,16 @@ const t = {
     reportAlert: "Report Issue",
     cropAffected: "Crop Affected",
     severity: "Severity",
-    machinerySharing: "Machinery Sharing",
-    peerMachineryDesc: "Rent directly from farmers near you.",
-    listEquipment: "List My Equipment",
+    agriNews: "Agri-News",
+    topFarmers: "Top Farmers",
+    leaderboard: "Community Leaderboard",
+    leaderboardDesc: "Recognizing our most helpful and active community members.",
+    points: "Points",
+    farmerOfTheMonth: "Farmer of the Month",
     day: "day"
   },
   hi: {
-    kisanChaupal: "किसान चौपाल",
+    kisanChaupal: "किसान सामुदायिक केंद्र",
     communityDescription: "किसानों से जुड़ें, अपनी प्रगति साझा करें, और विशेषज्ञों से उत्तर प्राप्त करें।",
     createPost: "पोस्ट बनाएं",
     createNewPost: "नई पोस्ट बनाएं",
@@ -52,13 +55,16 @@ const t = {
     reportAlert: "समस्या की रिपोर्ट करें",
     cropAffected: "प्रभावित फसल",
     severity: "गंभीरता",
-    machinerySharing: "मशीनरी साझाकरण",
-    peerMachineryDesc: "अपने आस-पास के किसानों से सीधे किराए पर लें।",
-    listEquipment: "मेरे उपकरण सूचीबद्ध करें",
+    agriNews: "कृषि समाचार",
+    topFarmers: "शीर्ष किसान",
+    leaderboard: "सामुदायिक लीडरबोर्ड",
+    leaderboardDesc: "हमारे सबसे मददगार और सक्रिय सामुदायिक सदस्यों को पहचानना।",
+    points: "अंक",
+    farmerOfTheMonth: "महीने का किसान",
     day: "दिन"
   },
   te: {
-    kisanChaupal: "కిసాన్ చౌపాల్",
+    kisanChaupal: "కిసాన్ కమ్యూనిటీ హబ్",
     communityDescription: "రైతులతో కనెక్ట్ అవ్వండి, నిపుణుల నుండి సమాధానాలు పొందండి.",
     createPost: "పోస్ట్ చేయండి",
     createNewPost: "కొత్త పోస్ట్ సృష్టించండి",
@@ -78,9 +84,12 @@ const t = {
     reportAlert: "సమస్యను నివేదించండి",
     cropAffected: "ప్రభావితమైన పంట",
     severity: "తీవ్రత",
-    machinerySharing: "యంత్రాల భాగస్వామ్యం",
-    peerMachineryDesc: "మీ దగ్గరలోని రైతుల నుండి నేరుగా అద్దెకు తీసుకోండి.",
-    listEquipment: "నా పరికరాలను జాబితా చేయండి",
+    agriNews: "వ్యవసాయ వార్తలు",
+    topFarmers: "ఉత్తమ రైతులు",
+    leaderboard: "కమ్యూనిటీ లీడర్‌బోర్డ్",
+    leaderboardDesc: "మా అత్యంత సహాయకారి మరియు క్రియాశీల సంఘ సభ్యులను గుర్తించడం.",
+    points: "పాయింట్లు",
+    farmerOfTheMonth: "ఈ నెల రైతు",
     day: "రోజు"
   }
 };

@@ -2925,4 +2925,9 @@ export const en = {
     "reportAlert": "Report Issue",
     "cropAffected": "Crop Affected",
     "severity": "Severity",
+    "topFarmers": "Top Farmers",
+    "leaderboard": "Community Leaderboard",
+    "leaderboardDesc": "Recognizing our most helpful and active community members.",
+    "points": "Points",
+    "farmerOfTheMonth": "Farmer of the Month",
 };
