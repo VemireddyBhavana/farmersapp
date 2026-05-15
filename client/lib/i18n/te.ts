@@ -2980,4 +2980,10 @@ export const te = {
     "selectFile": "Select Report PDF/Image",
     "soilArchitecture": "Soil Structure",
     "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "ముందస్తు చెల్లింపు సిమ్యులేటర్",
+    "extraPayment": "అదనపు నెలవారీ చెల్లింపు",
+    "monthsSaved": "నెలలు ఆదా అయ్యాయి",
+    "timeSaved": "ఆదా చేసిన సమయం",
+    "actualTenure": "వాస్తవ కాలపరిమితి",
+    "interestSaved": "ఆదా చేసిన వడ్డీ",
 };

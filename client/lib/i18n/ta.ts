@@ -2981,4 +2981,10 @@ export const ta = {
 
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "முன்கூட்டியే செலுத்தும் சிமுலேட்டர்",
+    "extraPayment": "கூடுதல் மாதாந்திர கட்டணம்",
+    "monthsSaved": "மாதங்கள் சேமிக்கப்பட்டன",
+    "timeSaved": "சேமிக்கப்பட்ட நேரம்",
+    "actualTenure": "உண்மையான காலம்",
+    "interestSaved": "சேமிக்கப்பட்ட வட்டி",
 };

@@ -2980,4 +2980,10 @@ export const kn = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "ಮುಂಗಡ ಪಾವತಿ ಸಿಮ್ಯುಲೇಟರ್",
+    "extraPayment": "ಹೆಚ್ಚುವರಿ ಮಾಸಿಕ ಪಾವತಿ",
+    "monthsSaved": "ತಿಂಗಳುಗಳು ಉಳಿಸಲಾಗಿದೆ",
+    "timeSaved": "ಉಳಿಸಿದ ಸಮಯ",
+    "actualTenure": "ವಾಸ್ತವಿಕ ಅವಧಿ",
+    "interestSaved": "ಉಳಿಸಿದ ಬಡ್ಡಿ",
 };

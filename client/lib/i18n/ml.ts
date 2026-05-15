@@ -2980,4 +2980,10 @@ export const ml = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "പ്രീ-പേയ്‌മെന്റ് സിമുലേറ്റർ",
+    "extraPayment": "അധിക പ്രതിമാസ പേയ്‌മെന്റ്",
+    "monthsSaved": "മാസങ്ങൾ ലാഭിച്ചു",
+    "timeSaved": "ലാഭിച്ച സമയം",
+    "actualTenure": "യഥാർത്ഥ കാലാവധി",
+    "interestSaved": "ലാഭിച്ച പലിശ",
 };

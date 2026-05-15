@@ -2980,4 +2980,10 @@ export const mr = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "प्री-पेमेंट सिम्युलेटर",
+    "extraPayment": "अतिरिक्त मासिक देय",
+    "monthsSaved": "महिने वाचले",
+    "timeSaved": "वाचलेला वेळ",
+    "actualTenure": "वास्तविक कालावधी",
+    "interestSaved": "वाचलेले व्याज",
 };

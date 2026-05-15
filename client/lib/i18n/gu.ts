@@ -2980,4 +2980,10 @@ export const gu = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "પ્રી-પેમેન્ટ સિમ્યુલેટર",
+    "extraPayment": "વધારાની માસિક ચુકવણી",
+    "monthsSaved": "મહિના બચ્યા",
+    "timeSaved": "બચાવેલ સમય",
+    "actualTenure": "વાસ્તવિક કાર્યકાળ",
+    "interestSaved": "બચાવેલ વ્યાજ",
 };

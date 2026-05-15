@@ -2980,4 +2980,11 @@ export const bn = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "প্রি-পেমেন্ট সিমুলেটর",
+    "extraPayment": "অতিরিক্ত মাসিক পেমেন্ট",
+    "monthsSaved": "মাস সাশ্রয় হয়েছে",
+    "timeSaved": "সাশ্রয়কৃত সময়",
+    "actualTenure": "প্রকৃত মেয়াদ",
+    "interestSaved": "সাশ্রয়কৃত সুদ",
+    "nabard Recognized": "নাবার্ড স্বীকৃত প্রোটোকল",
 };

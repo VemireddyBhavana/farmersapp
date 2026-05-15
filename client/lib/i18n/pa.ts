@@ -2980,4 +2980,10 @@ export const pa = {
     "selectFile": "Select Report PDF/Image",
         "soilArchitecture": "Soil Structure",
         "aerationIndex": "Aeration Health Index",
+    "prePaymentSimulator": "ਪ੍ਰੀ-ਪੇਮੈਂਟ ਸਿਮੂਲੇਟਰ",
+    "extraPayment": "ਵਾਧੂ ਮਾਸਿਕ ਭੁਗਤਾਨ",
+    "monthsSaved": "ਮਹੀਨੇ ਬਚੇ",
+    "timeSaved": "ਬਚਾਇਆ ਸਮਾਂ",
+    "actualTenure": "ਅਸਲ ਮਿਆਦ",
+    "interestSaved": "ਬਚਾਇਆ ਵਿਆਜ",
 };
