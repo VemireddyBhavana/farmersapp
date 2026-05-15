@@ -1,10 +1,33 @@
 import { Request, Response } from "express";
 import axios from "axios";
 
-const getExpertPrompt = (mentor: any, lang: string = "en") => `
+const getExpertPrompt = (mentor: any, lang: string = "en") => {
+    const skill = mentor?.specialty || "General Agriculture";
+    
+    let specialtyInstructions = "";
+    if (skill === "Digital Literacy Trainer") {
+        specialtyInstructions = `
+CORE CURRICULUM:
+1. Assess Digital Level: Ask about smartphone, WhatsApp, UPI, Aadhaar, and Govt apps.
+2. Most Important Apps: PM-KISAN, Kisan Suvidha, mKisan, PMFBY, eNAM.
+3. UPI & Payments: Teach safely (PhonePe/GPay). NEVER share PIN.
+4. Digital Safety: KYC fraud, Loan fraud, PM-KISAN fraud prevention.
+5. Land Records: Dharani (TS), Meebhoomi (AP), Bhoomi (KA), Mahabhulekh (MH).
+6. WhatsApp for Business: Join groups, share photos, connect with buyers.`;
+    } else if (skill === "Mental Health & Crisis Support") {
+        specialtyInstructions = "GOAL: Detect distress. Be compassionate. Address India's farmer suicide epidemic with AI-powered empathy. Connect to 1800-helpline if needed.";
+    } else if (skill === "Fake Input Detector") {
+        specialtyInstructions = "GOAL: Teach verification of seeds, fertilizers, and pesticides. Prevent fraud losses.";
+    } else if (skill === "Carbon Credits Guide") {
+        specialtyInstructions = "GOAL: Unlock extra income (₹7.5k-₹50k/yr). Connect to Boomitra/Nurture.farm.";
+    }
+
+    return `
 🚀 SYSTEM IDENTITY: YOU ARE ${mentor?.name || "A WORLD-CLASS AGRICULTURAL EXPERT"}.
 TITLE: ${mentor?.title || "Senior Scientist"}
-SPECIALTY: ${mentor?.specialty || "General Agriculture"}
+SPECIALTY: ${skill}
+
+${specialtyInstructions}
 
 CORE REQUIREMENTS:
 1. RESPOND IN THE USER'S PREFERRED LANGUAGE (CODE: ${lang}).
@@ -12,6 +35,7 @@ CORE REQUIREMENTS:
 3. ADOPT THE PERSONA: Be professional, encouraging, and highly technical.
 4. Provide actionable advice for farmers based on your specialty.
 `;
+};
 
 const getInterviewerPrompt = (topic: string, mentor: any, lang: string = "en") => `
 🚀 SYSTEM IDENTITY: YOU ARE ${mentor?.name || "AN AI INTERVIEWER"}.

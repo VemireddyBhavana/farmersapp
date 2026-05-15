@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmGuardian AI — Protection & Empowerment for Bharat's Farmers</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-black: #1a0f00;
+            --surface: #2d1a06;
+            --gold: #f5c842;
+            --amber: #c8860a;
+            --green: #3d7a2e;
+            --sprout: #6db85c;
+            --cream: #fdf6e3;
+            --text-muted: rgba(253, 246, 227, 0.7);
+            
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'DM Sans', sans-serif;
+            
+            --transition: 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            --transition-bouncy: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important; /* Custom cursor rule */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--cream);
+            font-family: var(--body-font);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Canvas Background --- */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* --- Custom Cursor --- */
+        #cursor-dot {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+        }
+
+        #cursor-ring {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+
+        .cursor-active #cursor-dot { transform: translate(-50%, -50%) scale(2.5); }
+        .cursor-active #cursor-ring { transform: translate(-50%, -50%) scale(1.5); }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            background: rgba(26, 15, 0, 0.5);
+            transition: background 0.5s;
+        }
+
+        nav.scrolled {
+            background: rgba(26, 15, 0, 0.95);
+            padding: 1rem 4rem;
+        }
+
+        .logo {
+            font-family: var(--heading-font);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span { color: var(--green); }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn-demo {
+            background: var(--amber);
+            color: var(--bg-black);
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            transition: var(--transition-bouncy);
+        }
+
+        .btn-demo:hover {
+            transform: scale(1.05);
+            background: var(--gold);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            align-items: center;
+            padding: 0 8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(109, 184, 92, 0.1);
+            border: 1px solid rgba(109, 184, 92, 0.3);
+            border-radius: 100px;
+            color: var(--sprout);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--sprout);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 {
+            font-family: var(--heading-font);
+            font-size: 5.5rem;
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 .white { color: #fff; }
+        h1 .gold { color: var(--gold); }
+        h1 .green { color: var(--green); }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3.5rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--amber);
+            color: var(--bg-black);
+            padding: 1.2rem 3rem;
+            border-radius: 100px;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition-bouncy);
+            box-shadow: 0 15px 30px rgba(200, 134, 10, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            background: var(--gold);
+        }
+
+        .btn-outline {
+            border: 2px solid rgba(253, 246, 227, 0.1);
+            color: var(--cream);
+            padding: 1.2rem 3rem;
+            border-radius: 100px;
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            background: rgba(253, 246, 227, 0.05);
+            border-color: var(--cream);
+        }
+
+        /* --- Hero Visual --- */
+        .hero-visual {
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orb-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orb-outer {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(61, 122, 46, 0.4) 0%, rgba(245, 200, 66, 0.2) 50%, transparent 70%);
+            border-radius: 50%;
+            animation: orbPulse 4s infinite ease-in-out;
+        }
+
+        .orb-inner {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            background: var(--surface);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 50px rgba(245, 200, 66, 0.2);
+            animation: orbSpin 20s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 0.9; }
+        }
+
+        @keyframes orbSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-card {
+            position: absolute;
+            background: rgba(45, 26, 6, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(245, 200, 66, 0.2);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            z-index: 3;
+            text-align: center;
+        }
+
+        .stat-card .val {
+            display: block;
+            font-family: var(--heading-font);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-card .label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .card-tl { top: 10%; left: 0%; animation: float1 6s infinite ease-in-out; }
+        .card-tr { top: 0%; right: 5%; animation: float2 7s infinite ease-in-out; }
+        .card-bl { bottom: 10%; left: 5%; animation: float1 8s infinite ease-in-out 1s; }
+        .card-br { bottom: 0%; right: 0%; animation: float2 5s infinite ease-in-out 0.5s; }
+
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-22px) rotate(2deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(-2deg); }
+        }
+
+        /* --- Ticker --- */
+        .ticker-wrapper {
+            background: var(--amber);
+            padding: 1.5rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 10;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 25s linear infinite;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            font-weight: 900;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--bg-black);
+            margin: 0 3rem;
+        }
+
+        .ticker-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--bg-black);
+            border-radius: 50%;
+            vertical-align: middle;
+        }
+
+        @keyframes ticker {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* --- Stats Bar --- */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: var(--surface);
+            border-top: 1px solid rgba(245, 200, 66, 0.1);
+            border-bottom: 1px solid rgba(245, 200, 66, 0.1);
+            padding: 4rem 8rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stat-item {
+            text-align: center;
+            border-right: 1px solid rgba(245, 200, 66, 0.1);
+        }
+
+        .stat-item:last-child { border-right: none; }
+
+        .stat-num {
+            font-family: var(--heading-font);
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        /* --- Skills Section --- */
+        .section-padding {
+            padding: 10rem 8rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .section-tag {
+            color: var(--amber);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            font-size: 0.8rem;
+            display: block;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-family: var(--heading-font);
+            font-size: 3.8rem;
+            line-height: 1.1;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--surface);
+            border: 1px solid rgba(245, 200, 66, 0.1);
+            padding: 3rem;
+            border-radius: 40px;
+            transition: var(--transition-bouncy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(61, 122, 46, 0.1) 100%);
+            border-color: rgba(61, 122, 46, 0.3);
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(245, 200, 66, 0.03), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(245, 200, 66, 0.3);
+            box-shadow: 0 24px 64px rgba(200, 134, 10, 0.15);
+        }
+
+        .skill-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .skill-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .bg-red { background: rgba(239, 68, 68, 0.15); }
+        .bg-gold { background: rgba(245, 200, 66, 0.15); }
+        .bg-green { background: rgba(109, 184, 92, 0.15); }
+        .bg-blue { background: rgba(59, 130, 246, 0.15); }
+
+        .skill-name {
+            font-family: var(--heading-font);
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .skill-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .skill-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .badge-gold { background: rgba(245, 200, 66, 0.1); color: var(--gold); border: 1px solid rgba(245, 200, 66, 0.2); }
+        .badge-green { background: rgba(109, 184, 92, 0.1); color: var(--sprout); border: 1px solid rgba(109, 184, 92, 0.2); }
+
+        /* --- How It Works --- */
+        .how-it-works {
+            background: rgba(26, 15, 0, 0.6);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 8rem;
+        }
+
+        .step-item {
+            padding: 3rem;
+            border-right: 1px solid rgba(245, 200, 66, 0.05);
+            transition: var(--transition);
+        }
+
+        .step-item:last-child { border-right: none; }
+
+        .step-num {
+            font-family: var(--heading-font);
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--gold);
+            opacity: 0.08;
+            display: block;
+            margin-bottom: -2rem;
+            transition: opacity 0.3s;
+        }
+
+        .step-item:hover .step-num { opacity: 0.25; }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- Reveal Animation --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        /* --- CTA Footer --- */
+        .cta-section {
+            text-align: center;
+            padding: 12rem 8rem;
+            background: radial-gradient(circle at center, rgba(61, 122, 46, 0.08) 0%, transparent 70%);
+        }
+
+        footer {
+            padding: 4rem 8rem;
+            border-top: 1px solid rgba(245, 200, 66, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-black);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover { color: var(--gold); }
+
+        /* --- Responsive --- */
+        @media (max-width: 1200px) {
+            h1 { font-size: 4rem; }
+            .hero { padding: 0 4rem; }
+            .section-padding { padding: 8rem 4rem; }
+            .stats-bar { padding: 4rem; }
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                height: auto;
+                padding-top: 10rem;
+                padding-bottom: 5rem;
+            }
+            .hero-content { margin: 0 auto; }
+            .cta-group { justify-content: center; }
+            .hero-visual { height: 400px; margin-top: 4rem; }
+            .nav-links { display: none; }
+            nav { padding: 1.5rem 2rem; }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+            .stat-item { border-right: none; }
+            .skills-grid { grid-template-columns: 1fr; }
+            .skill-card.featured { grid-column: span 1; }
+            .how-it-works { grid-template-columns: repeat(2, 1fr); padding: 2rem; }
+            .step-item { border-right: none; border-bottom: 1px solid rgba(245, 200, 66, 0.05); }
+            h2 { font-size: 2.8rem; }
+            footer { flex-direction: column; gap: 2rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+    
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <nav id="navbar">
+        <div class="logo">FarmGuardian <span>AI</span></div>
+        <div class="nav-links">
+            <a href="#skills">Skills</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#impact">Impact</a>
+        </div>
+        <a href="#" class="btn-demo">Try Demo</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge reveal">
+                <div class="pulse-dot"></div>
+                AI Agent · Built for Bharat's Farmers
+            </div>
+            <h1 class="reveal delay-1">
+                <span class="white">Every Farmer</span><br>
+                <span class="gold">Deserves a</span><br>
+                <span class="green">Guardian.</span>
+            </h1>
+            <p class="subtitle reveal delay-2">
+                The world's first specialized AI agent built to protect livelihoods, maximize income, and ensure mental well-being for rural India. From detecting fake inputs to unlocking global exports — your farm's future is secure.
+            </p>
+            <div class="cta-group reveal delay-3">
+                <a href="#skills" class="btn-primary">
+                    Protect My Farm
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#" class="btn-outline">How it works</a>
+            </div>
+        </div>
+
+        <div class="hero-visual reveal">
+            <div class="orb-container">
+                <div class="orb-outer"></div>
+                <div class="orb-inner">🌾</div>
+                <div class="stat-card card-tl">
+                    <span class="val">10K+</span>
+                    <span class="label">Farmers Helped</span>
+                </div>
+                <div class="stat-card card-tr">
+                    <span class="val">9</span>
+                    <span class="label">Expert Skills</span>
+                </div>
+                <div class="stat-card card-bl">
+                    <span class="val">₹0</span>
+                    <span class="label">Cost to Farmers</span>
+                </div>
+                <div class="stat-card card-br">
+                    <span class="val">24/7</span>
+                    <span class="label">Always Active</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="ticker-wrapper">
+        <div class="ticker-content">
+            <span class="ticker-item">Mental Health Support</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Fake Input Detection</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Carbon Credits</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Export Quality</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Agri-Tourism</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Zero Budget Farming</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Women Empowerment</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Land Dispute Mediation</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Digital Literacy</span><span class="ticker-dot"></span>
+            <!-- Duplicate for loop -->
+            <span class="ticker-item">Mental Health Support</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Fake Input Detection</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Carbon Credits</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Export Quality</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Agri-Tourism</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Zero Budget Farming</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Women Empowerment</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Land Dispute Mediation</span><span class="ticker-dot"></span>
+            <span class="ticker-item">Digital Literacy</span><span class="ticker-dot"></span>
+        </div>
+    </div>
+
+    <section class="stats-bar">
+        <div class="stat-item reveal">
+            <div class="stat-num" data-val="50000">₹0</div>
+            <div class="stat-text">Extra Carbon Income</div>
+        </div>
+        <div class="stat-item reveal delay-1">
+            <div class="stat-num" data-val="3">0×</div>
+            <div class="stat-text">Higher Export Price</div>
+        </div>
+        <div class="stat-item reveal delay-2">
+            <div class="stat-num" data-val="0">0</div>
+            <div class="stat-text">Chemical Input Cost</div>
+        </div>
+        <div class="stat-item reveal delay-3">
+            <div class="stat-num" data-val="1800">0</div>
+            <div class="stat-text">Crisis Support Line</div>
+        </div>
+    </section>
+
+    <section id="skills" class="section-padding">
+        <div class="section-header reveal">
+            <span class="section-tag">Guardian Suite</span>
+            <h2>Skills That Save Livelihoods & Lives</h2>
+            <p class="section-desc">FarmGuardian AI is equipped with deep agricultural knowledge and social empathy to solve the most critical challenges on the ground.</p>
+        </div>
+
+        <div class="skills-grid">
+            <!-- Row 1 -->
+            <div class="skill-card featured reveal">
+                <div class="skill-icon bg-red">❤️</div>
+                <h3 class="skill-name">Mental Health & Crisis Support</h3>
+                <p class="skill-desc">Detects distress signals in farmer conversations. Provides compassionate support, immediate practical steps, and crisis helpline connections. Built to address India's farmer suicide epidemic with AI-powered empathy.</p>
+                <span class="skill-badge badge-gold">Life-saving Agent</span>
+            </div>
+            
+            <div class="skill-card reveal delay-1">
+                <div class="skill-icon bg-gold">🔍</div>
+                <h3 class="skill-name">Fake Input Detector</h3>
+                <p class="skill-desc">Teaches farmers to verify seeds, fertilizers, and pesticides before purchase. Prevents lakhs in losses to agricultural fraud.</p>
+                <span class="skill-badge badge-green">Fraud Protection</span>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="skill-card reveal">
+                <div class="skill-icon bg-green">🌍</div>
+                <h3 class="skill-name">Carbon Credits Guide</h3>
+                <p class="skill-desc">Unlocks ₹7,500–₹50,000/year extra income for farmers practicing sustainable farming. Connects to global carbon markets.</p>
+                <span class="skill-badge badge-green">New Income Stream</span>
+            </div>
+
+            <div class="skill-card reveal delay-1">
+                <div class="skill-icon bg-blue">📦</div>
+                <h3 class="skill-name">Export Quality Checker</h3>
+                <p class="skill-desc">Guides farmers to meet EU, USA, and Gulf standards. Earn 3× more by selling internationally via APEDA certification.</p>
+                <span class="skill-badge badge-gold">3× Income Potential</span>
+            </div>
+
+            <div class="skill-card reveal delay-2">
+                <div class="skill-icon bg-green">🏡</div>
+                <h3 class="skill-name">Agri-Tourism Advisor</h3>
+                <p class="skill-desc">Transforms farms into tourist destinations. Day visits, farm stays, school trips — ₹90,000+/month additional income.</p>
+                <span class="skill-badge badge-green">Diversified Income</span>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="skill-card reveal">
+                <div class="skill-icon bg-green">🌿</div>
+                <h3 class="skill-name">Zero Budget Farming</h3>
+                <p class="skill-desc">Teaches natural farming methods. Eliminate fertilizer and pesticide costs using Jivamrita and natural inputs.</p>
+                <span class="skill-badge badge-green">Zero Cost Input</span>
+            </div>
+
+            <div class="skill-card featured reveal delay-1">
+                <div class="skill-icon bg-gold">⚖️</div>
+                <h3 class="skill-name">Land Dispute Mediator</h3>
+                <p class="skill-desc">Guides farmers through boundary disputes, water conflicts, and tenancy issues via Revenue Department and Lok Adalat — free, fast, and legally binding.</p>
+                <span class="skill-badge badge-green">Free Legal Support</span>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="skill-card reveal">
+                <div class="skill-icon bg-red">👩‍🌾</div>
+                <h3 class="skill-name">Women Farmer Empowerment</h3>
+                <p class="skill-desc">Helps women access land rights, independent loans, and government schemes they are legally entitled to but often denied.</p>
+                <span class="skill-badge badge-gold">Social Empowerment</span>
+            </div>
+
+            <div class="skill-card reveal delay-1">
+                <div class="skill-icon bg-blue">📱</div>
+                <h3 class="skill-name">Digital Literacy Trainer</h3>
+                <p class="skill-desc">Teaches UPI payments, government apps, online selling, and digital safety. Bridges the gap between farmers and digital India.</p>
+                <span class="skill-badge badge-green">Digital India</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="step-item reveal">
+            <span class="step-num">01</span>
+            <h4 class="step-title">Define Agent</h4>
+            <p class="step-desc">Configure the Guardian's personality and regional expertise tailored to your specific district.</p>
+        </div>
+        <div class="step-item reveal delay-1">
+            <span class="step-num">02</span>
+            <h4 class="step-title">Validate</h4>
+            <p class="step-desc">Our AI rigorously tests the advice against the latest agricultural research and government data.</p>
+        </div>
+        <div class="step-item reveal delay-2">
+            <span class="step-num">03</span>
+            <h4 class="step-title">Run with gitclaw</h4>
+            <p class="step-desc">Utilize our secure SDK to run the agent across mobile apps, WhatsApp, and SMS portals.</p>
+        </div>
+        <div class="step-item reveal delay-3">
+            <span class="step-num">04</span>
+            <h4 class="step-title">Deploy</h4>
+            <p class="step-desc">Launch to millions of farmers with full multi-lingual support and offline capabilities.</p>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="reveal">
+            <span class="white">A Farmer's</span><br>
+            <span class="gold">Best Friend,</span><br>
+            <span class="green">Always There.</span>
+        </h2>
+        <p class="subtitle reveal delay-1" style="margin: 0 auto 3.5rem;">Join the movement to protect the backbone of our nation with technology that cares.</p>
+        <div class="cta-group reveal delay-2">
+            <a href="#" class="btn-primary">View on GitHub</a>
+            <a href="#skills" class="btn-outline">Explore Skills</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo">FarmGuardian <span>AI</span></div>
+        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">© 2026 FarmGuardian AI. Built for Bharat.</p>
+        <div class="footer-links">
+            <a href="#">GitHub</a>
+            <a href="#">Spec</a>
+            <a href="#">SDK</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- Custom Cursor ---
+        const dot = document.getElementById('cursor-dot');
+        const ring = document.getElementById('cursor-ring');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dot.style.left = mouseX + 'px';
+            dot.style.top = mouseY + 'px';
+        });
+
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.12;
+            ringY += (mouseY - ringY) * 0.12;
+            ring.style.left = ringX + 'px';
+            ring.style.top = ringY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('a, button, .skill-card').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+        });
+
+        // --- Particle Canvas ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const emojis = ['🌾', '🌱', '🍃', '✦', '○', '·', '◦'];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = 4 + Math.random() * 14;
+                this.speed = 0.15 + Math.random() * 0.6;
+                this.opacity = 0.05 + Math.random() * 0.4;
+                this.char = emojis[Math.floor(Math.random() * emojis.length)];
+                this.wobble = Math.random() * Math.PI * 2;
+                this.drift = 0.2 + Math.random() * 0.5;
+                this.color = Math.random() > 0.5 ? 'rgba(245,200,66,' : 'rgba(109,184,92,';
+            }
+            update() {
+                this.y -= this.speed;
+                this.wobble += 0.01;
+                this.x += Math.sin(this.wobble) * this.drift;
+                if (this.y < -20) this.init();
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color + '1)';
+                ctx.font = `${this.size}px serif`;
+                ctx.fillText(this.char, this.x, this.y);
+            }
+        }
+
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // --- Scroll Reveal ---
+        const observerOptions = { threshold: 0.12 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if (entry.target.querySelector('.stat-num')) {
+                        animateCounter(entry.target.querySelector('.stat-num'));
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- Nav Scroll ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 60) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // --- Counter Animation ---
+        function animateCounter(el) {
+            const target = parseInt(el.getAttribute('data-val'));
+            let current = 0;
+            const duration = 1800;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                current = Math.floor(eased * target);
+                
+                if (target === 3) el.innerText = current + '×';
+                else if (target >= 1000) el.innerText = '₹' + (current/1000).toFixed(0) + 'K';
+                else el.innerText = current;
+
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+    </script>
+</body>
+</html>

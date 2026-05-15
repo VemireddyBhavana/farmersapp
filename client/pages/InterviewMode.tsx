@@ -29,12 +29,15 @@ const InputIcon = (props: any) => (
 );
 
 const FARM_TOPICS = [
-  { id: "intro", title: "Farmer Introduction", icon: UserCircle2, desc: "Personal and farm background", color: "from-purple-500 to-indigo-600", bg: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200" },
-  { id: "pests", title: "AI Pest Diagnosis", icon: Shield, desc: "Managing crop threats with AI", color: "from-emerald-500 to-teal-600", bg: "https://images.unsplash.com/photo-1599023414167-a89f92acc63b?auto=format&fit=crop&q=80&w=1200" },
-  { id: "fertilizers", title: "Organic Fertilizers", icon: Sprout, desc: "Natural soil enrichment", color: "from-orange-500 to-amber-600", bg: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=1200" },
-  { id: "market", title: "Market Strategies", icon: Wallet, desc: "Selling at peak cycles", color: "from-blue-500 to-cyan-600", bg: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200" },
-  { id: "irrigation", title: "Sustainable Irrigation", icon: Droplets, desc: "Precision water management", color: "from-sky-500 to-blue-600", bg: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200" },
-  { id: "schemes", title: "Government Schemes", icon: BookOpen, desc: "Subsidies and support", color: "from-rose-500 to-pink-600", bg: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1200" }
+  { id: "mental", title: "Mental Health & Crisis", icon: Shield, desc: "Support and well-being", color: "from-red-500 to-rose-600", bg: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1200" },
+  { id: "fake", title: "Fake Input Detection", icon: ShieldCheck, desc: "Verify seeds and fertilizers", color: "from-amber-500 to-orange-600", bg: "https://images.unsplash.com/photo-1599023414167-a89f92acc63b?auto=format&fit=crop&q=80&w=1200" },
+  { id: "carbon", title: "Carbon Credits Guide", icon: Sprout, desc: "Earn via sustainability", color: "from-emerald-500 to-teal-600", bg: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=1200" },
+  { id: "export", title: "Export Quality Standards", icon: Award, desc: "Sell to global markets", color: "from-blue-500 to-indigo-600", bg: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200" },
+  { id: "tourism", title: "Agri-Tourism Business", icon: LayoutGrid, desc: "Diversify farm income", color: "from-sky-500 to-blue-600", bg: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200" },
+  { id: "zbnf", title: "Zero Budget Farming", icon: Droplets, desc: "Eliminate input costs", color: "from-green-500 to-emerald-600", bg: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=1200" },
+  { id: "women", title: "Women Empowerment", icon: UserCircle2, desc: "Rights and access", color: "from-rose-500 to-pink-600", bg: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200" },
+  { id: "dispute", title: "Land Dispute Resolution", icon: BookOpen, desc: "Legal and mediation help", color: "from-indigo-500 to-blue-600", bg: "https://images.unsplash.com/photo-1589118949245-7d38baf380d6?auto=format&fit=crop&q=80&w=400" },
+  { id: "digital", title: "Digital Literacy", icon: Bot, desc: "UPI, Apps and Safety", color: "from-violet-500 to-purple-600", bg: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300" }
 ];
 
 const MENTORS = [
