@@ -341,25 +341,25 @@ export default function FarmingCalendar() {
 
       {/* Booking Dialog */}
       <Dialog open={isBookingModalOpen} onOpenChange={setIsBookingModalOpen}>
-        <DialogContent className="sm:max-w-[450px] rounded-[2.5rem] p-10 border-none glass-dark bg-white/90 backdrop-blur-2xl">
+        <DialogContent className="sm:max-w-[450px] rounded-[2.5rem] p-10 border-none bg-white dark:bg-emerald-950 shadow-2xl">
           <DialogHeader className="mb-8">
             <div className="h-16 w-16 rounded-3xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-xl shadow-emerald-600/20">
               <CalendarIcon className="h-8 w-8" />
             </div>
-            <DialogTitle className="text-3xl font-black">Day Action</DialogTitle>
-            <DialogDescription className="text-lg font-medium">
+            <DialogTitle className="text-3xl font-black text-emerald-950 dark:text-white">Day Action</DialogTitle>
+            <DialogDescription className="text-lg font-medium text-emerald-700 dark:text-emerald-100/70">
               Schedule your agricultural task for {selectedDay} {monthName}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Quick Select Task</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Quick Select Task</p>
             <div className="grid grid-cols-2 gap-4">
-              {["Irrigation", "Weeding", "Fertilizing", "Spraying", "Pruning", "Maintenance"].map(task => (
+              {["Sowing", "Irrigation", "Fertilizing", "Weeding", "Spraying", "Harvesting"].map(task => (
                 <Button
                   key={task}
                   variant="outline"
                   onClick={() => handleConfirmBooking(task)}
-                  className="h-14 rounded-2xl border-emerald-100 hover:bg-emerald-600 hover:text-white hover:border-none font-bold transition-all"
+                  className="h-14 rounded-2xl border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-emerald-900/20 text-emerald-950 dark:text-emerald-50 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 hover:border-transparent font-bold transition-all"
                 >
                   {task}
                 </Button>
@@ -370,7 +370,7 @@ export default function FarmingCalendar() {
             <Button
               variant="ghost"
               onClick={() => setIsBookingModalOpen(false)}
-              className="rounded-xl font-bold text-muted-foreground w-full py-6"
+              className="rounded-xl font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 w-full py-6 transition-colors"
             >
               Discard
             </Button>
@@ -379,8 +379,8 @@ export default function FarmingCalendar() {
       </Dialog>
       {/* Blueprint Dialog */}
       <Dialog open={isBlueprintModalOpen} onOpenChange={setIsBlueprintModalOpen}>
-        <DialogContent className="sm:max-w-[700px] rounded-[2.5rem] p-0 border-none overflow-hidden glass max-h-[90vh]">
-          <div className="bg-emerald-600 p-10 text-white space-y-2">
+        <DialogContent className="sm:max-w-[700px] rounded-[2.5rem] p-0 border-none overflow-hidden glass max-h-[90vh] flex flex-col">
+          <div className="bg-emerald-600 p-10 text-white space-y-2 shrink-0">
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl">
                 {selectedCrop.emoji}
@@ -394,7 +394,7 @@ export default function FarmingCalendar() {
             </div>
           </div>
 
-          <div className="p-10 space-y-8 overflow-y-auto no-scrollbar">
+          <div className="p-10 space-y-8 overflow-y-auto no-scrollbar flex-1">
             <div className="grid gap-6">
               <div className="space-y-4">
                 <h4 className="font-black text-lg flex items-center gap-2">
@@ -404,8 +404,9 @@ export default function FarmingCalendar() {
                 <div className="space-y-4">
                   {selectedCrop.activities.map((act, i) => (
                     <div key={i} className="flex gap-4 p-4 rounded-2xl bg-muted/30 border border-primary/5">
-                      <div className="h-10 w-10 flex-shrink-0 rounded-xl bg-white flex items-center justify-center font-bold text-emerald-600 shadow-sm">
-                        Day {act.day}
+                      <div className="h-14 w-12 flex-shrink-0 rounded-xl bg-white flex flex-col items-center justify-center text-emerald-600 shadow-sm">
+                        <span className="text-[10px] font-black uppercase leading-none mb-0.5">Day</span>
+                        <span className="text-lg font-black leading-none">{act.day}</span>
                       </div>
                       <div>
                         <p className="font-bold text-sm">{act.task}</p>
