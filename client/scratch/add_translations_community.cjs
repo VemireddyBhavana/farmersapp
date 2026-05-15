@@ -15,7 +15,11 @@ const t = {
     offline: "Offline",
     offlineModeActive: "Offline Mode Active",
     pendingSync: "Pending Sync",
-    syncingWithServer: "Syncing with Server..."
+    syncingWithServer: "Syncing with Server...",
+    writeComment: "Write a comment...",
+    reply: "Reply",
+    deletePost: "Delete Post",
+    noCommentsYet: "No comments yet. Be the first to reply!"
   },
   hi: {
     kisanChaupal: "किसान चौपाल",
@@ -27,7 +31,11 @@ const t = {
     offline: "ऑफ़लाइन",
     offlineModeActive: "ऑफ़लाइन मोड सक्रिय",
     pendingSync: "सिंक लंबित है",
-    syncingWithServer: "सर्वर से सिंक हो रहा है..."
+    syncingWithServer: "सर्वर से सिंक हो रहा है...",
+    writeComment: "टिप्पणी लिखें...",
+    reply: "जवाब दें",
+    deletePost: "पोस्ट हटाएं",
+    noCommentsYet: "अभी तक कोई टिप्पणी नहीं। जवाब देने वाले पहले व्यक्ति बनें!"
   },
   te: {
     kisanChaupal: "కిసాన్ చౌపాల్",
@@ -39,7 +47,11 @@ const t = {
     offline: "ఆఫ్‌లైన్",
     offlineModeActive: "ఆఫ్‌లైన్ మోడ్ ఆన్‌లో ఉంది",
     pendingSync: "సింక్ పెండింగ్",
-    syncingWithServer: "సర్వర్‌తో సింక్ అవుతోంది..."
+    syncingWithServer: "సర్వర్‌తో సింక్ అవుతోంది...",
+    writeComment: "వ్యాఖ్యను రాయండి...",
+    reply: "ప్రత్యుత్తరం ఇవ్వండి",
+    deletePost: "పోస్ట్‌ను తొలగించండి",
+    noCommentsYet: "ఇంకా వ్యాఖ్యలు లేవు. మొదట మీరే ప్రత్యుత్తరం ఇవ్వండి!"
   }
 };
 

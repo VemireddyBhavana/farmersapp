@@ -4,6 +4,7 @@ import { backend, CommunityPost, PostComment } from '../lib/MockBackend';
 type OfflineAction = 
   | { type: 'CREATE_POST'; payload: Omit<CommunityPost, "id" | "upvotes" | "comments" | "timestamp"> }
   | { type: 'UPVOTE_POST'; payload: { postId: string } }
+  | { type: 'DELETE_POST'; payload: { postId: string } }
   | { type: 'ADD_COMMENT'; payload: { postId: string, comment: Omit<PostComment, "id" | "timestamp"> } };
 
 export function useOfflineSync() {
@@ -63,6 +64,8 @@ export function useOfflineSync() {
           backend.addCommunityPost(action.payload);
         } else if (action.type === 'UPVOTE_POST') {
           backend.upvotePost(action.payload.postId);
+        } else if (action.type === 'DELETE_POST') {
+          backend.deleteCommunityPost(action.payload.postId);
         } else if (action.type === 'ADD_COMMENT') {
           backend.addComment(action.payload.postId, action.payload.comment);
         }
@@ -83,6 +86,7 @@ export function useOfflineSync() {
       // Execute immediately if online (simulated API call)
       if (action.type === 'CREATE_POST') backend.addCommunityPost(action.payload);
       if (action.type === 'UPVOTE_POST') backend.upvotePost(action.payload.postId);
+      if (action.type === 'DELETE_POST') backend.deleteCommunityPost(action.payload.postId);
       if (action.type === 'ADD_COMMENT') backend.addComment(action.payload.postId, action.payload.comment);
       window.dispatchEvent(new Event('community_sync_complete'));
     } else {

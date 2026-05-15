@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2 } from "lucide-react";
+import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,8 @@ export default function Community() {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [newPostContent, setNewPostContent] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [openComments, setOpenComments] = useState<Record<string, boolean>>({});
+  const [newComments, setNewComments] = useState<Record<string, string>>({});
 
   const loadPosts = () => {
     setPosts(backend.getCommunityPosts());
@@ -66,6 +68,48 @@ export default function Community() {
     
     if (!isOnline) {
       setPosts(posts.map(p => p.id === postId ? { ...p, upvotes: p.upvotes + 1 } : p));
+    }
+  };
+
+  const handleDeletePost = (postId: string) => {
+    addActionToQueue({ type: 'DELETE_POST', payload: { postId } });
+    setPosts(posts.filter(p => p.id !== postId)); // Optimistic delete
+  };
+
+  const handleAddComment = (postId: string) => {
+    const content = newComments[postId];
+    if (!content?.trim()) return;
+
+    addActionToQueue({
+      type: 'ADD_COMMENT',
+      payload: {
+        postId,
+        comment: {
+          authorName: "Current User",
+          authorRole: "Farmer",
+          content
+        }
+      }
+    });
+
+    setNewComments({ ...newComments, [postId]: "" });
+
+    if (!isOnline) {
+      setPosts(posts.map(p => {
+        if (p.id === postId) {
+          return {
+            ...p,
+            comments: [...p.comments, {
+              id: "TEMP-C-" + Date.now(),
+              authorName: "Current User",
+              authorRole: "Farmer",
+              content,
+              timestamp: new Date().toISOString()
+            }]
+          };
+        }
+        return p;
+      }));
     }
   };
 
@@ -188,6 +232,14 @@ export default function Community() {
                   <span className="text-xs font-medium text-muted-foreground bg-muted/50 px-2.5 py-1 rounded-lg">
                     {post.authorRole}
                   </span>
+                  {post.authorName === "Current User" && (
+                    <button 
+                      onClick={() => handleDeletePost(post.id)}
+                      className="ml-2 p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
                 </div>
 
                 <p className="text-emerald-900 dark:text-emerald-100 leading-relaxed mb-6 font-medium">
@@ -209,10 +261,59 @@ export default function Community() {
                   >
                     <ThumbsUp className="h-5 w-5" /> {post.upvotes}
                   </button>
-                  <button className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-blue-600 transition-colors">
+                  <button 
+                    onClick={() => setOpenComments({ ...openComments, [post.id]: !openComments[post.id] })}
+                    className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-blue-600 transition-colors"
+                  >
                     <MessageSquare className="h-5 w-5" /> {post.comments.length}
                   </button>
                 </div>
+
+                <AnimatePresence>
+                  {openComments[post.id] && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-6 mt-4 border-t border-dashed border-emerald-100 dark:border-emerald-900/30 space-y-4">
+                        {post.comments.length === 0 ? (
+                          <p className="text-sm text-center text-muted-foreground italic py-4">{t("noCommentsYet")}</p>
+                        ) : (
+                          <div className="space-y-4 max-h-60 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-emerald-200 dark:scrollbar-thumb-emerald-800">
+                            {post.comments.map(comment => (
+                              <div key={comment.id} className="bg-emerald-50/50 dark:bg-emerald-900/10 p-4 rounded-2xl">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="font-bold text-sm text-emerald-950 dark:text-emerald-50">{comment.authorName}</span>
+                                  <span className="text-[10px] text-muted-foreground">{new Date(comment.timestamp).toLocaleDateString()}</span>
+                                </div>
+                                <p className="text-sm text-emerald-800 dark:text-emerald-200">{comment.content}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
+                        <div className="flex items-end gap-2 pt-2">
+                          <Textarea 
+                            value={newComments[post.id] || ""}
+                            onChange={(e) => setNewComments({ ...newComments, [post.id]: e.target.value })}
+                            placeholder={t("writeComment")}
+                            className="min-h-[44px] h-[44px] py-3 rounded-2xl resize-none border-emerald-200 dark:border-emerald-800 focus-visible:ring-emerald-500"
+                          />
+                          <Button 
+                            onClick={() => handleAddComment(post.id)}
+                            disabled={!newComments[post.id]?.trim()}
+                            className="h-[44px] px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 font-bold shadow-md shadow-emerald-600/20 shrink-0"
+                          >
+                            <Send className="h-4 w-4 sm:mr-2" />
+                            <span className="hidden sm:inline">{t("reply")}</span>
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             ))}
           </AnimatePresence>

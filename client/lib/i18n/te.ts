@@ -2905,4 +2905,7 @@ export const te = {
     "offlineModeActive": "ఆఫ్‌లైన్ మోడ్ ఆన్‌లో ఉంది",
     "pendingSync": "సింక్ పెండింగ్",
     "syncingWithServer": "సర్వర్‌తో సింక్ అవుతోంది...",
+    "writeComment": "వ్యాఖ్యను రాయండి...",
+    "deletePost": "పోస్ట్‌ను తొలగించండి",
+    "noCommentsYet": "ఇంకా వ్యాఖ్యలు లేవు. మొదట మీరే ప్రత్యుత్తరం ఇవ్వండి!",
 };

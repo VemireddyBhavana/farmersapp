@@ -2905,4 +2905,7 @@ export const hi = {
     "offlineModeActive": "ऑफ़लाइन मोड सक्रिय",
     "pendingSync": "सिंक लंबित है",
     "syncingWithServer": "सर्वर से सिंक हो रहा है...",
+    "writeComment": "टिप्पणी लिखें...",
+    "deletePost": "पोस्ट हटाएं",
+    "noCommentsYet": "अभी तक कोई टिप्पणी नहीं। जवाब देने वाले पहले व्यक्ति बनें!",
 };

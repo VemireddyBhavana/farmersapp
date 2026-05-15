@@ -161,6 +161,16 @@ class MockBackend {
       this.save();
     }
   }
+
+  deleteCommunityPost(postId: string) {
+    const initialLength = this.communityPosts.length;
+    this.communityPosts = this.communityPosts.filter(p => p.id !== postId);
+    if (this.communityPosts.length < initialLength) {
+      this.save();
+      return true;
+    }
+    return false;
+  }
 }
 
 export const backend = new MockBackend();

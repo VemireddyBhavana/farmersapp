@@ -2905,4 +2905,7 @@ export const gu = {
     "offlineModeActive": "Offline Mode Active",
     "pendingSync": "Pending Sync",
     "syncingWithServer": "Syncing with Server...",
+    "writeComment": "Write a comment...",
+    "deletePost": "Delete Post",
+    "noCommentsYet": "No comments yet. Be the first to reply!",
 };
