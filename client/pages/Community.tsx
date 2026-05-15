@@ -16,12 +16,6 @@ const localAlerts = [
   { id: 3, pest: "Locust Swarm", crop: "Multiple", location: "Jaisalmer", distance: "45km", severity: "Critical", date: "1 day ago" },
 ];
 
-const peerMachinery = [
-  { id: 1, name: "Mahindra Tractor", owner: "Suresh", distance: "2km", price: 500, type: "Tractor" },
-  { id: 2, name: "Seed Drill", owner: "Ramesh", distance: "5km", price: 200, type: "Attachment" },
-  { id: 3, name: "Harvester", owner: "Venkat", distance: "12km", price: 1500, type: "Heavy" },
-];
-
 const agriNews = [
   { id: 1, title: "PM-Kisan 15th Installment Released", source: "Govt Portal", date: "2 hours ago", type: "Scheme" },
   { id: 2, title: "Heavy Rain Alert for Coastal Andhra", source: "IMD", date: "5 hours ago", type: "Weather" },
@@ -219,7 +213,6 @@ export default function Community() {
           <TabsList className="w-full justify-start overflow-x-auto bg-transparent border-b border-emerald-100 dark:border-emerald-900 rounded-none h-14 mb-8 pb-0 gap-6 px-0 scrollbar-none [scrollbar-width:none]">
             <TabsTrigger value="discussions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("discussions")}</TabsTrigger>
             <TabsTrigger value="alerts" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("localAlerts")}</TabsTrigger>
-            <TabsTrigger value="machinery" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("machinerySharing")}</TabsTrigger>
             <TabsTrigger value="news" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("agriNews")}</TabsTrigger>
           </TabsList>
 
@@ -392,35 +385,6 @@ export default function Community() {
                 </div>
               </div>
             ))}
-          </TabsContent>
-
-          <TabsContent value="machinery" className="space-y-4">
-            <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-[2rem] border border-amber-100 dark:border-amber-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-              <div>
-                <h3 className="font-black text-amber-950 dark:text-amber-50">{t("peerMachinery")}</h3>
-                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">{t("peerMachineryDesc")}</p>
-              </div>
-              <Button className="rounded-xl font-bold bg-amber-600 hover:bg-amber-700 text-white whitespace-nowrap">
-                <Plus className="h-4 w-4 mr-2"/> {t("listEquipment")}
-              </Button>
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              {peerMachinery.map(item => (
-                <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex items-center gap-4">
-                  <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center shrink-0">
-                    <TractorIcon className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-black text-emerald-950 dark:text-emerald-50">{item.name}</h4>
-                    <p className="text-xs font-bold text-muted-foreground flex items-center gap-1">
-                      <Users className="h-3 w-3" /> {item.owner} • <MapPin className="h-3 w-3" /> {item.distance}
-                    </p>
-                    <p className="font-black text-emerald-700 dark:text-emerald-400 mt-1">₹{item.price}/{t("day")}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </TabsContent>
 
           <TabsContent value="news" className="space-y-4">
