@@ -87,7 +87,7 @@ const SidebarFilters = ({
         </div>
 
         <div className="space-y-4">
-            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 border-l-4 border-emerald-500 pl-3">{t("seedTechnology")}</h3>
+            <h3 className="text-sm font-black uppercase tracking-widest text-emerald-900 dark:text-emerald-50 border-l-4 border-emerald-500 pl-3">{t("seedTechnology")}</h3>
             <div className="grid gap-2">
                 {["Hybrid", "Organic", "Non-GMO"].map((type) => (
                     <label key={type} className="flex items-center gap-3 p-3 rounded-xl hover:bg-emerald-50 cursor-pointer transition-colors group">
@@ -104,7 +104,7 @@ const SidebarFilters = ({
                                 }));
                             }}
                         />
-                        <span className="text-sm font-black text-emerald-800 group-hover:text-emerald-600 transition-colors">{t(type.toLowerCase().replace('-', ''))}</span>
+                        <span className="text-sm font-black text-emerald-800 dark:text-emerald-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{t(type.toLowerCase().replace('-', ''))}</span>
                     </label>
                 ))}
             </div>
@@ -199,7 +199,7 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                     <div className="w-full flex items-center justify-between bg-emerald-50/30 p-4 rounded-3xl border border-emerald-50/50">
                         <div className="space-y-0.5">
                             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{t("ratePerUnit")} {seed.unit}</p>
-                            <p className="text-3xl font-black text-emerald-950 tracking-tighter">₹{seed.price}</p>
+                            <p className="text-3xl font-black text-emerald-950 dark:text-emerald-50 tracking-tighter">₹{seed.price}</p>
                         </div>
                         <div className="text-right">
                            <div className="flex items-center gap-1 text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1 justify-end">
@@ -212,7 +212,7 @@ const ProductCard = forwardRef(({ seed, idx, onAddToCart, onBuyNow }: any, ref: 
                     <div className="grid grid-cols-2 gap-3 w-full">
                         <Button 
                             variant="outline" 
-                            className="h-14 rounded-2xl border-emerald-100 text-emerald-900 font-black text-xs uppercase tracking-widest hover:bg-emerald-50 transition-all"
+                            className="h-14 rounded-2xl border-emerald-100 dark:border-emerald-800 text-emerald-900 dark:text-emerald-50 font-black text-xs uppercase tracking-widest hover:bg-emerald-50 dark:hover:bg-emerald-900 transition-all bg-transparent"
                             onClick={(e) => { e.stopPropagation(); onAddToCart(seed); }}
                         >
                             {t("addToCart")}
@@ -321,7 +321,7 @@ const SeedsBuyer = () => {
                                      {totalItems > 0 && <span className="absolute top-0 right-0 h-4 w-full bg-emerald-500/20 animate-pulse" />}
                                 </button>
                             </SheetTrigger>
-                            <SheetContent className="w-full sm:max-w-md bg-white border-l border-emerald-100 p-0 flex flex-col">
+                            <SheetContent className="w-full sm:max-w-md bg-white dark:bg-emerald-950 border-l border-emerald-100 dark:border-emerald-900 p-0 flex flex-col">
                                 <SheetHeader className="p-8 bg-emerald-900 text-white">
                                     <SheetTitle className="text-3xl font-black text-white flex items-center gap-4">
                                         <div className="bg-emerald-500 p-3 rounded-2xl">
@@ -341,7 +341,7 @@ const SeedsBuyer = () => {
                                                 <ShoppingBag className="h-12 w-12" />
                                             </div>
                                             <div className="space-y-2">
-                                                <h4 className="text-xl font-black text-emerald-900">{t("basketIsResting")}</h4>
+                                                <h4 className="text-xl font-black text-emerald-900 dark:text-emerald-50">{t("basketIsResting")}</h4>
                                                 <p className="text-emerald-600 font-medium">{t("addPotentialToStartSeason")}</p>
                                             </div>
                                             <Button variant="outline" onClick={() => setIsCartOpen(false)} className="rounded-2xl border-emerald-200 h-14 px-8 font-black uppercase text-xs tracking-widest">{t("exploreSeeds")}</Button>
@@ -356,20 +356,20 @@ const SeedsBuyer = () => {
                                                     <div className="flex-1 flex flex-col justify-between">
                                                         <div className="space-y-1">
                                                             <div className="flex justify-between items-start">
-                                                                <h4 className="font-black text-emerald-950 leading-[1.1] text-lg">{item.name}</h4>
+                                                                <h4 className="font-black text-emerald-950 dark:text-emerald-50 leading-[1.1] text-lg">{item.name}</h4>
                                                                 <button onClick={() => removeFromCart(item.id)} className="text-red-400 hover:text-red-600 transition-colors">
                                                                     <Trash2 className="h-5 w-5" />
                                                                 </button>
                                                             </div>
-                                                            <p className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">{item.brand}</p>
+                                                            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-black uppercase tracking-widest">{item.brand}</p>
                                                         </div>
                                                         <div className="flex items-center justify-between mt-4">
-                                                            <div className="flex items-center gap-3 bg-emerald-50 p-1.5 rounded-2xl">
-                                                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="h-8 w-8 rounded-xl bg-white flex items-center justify-center shadow-sm hover:bg-emerald-600 hover:text-white transition-all"><Minus className="h-3 w-3" /></button>
-                                                                <span className="font-black text-emerald-900 w-4 text-center">{item.quantity}</span>
-                                                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="h-8 w-8 rounded-xl bg-white flex items-center justify-center shadow-sm hover:bg-emerald-600 hover:text-white transition-all"><Plus className="h-3 w-3" /></button>
+                                                            <div className="flex items-center gap-3 bg-emerald-50 dark:bg-emerald-900/30 p-1.5 rounded-2xl">
+                                                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="h-8 w-8 rounded-xl bg-white dark:bg-emerald-800 flex items-center justify-center shadow-sm hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white transition-all"><Minus className="h-3 w-3" /></button>
+                                                                <span className="font-black text-emerald-900 dark:text-emerald-50 w-4 text-center">{item.quantity}</span>
+                                                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="h-8 w-8 rounded-xl bg-white dark:bg-emerald-800 flex items-center justify-center shadow-sm hover:bg-emerald-600 dark:hover:bg-emerald-500 hover:text-white transition-all"><Plus className="h-3 w-3" /></button>
                                                             </div>
-                                                            <p className="font-black text-2xl text-emerald-950 tracking-tighter">₹{(item.price * item.quantity).toLocaleString()}</p>
+                                                            <p className="font-black text-2xl text-emerald-950 dark:text-emerald-50 tracking-tighter">₹{(item.price * item.quantity).toLocaleString()}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -378,14 +378,14 @@ const SeedsBuyer = () => {
                                     )}
                                 </ScrollArea>
                                 
-                                <div className="p-8 border-t border-emerald-100 bg-emerald-50/30 space-y-6">
+                                <div className="p-8 border-t border-emerald-100 dark:border-emerald-900 bg-emerald-50/30 dark:bg-emerald-950 space-y-6">
                                     <div className="flex justify-between items-end">
                                         <div>
-                                            <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">{t("grandTotal")}</p>
-                                            <p className="text-4xl font-black text-emerald-950 tracking-tighter">₹{totalPrice.toLocaleString()}</p>
+                                            <p className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-1">{t("grandTotal")}</p>
+                                            <p className="text-4xl font-black text-emerald-950 dark:text-emerald-50 tracking-tighter">₹{totalPrice.toLocaleString()}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-[10px] font-black text-emerald-600/60 uppercase tracking-widest flex items-center gap-1.5 justify-end">
+                                            <p className="text-[10px] font-black text-emerald-600/60 dark:text-emerald-400/60 uppercase tracking-widest flex items-center gap-1.5 justify-end">
                                                <Truck className="h-3 w-3" /> {t("freeDelivery")}
                                             </p>
                                             <p className="text-xs font-bold text-emerald-400">{t("nextDayArrival")}</p>
@@ -416,7 +416,7 @@ const SeedsBuyer = () => {
             </header>
 
             {/* 2. Top Filter Bar (Sticky with Glass Effect) */}
-            <div className="sticky top-0 z-40 px-6 py-4 transition-all duration-500 bg-[#fafcfb]/80 backdrop-blur-xl border-b border-emerald-100/50 shadow-sm">
+            <div className="sticky top-0 z-40 px-6 py-4 transition-all duration-500 bg-[#fafcfb]/80 dark:bg-[#0a0f0d]/80 backdrop-blur-xl border-b border-emerald-100/50 dark:border-emerald-900/50 shadow-sm">
                 <div className="container mx-auto">
                     <div className="flex flex-col lg:flex-row items-center gap-4">
                         {/* Search & Categories Container */}
@@ -486,7 +486,7 @@ const SeedsBuyer = () => {
                                             <Filter className="h-5 w-5" />
                                         </Button>
                                     </SheetTrigger>
-                                    <SheetContent side="left" className="w-80 bg-white p-0">
+                                    <SheetContent side="left" className="w-80 bg-white dark:bg-emerald-950 border-emerald-100 dark:border-emerald-900 p-0">
                                         <div className="p-8 bg-emerald-900 text-white flex justify-between items-center shrink-0">
                                             <h3 className="text-xl font-black flex items-center gap-2"><Filter className="h-5 w-5" /> Filters</h3>
                                             <SheetClose className="p-2 border border-white/20 rounded-xl hover:bg-white/10 transition-colors"><X className="h-4 w-4" /></SheetClose>
@@ -533,13 +533,13 @@ const SeedsBuyer = () => {
                         </div>
 
                         {filteredSeeds.length === 0 ? (
-                            <div className="py-32 flex flex-col items-center text-center space-y-6 bg-emerald-50/20 rounded-[4rem] border-2 border-dashed border-emerald-100/50 mx-4">
-                                <div className="h-28 w-28 bg-white rounded-full flex items-center justify-center shadow-xl shadow-emerald-900/5">
+                            <div className="py-32 flex flex-col items-center text-center space-y-6 bg-emerald-50/20 dark:bg-emerald-900/10 rounded-[4rem] border-2 border-dashed border-emerald-100/50 dark:border-emerald-800/50 mx-4">
+                                <div className="h-28 w-28 bg-white dark:bg-emerald-900 rounded-full flex items-center justify-center shadow-xl shadow-emerald-900/5">
                                     <Search className="h-12 w-12 text-emerald-200" />
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-2xl font-black text-emerald-900">{t("cropNotFound")}</h3>
-                                    <p className="text-emerald-600/70 font-medium max-w-sm mx-auto">{t("noSeedsMatchingFilters")}</p>
+                                    <h3 className="text-2xl font-black text-emerald-900 dark:text-emerald-50">{t("cropNotFound")}</h3>
+                                    <p className="text-emerald-600/70 dark:text-emerald-400/70 font-medium max-w-sm mx-auto">{t("noSeedsMatchingFilters")}</p>
                                 </div>
                                 <Button 
                                     variant="outline" 

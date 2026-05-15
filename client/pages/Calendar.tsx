@@ -239,7 +239,7 @@ export default function FarmingCalendar() {
           );
         })()}
 
-        <div className="flex bg-white p-2 rounded-2xl shadow-xl border border-emerald-100 items-center gap-4">
+        <div className="flex bg-white dark:bg-emerald-950 p-2 rounded-2xl shadow-xl border border-emerald-100 dark:border-emerald-800 items-center gap-4">
           <div className="bg-emerald-600 p-2 rounded-xl text-white">
             <Sprout className="h-6 w-6" />
           </div>
@@ -249,7 +249,7 @@ export default function FarmingCalendar() {
               <SelectTrigger className="border-none bg-transparent h-auto p-0 text-lg font-bold shadow-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none focus:outline-none data-[state=open]:outline-none">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="rounded-2xl border-emerald-100 shadow-2xl">
+              <SelectContent className="rounded-2xl border-emerald-100 dark:border-emerald-800 bg-white dark:bg-emerald-950 shadow-2xl">
                 {Object.entries(cropsData).map(([key, data]) => (
                   <SelectItem key={key} value={key} className="rounded-xl font-bold py-3">
                     {data.emoji} {t(data.nameKey)}
@@ -298,7 +298,7 @@ export default function FarmingCalendar() {
               <div className="pt-4">
                 <Button
                   onClick={() => setIsBlueprintModalOpen(true)}
-                  className="w-full rounded-2xl bg-white text-emerald-700 hover:bg-emerald-50 font-black h-14 shadow-xl"
+                  className="w-full rounded-2xl bg-white dark:bg-emerald-900 text-emerald-700 dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-800 font-black h-14 shadow-xl border-none"
                 >
                   Detailed Growth Blueprint
                 </Button>
@@ -307,7 +307,7 @@ export default function FarmingCalendar() {
             <div className="absolute -bottom-10 -right-10 h-64 w-64 bg-emerald-400 rounded-full blur-3xl opacity-20 pointer-events-none" />
           </Card>
 
-          <Card className="rounded-[2.5rem] border-emerald-100 shadow-xl overflow-hidden bg-white">
+          <Card className="rounded-[2.5rem] border-emerald-100 dark:border-emerald-800 shadow-xl overflow-hidden bg-white dark:bg-emerald-950">
             <CardHeader className="p-8 pb-4">
               <CardTitle className="text-xl font-black flex items-center gap-2">
                 <Timer className="h-5 w-5 text-emerald-600" />
@@ -317,9 +317,9 @@ export default function FarmingCalendar() {
             <CardContent className="p-8 pt-4 space-y-4">
               {userBookings.length > 0 ? (
                 userBookings.map((booking, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 border border-emerald-100 group">
+                  <div key={idx} className="flex items-center justify-between p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800/50 group">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                      <div className="h-10 w-10 rounded-xl bg-emerald-100 dark:bg-emerald-800 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold">
                         {booking.date.split(" ")[0]}
                       </div>
                       <div>
@@ -342,7 +342,7 @@ export default function FarmingCalendar() {
 
         {/* Right Column: Interactive Calendar */}
         <div className="lg:col-span-2 space-y-8">
-          <Card className="rounded-[3rem] border-primary/5 shadow-2xl overflow-hidden bg-white">
+          <Card className="rounded-[3rem] border-primary/5 dark:border-emerald-800/50 shadow-2xl overflow-hidden bg-white dark:bg-emerald-950">
             <CardHeader className="p-10 pb-6 flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-3xl font-black text-foreground">
@@ -350,9 +350,9 @@ export default function FarmingCalendar() {
                 </CardTitle>
                 <p className="text-sm font-bold text-emerald-600">Dynamic Activity Interface</p>
               </div>
-              <div className="flex bg-muted/50 p-1.5 rounded-2xl gap-1">
-                <Button variant="ghost" size="icon" onClick={prevMonth} className="rounded-xl hover:bg-white hover:shadow-lg"><ChevronLeft className="h-5 w-5" /></Button>
-                <Button variant="ghost" size="icon" onClick={nextMonth} className="rounded-xl hover:bg-white hover:shadow-lg"><ChevronRight className="h-5 w-5" /></Button>
+              <div className="flex bg-muted/50 dark:bg-emerald-900/30 p-1.5 rounded-2xl gap-1">
+                <Button variant="ghost" size="icon" onClick={prevMonth} className="rounded-xl hover:bg-white dark:hover:bg-emerald-800 hover:shadow-lg"><ChevronLeft className="h-5 w-5" /></Button>
+                <Button variant="ghost" size="icon" onClick={nextMonth} className="rounded-xl hover:bg-white dark:hover:bg-emerald-800 hover:shadow-lg"><ChevronRight className="h-5 w-5" /></Button>
               </div>
             </CardHeader>
             <CardContent className="p-10 pt-0">
