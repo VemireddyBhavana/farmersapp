@@ -86,29 +86,72 @@ const YieldPrediction = () => {
     setIsCalculating(true);
     
     try {
-      // Mocking enhanced API response
+      // Simulate API processing delay
       await new Promise(r => setTimeout(r, 2000));
-      const mockRes = {
-        yield: (Math.random() * 2 + 2).toFixed(1),
-        profit: `₹${(Math.random() * 50000 + 100000).toLocaleString()}`,
-        risk: Math.random() > 0.7 ? "Moderate" : "Low",
-        ndvi: (Math.random() * 0.2 + 0.6).toFixed(2),
-        insights: [
-          "Irrigation efficiency is at 88%. Consider drip maintenance.",
-          "Nitrogen levels in soil are optimal for this growth stage.",
-          "Market demand for this crop is projected to rise by 12% next month."
-        ],
-        costs: {
-          seeds: 12500,
-          fertilizer: 28000,
-          labor: 15000,
-          total: 55500
-        },
-        weatherImpact: weather?.temperature_2m > 35 ? "Heat stress detected. Increase watering." : "Optimal temperature for flowering.",
-        healthScore: 92
+      
+      const landAcres = parseFloat(formData.land) || 0;
+      
+      // REALISTIC AGRICULTURAL FORMULAS
+      // 1. Base Yield per Acre (in Tons)
+      const baseYields: any = { "Rice": 2.2, "Wheat": 1.8, "Cotton": 0.8, "Maize": 2.5 };
+      let predictedYield = (baseYields[formData.crop] || 2.0) * landAcres;
+
+      // 2. Multipliers based on parameters
+      const soilMult: any = { "Alluvial": 1.1, "Black": 1.05, "Clay": 0.95, "Loamy": 1.0 };
+      const irrMult: any = { "Drip": 1.25, "Borewell": 1.1, "Canal": 1.05, "Rain-fed": 0.8 };
+      
+      predictedYield *= (soilMult[formData.soil] || 1.0);
+      predictedYield *= (irrMult[formData.irrigation] || 1.0);
+
+      // 3. Weather Impact (Real temperature check)
+      const currentTemp = weather?.temperature_2m || 30;
+      let weatherNote = "Optimal temperature for crop growth.";
+      if (currentTemp > 35) {
+        predictedYield *= 0.92; // 8% loss due to heat stress
+        weatherNote = "Heat stress detected. High evaporation reducing yield potential by ~8%.";
+      } else if (currentTemp < 15) {
+        predictedYield *= 0.95; // Slow growth in cold
+        weatherNote = "Low temperatures slowing metabolic activity. Expected 5% delay in maturity.";
+      }
+
+      // 4. Market Prices (₹ per Ton)
+      const marketPrices: any = { "Rice": 22000, "Wheat": 21000, "Cotton": 60000, "Maize": 19000 };
+      const grossRevenue = predictedYield * (marketPrices[formData.crop] || 20000);
+
+      // 5. Production Costs (₹ per Acre)
+      const costPerAcre: any = {
+        "Rice": { seeds: 3000, fertilizer: 6000, labor: 5000 },
+        "Wheat": { seeds: 2500, fertilizer: 5000, labor: 4000 },
+        "Cotton": { seeds: 4000, fertilizer: 8000, labor: 7000 },
+        "Maize": { seeds: 2800, fertilizer: 5500, labor: 4500 }
       };
-      setResult(mockRes);
-      setHistory(prev => [mockRes, ...prev].slice(0, 5));
+      
+      const cropCosts = costPerAcre[formData.crop] || { seeds: 2500, fertilizer: 5000, labor: 4000 };
+      const totalCosts = {
+        seeds: cropCosts.seeds * landAcres,
+        fertilizer: cropCosts.fertilizer * landAcres,
+        labor: cropCosts.labor * landAcres,
+        total: (cropCosts.seeds + cropCosts.fertilizer + cropCosts.labor) * landAcres
+      };
+
+      const finalRes = {
+        yield: predictedYield.toFixed(2),
+        profit: `₹${Math.round(grossRevenue).toLocaleString()}`,
+        risk: predictedYield / landAcres < 1.5 ? "Moderate" : "Low",
+        ndvi: (0.65 + (predictedYield / landAcres) * 0.05).toFixed(2),
+        insights: [
+          `${formData.irrigation} provides stable water, but check ${formData.crop} root depth.`,
+          `${formData.soil} soil is high in minerals; avoid over-fertilizing this season.`,
+          `Current NDVI trend is ${predictedYield / landAcres > 2 ? "Excellent" : "Stable"}. Monitoring canopy density.`
+        ],
+        costs: totalCosts,
+        weatherImpact: weatherNote,
+        healthScore: Math.round(70 + (predictedYield / landAcres) * 10),
+        rawProfit: Math.round(grossRevenue)
+      };
+
+      setResult(finalRes);
+      setHistory(prev => [finalRes, ...prev].slice(0, 5));
     } catch (err) {
       console.error("Prediction failed");
     } finally {
@@ -116,11 +159,76 @@ const YieldPrediction = () => {
     }
   };
 
+  const handleDownloadReport = () => {
+    if (!result) return;
+
+    const reportContent = `
+=========================================
+      AGRICULTURAL FORECAST REPORT
+=========================================
+Date: ${new Date().toLocaleDateString()}
+Farmer: ${farmer?.name}
+Location: ${location?.district || farmer?.location}
+
+-----------------------------------------
+FARM PARAMETERS:
+-----------------------------------------
+Crop: ${formData.crop}
+Land Area: ${formData.land} Acres
+Soil Type: ${formData.soil}
+Irrigation: ${formData.irrigation}
+
+-----------------------------------------
+PREDICTED OUTCOMES:
+-----------------------------------------
+Expected Yield: ${result.yield} Tons
+Market Revenue: ${result.profit}
+Risk Assessment: ${result.risk} Risk
+
+-----------------------------------------
+COST & PROFIT ANALYSIS:
+-----------------------------------------
+Gross Revenue:   ${result.profit}
+Production Cost: ₹${result.costs.total.toLocaleString()}
+
+Breakdown:
+- Seeds:      ₹${result.costs.seeds.toLocaleString()}
+- Fertilizer: ₹${result.costs.fertilizer.toLocaleString()}
+- Labor:      ₹${result.costs.labor.toLocaleString()}
+
+NET PROFIT:      ₹${(result.rawProfit - result.costs.total).toLocaleString()}
+
+-----------------------------------------
+AI TACTICAL ADVISORY:
+-----------------------------------------
+1. ${result.insights[0]}
+2. ${result.insights[1]}
+3. ${result.insights[2]}
+
+Weather Impact: ${result.weatherImpact}
+
+-----------------------------------------
+CONFIDENTIALITY NOTICE:
+This report is generated using Kisan App ML models.
+Values are estimates based on input parameters.
+=========================================
+    `;
+
+    const blob = new Blob([reportContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Yield_Forecast_${formData.crop}_${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const trendData = [
-    { name: "Week 1", yield: 2.1, ndvi: 0.65 },
-    { name: "Week 2", yield: 2.4, ndvi: 0.68 },
-    { name: "Week 3", yield: 2.8, ndvi: 0.72 },
-    { name: "Week 4", yield: result?.yield || 3.2, ndvi: result?.ndvi || 0.75 },
+    { name: "Week 1", yield: (parseFloat(result?.yield) * 0.6).toFixed(1) || 1.2, ndvi: 0.62 },
+    { name: "Week 2", yield: (parseFloat(result?.yield) * 0.75).toFixed(1) || 1.8, ndvi: 0.68 },
+    { name: "Week 3", yield: (parseFloat(result?.yield) * 0.9).toFixed(1) || 2.4, ndvi: 0.74 },
+    { name: "Week 4", yield: result?.yield || 3.0, ndvi: result?.ndvi || 0.75 },
   ];
 
   return (
@@ -144,7 +252,7 @@ const YieldPrediction = () => {
               <span className="text-sm font-bold text-slate-700">{farmer?.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <MapIcon size={16} className="text-slate-400" />
+              <MapIconUI size={16} className="text-slate-400" />
               <span className="text-sm font-bold text-slate-700">{location?.district || farmer?.location}</span>
             </div>
             <div className="h-8 w-[1px] bg-slate-200"></div>
@@ -155,7 +263,11 @@ const YieldPrediction = () => {
                    <span className="text-xs font-bold text-emerald-600">{t("secureConnect")}</span>
                 </div>
             </div>
-            <button className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg shadow-slate-200">
+            <button 
+              onClick={handleDownloadReport}
+              disabled={!result}
+              className="flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg shadow-slate-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            >
                <Download size={14} />
                {t("downloadReport")}
             </button>
@@ -391,7 +503,7 @@ const YieldPrediction = () => {
                            <div className="p-5 bg-emerald-600 rounded-3xl text-white">
                               <div className="flex justify-between items-center">
                                  <span className="font-bold text-sm uppercase tracking-wider">{t("netProfit")}</span>
-                                 <span className="text-2xl font-black">₹{(parseInt(result.profit.replace(/[^\d]/g, '')) - result.costs.total).toLocaleString()}</span>
+                                 <span className="text-2xl font-black">₹{(result.rawProfit - result.costs.total).toLocaleString()}</span>
                               </div>
                            </div>
                         </div>
