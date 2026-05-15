@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, Newspaper, AlertTriangle, Bug, Award, Star, Medal } from "lucide-react";
+import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,26 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { backend, CommunityPost } from "@/lib/MockBackend";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-const localAlerts = [
-  { id: 1, pest: "Fall Armyworm", crop: "Maize", location: "Karnal", distance: "5km", severity: "High", date: "2 hours ago" },
-  { id: 2, pest: "Whitefly", crop: "Cotton", location: "Guntur", distance: "12km", severity: "Medium", date: "5 hours ago" },
-  { id: 3, pest: "Locust Swarm", crop: "Multiple", location: "Jaisalmer", distance: "45km", severity: "Critical", date: "1 day ago" },
-];
-
-const topFarmers = [
-  { id: 1, name: "Ramesh Kumar", location: "Punjab", points: 2450, badges: ["Master Sower", "Pest Expert"], isMonthWinner: true },
-  { id: 2, name: "Venkat Rao", location: "Andhra Pradesh", points: 1820, badges: ["Irrigation Pro"], isMonthWinner: false },
-  { id: 3, name: "Suresh Patel", location: "Gujarat", points: 1650, badges: ["Organic Pioneer", "Market Guru"], isMonthWinner: false },
-  { id: 4, name: "Priya Sharma", location: "Haryana", points: 1400, badges: ["Innovator"], isMonthWinner: false },
-];
-
-const agriNews = [
-  { id: 1, title: "PM-Kisan 15th Installment Released", source: "Govt Portal", date: "2 hours ago", type: "Scheme" },
-  { id: 2, title: "Heavy Rain Alert for Coastal Andhra", source: "IMD", date: "5 hours ago", type: "Weather" },
-  { id: 3, title: "New Subsidy for Drip Irrigation Announced", source: "Agri Dept", date: "1 day ago", type: "Scheme" },
-];
 
 export default function Community() {
   const { t } = useLanguage();
@@ -216,15 +196,7 @@ export default function Community() {
            </Dialog>
         </div>
 
-        <Tabs defaultValue="discussions" className="w-full">
-          <TabsList className="w-full justify-start overflow-x-auto bg-transparent border-b border-emerald-100 dark:border-emerald-900 rounded-none h-14 mb-8 pb-0 gap-6 px-0 scrollbar-none [scrollbar-width:none]">
-            <TabsTrigger value="discussions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("discussions")}</TabsTrigger>
-            <TabsTrigger value="alerts" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("localAlerts")}</TabsTrigger>
-            <TabsTrigger value="news" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("agriNews")}</TabsTrigger>
-            <TabsTrigger value="leaderboard" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("topFarmers")}</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="discussions" className="space-y-6">
+        <div className="space-y-6">
           <AnimatePresence>
             {posts.map((post) => (
               <motion.div
@@ -345,125 +317,7 @@ export default function Community() {
               </motion.div>
             ))}
           </AnimatePresence>
-          </TabsContent>
-
-          <TabsContent value="alerts" className="space-y-4">
-            <div className="bg-rose-50 dark:bg-rose-900/20 p-6 rounded-[2rem] border border-rose-100 dark:border-rose-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-              <div>
-                <h3 className="font-black text-rose-950 dark:text-rose-50">{t("localAlerts")}</h3>
-                <p className="text-sm text-rose-700 dark:text-rose-300 font-medium">{t("localAlertsDesc")}</p>
-              </div>
-              <Button className="rounded-xl font-bold bg-rose-600 hover:bg-rose-700 text-white whitespace-nowrap">
-                <AlertTriangle className="h-4 w-4 mr-2"/> {t("reportAlert")}
-              </Button>
-            </div>
-            
-            {localAlerts.map(item => (
-              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-rose-100 dark:border-rose-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${
-                    item.severity === 'Critical' ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 
-                    item.severity === 'High' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30' : 
-                    'bg-amber-100 text-amber-600 dark:bg-amber-900/30'
-                  }`}>
-                    <Bug className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{item.pest}</h4>
-                    <p className="text-sm font-bold text-muted-foreground flex items-center gap-1">
-                      <MapPin className="h-3 w-3" /> {item.location} ({item.distance})
-                    </p>
-                  </div>
-                </div>
-                <div className="flex w-full sm:w-auto justify-between sm:justify-end gap-6 items-center">
-                  <div className="text-left sm:text-right">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("cropAffected")}</p>
-                    <p className="font-bold text-slate-700 dark:text-slate-300">{item.crop}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{t("severity")}</p>
-                    <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${
-                      item.severity === 'Critical' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
-                      item.severity === 'High' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : 
-                      'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                    }`}>
-                      {item.severity}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="news" className="space-y-4">
-            {agriNews.map(item => (
-              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex gap-4 items-start">
-                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
-                  <Newspaper className="h-6 w-6" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">{item.type}</span>
-                    <span className="text-xs font-bold text-muted-foreground">• {item.date}</span>
-                  </div>
-                  <h4 className="font-black text-emerald-950 dark:text-emerald-50 text-lg leading-tight mb-1">{item.title}</h4>
-                  <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">Source: {item.source}</p>
-                </div>
-              </div>
-            ))}
-          </TabsContent>
-
-          <TabsContent value="leaderboard" className="space-y-6">
-            <div className="bg-gradient-to-r from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-900/10 p-6 rounded-[2rem] border border-amber-200 dark:border-amber-800/50 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <div>
-                <h3 className="font-black text-amber-950 dark:text-amber-50 text-2xl flex items-center gap-2">
-                  <Award className="h-6 w-6 text-amber-600 dark:text-amber-400" /> {t("leaderboard")}
-                </h3>
-                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">{t("leaderboardDesc")}</p>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              {topFarmers.map((farmer, index) => (
-                <div key={farmer.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4 relative overflow-hidden">
-                  {farmer.isMonthWinner && (
-                    <div className="absolute top-0 right-0 bg-amber-400 text-amber-950 text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-bl-xl shadow-sm flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-amber-950" /> {t("farmerOfTheMonth")}
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0">
-                    <div className="flex items-center justify-center w-8 font-black text-2xl text-slate-300 dark:text-slate-700">
-                      #{index + 1}
-                    </div>
-                    <div className="h-14 w-14 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center font-black text-2xl text-emerald-700 dark:text-emerald-400 shrink-0">
-                      {farmer.name[0]}
-                    </div>
-                    <div>
-                      <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{farmer.name}</h4>
-                      <p className="text-xs font-bold text-muted-foreground flex items-center gap-1">
-                        <MapPin className="h-3 w-3" /> {farmer.location}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col items-start sm:items-end w-full sm:w-auto gap-2">
-                    <div className="flex gap-2">
-                      {farmer.badges.map(badge => (
-                        <span key={badge} className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-lg border border-emerald-100 dark:border-emerald-800/50">
-                          <Medal className="h-3 w-3" /> {badge}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="font-black text-xl text-emerald-600 dark:text-emerald-400 mt-1">
-                      {farmer.points.toLocaleString()} <span className="text-sm text-slate-400 uppercase tracking-widest">{t("points")}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+        </div>
       </div>
     </div>
   );
