@@ -32,7 +32,7 @@ const cropsData: Record<string, {
   emoji: string;
   plantingMonths: string[];
   harvestMonths: string[];
-  activities: { day: number; task: string; type: "Sowing" | "Maintenance" | "Watering" | "Security" }[];
+  activities: { day: number; task: string; type: string }[];
 }> = {
   tomato: {
     name: "Tomato",
@@ -85,6 +85,65 @@ const cropsData: Record<string, {
     activities: [
       { day: 1, task: "Nursery Sowing", type: "Maintenance" },
       { day: 30, task: "Transplanting", type: "Sowing" },
+    ]
+  },
+  maize: {
+    name: "Maize (Corn)",
+    emoji: "🌽",
+    plantingMonths: ["June", "July"],
+    harvestMonths: ["September", "October"],
+    activities: [
+      { day: 1, task: "Field Preparation", type: "Maintenance" },
+      { day: 5, task: "Sowing Seeds", type: "Sowing" },
+      { day: 25, task: "First Weeding", type: "Maintenance" },
+      { day: 40, task: "Fertilizer Application", type: "Maintenance" },
+    ]
+  },
+  soybean: {
+    name: "Soybean",
+    emoji: "🌱",
+    plantingMonths: ["June", "July"],
+    harvestMonths: ["September", "October"],
+    activities: [
+      { day: 2, task: "Seed Treatment", type: "Maintenance" },
+      { day: 7, task: "Sowing", type: "Sowing" },
+      { day: 30, task: "Weeding", type: "Maintenance" },
+    ]
+  },
+  sugarcane: {
+    name: "Sugarcane",
+    emoji: "🎋",
+    plantingMonths: ["January", "February", "March"],
+    harvestMonths: ["November", "December"],
+    activities: [
+      { day: 1, task: "Deep Ploughing", type: "Maintenance" },
+      { day: 15, task: "Planting Setts", type: "Sowing" },
+      { day: 45, task: "First Irrigation", type: "Watering" },
+      { day: 90, task: "Earthing Up", type: "Maintenance" },
+    ]
+  },
+  potato: {
+    name: "Potato",
+    emoji: "🥔",
+    plantingMonths: ["October", "November"],
+    harvestMonths: ["February", "March"],
+    activities: [
+      { day: 5, task: "Land Preparation", type: "Maintenance" },
+      { day: 15, task: "Planting Tubers", type: "Sowing" },
+      { day: 35, task: "Earthing Up", type: "Maintenance" },
+      { day: 45, task: "Irrigation", type: "Watering" },
+    ]
+  },
+  onion: {
+    name: "Onion",
+    emoji: "🧅",
+    plantingMonths: ["October", "November"],
+    harvestMonths: ["March", "April"],
+    activities: [
+      { day: 1, task: "Nursery Preparation", type: "Maintenance" },
+      { day: 45, task: "Transplanting", type: "Sowing" },
+      { day: 60, task: "Weeding", type: "Maintenance" },
+      { day: 75, task: "Irrigation", type: "Watering" },
     ]
   }
 };
