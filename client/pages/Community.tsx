@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, TrendingUp, TrendingDown, Newspaper, Tractor as TractorIcon } from "lucide-react";
+import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, Newspaper, Tractor as TractorIcon, AlertTriangle, Bug } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,10 +10,10 @@ import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
-const crowdsourcedPrices = [
-  { id: 1, crop: "Wheat", location: "Karnal Mandi", official: 2125, reported: 2300, trend: "up", reporters: 45 },
-  { id: 2, crop: "Cotton", location: "Guntur", official: 7020, reported: 6850, trend: "down", reporters: 120 },
-  { id: 3, crop: "Soybean", location: "Indore", official: 4600, reported: 4650, trend: "up", reporters: 89 },
+const localAlerts = [
+  { id: 1, pest: "Fall Armyworm", crop: "Maize", location: "Karnal", distance: "5km", severity: "High", date: "2 hours ago" },
+  { id: 2, pest: "Whitefly", crop: "Cotton", location: "Guntur", distance: "12km", severity: "Medium", date: "5 hours ago" },
+  { id: 3, pest: "Locust Swarm", crop: "Multiple", location: "Jaisalmer", distance: "45km", severity: "Critical", date: "1 day ago" },
 ];
 
 const peerMachinery = [
@@ -218,7 +218,7 @@ export default function Community() {
         <Tabs defaultValue="discussions" className="w-full">
           <TabsList className="w-full justify-start overflow-x-auto bg-transparent border-b border-emerald-100 dark:border-emerald-900 rounded-none h-14 mb-8 pb-0 gap-6 px-0 scrollbar-none [scrollbar-width:none]">
             <TabsTrigger value="discussions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("discussions")}</TabsTrigger>
-            <TabsTrigger value="mandi" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("mandiPrices")}</TabsTrigger>
+            <TabsTrigger value="alerts" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("localAlerts")}</TabsTrigger>
             <TabsTrigger value="machinery" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("machinerySharing")}</TabsTrigger>
             <TabsTrigger value="news" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("agriNews")}</TabsTrigger>
           </TabsList>
@@ -346,34 +346,48 @@ export default function Community() {
           </AnimatePresence>
           </TabsContent>
 
-          <TabsContent value="mandi" className="space-y-4">
-            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-6 rounded-[2rem] border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+          <TabsContent value="alerts" className="space-y-4">
+            <div className="bg-rose-50 dark:bg-rose-900/20 p-6 rounded-[2rem] border border-rose-100 dark:border-rose-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
               <div>
-                <h3 className="font-black text-emerald-950 dark:text-emerald-50">{t("crowdsourcedPrices")}</h3>
-                <p className="text-sm text-emerald-700 dark:text-emerald-300 font-medium">{t("crowdsourcedPricesDesc")}</p>
+                <h3 className="font-black text-rose-950 dark:text-rose-50">{t("localAlerts")}</h3>
+                <p className="text-sm text-rose-700 dark:text-rose-300 font-medium">{t("localAlertsDesc")}</p>
               </div>
-              <Button className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap">
-                <Plus className="h-4 w-4 mr-2"/> {t("reportPrice")}
+              <Button className="rounded-xl font-bold bg-rose-600 hover:bg-rose-700 text-white whitespace-nowrap">
+                <AlertTriangle className="h-4 w-4 mr-2"/> {t("reportAlert")}
               </Button>
             </div>
             
-            {crowdsourcedPrices.map(item => (
-              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="w-full sm:w-auto">
-                  <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{item.crop}</h4>
-                  <p className="text-sm font-bold text-muted-foreground flex items-center gap-1"><MapPin className="h-3 w-3" /> {item.location}</p>
+            {localAlerts.map(item => (
+              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-rose-100 dark:border-rose-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${
+                    item.severity === 'Critical' ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 
+                    item.severity === 'High' ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30' : 
+                    'bg-amber-100 text-amber-600 dark:bg-amber-900/30'
+                  }`}>
+                    <Bug className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{item.pest}</h4>
+                    <p className="text-sm font-bold text-muted-foreground flex items-center gap-1">
+                      <MapPin className="h-3 w-3" /> {item.location} ({item.distance})
+                    </p>
+                  </div>
                 </div>
                 <div className="flex w-full sm:w-auto justify-between sm:justify-end gap-6 items-center">
-                  <div className="text-center">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("officialPrice")}</p>
-                    <p className="font-bold text-slate-700 dark:text-slate-300">₹{item.official}</p>
+                  <div className="text-left sm:text-right">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("cropAffected")}</p>
+                    <p className="font-bold text-slate-700 dark:text-slate-300">{item.crop}</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">{t("communityPrice")}</p>
-                    <p className="font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-1 justify-center">
-                      ₹{item.reported}
-                      {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-emerald-500" /> : <TrendingDown className="h-4 w-4 text-red-500" />}
-                    </p>
+                  <div className="text-right">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{t("severity")}</p>
+                    <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${
+                      item.severity === 'Critical' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                      item.severity === 'High' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : 
+                      'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                    }`}>
+                      {item.severity}
+                    </span>
                   </div>
                 </div>
               </div>

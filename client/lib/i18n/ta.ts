@@ -2920,4 +2920,9 @@ export const ta = {
     "peerMachineryDesc": "Rent directly from farmers near you.",
     "listEquipment": "List My Equipment",
     "day": "day",
+    "localAlerts": "Local Alerts",
+    "localAlertsDesc": "Early warnings for pests and diseases reported by nearby farmers.",
+    "reportAlert": "Report Issue",
+    "cropAffected": "Crop Affected",
+    "severity": "Severity",
 };
