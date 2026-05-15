@@ -379,7 +379,7 @@ export default function FarmingCalendar() {
       </Dialog>
       {/* Blueprint Dialog */}
       <Dialog open={isBlueprintModalOpen} onOpenChange={setIsBlueprintModalOpen}>
-        <DialogContent className="sm:max-w-[700px] rounded-[2.5rem] p-0 border-none overflow-hidden glass max-h-[90vh] flex flex-col">
+        <DialogContent className="sm:max-w-[700px] rounded-[2.5rem] p-0 border-none overflow-hidden bg-white dark:bg-emerald-950 shadow-2xl max-h-[90vh] flex flex-col">
           <div className="bg-emerald-600 p-10 text-white space-y-2 shrink-0">
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 rounded-3xl bg-white/20 flex items-center justify-center text-4xl">
@@ -397,20 +397,20 @@ export default function FarmingCalendar() {
           <div className="p-10 space-y-8 overflow-y-auto no-scrollbar flex-1">
             <div className="grid gap-6">
               <div className="space-y-4">
-                <h4 className="font-black text-lg flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-emerald-600" />
+                <h4 className="font-black text-lg flex items-center gap-2 text-emerald-950 dark:text-emerald-50">
+                  <Clock className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                   Cultivation Timeline
                 </h4>
                 <div className="space-y-4">
                   {selectedCrop.activities.map((act, i) => (
-                    <div key={i} className="flex gap-4 p-4 rounded-2xl bg-muted/30 border border-primary/5">
-                      <div className="h-14 w-12 flex-shrink-0 rounded-xl bg-white flex flex-col items-center justify-center text-emerald-600 shadow-sm">
+                    <div key={i} className="flex gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-emerald-900/30 border border-slate-100 dark:border-emerald-800/50">
+                      <div className="h-14 w-12 flex-shrink-0 rounded-xl bg-white dark:bg-emerald-800 flex flex-col items-center justify-center text-emerald-600 dark:text-emerald-300 shadow-sm border border-slate-100 dark:border-emerald-700/50">
                         <span className="text-[10px] font-black uppercase leading-none mb-0.5">Day</span>
                         <span className="text-lg font-black leading-none">{act.day}</span>
                       </div>
                       <div>
-                        <p className="font-bold text-sm">{act.task}</p>
-                        <Badge variant="outline" className="text-[10px] uppercase tracking-widest mt-1 border-primary/10">
+                        <p className="font-bold text-sm text-emerald-950 dark:text-emerald-50">{act.task}</p>
+                        <Badge variant="outline" className="text-[10px] uppercase tracking-widest mt-1 border-emerald-200 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300">
                           {act.type}
                         </Badge>
                       </div>
@@ -420,15 +420,15 @@ export default function FarmingCalendar() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 rounded-3xl bg-blue-50 border border-blue-100 space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-600">Water Management</p>
-                  <p className="text-sm font-medium leading-relaxed">
+                <div className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Water Management</p>
+                  <p className="text-sm font-medium leading-relaxed text-blue-950 dark:text-blue-50">
                     Regular irrigation every 3-4 days in summer, 7-10 days in winter.
                   </p>
                 </div>
-                <div className="p-6 rounded-3xl bg-amber-50 border border-amber-100 space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-amber-600">Fertilizer Use</p>
-                  <p className="text-sm font-medium leading-relaxed">
+                <div className="p-6 rounded-3xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">Fertilizer Use</p>
+                  <p className="text-sm font-medium leading-relaxed text-amber-950 dark:text-amber-50">
                     Apply NPK (19:19:19) at early stages, shift to Potash during fruiting.
                   </p>
                 </div>
@@ -436,7 +436,7 @@ export default function FarmingCalendar() {
             </div>
 
             <DialogFooter>
-              <Button onClick={() => setIsBlueprintModalOpen(false)} className="w-full rounded-2xl py-6 h-auto font-black shadow-lg shadow-primary/20">
+              <Button onClick={() => setIsBlueprintModalOpen(false)} className="w-full rounded-2xl py-6 h-auto font-black shadow-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-950 dark:text-emerald-50 hover:bg-emerald-200 dark:hover:bg-emerald-800 shadow-emerald-900/5 dark:shadow-black/20">
                 Close Blueprint
               </Button>
             </DialogFooter>
