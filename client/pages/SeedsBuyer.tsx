@@ -422,14 +422,15 @@ const SeedsBuyer = () => {
                         {/* Search & Categories Container */}
                         <div className="flex-1 w-full bg-white dark:bg-emerald-950/20 rounded-[2rem] p-2 shadow-2xl shadow-emerald-900/10 border-2 border-emerald-50 dark:border-emerald-900/20 flex items-center gap-2 overflow-hidden">
                             {/* Crops Label/Search Trigger */}
-                            <div className="bg-emerald-600 text-white px-8 h-12 rounded-2xl flex items-center gap-3 shrink-0 font-black text-[11px] uppercase tracking-widest shadow-xl shadow-emerald-600/30">
+                            <label htmlFor="seed-search" className="bg-emerald-600 text-white px-8 h-12 rounded-[1.5rem] flex items-center gap-3 shrink-0 font-black text-[11px] uppercase tracking-widest shadow-xl shadow-emerald-600/30 cursor-pointer hover:bg-emerald-500 transition-colors">
                                 <Search className="h-4 w-4" />
                                 <span className="hidden sm:inline">Crops</span>
-                            </div>
+                            </label>
 
                             {/* Search Input */}
                             <div className="shrink-0 w-40 md:w-60">
                                 <Input
+                                    id="seed-search"
                                     placeholder={t("findYourSeeds")}
                                     className="h-12 border-none bg-transparent focus-visible:ring-0 shadow-none text-sm font-bold placeholder:text-emerald-900/30 dark:text-emerald-50 dark:placeholder:text-emerald-100/20"
                                     value={searchQuery}
@@ -447,7 +448,7 @@ const SeedsBuyer = () => {
                                             <TabsTrigger 
                                                 key={cat}
                                                 value={cat} 
-                                                className="rounded-xl px-6 h-full data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border-none shadow-md text-emerald-900/60 dark:text-emerald-100/60 hover:text-emerald-700 dark:hover:text-emerald-300"
+                                                className="rounded-xl px-6 h-full data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-black text-[10px] uppercase tracking-widest transition-all shrink-0 border-none data-[state=active]:shadow-md text-emerald-900/60 dark:text-emerald-100/60 hover:text-emerald-700 dark:hover:text-emerald-300"
                                             >
                                                 {cat === "All" ? t("all") : t(cat.toLowerCase().replace(' ', ''))}
                                             </TabsTrigger>
@@ -458,7 +459,7 @@ const SeedsBuyer = () => {
                         </div>
 
                         <div className="shrink-0 flex items-center gap-3">
-                            <div className="bg-emerald-50 dark:bg-emerald-900/20 px-6 h-14 rounded-[1.8rem] border-2 border-emerald-100 dark:border-emerald-900/30 shadow-xl shadow-emerald-900/5 flex items-center gap-3 group cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-all">
+                            <div className="bg-emerald-50 dark:bg-emerald-900/20 px-6 h-16 rounded-[2rem] border-2 border-emerald-100 dark:border-emerald-900/30 shadow-xl shadow-emerald-900/5 flex items-center gap-3 group cursor-pointer hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-all">
                                 <Filter className="h-4 w-4 text-emerald-700 dark:text-emerald-300" />
                                 <span className="text-[10px] font-black text-emerald-950 dark:text-emerald-50 uppercase tracking-widest">{t("sortBy")}:</span>
                                 <select 
@@ -481,7 +482,7 @@ const SeedsBuyer = () => {
                             <div className="lg:hidden">
                                 <Sheet>
                                     <SheetTrigger asChild>
-                                        <Button variant="outline" className="h-14 w-14 rounded-2xl border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 shadow-xl bg-white dark:bg-emerald-950">
+                                        <Button variant="outline" className="h-16 w-16 rounded-[2rem] border-emerald-100 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 shadow-xl bg-white dark:bg-emerald-950">
                                             <Filter className="h-5 w-5" />
                                         </Button>
                                     </SheetTrigger>
