@@ -362,9 +362,8 @@ export default function FarmingCalendar() {
               <div className="grid grid-cols-7 gap-4 md:gap-6">
                 {Array.from({ length: daysInMonth }).map((_, i) => {
                   const day = i + 1;
-                  const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth();
+                  const isToday = day === new Date().getDate() && currentDate.getMonth() === new Date().getMonth() && currentDate.getFullYear() === new Date().getFullYear();
                   const booking = userBookings.find(b => b.date.startsWith(day.toString()) && b.date.includes(monthName));
-                  const activity = selectedCrop.activities.find(a => a.day === day && monthName === selectedCrop.plantingMonths[0]);
 
                   return (
                     <motion.div
@@ -374,20 +373,16 @@ export default function FarmingCalendar() {
                       onClick={() => handleDateClick(day)}
                       className={cn(
                         "aspect-square p-2 md:p-4 rounded-3xl flex flex-col items-center justify-center border-4 transition-all cursor-pointer relative group",
-                        isToday ? "border-blue-500 bg-blue-50 shadow-xl shadow-blue-500/10" :
-                          booking ? "border-emerald-500 bg-emerald-50 shadow-xl shadow-emerald-500/10" :
-                            activity ? "border-amber-500 bg-amber-50" :
-                              "border-transparent bg-slate-50/50 hover:bg-white hover:border-emerald-200"
+                        isToday ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 shadow-xl shadow-blue-500/10" :
+                          booking ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 dark:border-emerald-800 shadow-xl shadow-emerald-500/10" :
+                            "border-transparent bg-slate-50/50 dark:bg-emerald-900/10 hover:bg-white dark:hover:bg-emerald-900/30 hover:border-emerald-200 dark:hover:border-emerald-800"
                       )}
                     >
-                      <span className={cn("text-lg md:text-2xl font-black", isToday ? "text-blue-600" : booking ? "text-emerald-700" : activity ? "text-amber-700" : "text-slate-400 group-hover:text-emerald-600")}>
+                      <span className={cn("text-lg md:text-2xl font-black", isToday ? "text-blue-600 dark:text-blue-400" : booking ? "text-emerald-700 dark:text-emerald-400" : "text-slate-400 dark:text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400")}>
                         {day}
                       </span>
                       {booking && (
                         <div className="mt-1 md:mt-2 h-2 w-2 md:h-3 md:w-3 rounded-full bg-emerald-500 shadow-lg shadow-emerald-500/50" />
-                      )}
-                      {activity && !booking && (
-                        <div className="mt-1 md:mt-2 h-2 w-2 md:h-3 md:w-3 rounded-full bg-amber-500 animate-pulse" />
                       )}
                     </motion.div>
                   );
