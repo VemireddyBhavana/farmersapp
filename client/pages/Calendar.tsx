@@ -33,12 +33,16 @@ const cropsData: Record<string, {
   plantingMonths: string[];
   harvestMonths: string[];
   activities: { day: number; task: string; type: string }[];
+  waterManagement: string;
+  fertilizerUse: string;
 }> = {
   tomato: {
     nameKey: "crop_tomato",
     emoji: "🍅",
     plantingMonths: ["March", "April", "May"],
     harvestMonths: ["June", "July", "August"],
+    waterManagement: "Regular irrigation every 3-4 days in summer, 7-10 days in winter.",
+    fertilizerUse: "Apply NPK (19:19:19) at early stages, shift to Potash during fruiting.",
     activities: [
       { day: 5, task: "Soil Preparation", type: "Maintenance" },
       { day: 10, task: "Sowing Seeds", type: "Sowing" },
@@ -51,6 +55,8 @@ const cropsData: Record<string, {
     emoji: "🌾",
     plantingMonths: ["June", "July"],
     harvestMonths: ["October", "November"],
+    waterManagement: "Maintain 2-5cm standing water throughout growing period until 15 days before harvest.",
+    fertilizerUse: "High Nitrogen requirement. Apply basal dose and 2-3 split applications at tillering and panicle initiation.",
     activities: [
       { day: 1, task: "Nursery Preparation", type: "Maintenance" },
       { day: 15, task: "Transplanting", type: "Sowing" },
@@ -62,6 +68,8 @@ const cropsData: Record<string, {
     emoji: "🌾",
     plantingMonths: ["October", "November"],
     harvestMonths: ["March", "April"],
+    waterManagement: "Requires 4-6 irrigations. Crown Root Initiation (CRI) stage is highly critical for moisture.",
+    fertilizerUse: "Apply basal NPK. Top dress with Nitrogen immediately after the first irrigation.",
     activities: [
       { day: 10, task: "Sowing", type: "Sowing" },
       { day: 25, task: "First Irrigation", type: "Watering" },
@@ -72,6 +80,8 @@ const cropsData: Record<string, {
     emoji: "☁️",
     plantingMonths: ["May", "June"],
     harvestMonths: ["October", "November"],
+    waterManagement: "Moisture is crucial during flowering and boll formation. Extremely sensitive to waterlogging.",
+    fertilizerUse: "Requires split doses of Nitrogen and high Potash during boll development for fiber quality.",
     activities: [
       { day: 5, task: "Sowing", type: "Sowing" },
       { day: 20, task: "Thinning & Gap Filling", type: "Maintenance" },
@@ -82,6 +92,8 @@ const cropsData: Record<string, {
     emoji: "🌶️",
     plantingMonths: ["July", "August"],
     harvestMonths: ["December", "January"],
+    waterManagement: "Needs light, frequent irrigation. Highly sensitive to water stagnation which causes root rot.",
+    fertilizerUse: "Regular NPK application. Calcium and Boron are critical to prevent blossom end rot and flower drop.",
     activities: [
       { day: 1, task: "Nursery Sowing", type: "Maintenance" },
       { day: 30, task: "Transplanting", type: "Sowing" },
@@ -92,6 +104,8 @@ const cropsData: Record<string, {
     emoji: "🌽",
     plantingMonths: ["June", "July"],
     harvestMonths: ["September", "October"],
+    waterManagement: "Moisture stress at tasseling and silking stages drastically reduces grain yield.",
+    fertilizerUse: "Heavy feeder. Requires high Nitrogen in 3 split doses: basal, knee-high, and pre-tasseling.",
     activities: [
       { day: 1, task: "Field Preparation", type: "Maintenance" },
       { day: 5, task: "Sowing Seeds", type: "Sowing" },
@@ -104,6 +118,8 @@ const cropsData: Record<string, {
     emoji: "🌱",
     plantingMonths: ["June", "July"],
     harvestMonths: ["September", "October"],
+    waterManagement: "Critical water requirement during flowering and pod filling. Drought stress causes pod abortion.",
+    fertilizerUse: "Needs Rhizobium seed treatment. Low Nitrogen requirement but high Phosphorus for root nodulation.",
     activities: [
       { day: 2, task: "Seed Treatment", type: "Maintenance" },
       { day: 7, task: "Sowing", type: "Sowing" },
@@ -115,6 +131,8 @@ const cropsData: Record<string, {
     emoji: "🎋",
     plantingMonths: ["January", "February", "March"],
     harvestMonths: ["November", "December"],
+    waterManagement: "High water requirement. Needs regular irrigation every 10-15 days during grand growth phase.",
+    fertilizerUse: "Heavy Nitrogen feeder. Apply in 3-4 splits before earthing up to prevent lodging.",
     activities: [
       { day: 1, task: "Deep Ploughing", type: "Maintenance" },
       { day: 15, task: "Planting Setts", type: "Sowing" },
@@ -127,6 +145,8 @@ const cropsData: Record<string, {
     emoji: "🥔",
     plantingMonths: ["October", "November"],
     harvestMonths: ["February", "March"],
+    waterManagement: "Keep soil consistently moist but never waterlogged. Tuber initiation is the most critical stage.",
+    fertilizerUse: "Requires high Phosphorus for root development and high Potash for starch accumulation in tubers.",
     activities: [
       { day: 5, task: "Land Preparation", type: "Maintenance" },
       { day: 15, task: "Planting Tubers", type: "Sowing" },
@@ -139,6 +159,8 @@ const cropsData: Record<string, {
     emoji: "🧅",
     plantingMonths: ["October", "November"],
     harvestMonths: ["March", "April"],
+    waterManagement: "Needs frequent light irrigations due to shallow roots. Withhold water 15 days before harvest.",
+    fertilizerUse: "High Sulphur requirement for pungency and bulb keeping quality. Apply Nitrogen in splits.",
     activities: [
       { day: 1, task: "Nursery Preparation", type: "Maintenance" },
       { day: 45, task: "Transplanting", type: "Sowing" },
@@ -477,13 +499,13 @@ export default function FarmingCalendar() {
                 <div className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 space-y-2">
                   <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Water Management</p>
                   <p className="text-sm font-medium leading-relaxed text-blue-950 dark:text-blue-50">
-                    Regular irrigation every 3-4 days in summer, 7-10 days in winter.
+                    {selectedCrop.waterManagement}
                   </p>
                 </div>
                 <div className="p-6 rounded-3xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 space-y-2">
                   <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">Fertilizer Use</p>
                   <p className="text-sm font-medium leading-relaxed text-amber-950 dark:text-amber-50">
-                    Apply NPK (19:19:19) at early stages, shift to Potash during fruiting.
+                    {selectedCrop.fertilizerUse}
                   </p>
                 </div>
               </div>
