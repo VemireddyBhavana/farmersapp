@@ -261,27 +261,30 @@ export default function AgriSchemes() {
 
       {/* Track Modal */}
       <Dialog open={isTrackModalOpen} onOpenChange={setIsTrackModalOpen}>
-        <DialogContent className="sm:max-w-[600px] rounded-[2rem] p-8 border-none glass max-h-[80vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[600px] rounded-[2rem] p-8 border-none bg-white dark:bg-slate-900 shadow-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black">{t("trackMyApps")}</DialogTitle>
-            <DialogDescription className="font-medium">
+            <DialogTitle className="text-3xl font-black text-slate-900 dark:text-white uppercase italic tracking-tighter">
+              {t("trackMyApps")}
+            </DialogTitle>
+            <DialogDescription className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest text-[10px]">
               {t("trackAppDesc")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-6">
             {userApps.length === 0 ? (
-              <div className="text-center py-12">
-                <ScrollText className="h-12 w-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-                <p className="text-muted-foreground font-medium">{t("noApps")}</p>
+              <div className="text-center py-16 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
+                <ScrollText className="h-16 w-16 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
+                <p className="text-slate-900 dark:text-white font-black uppercase italic tracking-widest text-sm">{t("noApps")}</p>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-tight mt-2">Check back after submitting a scheme application</p>
               </div>
             ) : (
               userApps.map((app) => (
                 <div key={app.id} className="p-6 rounded-[1.5rem] bg-white border border-primary/5 shadow-sm space-y-4">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h4 className="font-black text-lg">{app.schemeName}</h4>
-                      <p className="text-xs font-bold text-muted-foreground">{t("appId")}: {app.id}</p>
+                      <h4 className="font-black text-lg text-slate-900 dark:text-white">{app.schemeName}</h4>
+                      <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t("appId")}: {app.id}</p>
                     </div>
                     <Badge className={cn(
                       "rounded-full px-3 py-1",
@@ -293,20 +296,20 @@ export default function AgriSchemes() {
 
                   <div className="grid grid-cols-2 gap-4 pt-2">
                     <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("beneficiary") || "Beneficiary"}</p>
-                      <p className="text-xs font-bold">{app.beneficiaryName}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("beneficiary") || "Beneficiary"}</p>
+                      <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.beneficiaryName}</p>
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("location") || "Location"}</p>
-                      <p className="text-xs font-bold">{app.location}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("location") || "Location"}</p>
+                      <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.location}</p>
                     </div>
                     <div className="space-y-1 col-span-2">
-                      <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{t("verificationStatus")}</p>
-                      <p className="text-xs font-bold text-emerald-600">{app.verificationStep}</p>
+                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("verificationStatus")}</p>
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{app.verificationStep}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground border-t pt-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
                     <Calendar className="h-3 w-3" />
                     {t("date")}: {app.date}
                   </div>
