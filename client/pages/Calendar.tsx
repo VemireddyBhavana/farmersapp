@@ -422,22 +422,22 @@ export default function FarmingCalendar() {
             <div className="h-16 w-16 rounded-3xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-xl shadow-emerald-600/20">
               <CalendarIcon className="h-8 w-8" />
             </div>
-            <DialogTitle className="text-3xl font-black text-emerald-950 dark:text-white">Day Action</DialogTitle>
+            <DialogTitle className="text-3xl font-black text-emerald-950 dark:text-white">Farm Activity</DialogTitle>
             <DialogDescription className="text-lg font-medium text-emerald-700 dark:text-emerald-100/70">
-              Schedule your agricultural task for {selectedDay} {monthName}.
+              Schedule your farm activity for {selectedDay} {monthName}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Quick Select Task</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Select Farm Activity</p>
             <div className="grid grid-cols-2 gap-4">
-              {["task_sowing", "task_irrigation", "task_fertilizing", "task_weeding", "task_spraying", "task_harvesting"].map(taskKey => (
+              {["Field Ploughing", "Seed Sowing", "Crop Irrigation", "Fertilizer Application", "Pesticide Spraying", "Crop Harvesting"].map(taskKey => (
                 <Button
                   key={taskKey}
                   variant="outline"
-                  onClick={() => handleConfirmBooking(t(taskKey))}
-                  className="h-14 rounded-2xl border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-emerald-900/20 text-emerald-950 dark:text-emerald-50 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 hover:border-transparent font-bold transition-all"
+                  onClick={() => handleConfirmBooking(taskKey)}
+                  className="h-14 rounded-2xl border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-emerald-900/20 text-emerald-950 dark:text-emerald-50 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 hover:border-transparent font-bold transition-all text-xs"
                 >
-                  {t(taskKey)}
+                  {taskKey}
                 </Button>
               ))}
             </div>
