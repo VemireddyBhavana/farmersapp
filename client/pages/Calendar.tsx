@@ -41,8 +41,8 @@ const cropsData: Record<string, {
     emoji: "🍅",
     plantingMonths: ["March", "April", "May"],
     harvestMonths: ["June", "July", "August"],
-    waterManagement: "Regular irrigation every 3-4 days in summer, 7-10 days in winter.",
-    fertilizerUse: "Apply NPK (19:19:19) at early stages, shift to Potash during fruiting.",
+    waterManagement: "water_tomato",
+    fertilizerUse: "fert_tomato",
     activities: [
       { day: 5, task: "Soil Preparation", type: "Maintenance" },
       { day: 10, task: "Sowing Seeds", type: "Sowing" },
@@ -55,8 +55,8 @@ const cropsData: Record<string, {
     emoji: "🌾",
     plantingMonths: ["June", "July"],
     harvestMonths: ["October", "November"],
-    waterManagement: "Maintain 2-5cm standing water throughout growing period until 15 days before harvest.",
-    fertilizerUse: "High Nitrogen requirement. Apply basal dose and 2-3 split applications at tillering and panicle initiation.",
+    waterManagement: "water_rice",
+    fertilizerUse: "fert_rice",
     activities: [
       { day: 1, task: "Nursery Preparation", type: "Maintenance" },
       { day: 15, task: "Transplanting", type: "Sowing" },
@@ -68,8 +68,8 @@ const cropsData: Record<string, {
     emoji: "🌾",
     plantingMonths: ["October", "November"],
     harvestMonths: ["March", "April"],
-    waterManagement: "Requires 4-6 irrigations. Crown Root Initiation (CRI) stage is highly critical for moisture.",
-    fertilizerUse: "Apply basal NPK. Top dress with Nitrogen immediately after the first irrigation.",
+    waterManagement: "water_wheat",
+    fertilizerUse: "fert_wheat",
     activities: [
       { day: 10, task: "Sowing", type: "Sowing" },
       { day: 25, task: "First Irrigation", type: "Watering" },
@@ -80,8 +80,8 @@ const cropsData: Record<string, {
     emoji: "☁️",
     plantingMonths: ["May", "June"],
     harvestMonths: ["October", "November"],
-    waterManagement: "Moisture is crucial during flowering and boll formation. Extremely sensitive to waterlogging.",
-    fertilizerUse: "Requires split doses of Nitrogen and high Potash during boll development for fiber quality.",
+    waterManagement: "water_cotton",
+    fertilizerUse: "fert_cotton",
     activities: [
       { day: 5, task: "Sowing", type: "Sowing" },
       { day: 20, task: "Thinning & Gap Filling", type: "Maintenance" },
@@ -92,8 +92,8 @@ const cropsData: Record<string, {
     emoji: "🌶️",
     plantingMonths: ["July", "August"],
     harvestMonths: ["December", "January"],
-    waterManagement: "Needs light, frequent irrigation. Highly sensitive to water stagnation which causes root rot.",
-    fertilizerUse: "Regular NPK application. Calcium and Boron are critical to prevent blossom end rot and flower drop.",
+    waterManagement: "water_chilli",
+    fertilizerUse: "fert_chilli",
     activities: [
       { day: 1, task: "Nursery Sowing", type: "Maintenance" },
       { day: 30, task: "Transplanting", type: "Sowing" },
@@ -104,8 +104,8 @@ const cropsData: Record<string, {
     emoji: "🌽",
     plantingMonths: ["June", "July"],
     harvestMonths: ["September", "October"],
-    waterManagement: "Moisture stress at tasseling and silking stages drastically reduces grain yield.",
-    fertilizerUse: "Heavy feeder. Requires high Nitrogen in 3 split doses: basal, knee-high, and pre-tasseling.",
+    waterManagement: "water_maize",
+    fertilizerUse: "fert_maize",
     activities: [
       { day: 1, task: "Field Preparation", type: "Maintenance" },
       { day: 5, task: "Sowing Seeds", type: "Sowing" },
@@ -118,8 +118,8 @@ const cropsData: Record<string, {
     emoji: "🌱",
     plantingMonths: ["June", "July"],
     harvestMonths: ["September", "October"],
-    waterManagement: "Critical water requirement during flowering and pod filling. Drought stress causes pod abortion.",
-    fertilizerUse: "Needs Rhizobium seed treatment. Low Nitrogen requirement but high Phosphorus for root nodulation.",
+    waterManagement: "water_soybean",
+    fertilizerUse: "fert_soybean",
     activities: [
       { day: 2, task: "Seed Treatment", type: "Maintenance" },
       { day: 7, task: "Sowing", type: "Sowing" },
@@ -131,8 +131,8 @@ const cropsData: Record<string, {
     emoji: "🎋",
     plantingMonths: ["January", "February", "March"],
     harvestMonths: ["November", "December"],
-    waterManagement: "High water requirement. Needs regular irrigation every 10-15 days during grand growth phase.",
-    fertilizerUse: "Heavy Nitrogen feeder. Apply in 3-4 splits before earthing up to prevent lodging.",
+    waterManagement: "water_sugarcane",
+    fertilizerUse: "fert_sugarcane",
     activities: [
       { day: 1, task: "Deep Ploughing", type: "Maintenance" },
       { day: 15, task: "Planting Setts", type: "Sowing" },
@@ -145,8 +145,8 @@ const cropsData: Record<string, {
     emoji: "🥔",
     plantingMonths: ["October", "November"],
     harvestMonths: ["February", "March"],
-    waterManagement: "Keep soil consistently moist but never waterlogged. Tuber initiation is the most critical stage.",
-    fertilizerUse: "Requires high Phosphorus for root development and high Potash for starch accumulation in tubers.",
+    waterManagement: "water_potato",
+    fertilizerUse: "fert_potato",
     activities: [
       { day: 5, task: "Land Preparation", type: "Maintenance" },
       { day: 15, task: "Planting Tubers", type: "Sowing" },
@@ -159,8 +159,8 @@ const cropsData: Record<string, {
     emoji: "🧅",
     plantingMonths: ["October", "November"],
     harvestMonths: ["March", "April"],
-    waterManagement: "Needs frequent light irrigations due to shallow roots. Withhold water 15 days before harvest.",
-    fertilizerUse: "High Sulphur requirement for pungency and bulb keeping quality. Apply Nitrogen in splits.",
+    waterManagement: "water_onion",
+    fertilizerUse: "fert_onion",
     activities: [
       { day: 1, task: "Nursery Preparation", type: "Maintenance" },
       { day: 45, task: "Transplanting", type: "Sowing" },
@@ -422,22 +422,22 @@ export default function FarmingCalendar() {
             <div className="h-16 w-16 rounded-3xl bg-emerald-600 text-white flex items-center justify-center mb-4 shadow-xl shadow-emerald-600/20">
               <CalendarIcon className="h-8 w-8" />
             </div>
-            <DialogTitle className="text-3xl font-black text-emerald-950 dark:text-white">Farm Activity</DialogTitle>
+            <DialogTitle className="text-3xl font-black text-emerald-950 dark:text-white">{t("farmActivityTitle")}</DialogTitle>
             <DialogDescription className="text-lg font-medium text-emerald-700 dark:text-emerald-100/70">
-              Schedule your farm activity for {selectedDay} {monthName}.
+              {t("scheduleFarmActivity")} {selectedDay} {monthName}.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Select Farm Activity</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">{t("selectFarmActivity")}</p>
             <div className="grid grid-cols-2 gap-4">
-              {["Field Ploughing", "Seed Sowing", "Crop Irrigation", "Fertilizer Application", "Pesticide Spraying", "Crop Harvesting"].map(taskKey => (
+              {["task_ploughing", "task_sowing", "task_irrigation", "task_fertilizing", "task_spraying", "task_harvesting"].map(taskKey => (
                 <Button
                   key={taskKey}
                   variant="outline"
-                  onClick={() => handleConfirmBooking(taskKey)}
+                  onClick={() => handleConfirmBooking(t(taskKey))}
                   className="h-14 rounded-2xl border-emerald-100 dark:border-emerald-800/50 bg-white dark:bg-emerald-900/20 text-emerald-950 dark:text-emerald-50 hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 hover:border-transparent font-bold transition-all text-xs"
                 >
-                  {taskKey}
+                  {t(taskKey)}
                 </Button>
               ))}
             </div>
@@ -475,7 +475,7 @@ export default function FarmingCalendar() {
               <div className="space-y-4">
                 <h4 className="font-black text-lg flex items-center gap-2 text-emerald-950 dark:text-emerald-50">
                   <Clock className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                  Cultivation Timeline
+                  {t("cultivationTimeline")}
                 </h4>
                 <div className="space-y-4">
                   {selectedCrop.activities.map((act, i) => (
@@ -497,15 +497,15 @@ export default function FarmingCalendar() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-6 rounded-3xl bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">Water Management</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">{t("waterManagement")}</p>
                   <p className="text-sm font-medium leading-relaxed text-blue-950 dark:text-blue-50">
-                    {selectedCrop.waterManagement}
+                    {t(selectedCrop.waterManagement)}
                   </p>
                 </div>
                 <div className="p-6 rounded-3xl bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">Fertilizer Use</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-amber-600 dark:text-amber-400">{t("fertilizerUse")}</p>
                   <p className="text-sm font-medium leading-relaxed text-amber-950 dark:text-amber-50">
-                    {selectedCrop.fertilizerUse}
+                    {t(selectedCrop.fertilizerUse)}
                   </p>
                 </div>
               </div>
