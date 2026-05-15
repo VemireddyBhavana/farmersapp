@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2 } from "lucide-react";
+import { Users, WifiOff, Send, ThumbsUp, MessageSquare, MapPin, Tag, Plus, CheckCircle2, Trash2, TrendingUp, TrendingDown, Newspaper, Tractor as TractorIcon } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { backend, CommunityPost } from "@/lib/MockBackend";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
+const crowdsourcedPrices = [
+  { id: 1, crop: "Wheat", location: "Karnal Mandi", official: 2125, reported: 2300, trend: "up", reporters: 45 },
+  { id: 2, crop: "Cotton", location: "Guntur", official: 7020, reported: 6850, trend: "down", reporters: 120 },
+  { id: 3, crop: "Soybean", location: "Indore", official: 4600, reported: 4650, trend: "up", reporters: 89 },
+];
+
+const peerMachinery = [
+  { id: 1, name: "Mahindra Tractor", owner: "Suresh", distance: "2km", price: 500, type: "Tractor" },
+  { id: 2, name: "Seed Drill", owner: "Ramesh", distance: "5km", price: 200, type: "Attachment" },
+  { id: 3, name: "Harvester", owner: "Venkat", distance: "12km", price: 1500, type: "Heavy" },
+];
+
+const agriNews = [
+  { id: 1, title: "PM-Kisan 15th Installment Released", source: "Govt Portal", date: "2 hours ago", type: "Scheme" },
+  { id: 2, title: "Heavy Rain Alert for Coastal Andhra", source: "IMD", date: "5 hours ago", type: "Weather" },
+  { id: 3, title: "New Subsidy for Drip Irrigation Announced", source: "Agri Dept", date: "1 day ago", type: "Scheme" },
+];
 
 export default function Community() {
   const { t } = useLanguage();
@@ -196,7 +215,15 @@ export default function Community() {
            </Dialog>
         </div>
 
-        <div className="space-y-6">
+        <Tabs defaultValue="discussions" className="w-full">
+          <TabsList className="w-full justify-start overflow-x-auto bg-transparent border-b border-emerald-100 dark:border-emerald-900 rounded-none h-14 mb-8 pb-0 gap-6 px-0 scrollbar-none [scrollbar-width:none]">
+            <TabsTrigger value="discussions" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("discussions")}</TabsTrigger>
+            <TabsTrigger value="mandi" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("mandiPrices")}</TabsTrigger>
+            <TabsTrigger value="machinery" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("machinerySharing")}</TabsTrigger>
+            <TabsTrigger value="news" className="rounded-none border-b-2 border-transparent data-[state=active]:border-emerald-600 data-[state=active]:text-emerald-700 dark:data-[state=active]:text-emerald-400 bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none text-muted-foreground font-bold pb-4 px-1">{t("agriNews")}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="discussions" className="space-y-6">
           <AnimatePresence>
             {posts.map((post) => (
               <motion.div
@@ -317,7 +344,89 @@ export default function Community() {
               </motion.div>
             ))}
           </AnimatePresence>
-        </div>
+          </TabsContent>
+
+          <TabsContent value="mandi" className="space-y-4">
+            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-6 rounded-[2rem] border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+              <div>
+                <h3 className="font-black text-emerald-950 dark:text-emerald-50">{t("crowdsourcedPrices")}</h3>
+                <p className="text-sm text-emerald-700 dark:text-emerald-300 font-medium">{t("crowdsourcedPricesDesc")}</p>
+              </div>
+              <Button className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap">
+                <Plus className="h-4 w-4 mr-2"/> {t("reportPrice")}
+              </Button>
+            </div>
+            
+            {crowdsourcedPrices.map(item => (
+              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="w-full sm:w-auto">
+                  <h4 className="font-black text-lg text-emerald-950 dark:text-emerald-50">{item.crop}</h4>
+                  <p className="text-sm font-bold text-muted-foreground flex items-center gap-1"><MapPin className="h-3 w-3" /> {item.location}</p>
+                </div>
+                <div className="flex w-full sm:w-auto justify-between sm:justify-end gap-6 items-center">
+                  <div className="text-center">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{t("officialPrice")}</p>
+                    <p className="font-bold text-slate-700 dark:text-slate-300">₹{item.official}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">{t("communityPrice")}</p>
+                    <p className="font-black text-emerald-700 dark:text-emerald-400 flex items-center gap-1 justify-center">
+                      ₹{item.reported}
+                      {item.trend === 'up' ? <TrendingUp className="h-4 w-4 text-emerald-500" /> : <TrendingDown className="h-4 w-4 text-red-500" />}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+
+          <TabsContent value="machinery" className="space-y-4">
+            <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-[2rem] border border-amber-100 dark:border-amber-900/50 flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+              <div>
+                <h3 className="font-black text-amber-950 dark:text-amber-50">{t("peerMachinery")}</h3>
+                <p className="text-sm text-amber-700 dark:text-amber-300 font-medium">{t("peerMachineryDesc")}</p>
+              </div>
+              <Button className="rounded-xl font-bold bg-amber-600 hover:bg-amber-700 text-white whitespace-nowrap">
+                <Plus className="h-4 w-4 mr-2"/> {t("listEquipment")}
+              </Button>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              {peerMachinery.map(item => (
+                <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex items-center gap-4">
+                  <div className="h-16 w-16 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center shrink-0">
+                    <TractorIcon className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-black text-emerald-950 dark:text-emerald-50">{item.name}</h4>
+                    <p className="text-xs font-bold text-muted-foreground flex items-center gap-1">
+                      <Users className="h-3 w-3" /> {item.owner} • <MapPin className="h-3 w-3" /> {item.distance}
+                    </p>
+                    <p className="font-black text-emerald-700 dark:text-emerald-400 mt-1">₹{item.price}/{t("day")}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="news" className="space-y-4">
+            {agriNews.map(item => (
+              <div key={item.id} className="bg-white dark:bg-[#0a0f0d] p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900/50 flex gap-4 items-start">
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-blue-600 dark:text-blue-400 shrink-0">
+                  <Newspaper className="h-6 w-6" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">{item.type}</span>
+                    <span className="text-xs font-bold text-muted-foreground">• {item.date}</span>
+                  </div>
+                  <h4 className="font-black text-emerald-950 dark:text-emerald-50 text-lg leading-tight mb-1">{item.title}</h4>
+                  <p className="text-sm font-medium text-emerald-700 dark:text-emerald-300">Source: {item.source}</p>
+                </div>
+              </div>
+            ))}
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

@@ -19,7 +19,20 @@ const t = {
     writeComment: "Write a comment...",
     reply: "Reply",
     deletePost: "Delete Post",
-    noCommentsYet: "No comments yet. Be the first to reply!"
+    noCommentsYet: "No comments yet. Be the first to reply!",
+    discussions: "Discussions",
+    mandiPrices: "Mandi Prices",
+    machinerySharing: "Machinery Sharing",
+    agriNews: "Agri-News",
+    crowdsourcedPrices: "Crowdsourced Prices",
+    crowdsourcedPricesDesc: "Compare official mandi rates with what farmers are actually receiving.",
+    reportPrice: "Report My Sale Price",
+    officialPrice: "Official Price",
+    communityPrice: "Community Price",
+    peerMachinery: "Peer-to-Peer Machinery Sharing",
+    peerMachineryDesc: "Rent directly from farmers near you.",
+    listEquipment: "List My Equipment",
+    day: "day"
   },
   hi: {
     kisanChaupal: "किसान चौपाल",
@@ -35,7 +48,20 @@ const t = {
     writeComment: "टिप्पणी लिखें...",
     reply: "जवाब दें",
     deletePost: "पोस्ट हटाएं",
-    noCommentsYet: "अभी तक कोई टिप्पणी नहीं। जवाब देने वाले पहले व्यक्ति बनें!"
+    noCommentsYet: "अभी तक कोई टिप्पणी नहीं। जवाब देने वाले पहले व्यक्ति बनें!",
+    discussions: "चर्चा",
+    mandiPrices: "मंडी के भाव",
+    machinerySharing: "मशीनरी साझाकरण",
+    agriNews: "कृषि समाचार",
+    crowdsourcedPrices: "क्राउडसोर्स्ड कीमतें",
+    crowdsourcedPricesDesc: "आधिकारिक मंडी दरों की तुलना किसानों को वास्तव में मिलने वाले भाव से करें।",
+    reportPrice: "मेरी बिक्री कीमत दर्ज करें",
+    officialPrice: "आधिकारिक कीमत",
+    communityPrice: "समुदाय की कीमत",
+    peerMachinery: "पीयर-टू-पीयर मशीनरी शेयरिंग",
+    peerMachineryDesc: "अपने आस-पास के किसानों से सीधे किराए पर लें।",
+    listEquipment: "मेरे उपकरण सूचीबद्ध करें",
+    day: "दिन"
   },
   te: {
     kisanChaupal: "కిసాన్ చౌపాల్",
@@ -51,7 +77,20 @@ const t = {
     writeComment: "వ్యాఖ్యను రాయండి...",
     reply: "ప్రత్యుత్తరం ఇవ్వండి",
     deletePost: "పోస్ట్‌ను తొలగించండి",
-    noCommentsYet: "ఇంకా వ్యాఖ్యలు లేవు. మొదట మీరే ప్రత్యుత్తరం ఇవ్వండి!"
+    noCommentsYet: "ఇంకా వ్యాఖ్యలు లేవు. మొదట మీరే ప్రత్యుత్తరం ఇవ్వండి!",
+    discussions: "చర్చలు",
+    mandiPrices: "మండి ధరలు",
+    machinerySharing: "యంత్రాల భాగస్వామ్యం",
+    agriNews: "వ్యవసాయ వార్తలు",
+    crowdsourcedPrices: "సమాజం నుండి ధరలు",
+    crowdsourcedPricesDesc: "అధికారిక మండి ధరలను రైతులు నిజంగా పొందుతున్న ధరలతో పోల్చండి.",
+    reportPrice: "నా అమ్మకపు ధరను నమోదు చేయండి",
+    officialPrice: "అధికారిక ధర",
+    communityPrice: "సమాజం ధర",
+    peerMachinery: "రైతుల మధ్య యంత్రాల భాగస్వామ్యం",
+    peerMachineryDesc: "మీ దగ్గరలోని రైతుల నుండి నేరుగా అద్దెకు తీసుకోండి.",
+    listEquipment: "నా పరికరాలను జాబితా చేయండి",
+    day: "రోజు"
   }
 };
 
