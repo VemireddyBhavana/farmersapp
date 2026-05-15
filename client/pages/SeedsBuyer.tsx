@@ -236,7 +236,6 @@ const SeedsBuyer = () => {
     const { t } = useLanguage();
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const [mobileNumber, setMobileNumber] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [filters, setFilters] = useState({
         season: "All",
@@ -253,17 +252,7 @@ const SeedsBuyer = () => {
         setIsCartOpen(true);
     };
 
-    const handleGetAdvice = () => {
-        if (!/^\d{10}$/.test(mobileNumber)) {
-            toast({
-                title: "Invalid Number",
-                description: "Please enter a valid 10-digit mobile number",
-                variant: "destructive"
-            });
-            return;
-        }
-        navigate(`/whatsapp-bot?phone=${mobileNumber}&initialMessage=true`);
-    };
+
 
     const filteredSeeds = seedsData.filter((seed) => {
         // SEARCH FILTER
@@ -573,42 +562,6 @@ const SeedsBuyer = () => {
                             </div>
                         )}
 
-                        {/* Footer Discovery Banner */}
-                        <section className="bg-emerald-900 rounded-[3rem] p-10 md:p-16 relative overflow-hidden flex flex-col items-center text-center mt-20">
-                            <div className="relative z-10 max-w-2xl space-y-8">
-                                <div className="bg-emerald-500/20 w-fit mx-auto p-4 rounded-3xl backdrop-blur-md border border-emerald-400/20">
-                                    <CheckCircle2 className="h-8 w-8 text-emerald-400" />
-                                </div>
-                                <h2 className="text-4xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter">
-                                    {t("scientificCropIntelligence")}
-                                </h2>
-                                <p className="text-emerald-100/60 text-lg font-medium">
-                                    {t("whatsappRecDesc")}
-                                </p>
-
-                                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto w-full pt-6">
-                                    <Input
-                                        type="tel"
-                                        maxLength={10}
-                                        placeholder={t("mobileNumberPlaceholder")}
-                                        className="h-16 rounded-2xl bg-white/5 border-white/10 text-white placeholder:text-white/40 text-xl px-8 flex-1 focus-visible:ring-emerald-500 transition-all font-black tracking-widest text-center"
-                                        value={mobileNumber}
-                                        onChange={(e) => {
-                                            const val = e.target.value.replace(/\D/g, "");
-                                            if (val.length <= 10) setMobileNumber(val);
-                                        }}
-                                    />
-                                    <Button
-                                        className="h-16 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-lg px-10 shadow-2xl shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
-                                        onClick={handleGetAdvice}
-                                    >
-                                        {t("adviceBtn")}
-                                    </Button>
-                                </div>
-                            </div>
-                            <Leaf className="absolute -bottom-20 -left-20 h-80 w-80 text-emerald-800/20 -rotate-45 pointer-events-none" />
-                            <Sprout className="absolute -top-20 -right-20 h-80 w-80 text-emerald-800/20 rotate-12 pointer-events-none" />
-                        </section>
                     </div>
                 </div>
             </main>
