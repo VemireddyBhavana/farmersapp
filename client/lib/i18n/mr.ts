@@ -2953,4 +2953,13 @@ export const mr = {
     "subsidy_title": "Subsidy Discovery",
     "subsidy_subtitle": "Find every government grant you qualify for",
     "subsidy_reason": "Criteria not met",
+    "diagnosticResult": "Diagnostic Result",
+    "infectionDetected": "Infection Detected",
+    "healthySpecimen": "Healthy Specimen",
+    "cureProcess": "Cure Process",
+    "preventionTips": "Prevention Tips",
+    "diagnoseNewSample": "Diagnose New Sample",
+    "advancedPedologySystem": "Advanced Pedology & Soil Intelligence",
+    "calculateSoilHealth": "Calculate Soil Health",
+    "startAiDiagnosis": "Start AI Diagnosis",
 };
