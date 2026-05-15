@@ -2896,4 +2896,13 @@ export const te = {
     "cultivationTimeline": "సాగు టైమ్‌లైన్",
     "waterManagement": "నీటి నిర్వహణ",
     "fertilizerUse": "ఎరువుల వాడకం",
+    "kisanChaupal": "కిసాన్ చౌపాల్",
+    "communityDescription": "రైతులతో కనెక్ట్ అవ్వండి, నిపుణుల నుండి సమాధానాలు పొందండి.",
+    "createPost": "పోస్ట్ చేయండి",
+    "createNewPost": "కొత్త పోస్ట్ సృష్టించండి",
+    "whatsOnYourMind": "మీరు ఏమి ఆలోచిస్తున్నారు? మీ ప్రశ్నను అడగండి...",
+    "offline": "ఆఫ్‌లైన్",
+    "offlineModeActive": "ఆఫ్‌లైన్ మోడ్ ఆన్‌లో ఉంది",
+    "pendingSync": "సింక్ పెండింగ్",
+    "syncingWithServer": "సర్వర్‌తో సింక్ అవుతోంది...",
 };

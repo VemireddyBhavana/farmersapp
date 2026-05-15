@@ -2896,4 +2896,13 @@ export const hi = {
     "cultivationTimeline": "खेती की समयरेखा",
     "waterManagement": "जल प्रबंधन",
     "fertilizerUse": "उर्वरक उपयोग",
+    "kisanChaupal": "किसान चौपाल",
+    "communityDescription": "किसानों से जुड़ें, अपनी प्रगति साझा करें, और विशेषज्ञों से उत्तर प्राप्त करें।",
+    "createPost": "पोस्ट बनाएं",
+    "createNewPost": "नई पोस्ट बनाएं",
+    "whatsOnYourMind": "आपके मन में क्या है? अपडेट साझा करें, सवाल पूछें...",
+    "offline": "ऑफ़लाइन",
+    "offlineModeActive": "ऑफ़लाइन मोड सक्रिय",
+    "pendingSync": "सिंक लंबित है",
+    "syncingWithServer": "सर्वर से सिंक हो रहा है...",
 };

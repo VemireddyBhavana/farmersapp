@@ -2896,4 +2896,13 @@ export const ml = {
     "cultivationTimeline": "Cultivation Timeline",
     "waterManagement": "Water Management",
     "fertilizerUse": "Fertilizer Use",
+    "kisanChaupal": "Kisan Chaupal",
+    "communityDescription": "Connect with farmers, share your progress, and get answers from verified experts.",
+    "createPost": "Create Post",
+    "createNewPost": "Create a new post",
+    "whatsOnYourMind": "What's on your mind? Share an update, ask a question, or post a success story...",
+    "offline": "Offline",
+    "offlineModeActive": "Offline Mode Active",
+    "pendingSync": "Pending Sync",
+    "syncingWithServer": "Syncing with Server...",
 };
