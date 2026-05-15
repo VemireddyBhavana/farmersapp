@@ -20,10 +20,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "@/lib/LocationContext";
+import { jsPDF } from "jspdf";
+import { useToast } from "@/hooks/use-toast";
+
 
 const SubsidyFinder = () => {
   const { t } = useTranslation();
   const { location } = useLocation();
+  const { toast } = useToast();
+
   const [currentStep, setCurrentStep] = useState(0);
   
   // FARMER DATA
@@ -107,8 +112,19 @@ const SubsidyFinder = () => {
       documents: ["Project Report", "Land Records"],
       icon: <Sprout className="text-lime-600" />,
       url: "https://midh.gov.in/"
+    },
+    {
+      id: "pmfby",
+      name: t("scheme_pmfby"),
+      benefit: "Full Crop Cover",
+      rule: (f: any) => ["Rice", "Wheat", "Maize", "Cotton"].includes(f.crop),
+      reason: "Available for notification major crops in notified areas.",
+      documents: ["Sowing Certificate", "Bank Passbook", "Land Record"],
+      icon: <ShieldIcon className="text-orange-500" />,
+      url: "https://pmfby.gov.in/"
     }
   ];
+
 
   const steps = ["Personal", "Location", "Farm"];
 
@@ -141,6 +157,68 @@ const SubsidyFinder = () => {
     setCurrentStep(0);
     setResults([]);
   };
+
+  const downloadEligibilitySummary = () => {
+    const doc = new jsPDF();
+    const eligible = results.filter(r => r.eligible);
+    
+    // Header
+    doc.setFillColor(16, 185, 129); // Emerald-500
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("SUBSIDY ELIGIBILITY SUMMARY", 105, 25, { align: "center" });
+    
+    // Farmer Info
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(12);
+    doc.text(`Farmer Profile: ${farmer.gender}, ${farmer.category}`, 20, 55);
+    doc.text(`Location: ${farmer.state}`, 20, 62);
+    doc.text(`Land Size: ${farmer.land} Acres`, 20, 69);
+    doc.text(`Current Crop: ${farmer.crop}`, 20, 76);
+    
+    doc.line(20, 85, 190, 85);
+    
+    // Eligible Schemes
+    doc.setFontSize(16);
+    doc.text("Qualified Schemes", 20, 100);
+    
+    let yPos = 115;
+    eligible.forEach((scheme, idx) => {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(`${idx + 1}. ${scheme.name}`, 25, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(16, 185, 129);
+      doc.text(`Benefit: ${scheme.benefit}`, 30, yPos + 7);
+      doc.setTextColor(15, 23, 42);
+      doc.setFontSize(10);
+      doc.text("Required Docs: " + scheme.documents.join(", "), 30, yPos + 14);
+      yPos += 25;
+      
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+    });
+    
+    if (eligible.length === 0) {
+      doc.text("No matching schemes found based on current profile.", 20, 115);
+    }
+    
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(148, 163, 184);
+    doc.text("Disclaimer: This is an advisory summary. Final eligibility is determined by the respective government portals.", 105, 285, { align: "center" });
+    
+    doc.save("Subsidy_Eligibility_Summary.pdf");
+    toast({
+      title: "Summary Downloaded",
+      description: "Your eligibility report is ready.",
+    });
+  };
+
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans p-4 md:p-10 pb-32">
@@ -221,7 +299,7 @@ const SubsidyFinder = () => {
                              <button
                                key={c}
                                onClick={() => setFarmer({...farmer, category: c})}
-                               className={`p-4 rounded-2xl font-black transition-all border-2 ${farmer.category === c ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100"}`}
+                               className={`p-4 rounded-2xl font-black transition-all border-2 ${farmer.category === c ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
                              >
                                {c}
                              </button>
@@ -251,7 +329,7 @@ const SubsidyFinder = () => {
                             className={`p-4 rounded-2xl font-bold text-left transition-all border-2 flex justify-between items-center ${
                               farmer.state === s 
                               ? "bg-emerald-600 text-white border-emerald-600 shadow-md" 
-                              : "bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-200"
+                              : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-slate-200 dark:hover:border-slate-600"
                             }`}
                           >
                             {s}
@@ -288,12 +366,13 @@ const SubsidyFinder = () => {
 
                       <div className="space-y-4">
                         <label className="text-xs font-black uppercase text-slate-400 tracking-widest">{t('cropSelection')}</label>
+                        <label className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest">{t('cropSelection')}</label>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                           {["Rice", "Wheat", "Cotton", "Maize", "Horticulture"].map(c => (
                             <button
                               key={c}
                               onClick={() => setFarmer({...farmer, crop: c})}
-                              className={`p-3 rounded-xl font-bold transition-all border-2 text-sm ${farmer.crop === c ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-100"}`}
+                              className={`p-3 rounded-xl font-bold transition-all border-2 text-sm ${farmer.crop === c ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
                             >
                               {t(c.toLowerCase()) || c}
                             </button>
@@ -302,13 +381,13 @@ const SubsidyFinder = () => {
                       </div>
 
                       <div className="space-y-4">
-                        <label className="text-xs font-black uppercase text-slate-400 tracking-widest">{t('irrigationLabel')}</label>
+                        <label className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-widest">{t('irrigationLabel')}</label>
                         <div className="grid grid-cols-3 gap-3">
                           {["Borewell", "Canal", "Rain-fed"].map(i => (
                             <button
                               key={i}
                               onClick={() => setFarmer({...farmer, irrigation: i})}
-                              className={`p-3 rounded-xl font-bold transition-all border-2 text-xs ${farmer.irrigation === i ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 border-slate-100 text-slate-500 hover:border-slate-100"}`}
+                              className={`p-3 rounded-xl font-bold transition-all border-2 text-xs ${farmer.irrigation === i ? "bg-emerald-600 text-white border-emerald-600 shadow-lg" : "bg-slate-50 dark:bg-slate-800 border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
                             >
                               {t(i.toLowerCase().replace('-', '_')) || i}
                             </button>
@@ -354,7 +433,7 @@ const SubsidyFinder = () => {
             className="max-w-6xl mx-auto space-y-12"
           >
             <div className="text-center space-y-4">
-               <h2 className="text-5xl font-black text-slate-900 tracking-tight">{t('subsidy_results_title')}</h2>
+               <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight">{t('subsidy_results_title')}</h2>
                <div className="flex flex-wrap justify-center gap-2">
                  {[farmer.state, farmer.gender, farmer.category, `${farmer.land} Acres`].map((tag, idx) => (
                    <span key={idx} className="bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border border-emerald-100">
@@ -364,6 +443,12 @@ const SubsidyFinder = () => {
                </div>
                <Button variant="ghost" onClick={reset} className="font-black uppercase text-xs tracking-widest text-emerald-600 hover:bg-emerald-50">
                  {t("startOver")}
+               </Button>
+               <Button 
+                 onClick={downloadEligibilitySummary}
+                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest ml-4 shadow-lg shadow-emerald-600/20"
+               >
+                 <FileText className="mr-2 h-4 w-4" /> Download Summary
                </Button>
             </div>
 

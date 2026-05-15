@@ -46,6 +46,7 @@ const AgriLoanCalculator = () => {
   const [tenure, setTenure] = useState(36);
   const [loanType, setLoanType] = useState<"kcc" | "tractor" | "solar" | "custom">("kcc");
   const [isSubsidyActive, setIsSubsidyActive] = useState(true);
+  const [extraPayment, setExtraPayment] = useState(0);
   
   // UI State
   const [activeTab, setActiveTab] = useState<"summary" | "timeline">("summary");
@@ -66,16 +67,22 @@ const AgriLoanCalculator = () => {
     const n = tenure;
     
     const emi = r === 0 ? P / n : (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-    const totalPayment = emi * n;
-    const totalInterest = totalPayment - P;
+    const totalPaymentNominal = emi * n;
     
-    // Generate Amortization Data
+    // Generate Amortization Data with Extra Payment Support
     const timeline = [];
     let remainingBalance = P;
-    for (let i = 1; i <= n; i++) {
+    let totalInterest = 0;
+    let actualTenure = 0;
+    
+    for (let i = 1; i <= 360; i++) { // Support up to 30 years for safety
         const interestPaid = remainingBalance * r;
-        const principalPaid = emi - interestPaid;
+        const totalMonthlyPayment = emi + extraPayment;
+        const principalPaid = Math.min(remainingBalance, totalMonthlyPayment - interestPaid);
+        
         remainingBalance = Math.max(0, remainingBalance - principalPaid);
+        totalInterest += interestPaid;
+        actualTenure = i;
         
         timeline.push({
             month: i,
@@ -83,19 +90,25 @@ const AgriLoanCalculator = () => {
             principal: Math.round(principalPaid),
             interest: Math.round(interestPaid)
         });
+
+        if (remainingBalance <= 0) break;
     }
+
+    const totalPaymentActual = P + totalInterest;
 
     return {
       emi: Math.round(emi),
       totalInterest: Math.round(totalInterest),
-      totalPayment: Math.round(totalPayment),
+      totalPayment: Math.round(totalPaymentActual),
+      actualTenure,
+      timeSaved: n - actualTenure,
       timeline,
       chartData: [
         { name: 'Principal', value: P, color: '#10b981' },
         { name: 'Interest', value: Math.round(totalInterest), color: '#f59e0b' }
       ]
     };
-  }, [amount, effectiveInterest, tenure]);
+  }, [amount, effectiveInterest, tenure, extraPayment]);
 
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -128,6 +141,78 @@ const AgriLoanCalculator = () => {
     }
   };
 
+  const exportAmortizationPDF = () => {
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFillColor(15, 23, 42); // Slate-900
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.text("KisanAI Finance Report", 20, 25);
+    doc.setFontSize(10);
+    doc.text("Agri-Intelligence Financial Intelligence Suite", 20, 32);
+    
+    // Loan Summary
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(16);
+    doc.text("Loan Amortization Summary", 20, 55);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const summary = [
+      ["Principal Amount", formatCurrency(amount)],
+      ["Interest Rate", `${effectiveInterest.toFixed(1)}%`],
+      ["Loan Tenure", `${tenure} Months`],
+      ["Monthly EMI", formatCurrency(financialData.emi)],
+      ["Extra Monthly Payment", formatCurrency(extraPayment)],
+      ["Total Interest Payable", formatCurrency(financialData.totalInterest)],
+      ["Total Amount Payable", formatCurrency(financialData.totalPayment)],
+      ["Actual Tenure", `${financialData.actualTenure} Months`],
+      ["Time Saved", `${financialData.timeSaved} Months`]
+    ];
+    
+    let y = 70;
+    summary.forEach(([label, val]) => {
+      doc.text(label, 20, y);
+      doc.setFont("helvetica", "bold");
+      doc.text(val, 120, y);
+      doc.setFont("helvetica", "normal");
+      y += 8;
+    });
+    
+    doc.line(20, y + 5, 190, y + 5);
+    
+    // Schedule Table
+    y += 15;
+    doc.setFont("helvetica", "bold");
+    doc.text("Month", 20, y);
+    doc.text("Principal", 50, y);
+    doc.text("Interest", 90, y);
+    doc.text("Balance", 130, y);
+    doc.setFont("helvetica", "normal");
+    
+    y += 10;
+    financialData.timeline.forEach((row, i) => {
+      if (y > 270) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.text(row.month.toString(), 20, y);
+      doc.text(formatCurrency(row.principal), 50, y);
+      doc.text(formatCurrency(row.interest), 90, y);
+      doc.text(formatCurrency(row.balance), 130, y);
+      y += 8;
+    });
+    
+    doc.save(`KisanAI_Loan_Report_${Date.now()}.pdf`);
+    toast({
+        title: "Financial Report Generated",
+        description: "Your detailed amortization schedule has been saved."
+    });
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-20 pb-12 overflow-x-hidden">
       <div className="container mx-auto px-4">
@@ -137,14 +222,14 @@ const AgriLoanCalculator = () => {
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-widest italic border border-emerald-500/20">
                     <ShieldCheck className="h-4 w-4" /> {t("nabardRecognized")}
                 </div>
-                <h1 className="text-6xl lg:text-8xl font-black tracking-tight text-slate-800 dark:text-white uppercase italic leading-[0.85]">
+                <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight text-slate-800 dark:text-white uppercase italic leading-[0.85]">
                    {t("financialIntelligence")} <br /><span className="text-emerald-500">{t("financialIntelligenceHighlight")}</span>
                 </h1>
             </div>
             <div className="text-right">
                 <p className="text-sm font-black text-slate-400 uppercase tracking-[0.3em] mb-4">{t("effectiveApr")}</p>
-                <div className="text-6xl font-black text-slate-900 dark:text-white italic tracking-tighter flex items-center justify-end gap-2">
-                    {effectiveInterest.toFixed(1)}% <Percent className="h-8 w-8 text-emerald-500" />
+                <div className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white italic tracking-tighter flex items-center justify-end gap-2">
+                    {effectiveInterest.toFixed(1)}% <Percent className="h-6 w-6 md:h-8 md:w-8 text-emerald-500" />
                 </div>
             </div>
         </div>
@@ -242,6 +327,20 @@ const AgriLoanCalculator = () => {
                         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isSubsidyActive ? "left-7" : "left-1"}`} />
                      </div>
                   </div>
+
+                   {/* Pre-payment Simulator */}
+                   <div className="space-y-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex justify-between items-center">
+                         <Label className="text-[11px] font-black uppercase tracking-widest text-emerald-600 italic">Pre-payment Simulator</Label>
+                         <span className="text-xl font-black text-emerald-600 italic uppercase tracking-tighter">+{formatCurrency(extraPayment)} / mo</span>
+                      </div>
+                      <input 
+                        type="range" min="0" max="50000" step="500"
+                        value={extraPayment} onChange={(e) => setExtraPayment(Number(e.target.value))}
+                        className="w-full h-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-full appearance-none cursor-pointer accent-emerald-600"
+                      />
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest text-center italic">Paying extra reduces interest & tenure</p>
+                   </div>
                </div>
             </Card>
           </div>
@@ -260,8 +359,13 @@ const AgriLoanCalculator = () => {
                      </div>
                      <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400 italic">{t("projectedMonthlyEmi")}</span>
                   </div>
-                  <h4 className="text-7xl font-black italic tracking-tighter leading-none mb-4">{formatCurrency(financialData.emi)}</h4>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-10">{t("totalCommitment")}: {formatCurrency(financialData.totalPayment)}</p>
+                  <h4 className="text-5xl md:text-7xl font-black italic tracking-tighter leading-none mb-4 text-white">{formatCurrency(financialData.emi + extraPayment)}</h4>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-10">
+                    {t("totalCommitment")}: {formatCurrency(financialData.totalPayment)}
+                    {financialData.timeSaved > 0 && (
+                        <span className="text-emerald-400 ml-2 italic">({financialData.timeSaved} {t("monthsSaved")}!)</span>
+                    )}
+                  </p>
                   <Button className="w-full bg-white hover:bg-emerald-500 hover:text-white text-slate-900 h-16 rounded-[2rem] font-black uppercase tracking-widest italic text-xs transition-all flex items-center justify-center gap-3">
                      {t("finalizeLoanPackage")} <ArrowUpRight className="h-5 w-5" />
                   </Button>
@@ -342,7 +446,7 @@ const AgriLoanCalculator = () => {
                              <XAxis dataKey="month" hide />
                              <YAxis hide />
                              <RechartsTooltip />
-                             <Area type="monotone" dataKey="balance" stroke="#10b981" fillOpacity={1} fill="url(#colorBal)" strokeWidth={4} />
+                             <Area type="monotone" dataKey="balance" stroke="#10b981" fillOpacity={1} fill="url(#colorBal)" strokeWidth={4} isAnimationActive={false} />
                           </AreaChart>
                        </ResponsiveContainer>
                     </Card>
@@ -357,7 +461,10 @@ const AgriLoanCalculator = () => {
                     <Card className="p-8 rounded-[4rem] border-none shadow-xl bg-white dark:bg-slate-900 h-[400px] scrollbar-hide overflow-y-auto">
                        <div className="flex justify-between items-center mb-8 sticky top-0 bg-white dark:bg-slate-900 py-2 z-10">
                           <h4 className="text-xl font-black italic uppercase tracking-tighter">{t("fullPaymentSchedule")}</h4>
-                          <Button variant="ghost" size="sm" className="rounded-xl border border-slate-100 h-10 px-4 text-[10px] font-black italic uppercase italic tracking-widest">
+                          <Button 
+                             onClick={exportAmortizationPDF}
+                             variant="ghost" size="sm" className="rounded-xl border border-slate-100 h-10 px-4 text-[10px] font-black italic uppercase italic tracking-widest"
+                           >
                              <Download className="h-4 w-4 mr-2" /> {t("exportPdf")}
                           </Button>
                        </div>

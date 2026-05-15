@@ -86,10 +86,10 @@ export default function Dashboard() {
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-card/10 text-primary-foreground/90 rounded text-xs font-semibold tracking-wider uppercase border border-white/20">
                   <HeartHandshake className="w-4 h-4" /> {t('empoweringFarmers')}
                 </div>
-                <h2 className="text-4xl font-extrabold leading-tight">
+                <h2 className="text-3xl md:text-4xl font-extrabold leading-tight">
                   {t('nationalAgriPortal')}, {user?.username || t("farmer")}
                 </h2>
-                <p className="text-lg text-primary-foreground/80 max-w-lg leading-relaxed border-l-2 border-primary-foreground/40 pl-4 mt-2">
+                <p className="text-base md:text-lg text-primary-foreground/80 max-w-lg leading-relaxed border-l-2 border-primary-foreground/40 pl-4 mt-2">
                   {t('dashboardDesc')}
                 </p>
                 <div className="flex gap-4 pt-6">

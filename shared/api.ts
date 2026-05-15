@@ -8,6 +8,8 @@ export interface LocationData {
   country: string;
   state: string;
   district: string;
+  lat?: number;
+  lng?: number;
 }
 
 /**
