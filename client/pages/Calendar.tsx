@@ -246,7 +246,7 @@ export default function FarmingCalendar() {
           <div className="pr-4">
             <p className="text-[10px] font-black uppercase text-muted-foreground">Select Research Crop</p>
             <Select value={selectedCropKey} onValueChange={setSelectedCropKey}>
-              <SelectTrigger className="border-none bg-transparent h-auto p-0 text-lg font-bold shadow-none focus:ring-0">
+              <SelectTrigger className="border-none bg-transparent h-auto p-0 text-lg font-bold shadow-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none focus:outline-none data-[state=open]:outline-none">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="rounded-2xl border-emerald-100 shadow-2xl">
