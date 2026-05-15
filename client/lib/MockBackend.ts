@@ -72,7 +72,24 @@ class MockBackend {
 
   constructor() {
     const savedApps = localStorage.getItem("teachspark_apps");
-    if (savedApps) this.applications = JSON.parse(savedApps);
+    if (savedApps) {
+      this.applications = JSON.parse(savedApps);
+    } else {
+      // Seed initial data for demonstration if no apps exist
+      this.applications = [
+        {
+          id: "APP-PMK-772",
+          schemeName: "PM-Kisan Samman Nidhi",
+          status: "Approved",
+          date: "10/05/2026",
+          userId: "demo_user", // This will be filtered out unless we know the user ID
+          beneficiaryName: "Kisan Suvidha User",
+          location: "Anantapur, AP",
+          verificationStep: "Payment Disbursed"
+        }
+      ];
+      this.save();
+    }
 
     const savedBookings = localStorage.getItem("teachspark_bookings");
     if (savedBookings) this.bookings = JSON.parse(savedBookings);
@@ -92,7 +109,26 @@ class MockBackend {
   }
 
   getApplications(userId: string) {
-    return this.applications.filter(app => app.userId === userId);
+    // If no applications for this user, we can optionally return the seed one for demo purposes
+    const userApps = this.applications.filter(app => app.userId === userId);
+    if (userApps.length === 0 && userId) {
+      // Create a demo app for this specific user so they see something
+      const demoApp: Application = {
+        id: "APP-PMK-DEMO",
+        schemeName: "PM-Kisan Samman Nidhi",
+        status: "Approved",
+        date: new Date(Date.now() - 86400000 * 5).toLocaleDateString(),
+        userId: userId,
+        beneficiaryName: "Kisan Suvidha User",
+        location: "Anantapur, AP",
+        verificationStep: "Payment Disbursed Successfully",
+        // We can simulate steps in the UI based on status
+      };
+      this.applications.push(demoApp);
+      this.save();
+      return [demoApp];
+    }
+    return userApps;
   }
 
   addApplication(app: Omit<Application, "id" | "date" | "status" | "beneficiaryName" | "location" | "verificationStep">) {

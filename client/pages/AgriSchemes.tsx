@@ -84,8 +84,18 @@ export default function AgriSchemes() {
     setIsTrackModalOpen(true);
   };
 
-  const handleApplyClick = (url: string) => {
+  const handleApplyClick = (url: string, schemeName: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
+    if (user) {
+      backend.addApplication({
+        schemeName: schemeName,
+        userId: user.phone
+      });
+      toast({
+        title: t("applicationTracked") || "Application Tracked!",
+        description: t("applicationTrackedDesc") || `Your application for ${schemeName} is now being tracked in the portal.`,
+      });
+    }
   };
 
   const handleLocate = () => {
@@ -195,7 +205,7 @@ export default function AgriSchemes() {
                         </div>
                         <div className="flex gap-3 pt-4">
                           <Button
-                            onClick={() => handleApplyClick(scheme.url)}
+                            onClick={() => handleApplyClick(scheme.url, t(scheme.nameKey))}
                             className="flex-1 rounded-2xl py-6 h-auto font-black shadow-lg shadow-primary/20"
                           >
                             {t("applyNow")}
@@ -204,7 +214,7 @@ export default function AgriSchemes() {
                             variant="outline"
                             size="icon"
                             className="rounded-2xl h-14 w-14 border-primary/10 hover:bg-primary/5 transition-all group-hover:translate-x-1"
-                            onClick={() => handleApplyClick(scheme.url)}
+                            onClick={() => handleApplyClick(scheme.url, t(scheme.nameKey))}
                           >
                             <ExternalLink className="h-6 w-6 text-primary" />
                           </Button>
@@ -271,7 +281,7 @@ export default function AgriSchemes() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-6">
+          <div className="space-y-6 py-6">
             {userApps.length === 0 ? (
               <div className="text-center py-16 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border-2 border-dashed border-slate-100 dark:border-slate-800">
                 <ScrollText className="h-16 w-16 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
@@ -279,42 +289,112 @@ export default function AgriSchemes() {
                 <p className="text-slate-400 text-[10px] font-bold uppercase tracking-tight mt-2">Check back after submitting a scheme application</p>
               </div>
             ) : (
-              userApps.map((app) => (
-                <div key={app.id} className="p-6 rounded-[1.5rem] bg-white border border-primary/5 shadow-sm space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-black text-lg text-slate-900 dark:text-white">{app.schemeName}</h4>
-                      <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t("appId")}: {app.id}</p>
+              <div className="grid gap-6">
+                {userApps.map((app) => (
+                  <motion.div 
+                    key={app.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="p-8 rounded-[2.5rem] bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-700/50 space-y-6"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                           <Badge variant="outline" className="rounded-full border-primary/20 text-primary font-black text-[9px] uppercase tracking-tighter">
+                            {app.id}
+                          </Badge>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{app.date}</span>
+                        </div>
+                        <h4 className="font-black text-xl text-slate-900 dark:text-white">{app.schemeName}</h4>
+                      </div>
+                      <Badge className={cn(
+                        "rounded-full px-4 py-1.5 font-black text-[10px] uppercase tracking-widest",
+                        app.status === "Pending" ? "bg-amber-100 text-amber-700" : 
+                        app.status === "Approved" ? "bg-emerald-100 text-emerald-700" : 
+                        "bg-rose-100 text-rose-700"
+                      )}>
+                        {app.status}
+                      </Badge>
                     </div>
-                    <Badge className={cn(
-                      "rounded-full px-3 py-1",
-                      app.status === "Pending" ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"
-                    )}>
-                      {app.status}
-                    </Badge>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-2">
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("beneficiary") || "Beneficiary"}</p>
-                      <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.beneficiaryName}</p>
+                    {/* Vertical Timeline Status */}
+                    <div className="space-y-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("applicationStatus") || "Application Status"}</p>
+                       
+                       <div className="space-y-8 relative before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100 dark:before:bg-slate-800">
+                          {[
+                            { 
+                              title: "Application Submitted", 
+                              date: app.date, 
+                              desc: "Your application has been received and is in the queue for processing.",
+                              done: true,
+                              active: app.status === "Pending" && app.verificationStep === "Document Verification"
+                            },
+                            { 
+                              title: "Document Verification", 
+                              date: app.status !== "Pending" ? "Verified" : "In Progress", 
+                              desc: "Official verification of your uploaded documents and land records.",
+                              done: app.status !== "Pending" || app.verificationStep !== "Document Verification",
+                              active: app.status === "Pending" && app.verificationStep !== "Document Verification"
+                            },
+                            { 
+                              title: "Field Inspection", 
+                              date: app.status === "Approved" ? "Completed" : "Pending", 
+                              desc: "Verification by local agricultural officer at your farm location.",
+                              done: app.status === "Approved",
+                              active: app.status === "Pending" && app.verificationStep.includes("Inspection")
+                            },
+                            { 
+                              title: app.status === "Approved" ? "Approval Issued" : "Final Decision", 
+                              date: app.status === "Approved" ? "Done" : "Waiting", 
+                              desc: app.status === "Approved" ? "Your application has been officially approved for the scheme benefits." : "Final evaluation by the department head.",
+                              done: app.status === "Approved",
+                              active: app.status === "Approved"
+                            }
+                          ].map((step, i) => (
+                            <div key={i} className="relative pl-8 group">
+                              <div className={cn(
+                                "absolute left-0 top-1.5 h-4 w-4 rounded-full border-2 z-10 transition-all duration-500",
+                                step.done ? "bg-primary border-primary scale-110 shadow-lg shadow-primary/20" : "bg-white dark:bg-slate-900 border-slate-300",
+                                step.active && "animate-pulse ring-4 ring-primary/20"
+                              )} />
+                              <div className="space-y-1">
+                                <div className="flex justify-between items-center">
+                                  <h5 className={cn(
+                                    "font-black text-sm",
+                                    step.done ? "text-slate-900 dark:text-white" : "text-slate-400"
+                                  )}>{step.title}</h5>
+                                  <span className="text-[10px] font-bold text-primary px-2 py-0.5 rounded-full bg-primary/5">{step.date}</span>
+                                </div>
+                                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                                  {step.desc}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                       </div>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("location") || "Location"}</p>
-                      <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.location}</p>
-                    </div>
-                    <div className="space-y-1 col-span-2">
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{t("verificationStatus")}</p>
-                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{app.verificationStep}</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-2 text-xs font-bold text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
-                    <Calendar className="h-3 w-3" />
-                    {t("date")}: {app.date}
-                  </div>
-                </div>
-              ))
+                    <div className="grid grid-cols-2 gap-6 p-4 rounded-2xl bg-white dark:bg-slate-900/50 border border-slate-100 dark:border-slate-700/50">
+                      <div className="space-y-1">
+                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">{t("beneficiary") || "Beneficiary"}</p>
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.beneficiaryName}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">{t("location") || "Location"}</p>
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{app.location}</p>
+                      </div>
+                      <div className="space-y-1 col-span-2">
+                        <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">{t("currentStep") || "Current Step"}</p>
+                        <div className="flex items-center gap-2">
+                          <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 italic">{app.verificationStep}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             )}
           </div>
         </DialogContent>

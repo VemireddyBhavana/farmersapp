@@ -23,6 +23,7 @@ import { handleSoilAnalyze } from "./routes/soil";
 import { handleExpertConsult, handleSmartAssistant } from "./routes/assistant";
 import { handleYieldPredict, handleYieldHistory } from "./routes/yield";
 import { handleSaveHistory, handleGetHistory } from "./routes/history";
+import { handleAI, handleInterviewFeedback } from "./routes/ai";
 
 export function createServer() {
   const app = express();
@@ -66,6 +67,8 @@ export function createServer() {
   // Assistant & Expert Modules
   app.post("/api/expert-consult", handleExpertConsult);
   app.post("/api/smart-assistant", handleSmartAssistant);
+  app.post("/api/ai", handleAI);
+  app.post("/api/interview-feedback", handleInterviewFeedback);
 
   // Yield Prediction Module
   app.post("/api/predict", handleYieldPredict); // Matches frontend path
