@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FiMenu, FiSearch, FiSun, FiShare2, FiTarget, FiPlay, FiPause, FiChevronRight, FiMessageCircle, FiCloud, FiCloudLightning, FiGlobe, FiTrendingUp, FiThermometer, FiX } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { FiMenu, FiSearch, FiSun, FiShare2, FiTarget, FiPlay, FiPause, FiChevronRight, FiMessageCircle, FiCloud, FiCloudLightning, FiGlobe, FiTrendingUp, FiThermometer, FiX, FiCopy, FiCheck, FiWind, FiDroplet, FiAlertTriangle, FiInfo, FiBookOpen } from "react-icons/fi";
+import { toast } from "sonner";
 
 interface CityWeatherData {
   name: string;
@@ -107,6 +109,15 @@ const Weather: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Hyderabad");
+  const navigate = useNavigate();
+
+  // Premium Interactions State Hooks
+  const [radarOverlay, setRadarOverlay] = useState<"weather" | "rain" | "wind" | "lightning">("weather");
+  const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
+  const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isDetailedForecastOpen, setIsDetailedForecastOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   
   // Radar state controls
   const [radarTime, setRadarTime] = useState<"now" | "today" | "tomorrow">("now");
@@ -236,21 +247,21 @@ const Weather: React.FC = () => {
            </div>
            <div className="flex-1 overflow-y-auto py-2">
               <ul className="flex flex-col text-slate-700 font-medium text-sm">
-                 <li onClick={() => { setIsDrawerOpen(false); setSelectedCity("Hyderabad"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-[#ffcc00] bg-slate-50 text-[#126b8e]">Home</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">WeatherRadar</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">RainRadar</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">TemperatureRadar</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">WindRadar</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">LightningRadar</li>
-                 <div className="my-2 border-t border-slate-200"></div>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather News</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Editor's Pick</li>
-                 <div className="my-2 border-t border-slate-200"></div>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent text-[#126b8e] font-bold">Discover the app</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather widget</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Contact us</li>
-                 <li onClick={() => setIsDrawerOpen(false)} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Apps</li>
+                  <li onClick={() => { setIsDrawerOpen(false); navigate("/dashboard"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-[#ffcc00] bg-slate-50 text-[#126b8e]">Home</li>
+                  <li onClick={() => { setIsDrawerOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather</li>
+                  <li onClick={() => { setIsDrawerOpen(false); setRadarOverlay("weather"); document.getElementById("weather-radar-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">WeatherRadar</li>
+                  <li onClick={() => { setIsDrawerOpen(false); setRadarOverlay("rain"); document.getElementById("weather-radar-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">RainRadar</li>
+                  <li onClick={() => { setIsDrawerOpen(false); document.getElementById("temp-radar-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">TemperatureRadar</li>
+                  <li onClick={() => { setIsDrawerOpen(false); setRadarOverlay("wind"); document.getElementById("weather-radar-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">WindRadar</li>
+                  <li onClick={() => { setIsDrawerOpen(false); setRadarOverlay("lightning"); document.getElementById("weather-radar-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">LightningRadar</li>
+                  <div className="my-2 border-t border-slate-200"></div>
+                  <li onClick={() => { setIsDrawerOpen(false); document.getElementById("news-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather News</li>
+                  <li onClick={() => { setIsDrawerOpen(false); document.getElementById("news-section")?.scrollIntoView({ behavior: "smooth" }); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">{"Editor's Pick"}</li>
+                  <div className="my-2 border-t border-slate-200"></div>
+                  <li onClick={() => { setIsDrawerOpen(false); navigate("/explore"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent text-[#126b8e] font-bold">Discover the app</li>
+                  <li onClick={() => { setIsDrawerOpen(false); navigate("/explore"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Weather widget</li>
+                  <li onClick={() => { setIsDrawerOpen(false); navigate("/contact"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Contact us</li>
+                  <li onClick={() => { setIsDrawerOpen(false); navigate("/explore"); }} className="px-6 py-3 hover:bg-slate-100 cursor-pointer border-l-4 border-transparent">Apps</li>
               </ul>
            </div>
         </div>
@@ -301,7 +312,7 @@ const Weather: React.FC = () => {
       {/* Content Below Cards */}
       <div className="container mx-auto px-2 py-2 max-w-5xl space-y-4 pb-8">
         {/* Rain and Hails Card */}
-        <div className="w-full rounded-md overflow-hidden relative h-40 md:h-48 shadow-md flex cursor-pointer hover:shadow-lg transition-shadow">
+        <div onClick={() => setIsSafetyModalOpen(true)} className="w-full rounded-md overflow-hidden relative h-40 md:h-48 shadow-md flex cursor-pointer hover:shadow-lg transition-shadow">
             <div className="w-1/3 bg-[#175b82] p-4 md:p-6 flex flex-col justify-center">
                <div className="text-[#ffcc00] text-sm md:text-base font-medium mb-2">Rain and Hails</div>
                <div className="text-white text-xl md:text-3xl font-medium leading-tight">Hailstorm Safety<br/>Guide</div>
@@ -315,83 +326,152 @@ const Weather: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-4">
            {/* WeatherRadar (Left Column) */}
            <div className="md:col-span-2 flex flex-col gap-2">
-              <div className="bg-[#126b8e] text-white rounded-md overflow-hidden shadow-md flex flex-col h-72">
-                 {/* Header */}
-                 <div className="px-3 py-2 flex items-center justify-between text-sm font-semibold">
-                    <div className="flex items-center gap-2">
-                       <FiTarget className="text-[#ffcc00] text-lg" />
-                       <span>WeatherRadar ({currentCityData.name})</span>
-                    </div>
-                    <FiShare2 className="text-white hover:text-white/80 cursor-pointer" />
-                 </div>
-                 {/* Map Area */}
-                 <div className="flex-1 bg-green-800 relative w-full h-full border-t border-[#0f5a7a]">
-                    <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800" alt="Map background" className="w-full h-full object-cover opacity-60" />
-                    
-                    {/* Simulated live radar overlays */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                       {/* Animated Radar Sweep */}
-                       {isRadarPlaying && (
-                         <div className="absolute inset-0 bg-blue-500/10 animate-pulse transition-all duration-300"></div>
-                       )}
+              <div id="weather-radar-section" className="bg-[#126b8e] text-white rounded-md overflow-hidden shadow-md flex flex-col h-80 relative">
+                  {/* Header */}
+                  <div className="px-3 py-2 bg-[#0f5a7a] flex flex-col sm:flex-row gap-2 items-center justify-between text-xs border-b border-[#0d4f6a] relative z-20">
+                     <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-slate-100">
+                        <FiTarget className="text-[#ffcc00] text-sm animate-pulse" />
+                        <span>Interactive WeatherSphere ({radarOverlay})</span>
+                     </div>
+                     <div className="flex bg-[#126b8e] p-0.5 rounded border border-[#0d4f6a] text-[10px] font-bold">
+                        <button 
+                          onClick={() => { setRadarOverlay("weather"); toast.success("Weather overlay active."); }} 
+                          className={`px-2.5 py-1 rounded-sm cursor-pointer transition-colors ${radarOverlay === "weather" ? 'bg-[#ffcc00] text-slate-800' : 'text-white hover:bg-[#1a7f9c]'}`}
+                        >
+                           Weather
+                        </button>
+                        <button 
+                          onClick={() => { setRadarOverlay("rain"); toast.success("Rain overlay active."); }} 
+                          className={`px-2.5 py-1 rounded-sm cursor-pointer transition-colors ${radarOverlay === "rain" ? 'bg-[#ffcc00] text-slate-800' : 'text-white hover:bg-[#1a7f9c]'}`}
+                        >
+                           Rain
+                        </button>
+                        <button 
+                          onClick={() => { setRadarOverlay("wind"); toast.success("Wind overlay active."); }} 
+                          className={`px-2.5 py-1 rounded-sm cursor-pointer transition-colors ${radarOverlay === "wind" ? 'bg-[#ffcc00] text-slate-800' : 'text-white hover:bg-[#1a7f9c]'}`}
+                        >
+                           Wind
+                        </button>
+                        <button 
+                          onClick={() => { setRadarOverlay("lightning"); toast.success("Lightning overlay active."); }} 
+                          className={`px-2.5 py-1 rounded-sm cursor-pointer transition-colors ${radarOverlay === "lightning" ? 'bg-[#ffcc00] text-slate-800' : 'text-white hover:bg-[#1a7f9c]'}`}
+                        >
+                           Lightning
+                        </button>
+                     </div>
+                     <button onClick={() => { setIsShareModalOpen(true); toast.info("Opening weather sharing widget."); }} className="text-white hover:text-[#ffcc00] transition-colors cursor-pointer bg-white/10 p-1.5 rounded-full">
+                        <FiShare2 className="text-sm" />
+                     </button>
+                  </div>
+                  {/* Map Area */}
+                  <div className="flex-1 bg-green-800 relative w-full h-full border-t border-[#0f5a7a]">
+                     <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800" alt="Map background" className="w-full h-full object-cover opacity-60" />
+                     
+                     {/* Simulated live radar overlays */}
+                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        {/* Animated Radar Sweep */}
+                        {isRadarPlaying && (
+                          <div className="absolute inset-0 bg-blue-500/10 animate-pulse transition-all duration-300"></div>
+                        )}
 
-                       {/* Pins with dynamic shifts and increments when playing */}
-                       <div className="absolute top-1/4 left-1/4 flex flex-col items-center transition-all duration-500" style={{ transform: `translate(${timeOffset}px, ${-timeOffset}px)` }}>
-                          <span className="text-white text-[10px] font-bold drop-shadow-md">Dubai</span>
-                          <span className="text-red-500 text-[10px] font-bold drop-shadow-md">{37 + (radarTime === "now" ? 0 : radarTime === "today" ? 1 : 2)}</span>
-                          <FiSun className="text-[#ffcc00] text-2xl drop-shadow-lg" />
-                       </div>
-                       
-                       <div className="absolute top-1/2 left-1/3 flex flex-col items-center transition-all duration-500" style={{ transform: `translate(${-timeOffset}px, ${timeOffset}px)` }}>
-                          <span className="text-white text-[10px] font-bold drop-shadow-md">Mumbai</span>
-                          <span className="text-red-500 text-[10px] font-bold drop-shadow-md">{34 + (radarTime === "now" ? 0 : radarTime === "today" ? 0 : 1)}</span>
-                          <FiSun className="text-[#ffcc00] text-3xl drop-shadow-lg" />
-                       </div>
-                       
-                       <div className="absolute top-1/3 right-1/2 flex flex-col items-center transition-all duration-500" style={{ transform: `translate(${timeOffset / 2}px, ${timeOffset / 2}px)` }}>
-                          <span className="text-white text-[10px] font-bold drop-shadow-md">New Delhi</span>
-                          <span className="text-red-500 text-[10px] font-bold drop-shadow-md">{38 + (radarTime === "now" ? 0 : radarTime === "today" ? 2 : 4)}</span>
-                          <FiSun className="text-[#ffcc00] text-2xl drop-shadow-lg" />
-                       </div>
-                    </div>
-                    
-                    {/* Bottom Controls */}
-                    <div className="absolute bottom-2 left-2 flex gap-1">
-                       <button onClick={() => setRadarTime("now")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors ${radarTime === "now" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>now</button>
-                       <button onClick={() => setRadarTime("today")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors ${radarTime === "today" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>today</button>
-                       <button onClick={() => setRadarTime("tomorrow")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors ${radarTime === "tomorrow" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>tomorrow</button>
-                    </div>
-                    
-                    <button onClick={() => setIsRadarPlaying(!isRadarPlaying)} className="absolute bottom-2 right-2 bg-[#126b8e] text-white p-2 rounded-sm shadow-md hover:bg-[#0f5a7a] cursor-pointer transition-colors flex items-center justify-center">
-                       {isRadarPlaying ? <FiPause className="text-sm" /> : <FiPlay className="text-sm ml-0.5" />}
-                    </button>
-                 </div>
+                        {/* Rain overlay */}
+                        {radarOverlay === "rain" && (
+                          <div className="absolute inset-0 pointer-events-none z-10 bg-blue-900/20 backdrop-blur-[0.5px] overflow-hidden flex flex-col justify-start">
+                            <div className="flex flex-wrap gap-4 p-4 text-[#ffcc00] animate-bounce">
+                               <FiCloud className="text-3xl animate-bounce" />
+                               <FiCloud className="text-2xl animate-pulse" style={{ animationDelay: '0.4s' }} />
+                               <FiCloud className="text-3xl animate-bounce" style={{ animationDelay: '0.8s' }} />
+                            </div>
+                            <div className="absolute inset-0 grid grid-cols-6 gap-2 p-4">
+                               {Array.from({ length: 18 }).map((_, i) => (
+                                 <div key={i} className="w-1 h-3 bg-[#4c92ba] rounded-full transform rotate-[15deg] mx-auto animate-[bounce_1s_infinite]" style={{ animationDelay: `${i * 0.1}s` }}></div>
+                               ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Wind overlay */}
+                        {radarOverlay === "wind" && (
+                          <div className="absolute inset-0 pointer-events-none z-10 overflow-hidden">
+                            <svg className="w-full h-full opacity-70">
+                               <path d="M 0 50 Q 150 20, 300 80 T 600 50" fill="none" stroke="#22c55e" strokeWidth="3" strokeDasharray="10, 15" className="animate-[dash_5s_linear_infinite]" style={{ strokeDashoffset: -timeOffset * 5 }} />
+                               <path d="M 0 150 Q 200 120, 400 180 T 600 150" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeDasharray="10, 15" className="animate-[dash_4s_linear_infinite]" style={{ strokeDashoffset: -timeOffset * 6 }} />
+                            </svg>
+                          </div>
+                        )}
+
+                        {/* Lightning overlay */}
+                        {radarOverlay === "lightning" && (
+                          <div className="absolute inset-0 pointer-events-none z-10 bg-yellow-500/10 flex items-center justify-center animate-pulse">
+                            <div className="absolute top-1/4 left-1/3 text-yellow-400 animate-bounce">
+                               <FiCloudLightning className="text-4xl filter drop-shadow-[0_0_10px_rgba(234,179,8,1)]" />
+                            </div>
+                            <div className="absolute bottom-1/3 right-1/4 text-yellow-400 animate-bounce" style={{ animationDelay: '0.5s' }}>
+                               <FiCloudLightning className="text-3xl filter drop-shadow-[0_0_8px_rgba(234,179,8,1)]" />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Pins with dynamic shifts and increments when playing */}
+                        <div className="absolute top-1/4 left-1/4 flex flex-col items-center transition-all duration-500 font-sans" style={{ transform: `translate(${timeOffset}px, ${-timeOffset}px)` }}>
+                           <span className="text-white text-[10px] font-bold drop-shadow-md bg-slate-900/40 px-1 rounded-sm">Dubai</span>
+                           <span className="text-red-500 text-[10px] font-bold drop-shadow-md bg-white px-0.5 rounded-sm">{37 + (radarTime === "now" ? 0 : radarTime === "today" ? 1 : 2)}°</span>
+                           <FiSun className="text-[#ffcc00] text-2xl drop-shadow-lg animate-[spin_10s_linear_infinite]" />
+                        </div>
+                        
+                        <div className="absolute top-1/2 left-1/3 flex flex-col items-center transition-all duration-500 font-sans" style={{ transform: `translate(${-timeOffset}px, ${timeOffset}px)` }}>
+                           <span className="text-white text-[10px] font-bold drop-shadow-md bg-slate-900/40 px-1 rounded-sm">Mumbai</span>
+                           <span className="text-red-500 text-[10px] font-bold drop-shadow-md bg-white px-0.5 rounded-sm">{34 + (radarTime === "now" ? 0 : radarTime === "today" ? 0 : 1)}°</span>
+                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-lg animate-[spin_12s_linear_infinite]" />
+                        </div>
+                        
+                        <div className="absolute top-1/3 right-1/2 flex flex-col items-center transition-all duration-500 font-sans" style={{ transform: `translate(${timeOffset / 2}px, ${timeOffset / 2}px)` }}>
+                           <span className="text-white text-[10px] font-bold drop-shadow-md bg-slate-900/40 px-1 rounded-sm">New Delhi</span>
+                           <span className="text-red-500 text-[10px] font-bold drop-shadow-md bg-white px-0.5 rounded-sm">{38 + (radarTime === "now" ? 0 : radarTime === "today" ? 2 : 4)}°</span>
+                           <FiSun className="text-[#ffcc00] text-2xl drop-shadow-lg animate-[spin_8s_linear_infinite]" />
+                        </div>
+                     </div>
+                     
+                     {/* Bottom Controls */}
+                     <div className="absolute bottom-2 left-2 flex gap-1 z-20">
+                        <button onClick={() => setRadarTime("now")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors cursor-pointer ${radarTime === "now" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>now</button>
+                        <button onClick={() => setRadarTime("today")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors cursor-pointer ${radarTime === "today" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>today</button>
+                        <button onClick={() => setRadarTime("tomorrow")} className={`text-white text-[10px] font-bold px-3 py-1 rounded-sm shadow-sm transition-colors cursor-pointer ${radarTime === "tomorrow" ? 'bg-[#0d4f6a]' : 'bg-[#1b7f9c] hover:bg-[#126b8e]'}`}>tomorrow</button>
+                     </div>
+                     
+                     <button onClick={() => setIsRadarPlaying(!isRadarPlaying)} className="absolute bottom-2 right-2 bg-[#126b8e] text-white p-2 rounded-sm shadow-md hover:bg-[#0f5a7a] cursor-pointer transition-colors flex items-center justify-center z-20">
+                        {isRadarPlaying ? <FiPause className="text-sm" /> : <FiPlay className="text-sm ml-0.5" />}
+                     </button>
+                  </div>
               </div>
               
               {/* Forecast Map */}
               <div className="bg-[#126b8e] text-white rounded-md overflow-hidden shadow-md flex flex-col h-[400px] mt-4">
                  {/* Header */}
-                 <div className="px-3 py-2 flex items-center justify-between text-sm font-semibold border-b-[3px] border-[#ffcc00]">
-                    <div className="flex items-center gap-2">
-                       <div className="relative flex items-center justify-center w-6 h-6">
-                            <FiSun className="text-[#ffcc00] text-lg absolute -top-1 -left-1" />
-                            <FiCloud className="text-white text-lg absolute bottom-0 right-0" />
-                       </div>
-                       <span>Forecast Map</span>
-                    </div>
-                    <FiChevronRight className="text-white/80" />
-                 </div>
-                 {/* Map Area */}
-                 <div className="flex-1 bg-[#b3c4cc] relative w-full h-full overflow-hidden">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Relief_Map_of_India.png/640px-Relief_Map_of_India.png" alt="India Map" className="w-full h-full object-cover opacity-30 mix-blend-multiply" />
-                    
-                    <button className="absolute top-3 left-3 bg-[#1b7f9c] text-white text-xs font-bold px-4 py-1.5 rounded-sm shadow-sm hover:bg-[#126b8e] border border-white/20">
-                       today
-                    </button>
-                    
-                    <div className="absolute bottom-2 left-2 bg-white/40 rounded-full p-1 backdrop-blur-sm shadow-sm">
-                       <FiGlobe className="text-white text-lg" />
-                    </div>
+                  <div 
+                    onClick={() => toast.success("Switching to Global Weather Sphere view!")} 
+                    className="px-3 py-2 flex items-center justify-between text-sm font-semibold border-b-[3px] border-[#ffcc00] cursor-pointer hover:bg-[#0f5a7a] transition-colors"
+                  >
+                     <div className="flex items-center gap-2">
+                        <div className="relative flex items-center justify-center w-6 h-6">
+                             <FiSun className="text-[#ffcc00] text-lg absolute -top-1 -left-1" />
+                             <FiCloud className="text-white text-lg absolute bottom-0 right-0" />
+                        </div>
+                        <span>Forecast Map</span>
+                     </div>
+                     <FiChevronRight onClick={(e) => { e.stopPropagation(); toast.info("Displaying current 24-hour regional forecast map."); }} className="text-white/80 hover:text-white cursor-pointer text-lg" />
+                  </div>
+                  {/* Map Area */}
+                  <div className="flex-1 bg-[#b3c4cc] relative w-full h-full overflow-hidden">
+                     <img onClick={() => toast.success("Displaying regional meteorological relief map.")} src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Relief_Map_of_India.png/640px-Relief_Map_of_India.png" alt="India Map" className="w-full h-full object-cover opacity-30 mix-blend-multiply cursor-pointer hover:opacity-40 transition-opacity" />
+                     
+                     <button onClick={() => toast.info("Switched to today's forecast timeline.")} className="absolute top-3 left-3 bg-[#1b7f9c] text-white text-xs font-bold px-4 py-1.5 rounded-sm shadow-sm hover:bg-[#126b8e] border border-white/20 cursor-pointer">
+                        today
+                     </button>
+                     
+                     <div onClick={() => toast.success("Connected to weather satellite feeds.")} className="absolute bottom-2 left-2 bg-white/40 rounded-full p-1 backdrop-blur-sm shadow-sm cursor-pointer hover:bg-white/60 transition-colors">
+                        <FiGlobe className="text-white text-lg" />
+                     </div>
                     
                     {/* Interactive City Pins */}
                     <div className="absolute inset-0">
@@ -498,7 +578,10 @@ const Weather: React.FC = () => {
            {/* News (Right Column) */}
            <div className="md:col-span-1 bg-white border border-slate-200 rounded-md shadow-md overflow-hidden flex flex-col h-[328px]">
               {/* Header */}
-               <div className="bg-[#126b8e] px-3 py-2 flex items-center justify-between text-sm font-semibold text-white">
+                <div 
+                  onClick={() => setIsNewsModalOpen(true)}
+                  className="bg-[#126b8e] px-3 py-2 flex items-center justify-between text-sm font-semibold text-white cursor-pointer hover:bg-[#0f5a7a] transition-colors"
+                >
                   <div className="flex items-center gap-2">
                      <FiMessageCircle className="text-white text-lg" />
                      <span>News</span>
@@ -507,9 +590,9 @@ const Weather: React.FC = () => {
                </div>
                
                {/* News Item */}
-               <div className="flex-1 flex flex-col relative group cursor-pointer border-b border-slate-100">
+               <div className="flex-1 flex flex-col relative group cursor-pointer border-b border-slate-100 overflow-hidden" onClick={() => setIsNewsModalOpen(true)}>
                   <div className="h-36 bg-slate-200 relative overflow-hidden">
-                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400" alt="Heatwave" className="w-full h-full object-cover" />
+                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400" alt="Heatwave" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div className="w-20 h-20 relative flex items-center justify-center">
                            <svg viewBox="0 0 24 24" fill="white" stroke="#cc0000" strokeWidth="1.5" className="w-full h-full">
@@ -530,7 +613,7 @@ const Weather: React.FC = () => {
                
                {/* More News Button */}
                <div className="p-3 flex justify-start bg-white">
-                  <button className="flex items-center gap-1 bg-[#f4f7f9] text-[#126b8e] px-4 py-1.5 rounded-md text-[12px] font-bold hover:bg-[#e2e8f0] transition-colors border border-slate-200 shadow-sm cursor-pointer">
+                  <button onClick={() => setIsNewsModalOpen(true)} className="flex items-center gap-1 bg-[#f4f7f9] text-[#126b8e] px-4 py-1.5 rounded-md text-[12px] font-bold hover:bg-[#e2e8f0] border border-slate-200 shadow-sm cursor-pointer hover:shadow transition-all duration-300">
                      More News <FiChevronRight className="text-lg" />
                   </button>
                </div>
@@ -658,12 +741,42 @@ const Weather: React.FC = () => {
                
                <div className="flex items-center gap-2 ml-4">
                   <FiSun className="text-lg text-slate-400" />
-                  <div className="flex rounded overflow-hidden">
-                     <button className="bg-[#ffcc00] px-3 py-1 text-slate-800 cursor-pointer">more</button>
-                     <button className="bg-slate-200 px-3 py-1 cursor-pointer">less</button>
+                  <div className="flex rounded overflow-hidden text-[10px] font-bold">
+                     <button 
+                       onClick={() => { setIsDetailedForecastOpen(true); toast.success("Expanded detailed 14-day agricultural weather parameters."); }} 
+                       className={`px-3 py-1 cursor-pointer transition-colors ${isDetailedForecastOpen ? 'bg-[#ffcc00] text-slate-800' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                     >
+                        more
+                     </button>
+                     <button 
+                       onClick={() => { setIsDetailedForecastOpen(false); toast.info("Collapsed detailed weather parameters."); }} 
+                       className={`px-3 py-1 cursor-pointer transition-colors ${!isDetailedForecastOpen ? 'bg-[#126b8e] text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                     >
+                        less
+                     </button>
                   </div>
                </div>
             </div>
+            {isDetailedForecastOpen && (
+               <div className="p-4 bg-slate-50 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] font-sans text-slate-600 animate-[fadeIn_0.3s_ease-out]">
+                  <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
+                     <span className="font-bold text-[#126b8e]">Humidity Avg</span>
+                     <span className="text-slate-800 font-extrabold text-xs">68% <span className="text-green-500 font-normal">(-2%)</span></span>
+                  </div>
+                  <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
+                     <span className="font-bold text-[#126b8e]">Precipitation Prob</span>
+                     <span className="text-slate-800 font-extrabold text-xs">15% <span className="text-blue-500 font-normal">(Low)</span></span>
+                  </div>
+                  <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
+                     <span className="font-bold text-[#126b8e]">UV Index Max</span>
+                     <span className="text-slate-800 font-extrabold text-xs">9 <span className="text-red-500 font-normal">(Extreme)</span></span>
+                  </div>
+                  <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
+                     <span className="font-bold text-[#126b8e]">Wind Conditions</span>
+                     <span className="text-slate-800 font-extrabold text-xs">18 km/h <span className="text-slate-400 font-normal">(E)</span></span>
+                  </div>
+               </div>
+             )}
          </div>
 
          {/* TemperatureRadar */}
@@ -802,6 +915,192 @@ const Weather: React.FC = () => {
             </div>
          </div>
       </div>
+
+      {/* Hailstorm Safety Modal */}
+      {isSafetyModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+          <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
+            <div className="bg-[#126b8e] text-white px-5 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FiAlertTriangle className="text-[#ffcc00] text-xl animate-bounce" />
+                <span className="font-bold text-sm tracking-wide uppercase">Hailstorm Survival & Safety Guidelines</span>
+              </div>
+              <button 
+                onClick={() => setIsSafetyModalOpen(false)}
+                className="text-white hover:text-white/80 bg-white/10 hover:bg-white/20 p-1 rounded-full transition-colors cursor-pointer"
+              >
+                <FiX className="text-base" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 overflow-y-auto max-h-[60vh]">
+              <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-lg p-3 text-red-800 text-xs">
+                <FiInfo className="text-base shrink-0 mt-0.5" />
+                <div>
+                   <strong>Emergency Advisory:</strong> Hailstorms present instant threats of severe injury and heavy agricultural crop damage. Always follow the precautions listed below.
+                </div>
+              </div>
+
+              <div className="space-y-3 text-slate-700 text-xs leading-relaxed">
+                <h4 className="font-bold text-slate-800 text-sm">For Farmers in the Field:</h4>
+                <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                  <li><strong>Seek Immediate Shelter:</strong> Discontinue all farming operations instantly. Run to the nearest solid concrete structure.</li>
+                  <li><strong>Protect Livestock:</strong> Move cattle and birds inside covered barns immediately.</li>
+                  <li><strong>Protect Crops:</strong> Set up high-durability anti-hail protective mesh nets over critical crop patches if advisory alerts permit.</li>
+                </ul>
+
+                <h4 className="font-bold text-slate-800 text-sm">For Individuals Indoors:</h4>
+                <ul className="list-disc pl-5 space-y-1 text-slate-600">
+                  <li><strong>Stay Indoors:</strong> Remain inside rooms and stay away from glass windows or balconies.</li>
+                  <li><strong>Power Safety:</strong> Disconnect heavy electronic appliances to prevent surges from electrostatic lightning strokes.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button 
+                onClick={() => { setIsSafetyModalOpen(false); toast.success("Safety guidelines acknowledged."); }}
+                className="bg-[#126b8e] hover:bg-[#0f5a7a] text-white font-bold text-xs px-6 py-2.5 rounded shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+              >
+                Acknowledge
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Weather News Modal */}
+      {isNewsModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+          <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+            <div className="bg-[#126b8e] text-white px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FiBookOpen className="text-[#ffcc00] text-xl animate-pulse" />
+                <span className="font-bold text-base tracking-wide uppercase">Weather News & Agro-Alerts</span>
+              </div>
+              <button 
+                onClick={() => setIsNewsModalOpen(false)}
+                className="text-white hover:text-white/80 bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors cursor-pointer"
+              >
+                <FiX className="text-lg" />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-6">
+              <div className="relative h-48 rounded-lg overflow-hidden shadow-sm">
+                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800" alt="Heatwave Cover" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-4">
+                  <div>
+                     <span className="bg-red-500 text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full">Severe Alert</span>
+                     <h3 className="text-white text-lg font-bold mt-1.5 leading-tight">Agro-Survival: Tips for Harvesting During Intense Regional Heatwaves</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 text-slate-700 text-sm leading-relaxed">
+                <p>Met-departments have issued severe alerts warning farmers against extended daytime operations as temperature figures touch record levels. Harvesting during high-intensity solar bands reduces crop quality due to rapid dehydration and risks field sunstrokes.</p>
+                
+                <h4 className="font-extrabold text-[#126b8e] text-base pt-2">Key Heatwave Measures:</h4>
+                <ul className="list-disc pl-5 space-y-2 text-slate-600">
+                  <li><strong>Shift Operations:</strong> Complete all intense manual harvesting and soil tilling before 10:00 AM or after 5:00 PM.</li>
+                  <li><strong>Reflective Coverings:</strong> Protect harvested yield by keeping it under reflective insulated sheets or within ventilated sheds.</li>
+                  <li><strong>Hydration Protocols:</strong> Drink high-electrolyte fluids constantly. Set up temporary shade tents at key field intervals.</li>
+                </ul>
+              </div>
+
+              {/* Newsletter Subscription */}
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-3">
+                <div className="text-xs font-bold text-slate-700">Get Regional Weather Alerts & Newsletters:</div>
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    toast.success("Successfully subscribed to real-time weather news alerts!");
+                    setIsNewsModalOpen(false);
+                  }}
+                  className="flex gap-2"
+                >
+                  <input 
+                    type="email" 
+                    required 
+                    placeholder="Enter your email" 
+                    defaultValue="bhavanavemireddy6@gmail.com"
+                    className="flex-1 px-3 py-2 text-xs border border-slate-300 rounded shadow-inner focus:outline-none focus:border-[#126b8e] text-slate-800 bg-white" 
+                  />
+                  <button 
+                    type="submit"
+                    className="bg-[#126b8e] hover:bg-[#0f5a7a] text-white font-bold text-xs px-4 py-2 rounded shadow transition-colors cursor-pointer"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button 
+                onClick={() => setIsNewsModalOpen(false)}
+                className="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-5 py-2 rounded transition-colors cursor-pointer"
+              >
+                Close Article
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Share Clipboard Modal */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+          <div className="bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col">
+            <div className="bg-[#126b8e] text-white px-5 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FiShare2 className="text-[#ffcc00] text-lg animate-pulse" />
+                <span className="font-bold text-sm tracking-wide uppercase">Share Regional Forecast</span>
+              </div>
+              <button 
+                onClick={() => setIsShareModalOpen(false)}
+                className="text-white hover:text-white/80 bg-white/10 hover:bg-white/20 p-1 rounded-full transition-colors cursor-pointer"
+              >
+                <FiX className="text-base" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Copy the link below to share the current meteorological forecast of <strong>{currentCityData.name}</strong> with fellow farmers and partners.
+              </p>
+
+              <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded p-2 text-slate-800 font-mono text-xs select-all shadow-inner overflow-x-auto whitespace-nowrap bg-white">
+                {`${window.location.origin}/weather?city=${currentCityData.name}`}
+              </div>
+
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/weather?city=${currentCityData.name}`);
+                  setCopied(true);
+                  toast.success("Successfully copied link to clipboard!");
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                className="w-full bg-[#126b8e] hover:bg-[#0f5a7a] text-white font-bold text-xs py-3.5 rounded shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+              >
+                {copied ? (
+                  <>
+                    <FiCheck className="text-base text-[#ffcc00] animate-bounce" /> Copied Link!
+                  </>
+                ) : (
+                  <>
+                    <FiCopy className="text-base" /> Copy to Clipboard
+                  </>
+                )}
+              </button>
+            </div>
+
+            <div className="p-3 bg-slate-50 border-t border-slate-100 flex justify-end text-[10px] text-slate-400 font-medium">
+              Weather & Radar Sharing Hub
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-[#126b8e] text-white py-8 mt-8 border-t-[4px] border-[#ffcc00]">

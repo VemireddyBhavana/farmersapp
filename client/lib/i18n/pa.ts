@@ -2490,7 +2490,7 @@ export const pa = {
     "sunriseLabel": "ਸੂਰਜ ਚੜ੍ਹਨਾ",
     "sunsetLabel": "ਸੂਰਜ ਡੁੱਬਣਾ",
     "supplementation": "पूरक",
-    "supportEmail": "support@Kisan.ai",
+    "supportEmail": "bhavanavemireddy6@gmail.com",
     "supportPortal": "ਸਹਾਇਤਾ ਪੋਰਟਲ",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "ਟਿਕਾਊਤਾ ਮੀਟ੍ਰਿਕਸ",

@@ -59,6 +59,8 @@ export default function SoilPredictor() {
     };
     healthStatus: "Excellent" | "Good" | "Requires Treatment";
     isLeafDetected?: boolean;
+    reportId?: string;
+    timestamp?: string;
   }>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);

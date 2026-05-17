@@ -130,19 +130,9 @@ const App = () => (
               <Toaster />
               <Sonner />
               <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-                <SignedIn>
-                  <Layout>
-                    <AppRoutes />
-                  </Layout>
-                  <FloatingChatbot />
-                </SignedIn>
-                <SignedOut>
-                  <Routes>
-                    <Route path="/sso-callback" element={<AuthenticateWithRedirectCallback />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="*" element={<Navigate to="/login" replace />} />
-                  </Routes>
-                </SignedOut>
+                <Layout>
+                  <AppRoutes />
+                </Layout>
               </BrowserRouter>
             </CartProvider>
           </AuthProvider>

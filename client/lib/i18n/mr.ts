@@ -2490,7 +2490,7 @@ export const mr = {
     "sunriseLabel": "सूर्योदय",
     "sunsetLabel": "सूर्यास्त",
     "supplementation": "पूरक",
-    "supportEmail": "support@Kisan.ai",
+    "supportEmail": "bhavanavemireddy6@gmail.com",
     "supportPortal": "मदत पोर्टल",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "Sustainability Metrics",

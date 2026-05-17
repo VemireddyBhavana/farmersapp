@@ -57,7 +57,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <h3 className="font-bold">{t("emailUs")}</h3>
-                                    <p className="text-sm text-muted-foreground">support@techspark.ai</p>
+                                    <p className="text-sm text-muted-foreground">bhavanavemireddy6@gmail.com</p>
                                 </div>
                             </CardContent>
                         </Card>

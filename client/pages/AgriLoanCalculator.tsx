@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { jsPDF } from "jspdf";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Calculator, 

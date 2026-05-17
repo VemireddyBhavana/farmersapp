@@ -2490,7 +2490,7 @@ export const ta = {
     "sunriseLabel": "சூரிய உதயம்",
     "sunsetLabel": "சூரிய அஸ்தமனம்",
     "supplementation": "पूरक",
-    "supportEmail": "support@Kisan.ai",
+    "supportEmail": "bhavanavemireddy6@gmail.com",
     "supportPortal": "ஆதரவு போர்டல்",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "நிலையான வளர்ச்சி",

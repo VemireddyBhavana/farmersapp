@@ -2490,7 +2490,7 @@ export const gu = {
     "sunriseLabel": "સૂર્યોદય",
     "sunsetLabel": "સૂર્યાસ્ત",
     "supplementation": "पूरक",
-    "supportEmail": "support@Kisan.ai",
+    "supportEmail": "bhavanavemireddy6@gmail.com",
     "supportPortal": "સહાય પોર્ટલ",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "ટકાઉ મેટ્રિક્સ",

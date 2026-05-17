@@ -2490,7 +2490,7 @@ export const te = {
     "sunriseLabel": "సూర్యోదయం",
     "sunsetLabel": "సూర్యాస్తమయం",
     "supplementation": "అదనపు పోషకాలు",
-    "supportEmail": "support@Kisan.ai",
+    "supportEmail": "bhavanavemireddy6@gmail.com",
     "supportPortal": "మద్దతు పోర్టల్",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "సుస్థిరత కొలమానాలు",
