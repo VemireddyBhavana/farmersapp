@@ -1,3 +1,5 @@
+import tractorPremium from "@/assets/tractor_premium.png";
+import tractorMahindra from "@/assets/tractor_mahindra.png";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -39,9 +41,9 @@ const ownerStats = [
 ];
 
 const myEquipment = [
-  { id: 1, name: "John Deere 5310 GearPro", status: "Available", price: 800, rentals: 42, image: "/tractor_premium.png" },
-  { id: 2, name: "Mahindra 275 DI TU", status: "Rented", price: 600, rentals: 28, image: "/tractor_mahindra.png" },
-  { id: 3, name: "Rotavator - 7 Feet", status: "Maintenance", price: 300, rentals: 15, image: "/tractor_premium.png" },
+  { id: 1, name: "John Deere 5310 GearPro", status: "Available", price: 800, rentals: 42, image: tractorPremium },
+  { id: 2, name: "Mahindra 275 DI TU", status: "Rented", price: 600, rentals: 28, image: tractorMahindra },
+  { id: 3, name: "Rotavator - 7 Feet", status: "Maintenance", price: 300, rentals: 15, image: tractorPremium },
 ];
 
 const pendingRequests = [

@@ -1,56 +1,65 @@
+import wheatField from "@/assets/wheat_field.png";
+import tomatoFarming from "@/assets/tomato_farming.png";
+import sweetCorn from "@/assets/sweet_corn.png";
+import pulsesFarm from "@/assets/pulses_farm.png";
+import papayaTree from "@/assets/papaya_tree.png";
+import mustardField from "@/assets/mustard_field.png";
+import mangoOrchard from "@/assets/mango_orchard.png";
+import heroRiceField from "@/assets/hero_rice_field.png";
+import chiliPlant from "@/assets/chili_plant.png";
 export const seedsData = [
     {
         id: 1, name: "Golden King Hybrid Tomato", brand: "Mahyco", crop: "tomato", category: "Vegetables",
-        variety: "Hybrid FI", price: 450, unit: "100g", rating: 4.9, reviews: 128, image: "/tomato_farming.png",
+        variety: "Hybrid FI", price: 450, unit: "100g", rating: 4.9, reviews: 128, image: tomatoFarming,
         tags: ["High Yield", "Disease Resistant"], season: "Kharif", soil: "Loamy", duration: "70 days", stock: 150,
         seedType: "Hybrid",
         description: "Superior quality hybrid tomato seeds with 95% germination rate. High resistance to leaf curl virus."
     },
     {
         id: 2, name: "Premium Basmati Rice PB1121", brand: "Kaveri Seeds", crop: "rice", category: "Grains",
-        variety: "Foundations", price: 3200, unit: "10kg", rating: 4.8, reviews: 256, image: "/hero_rice_field.png",
+        variety: "Foundations", price: 3200, unit: "10kg", rating: 4.8, reviews: 256, image: heroRiceField,
         tags: ["Aromatic", "Long Grain"], season: "Kharif", soil: "Clayey", duration: "135 days", stock: 500,
         seedType: "Hybrid",
         description: "Certified foundation seeds for premium long-grain Basmati rice. Ideal for kharif season."
     },
     {
         id: 3, name: "Super Sonalika Wheat", brand: "Nuziveedu", crop: "wheat", category: "Grains",
-        variety: "Certified", price: 1800, unit: "40kg", rating: 4.7, reviews: 512, image: "/wheat_field.png",
+        variety: "Certified", price: 1800, unit: "40kg", rating: 4.7, reviews: 512, image: wheatField,
         tags: ["Fast Growth", "Robust"], season: "Rabi", soil: "Loamy", duration: "120 days", stock: 800,
         seedType: "Non-GMO",
         description: "High-protein wheat seeds with excellent drought tolerance. Best for Rabi sowing."
     },
     {
         id: 4, name: "Green Wonder Chili", brand: "Syngenta", crop: "chili", category: "Vegetables",
-        variety: "Hybrid", price: 850, unit: "50g", rating: 5.0, reviews: 89, image: "/chili_plant.png",
+        variety: "Hybrid", price: 850, unit: "50g", rating: 5.0, reviews: 89, image: chiliPlant,
         tags: ["Hot Variety", "Heavy Bearing"], season: "Kharif", soil: "Well-drained", duration: "90 days", stock: 80,
         seedType: "Hybrid",
         description: "Very spicy and high-yielding chili seeds. Prolific bearing throughout the season."
     },
     {
         id: 5, name: "Alphonso Mango Graft", brand: "FarmDirect", crop: "mango", category: "Fruits",
-        variety: "Grafted Sapling", price: 350, unit: "sapling", rating: 4.9, reviews: 42, image: "/mango_orchard.png",
+        variety: "Grafted Sapling", price: 350, unit: "sapling", rating: 4.9, reviews: 42, image: mangoOrchard,
         tags: ["Premium Quality", "Fruitful"], season: "Perennial", soil: "Alluvial/Loamy", duration: "3-5 years", stock: 120,
         seedType: "Organic",
         description: "Healthy grafted Alphonso mango saplings. High survival rate and disease resistance."
     },
     {
         id: 6, name: "Sweet Corn Gold-66", brand: "Advanta", crop: "sweetcorn", category: "Vegetables",
-        variety: "Hybrid", price: 1200, unit: "1kg", rating: 4.8, reviews: 156, image: "/sweet_corn.png",
+        variety: "Hybrid", price: 1200, unit: "1kg", rating: 4.8, reviews: 156, image: sweetCorn,
         tags: ["High Germination", "Sweet"], season: "Kharif", soil: "Loamy", duration: "75 days", stock: 200,
         seedType: "Hybrid",
         description: "Uniform cob size and excellent sweetness. Market leader in sweet corn seeds."
     },
     {
         id: 7, name: "Hybrid Mustard Pusa-31", brand: "IARI", crop: "mustard", category: "Oil seeds",
-        variety: "High Oil Content", price: 450, unit: "1kg", rating: 4.7, reviews: 84, image: "/mustard_field.png",
+        variety: "High Oil Content", price: 450, unit: "1kg", rating: 4.7, reviews: 84, image: mustardField,
         tags: ["Oil Rich", "Early Maturing"], season: "Rabi", soil: "Sandy Loam", duration: "110 days", stock: 150,
         seedType: "Non-GMO",
         description: "High-yield hybrid mustard with 42% oil content. Tolerant to white rust and frost."
     },
     {
         id: 8, name: "Hybrid Papaya Red Lady", brand: "Known-You", crop: "papaya", category: "Fruits",
-        variety: "786 Hybrid", price: 2100, unit: "10g", rating: 4.9, reviews: 112, image: "/papaya_tree.png",
+        variety: "786 Hybrid", price: 2100, unit: "10g", rating: 4.9, reviews: 112, image: papayaTree,
         tags: ["Dwarf Variety", "High Yield"], season: "Zaid", soil: "Loamy/Deep", duration: "270 days", stock: 45,
         seedType: "Hybrid",
         description: "Productive dwarf papaya variety. Fruits are large, red-fleshed and very sweet."
@@ -85,7 +94,7 @@ export const seedsData = [
     },
     {
         id: 13, name: "Red Gram (Toor Dal) - Arhar-1", brand: "State Seeds", crop: "pulses", category: "Pulses",
-        variety: "Early Maturing", price: 780, unit: "2kg", rating: 4.8, reviews: 95, image: "/pulses_farm.png",
+        variety: "Early Maturing", price: 780, unit: "2kg", rating: 4.8, reviews: 95, image: pulsesFarm,
         tags: ["Protein Rich", "Nitrogen Fixing"], season: "Kharif", soil: "Well-drained", duration: "150 days", stock: 90,
         seedType: "Organic",
         description: "Uniform ripening and disease resistant. Essential for pulse production cycles."

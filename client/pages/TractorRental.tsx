@@ -1,3 +1,8 @@
+import tractorRed from "@/assets/tractor_red.png";
+import tractorPremium from "@/assets/tractor_premium.png";
+import tractorOrange from "@/assets/tractor_orange.png";
+import seeder from "@/assets/seeder.png";
+import rotavator from "@/assets/rotavator.png";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -40,7 +45,7 @@ const equipment = [
     location: "Chittoor, AP",
     rating: 4.8,
     reviews: 124,
-    image: "/tractor_premium.png",
+    image: tractorPremium,
     tags: ["highPower", "acCabin"]
   },
   {
@@ -53,7 +58,7 @@ const equipment = [
     location: "Tirupati, AP",
     rating: 4.5,
     reviews: 89,
-    image: "/tractor_red.png",
+    image: tractorRed,
     tags: ["fuelEfficient"]
   },
   {
@@ -66,7 +71,7 @@ const equipment = [
     location: "Nellore, AP",
     rating: 4.9,
     reviews: 210,
-    image: "/tractor_red.png",
+    image: tractorRed,
     tags: ["bestSeller", "rugged"]
   },
   {
@@ -79,7 +84,7 @@ const equipment = [
     location: "Kadapa, AP",
     rating: 4.7,
     reviews: 56,
-    image: "/tractor_orange.png",
+    image: tractorOrange,
     tags: ["smoothGearbox"]
   },
   {
@@ -92,7 +97,7 @@ const equipment = [
     location: "Chittoor, AP",
     rating: 4.6,
     reviews: 34,
-    image: "/rotavator.png",
+    image: rotavator,
     tags: ["soilPrep"]
   },
   {
@@ -105,7 +110,7 @@ const equipment = [
     location: "Tirupati, AP",
     rating: 4.8,
     reviews: 12,
-    image: "/seeder.png",
+    image: seeder,
     tags: ["precision"]
   }
 ];

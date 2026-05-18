@@ -1,3 +1,13 @@
+import wheatField from "@/assets/wheat_field.png";
+import tomatoFarming from "@/assets/tomato_farming.png";
+import sweetCorn from "@/assets/sweet_corn.png";
+import pulsesFarm from "@/assets/pulses_farm.png";
+import papayaTree from "@/assets/papaya_tree.png";
+import mustardField from "@/assets/mustard_field.png";
+import mangoOrchard from "@/assets/mango_orchard.png";
+import heroRiceField from "@/assets/hero_rice_field.png";
+import cottonField from "@/assets/cotton_field.png";
+import chiliPlant from "@/assets/chili_plant.png";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Sprout, Droplets, Leaf, Bug, Hammer, Sun, Thermometer } from "lucide-react";
@@ -9,7 +19,7 @@ import { useLanguage } from "@/lib/LanguageContext";
 const cropData: Record<string, any> = {
   rice: {
     name: "Rice (Paddy)",
-    image: "/hero_rice_field.png",
+    image: heroRiceField,
     sections: [
       {
         title: "Soil Preparation",
@@ -45,7 +55,7 @@ const cropData: Record<string, any> = {
   },
   cotton: {
     name: "Cotton",
-    image: "/cotton_field.png",
+    image: cottonField,
     sections: [
       {
         title: "Soil Preparation",
@@ -81,7 +91,7 @@ const cropData: Record<string, any> = {
   },
   tomato: { // Using tomato as the representative vegetable key
     name: "Vegetables (Tomato)",
-    image: "/tomato_farming.png",
+    image: tomatoFarming,
     sections: [
       {
         title: "Soil Preparation",
@@ -117,7 +127,7 @@ const cropData: Record<string, any> = {
   },
   pulses: {
     name: "Pulses (Red Gram/Moong)",
-    image: "/pulses_farm.png",
+    image: pulsesFarm,
     sections: [
       {
         title: "Soil Preparation",
@@ -153,7 +163,7 @@ const cropData: Record<string, any> = {
   },
   wheat: {
     name: "Wheat",
-    image: "/wheat_field.png",
+    image: wheatField,
     sections: [
       {
         title: "Soil Preparation",
@@ -189,7 +199,7 @@ const cropData: Record<string, any> = {
   },
   chili: {
     name: "Chili",
-    image: "/chili_plant.png",
+    image: chiliPlant,
     sections: [
       {
         title: "Soil Preparation",
@@ -225,7 +235,7 @@ const cropData: Record<string, any> = {
   },
   mango: {
     name: "Mango",
-    image: "/mango_orchard.png",
+    image: mangoOrchard,
     sections: [
       {
         title: "Soil Preparation",
@@ -261,7 +271,7 @@ const cropData: Record<string, any> = {
   },
   sweetcorn: {
     name: "Sweet Corn",
-    image: "/sweet_corn.png",
+    image: sweetCorn,
     sections: [
       {
         title: "Soil Preparation",
@@ -297,7 +307,7 @@ const cropData: Record<string, any> = {
   },
   mustard: {
     name: "Mustard",
-    image: "/mustard_field.png",
+    image: mustardField,
     sections: [
       {
         title: "Soil Preparation",
@@ -333,7 +343,7 @@ const cropData: Record<string, any> = {
   },
   papaya: {
     name: "Papaya",
-    image: "/papaya_tree.png",
+    image: papayaTree,
     sections: [
       {
         title: "Soil Preparation",

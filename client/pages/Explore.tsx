@@ -1,3 +1,12 @@
+import yieldPrediction from "@/assets/yield_prediction.png";
+import subsidyFinder from "@/assets/subsidy_finder.png";
+import expertPfp from "@/assets/expert_pfp.png";
+import communityHub from "@/assets/community_hub.png";
+import tractorPremium from "@/assets/tractor_premium.png";
+import pulsesFarm from "@/assets/pulses_farm.png";
+import heroRiceField from "@/assets/hero_rice_field.png";
+import explorePests from "@/assets/explore_pests.png";
+import exploreMandi from "@/assets/explore_mandi.png";
 import React from "react";
 import { motion } from "framer-motion";
 import { 
@@ -34,7 +43,7 @@ const Explore = () => {
       icon: LayoutDashboard,
       color: "bg-blue-500/10 text-blue-600",
       link: "/dashboard",
-      image: "/hero_rice_field.png"
+      image: heroRiceField
     },
     {
       title: t('equipmentRentalTitle'),
@@ -42,7 +51,7 @@ const Explore = () => {
       icon: Truck,
       color: "bg-emerald-500/10 text-emerald-600",
       link: "/rent",
-      image: "/tractor_premium.png"
+      image: tractorPremium
     },
     {
       title: t('liveMarketPricesTitle'),
@@ -50,7 +59,7 @@ const Explore = () => {
       icon: LineChart,
       color: "bg-amber-500/10 text-amber-600",
       link: "/market",
-      image: "/explore_mandi.png"
+      image: exploreMandi
     },
     {
       title: t('aiAssistantTitle'),
@@ -58,7 +67,7 @@ const Explore = () => {
       icon: MessageSquare,
       color: "bg-purple-500/10 text-purple-600",
       link: "/chat",
-      image: "/pulses_farm.png"
+      image: pulsesFarm
     },
     {
       title: t('pestDiseaseDetectionTitle'),
@@ -66,7 +75,7 @@ const Explore = () => {
       icon: AlertTriangle,
       color: "bg-red-500/10 text-red-600",
       link: "/pests",
-      image: "/explore_pests.png"
+      image: explorePests
     },
     {
       title: t('cropHealthMonitor'),
@@ -74,7 +83,7 @@ const Explore = () => {
       icon: Leaf,
       color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       link: "/satellite-analysis",
-      image: "/pulses_farm.png"
+      image: pulsesFarm
     },
     {
       title: t('communityHubTitle'),
@@ -82,7 +91,7 @@ const Explore = () => {
       icon: MessageSquare,
       color: "bg-blue-500/10 text-blue-600",
       link: "/community",
-      image: "/community_hub.png"
+      image: communityHub
     },
     {
       title: t('expertConsultTitle'),
@@ -90,7 +99,7 @@ const Explore = () => {
       icon: User,
       color: "bg-purple-500/10 text-purple-600",
       link: "/expert-consult",
-      image: "/expert_pfp.png"
+      image: expertPfp
     },
     {
       title: t('yieldPredictionTitle'),
@@ -98,7 +107,7 @@ const Explore = () => {
       icon: TrendingUp,
       color: "bg-amber-500/10 text-amber-600",
       link: "/yield-prediction",
-      image: "/yield_prediction.png"
+      image: yieldPrediction
     },
     {
       title: t('subsidyFinderTitle'),
@@ -106,7 +115,7 @@ const Explore = () => {
       icon: FileText,
       color: "bg-emerald-500/10 text-emerald-600",
       link: "/subsidy-finder",
-      image: "/subsidy_finder.png"
+      image: subsidyFinder
     },
     {
       title: t('agriIntelligenceSuite'),
@@ -114,7 +123,7 @@ const Explore = () => {
       icon: Zap,
       color: "bg-emerald-500/10 text-emerald-600",
       link: "/agri-tools",
-      image: "/hero_rice_field.png"
+      image: heroRiceField
     }
   ];
 

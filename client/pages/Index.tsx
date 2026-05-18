@@ -1,3 +1,5 @@
+import visionBanner from "@/assets/vision_banner.png";
+import heroRiceField from "@/assets/hero_rice_field.png";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -54,7 +56,7 @@ export default function Index() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero_rice_field.png"
+            src={heroRiceField}
             alt={t("riceField")}
             className="w-full h-full object-cover scale-105"
           />
@@ -355,7 +357,7 @@ export default function Index() {
             >
               <div className="aspect-video rounded-[3rem] bg-primary/10 border border-primary/10 shadow-2xl overflow-hidden relative group">
                 <img
-                  src="/vision_banner.png"
+                  src={visionBanner}
                   alt={t("farmerTabletAlt")}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />

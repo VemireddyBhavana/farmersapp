@@ -1,3 +1,4 @@
+import tractorMahindra from "@/assets/tractor_mahindra.png";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/LanguageContext";
 import { Globe, Award, Leaf, TrendingUp, Package, CheckCircle2 } from "lucide-react";
@@ -52,7 +53,7 @@ export default function MarketLinkage() {
       <section className="relative min-h-[70vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="/tractor_mahindra.png"
+            src={tractorMahindra}
             alt="Export produce"
             className="w-full h-full object-cover"
           />

@@ -1,3 +1,4 @@
+import tractorPremium from "@/assets/tractor_premium.png";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -302,7 +303,7 @@ export default function Dashboard() {
             </Link>
           </div>
           <div className="w-full md:w-1/2 aspect-video rounded-xl overflow-hidden shadow-2xl relative z-10 border-4 border-white/20">
-            <img src="/tractor_premium.png" className="w-full h-full object-cover" alt={t("premiumTractorAlt")} />
+            <img src={tractorPremium} className="w-full h-full object-cover" alt={t("premiumTractorAlt")} />
           </div>
           <TractorIcon className="absolute right-[-40px] top-[-40px] h-80 w-80 text-primary/10 opacity-50 -rotate-12 group-hover:rotate-0 transition-transform duration-700" />
         </div>
