@@ -161,16 +161,15 @@ export const useWeather = () => {
         const data = JSON.parse(cached);
         if (Date.now() - data.timestamp < CACHE_TTL) {
           setWeather(data);
-        } else {
-          getLocationAndFetch();
         }
+        // If cache is stale, caller will explicitly invoke fetchWeather
       } catch (e) {
-        getLocationAndFetch();
+        // Invalid cache, caller will invoke fetchWeather
       }
-    } else {
-      getLocationAndFetch();
     }
-  }, [getLocationAndFetch]);
+    // Note: We do NOT auto-fetch on mount here.
+    // The Weather page explicitly calls fetchWeather(selectedCity) which covers initial load.
+  }, []);
 
   // AUTO-REFRESH EVERY 5 MINUTES (MSN Style)
   useEffect(() => {

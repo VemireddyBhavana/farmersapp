@@ -132,7 +132,7 @@ const Weather: React.FC = () => {
     { name: 'Bengaluru', temp: 30, bg: 'bg-gradient-to-r from-[#8ba0af] to-[#a2b3bf]' },
   ]);
 
-  const { weather, fetchWeather } = useWeather();
+  const { weather, loading, fetchWeather } = useWeather();
 
   const [mapTemps, setMapTemps] = useState<Record<string, number>>({
     Delhi: 38,
@@ -190,6 +190,7 @@ const Weather: React.FC = () => {
 
   // Fetch real-time weather details when active selected city changes
   useEffect(() => {
+    localStorage.removeItem("ismigs_weather_intel_cache");
     fetchWeather(undefined, undefined, selectedCity);
   }, [selectedCity, fetchWeather]);
 
