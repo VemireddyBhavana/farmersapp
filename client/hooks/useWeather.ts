@@ -81,40 +81,22 @@ export const useWeather = () => {
     setError(null);
 
     try {
-      let queryLat = lat;
-      let queryLon = lon;
-      let displayLocation = "";
+      let url = "";
 
-      // 1. Optional Geocoding on Frontend (User Implementation Strategy 2)
       if (manualLocation) {
+        // Use backend geocoding — server already handles ?city= using its API key
         setLoadingStage("Geocoding Location Coordinates...");
-        const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
-        const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(manualLocation)}&limit=1&appid=${API_KEY}`;
-        const geoRes = await fetch(geoUrl);
-        const geoData = await geoRes.json();
-
-        if (!geoData || geoData.length === 0) {
-          throw new Error(`Location not found: ${manualLocation}`);
-        }
-
-        queryLat = geoData[0].lat;
-        queryLon = geoData[0].lon;
-        displayLocation = geoData[0].state ? `${geoData[0].name}, ${geoData[0].state}, ${geoData[0].country}` : `${geoData[0].name}, ${geoData[0].country}`;
+        url = `/api/weather?city=${encodeURIComponent(manualLocation)}`;
+      } else if (lat !== undefined && lon !== undefined) {
         setLoadingStage("Locking GPS Composition...");
-      }
-
-      if (queryLat === undefined || queryLon === undefined) {
-        throw new Error("No coordinate lock found.");
+        url = `/api/weather?lat=${lat}&lon=${lon}`;
+      } else {
+        throw new Error("No coordinate or location provided.");
       }
 
       setLoadingStage("Scanning Atmospheric Composition...");
-      const params = new URLSearchParams({
-        lat: queryLat.toString(),
-        lon: queryLon.toString()
-      });
+      const response = await fetch(url);
 
-      const response = await fetch(`/api/weather?${params.toString()}`);
-      
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || "Intelligence feed interrupted.");
@@ -122,12 +104,12 @@ export const useWeather = () => {
 
       setLoadingStage("Processing Geospatial Imagery...");
       const data = await response.json();
-      
+
       const processedData: WeatherData = {
         ...data,
-        lat: queryLat,
-        lon: queryLon,
-        location: displayLocation || data.locationName || "Monitored Region",
+        lat: data.lat ?? lat ?? 0,
+        lon: data.lon ?? lon ?? 0,
+        location: data.locationName || manualLocation || "Monitored Region",
         timestamp: Date.now()
       };
 

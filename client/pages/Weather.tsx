@@ -195,8 +195,12 @@ const Weather: React.FC = () => {
 
   // Seamlessly bind real OpenWeather current & daily temperatures with generative padding
   const currentCityData = React.useMemo(() => {
-    if (weather && weather.location.toLowerCase().includes(selectedCity.toLowerCase())) {
-      const realName = weather.location.split(",")[0];
+    const locationMatch = weather &&
+      (weather.location.toLowerCase().includes(selectedCity.toLowerCase()) ||
+       selectedCity.toLowerCase().includes(weather.location.toLowerCase().split(",")[0].trim()));
+
+    if (locationMatch && weather) {
+      const realName = weather.location.split(",")[0].trim();
       const realTemp = Math.round(weather.current.temp);
       
       const maxTemps = Array.from({ length: 14 }, (_, i) => {
