@@ -193,44 +193,7 @@ const Weather: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white font-['Open_Sans'] pt-2">
-      {/* Header */}
-      <nav className="bg-[#126b8e] relative h-16 rounded-tl-[1.5rem] rounded-tr-[2px] mx-2 flex flex-col justify-center overflow-visible z-20 shadow-md">
-        <div 
-          className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay rounded-tl-[1.5rem]"
-          style={{ 
-            backgroundImage: `url('https://www.transparenttextures.com/patterns/topography.png')`,
-            backgroundSize: '400px'
-          }}
-        />
-        
-        <div className="container mx-auto px-4 flex items-center justify-between relative z-30">
-          <div className="flex items-center gap-4">
-             <button onClick={() => setIsDrawerOpen(true)} className="text-white text-xl hover:text-white/80 transition-colors cursor-pointer">
-                <FiMenu />
-             </button>
-             <div className="text-white text-2xl flex items-center gap-0 font-sans tracking-tight">
-                <span>weather</span>
-                <span className="text-[#ffcc00] font-bold mx-[1px]">&</span>
-                <span>radar</span>
-             </div>
-          </div>
 
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md relative ml-auto mr-8 items-center h-10">
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search city (e.g. Nagpur, Srinagar)..."
-              className="w-full h-full bg-white border-none rounded-l-sm pl-4 pr-12 text-sm text-[#333] focus:outline-none shadow-inner"
-            />
-            <button type="submit" className="absolute -right-5 h-10 w-10 bg-[#ffcc00] rounded-full flex items-center justify-center text-white hover:bg-[#e6b800] transition-colors shadow-md cursor-pointer">
-              <FiSearch className="text-lg" />
-            </button>
-          </form>
-        </div>
-        
-        <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ffb300] z-20"></div>
-      </nav>
 
       {/* Sidebar Drawer */}
       <div className="relative z-50">
@@ -269,19 +232,21 @@ const Weather: React.FC = () => {
 
       {/* City Cards Section */}
       <div className="container mx-auto px-2 py-4">
-         {/* Mobile Search Bar */}
-         <form onSubmit={handleSearch} className="flex md:hidden relative items-center h-10 mb-4 px-2">
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search city..."
-              className="w-full h-full bg-slate-100 border border-slate-300 rounded-sm pl-4 pr-12 text-sm text-[#333] focus:outline-none"
-            />
-            <button type="submit" className="absolute right-3 h-10 w-10 bg-[#ffcc00] rounded-sm flex items-center justify-center text-white hover:bg-[#e6b800] transition-colors shadow-md cursor-pointer">
-              <FiSearch className="text-lg" />
-            </button>
-         </form>
+         {/* Beautiful Centered Search Input */}
+         <div className="flex justify-center px-4 pt-4 pb-2">
+            <form onSubmit={handleSearch} className="relative w-full max-w-lg flex items-center h-12 shadow-sm rounded-2xl overflow-hidden border border-slate-200 bg-white">
+               <input 
+                 type="text"
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 placeholder="Search city (e.g. Hyderabad, Nagpur, Srinagar)..."
+                 className="w-full h-full bg-transparent pl-5 pr-14 text-sm text-slate-800 focus:outline-none placeholder:text-slate-400"
+               />
+               <button type="submit" className="absolute right-2 h-8 w-8 bg-[#ffcc00] rounded-xl flex items-center justify-center text-white hover:bg-[#e6b800] transition-colors shadow cursor-pointer">
+                  <FiSearch className="text-base" />
+               </button>
+            </form>
+         </div>
 
          <div className="flex gap-3 overflow-x-auto pb-4 snap-x hide-scrollbar justify-start md:justify-center px-2">
             {citiesList.map((city, i) => {
