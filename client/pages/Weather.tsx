@@ -1160,50 +1160,6 @@ const Weather: React.FC = () => {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="bg-[#126b8e] text-white py-8 mt-8 border-t-[4px] border-[#ffcc00]">
-         <div className="container mx-auto px-4 max-w-5xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               {/* Company */}
-               <div>
-                  <h3 className="font-bold text-lg mb-4 text-[#ffcc00]">Company</h3>
-                  <ul className="space-y-2 text-sm text-white/90">
-                     <li><a href="#" className="hover:underline">Contact us</a></li>
-                     <li><a href="#" className="hover:underline">Privacy policy</a></li>
-                     <li><a href="#" className="hover:underline">Legal info</a></li>
-                     <li><a href="#" className="hover:underline">Accessibility statement</a></li>
-                  </ul>
-               </div>
-               
-               {/* Services */}
-               <div>
-                  <h3 className="font-bold text-lg mb-4 text-[#ffcc00]">Services</h3>
-                  <ul className="space-y-2 text-sm text-white/90">
-                     <li><a href="#" className="hover:underline">Uploader</a></li>
-                     <li><a href="#" className="hover:underline">Weather widget</a></li>
-                     <li><a href="#" className="hover:underline">Apps</a></li>
-                  </ul>
-               </div>
-               
-               {/* App Download */}
-               <div>
-                  <h3 className="font-bold text-lg mb-2 text-[#ffcc00]">Weather & Radar is also available on</h3>
-                  <div className="flex gap-2">
-                     <div className="w-10 h-10 bg-white/20 rounded-md flex items-center justify-center hover:bg-white/30 cursor-pointer transition-colors">
-                        <span className="font-bold text-[10px]">iOS</span>
-                     </div>
-                     <div className="w-10 h-10 bg-white/20 rounded-md flex items-center justify-center hover:bg-white/30 cursor-pointer transition-colors">
-                        <span className="font-bold text-[10px]">Android</span>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            
-            <div className="mt-8 pt-4 border-t border-white/20 text-center text-xs text-white/60">
-               &copy; {new Date().getFullYear()} Weather & Radar Clone. All rights reserved.
-            </div>
-         </div>
-      </footer>
     </div>
   );
 };
