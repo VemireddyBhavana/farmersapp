@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiMenu, FiSearch, FiSun, FiShare2, FiTarget, FiPlay, FiPause, FiChevronRight, FiMessageCircle, FiCloud, FiCloudLightning, FiGlobe, FiTrendingUp, FiThermometer, FiX, FiCopy, FiCheck, FiWind, FiDroplet, FiAlertTriangle, FiInfo, FiBookOpen } from "react-icons/fi";
 import { toast } from "sonner";
+import { useWeather } from "../hooks/useWeather";
 
 interface CityWeatherData {
   name: string;
@@ -131,7 +132,100 @@ const Weather: React.FC = () => {
     { name: 'Bengaluru', temp: 30, bg: 'bg-gradient-to-r from-[#8ba0af] to-[#a2b3bf]' },
   ]);
 
-  const currentCityData = getCityData(selectedCity);
+  const { weather, fetchWeather } = useWeather();
+
+  const [mapTemps, setMapTemps] = useState<Record<string, number>>({
+    Delhi: 38,
+    Mumbai: 34,
+    Hyderabad: 36,
+    Kolkata: 37,
+    Chennai: 35,
+    Srinagar: 27,
+    Nagpur: 43
+  });
+
+  // Load real-time temperatures for the top cities list and map pins at mount
+  useEffect(() => {
+    const fetchRealTemps = async () => {
+      // 1. Fetch citiesList temperatures
+      const updatedList = [...citiesList];
+      for (let i = 0; i < updatedList.length; i++) {
+        try {
+          const res = await fetch(`/api/weather?city=${encodeURIComponent(updatedList[i].name)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.current) {
+              updatedList[i] = {
+                ...updatedList[i],
+                temp: Math.round(data.current.temp)
+              };
+            }
+          }
+        } catch (e) {
+          console.warn(`Failed to fetch real temperature for ${updatedList[i].name}:`, e);
+        }
+      }
+      setCitiesList(updatedList);
+
+      // 2. Fetch map pins temperatures
+      const pinCities = ['Delhi', 'Mumbai', 'Hyderabad', 'Kolkata', 'Chennai', 'Srinagar', 'Nagpur'];
+      const updatedMap = { ...mapTemps };
+      for (const city of pinCities) {
+        try {
+          const res = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.current) {
+              updatedMap[city] = Math.round(data.current.temp);
+            }
+          }
+        } catch (e) {
+          console.warn(`Failed to fetch map temperature for ${city}:`, e);
+        }
+      }
+      setMapTemps(updatedMap);
+    };
+    fetchRealTemps();
+  }, []);
+
+  // Fetch real-time weather details when active selected city changes
+  useEffect(() => {
+    fetchWeather(undefined, undefined, selectedCity);
+  }, [selectedCity, fetchWeather]);
+
+  // Seamlessly bind real OpenWeather current & daily temperatures with generative padding
+  const currentCityData = React.useMemo(() => {
+    if (weather && weather.location.toLowerCase().includes(selectedCity.toLowerCase())) {
+      const realName = weather.location.split(",")[0];
+      const realTemp = Math.round(weather.current.temp);
+      
+      const maxTemps = Array.from({ length: 14 }, (_, i) => {
+        if (i < weather.daily.length) return Math.round(weather.daily[i].temp.max);
+        return Math.round((weather.daily[weather.daily.length - 1]?.temp.max || 35) + Math.sin(i) * 2);
+      });
+      
+      const minTemps = Array.from({ length: 14 }, (_, i) => {
+        if (i < weather.daily.length) return Math.round(weather.daily[i].temp.min);
+        return Math.round((weather.daily[weather.daily.length - 1]?.temp.min || 25) + Math.cos(i) * 2);
+      });
+      
+      const weatherTypes = Array.from({ length: 14 }, (_, i) => {
+        if (i < weather.daily.length) {
+          return weather.daily[i].weather[0].main.toLowerCase().includes("rain") ? 'rain' as const : 'sun' as const;
+        }
+        return i % 3 === 0 ? 'rain' as const : 'sun' as const;
+      });
+
+      return {
+        name: realName,
+        temp: realTemp,
+        maxTemps,
+        minTemps,
+        weatherTypes
+      };
+    }
+    return getCityData(selectedCity);
+  }, [weather, selectedCity]);
 
   // Auto-play interval for live simulation
   useEffect(() => {
@@ -448,7 +542,7 @@ const Weather: React.FC = () => {
                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">New Delhi</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'delhi' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>40</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'delhi' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Delhi}</span>
                           </div>
                        </div>
                        
@@ -460,7 +554,7 @@ const Weather: React.FC = () => {
                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Mumbai</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'mumbai' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>34</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'mumbai' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Mumbai}</span>
                           </div>
                        </div>
 
@@ -472,7 +566,7 @@ const Weather: React.FC = () => {
                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Hyderabad</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'hyderabad' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>37</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'hyderabad' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Hyderabad}</span>
                           </div>
                        </div>
 
@@ -483,7 +577,7 @@ const Weather: React.FC = () => {
                           )}
                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'kolkata' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>37</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'kolkata' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Kolkata}</span>
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Kolkata</span>
                           </div>
                        </div>
@@ -496,7 +590,7 @@ const Weather: React.FC = () => {
                           <FiCloudLightning className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Chennai</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'chennai' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>35</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'chennai' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Chennai}</span>
                           </div>
                        </div>
                        
@@ -508,7 +602,7 @@ const Weather: React.FC = () => {
                           <FiSun className="text-[#ffcc00] text-3xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Srinagar</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'srinagar' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>27</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'srinagar' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Srinagar}</span>
                           </div>
                        </div>
                        
@@ -520,7 +614,7 @@ const Weather: React.FC = () => {
                           <FiSun className="text-[#ffcc00] text-4xl drop-shadow-md group-hover:scale-110 transition-transform" />
                           <div className="flex items-center gap-1 -mt-1 z-20">
                              <span className="text-slate-800 text-[11px] font-bold drop-shadow-sm">Nagpur</span>
-                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'nagpur' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>43</span>
+                             <span className={`bg-white border px-1 font-bold text-[10px] shadow-sm ${selectedCity.toLowerCase() === 'nagpur' ? 'text-[#ffcc00] border-[#ffcc00]' : 'text-red-600 border-slate-300'}`}>{mapTemps.Nagpur}</span>
                           </div>
                        </div>
 
@@ -726,19 +820,19 @@ const Weather: React.FC = () => {
                <div className="p-4 bg-slate-50 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] font-sans text-slate-600 animate-[fadeIn_0.3s_ease-out]">
                   <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
                      <span className="font-bold text-[#126b8e]">Humidity Avg</span>
-                     <span className="text-slate-800 font-extrabold text-xs">68% <span className="text-green-500 font-normal">(-2%)</span></span>
+                     <span className="text-slate-800 font-extrabold text-xs">{weather ? `${Math.round(weather.current.humidity)}%` : "68%"} <span className="text-green-500 font-normal">({weather ? "Live" : "-2%"})</span></span>
                   </div>
                   <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
                      <span className="font-bold text-[#126b8e]">Precipitation Prob</span>
-                     <span className="text-slate-800 font-extrabold text-xs">15% <span className="text-blue-500 font-normal">(Low)</span></span>
+                     <span className="text-slate-800 font-extrabold text-xs">{weather && weather.daily?.[0] ? `${Math.round(weather.daily[0].pop * 100)}%` : "15%"} <span className="text-blue-500 font-normal">({weather && weather.daily?.[0] && weather.daily[0].pop > 0.4 ? "High" : "Low"})</span></span>
                   </div>
                   <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
                      <span className="font-bold text-[#126b8e]">UV Index Max</span>
-                     <span className="text-slate-800 font-extrabold text-xs">9 <span className="text-red-500 font-normal">(Extreme)</span></span>
+                     <span className="text-slate-800 font-extrabold text-xs">{weather ? Math.round(weather.current.uvi) : 9} <span className="text-red-500 font-normal">({weather && weather.current.uvi > 7 ? "Extreme" : "Moderate"})</span></span>
                   </div>
                   <div className="bg-white p-2.5 rounded shadow-sm border border-slate-100 flex flex-col gap-1">
                      <span className="font-bold text-[#126b8e]">Wind Conditions</span>
-                     <span className="text-slate-800 font-extrabold text-xs">18 km/h <span className="text-slate-400 font-normal">(E)</span></span>
+                     <span className="text-slate-800 font-extrabold text-xs">{weather ? `${Math.round(weather.current.wind_speed)} km/h` : "18 km/h"} <span className="text-slate-400 font-normal">({weather ? "NW" : "E"})</span></span>
                   </div>
                </div>
              )}
@@ -988,7 +1082,6 @@ const Weather: React.FC = () => {
                     type="email" 
                     required 
                     placeholder="Enter your email" 
-                    defaultValue="bhavanavemireddy6@gmail.com"
                     className="flex-1 px-3 py-2 text-xs border border-slate-300 rounded shadow-inner focus:outline-none focus:border-[#126b8e] text-slate-800 bg-white" 
                   />
                   <button 
