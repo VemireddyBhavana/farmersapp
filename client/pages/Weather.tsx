@@ -377,7 +377,7 @@ const Weather: React.FC = () => {
                <div className="text-white text-xl md:text-3xl font-medium leading-tight">Hailstorm Safety<br/>Guide</div>
             </div>
             <div className="w-2/3 relative">
-               <img src="https://images.unsplash.com/photo-1542316527-3199bc451b03?auto=format&fit=crop&q=80&w=800" alt="Hail" className="w-full h-full object-cover" />
+               <img src="/hailstorm_safety.png" alt="Hail" className="w-full h-full object-cover" />
             </div>
         </div>
 
@@ -522,7 +522,7 @@ const Weather: React.FC = () => {
                   </div>
                   {/* Map Area */}
                   <div className="flex-1 bg-[#b3c4cc] relative w-full h-full overflow-hidden">
-                     <img onClick={() => toast.success("Displaying regional meteorological relief map.")} src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Relief_Map_of_India.png/640px-Relief_Map_of_India.png" alt="India Map" className="w-full h-full object-cover opacity-30 mix-blend-multiply cursor-pointer hover:opacity-40 transition-opacity" />
+                     <img onClick={() => toast.success("Displaying regional meteorological relief map.")} src="/india_relief_map.png" alt="India Map" className="w-full h-full object-cover opacity-30 mix-blend-multiply cursor-pointer hover:opacity-40 transition-opacity" />
                      
                      <button onClick={() => toast.info("Switched to today's forecast timeline.")} className="absolute top-3 left-3 bg-[#1b7f9c] text-white text-xs font-bold px-4 py-1.5 rounded-sm shadow-sm hover:bg-[#126b8e] border border-white/20 cursor-pointer">
                         today
@@ -651,7 +651,7 @@ const Weather: React.FC = () => {
                {/* News Item */}
                <div className="flex-1 flex flex-col relative group cursor-pointer border-b border-slate-100 overflow-hidden" onClick={() => setIsNewsModalOpen(true)}>
                   <div className="h-36 bg-slate-200 relative overflow-hidden">
-                     <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=400" alt="Heatwave" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                     <img src="/heatwave_safety.png" alt="Heatwave" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <div className="w-20 h-20 relative flex items-center justify-center">
                            <svg viewBox="0 0 24 24" fill="white" stroke="#cc0000" strokeWidth="1.5" className="w-full h-full">
@@ -854,7 +854,7 @@ const Weather: React.FC = () => {
             {/* Map Area */}
             <div className="flex-1 bg-[#1e3a5f] relative w-full h-full overflow-hidden">
                {/* Heat map background with hue-rotation */}
-               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Relief_Map_of_India.png/640px-Relief_Map_of_India.png" alt="Heat Map" className="w-full h-full object-cover opacity-80" style={{ filter: `hue-rotate(${300 + (radarTime === 'now' ? 0 : radarTime === 'today' ? 15 : 30)}deg) saturate(3) brightness(0.8) contrast(1.5)` }} />
+               <img src="/india_relief_map.png" alt="Heat Map" className="w-full h-full object-cover opacity-80" style={{ filter: `hue-rotate(${300 + (radarTime === 'now' ? 0 : radarTime === 'today' ? 15 : 30)}deg) saturate(3) brightness(0.8) contrast(1.5)` }} />
                
                {/* Map Pins */}
                <div className="absolute inset-0 pointer-events-none">
