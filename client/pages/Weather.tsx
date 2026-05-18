@@ -214,19 +214,6 @@ const Weather: React.FC = () => {
                 <span>radar</span>
              </div>
           </div>
-
-          <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md relative ml-auto mr-8 items-center h-10">
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search city (e.g. Nagpur, Srinagar)..."
-              className="w-full h-full bg-white border-none rounded-l-sm pl-4 pr-12 text-sm text-[#333] focus:outline-none shadow-inner"
-            />
-            <button type="submit" className="absolute -right-5 h-10 w-10 bg-[#ffcc00] rounded-full flex items-center justify-center text-white hover:bg-[#e6b800] transition-colors shadow-md cursor-pointer">
-              <FiSearch className="text-lg" />
-            </button>
-          </form>
         </div>
         
         <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#ffb300] z-20"></div>
