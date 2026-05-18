@@ -424,7 +424,7 @@ const Weather: React.FC = () => {
                   </div>
                   {/* Map Area */}
                   <div className="flex-1 bg-green-800 relative w-full h-full border-t border-[#0f5a7a]">
-                     <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800" alt="Map background" className="w-full h-full object-cover opacity-60" />
+                     <img src="/world_weather_map.png" alt="Map background" className="w-full h-full object-cover opacity-60" />
                      
                      {/* Simulated live radar overlays */}
                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -1047,7 +1047,7 @@ const Weather: React.FC = () => {
 
             <div className="p-6 overflow-y-auto space-y-6">
               <div className="relative h-48 rounded-lg overflow-hidden shadow-sm">
-                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800" alt="Heatwave Cover" className="w-full h-full object-cover" />
+                <img src="/heatwave_news_cover.png" alt="Heatwave Cover" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent flex items-end p-4">
                   <div>
                      <span className="bg-red-500 text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full">Severe Alert</span>
