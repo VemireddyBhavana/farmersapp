@@ -145,7 +145,8 @@ export const useWeather = () => {
 
   const getLocationAndFetch = useCallback(() => {
     if (!navigator.geolocation) {
-      setError("Geolocation hardware not detected.");
+      console.warn("Geolocation hardware not detected. Using fallback location.");
+      fetchWeather(17.3850, 78.4867);
       return;
     }
 
@@ -156,9 +157,8 @@ export const useWeather = () => {
         fetchWeather(position.coords.latitude, position.coords.longitude);
       },
       (err) => {
-        setError("Location access denied. Please manual-lock your region.");
-        setLoading(false);
-        setLoadingStage("");
+        console.warn("Location access denied or timeout. Using default fallback location.");
+        fetchWeather(17.3850, 78.4867);
       },
       { timeout: 10000 }
     );
