@@ -11,7 +11,7 @@ interface Message {
 }
 
 export default function ExpertHelpVoice() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [listening, setListening] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,6 +23,17 @@ export default function ExpertHelpVoice() {
 
   const recognitionRef = useRef<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Sync active site language to selection
+  useEffect(() => {
+    if (language === "Telugu") {
+      setSelectedLang("te-IN");
+    } else if (language === "Hindi") {
+      setSelectedLang("hi-IN");
+    } else {
+      setSelectedLang("en-IN");
+    }
+  }, [language]);
 
   // Fetch weather on mount
   useEffect(() => {
@@ -76,6 +87,35 @@ export default function ExpertHelpVoice() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  // Translate weather advisory in weather advisory bar
+  const getLocalizedWeatherAdvisory = (advisory: string) => {
+    if (!advisory) return "";
+    const advDict: Record<string, Record<string, string>> = {
+      "te-IN": {
+        "Rain detected. Suspend irrigation. Ensure drainage channels in cotton/chilli fields are clear.": "వర్షం నమోదైంది. నీటిపారుదలని నిలిపివేయండి. పత్తి/మిరప పొలాల్లో నీరు నిల్వ ఉండకుండా డ్రైనేజీ కాలువలు శుభ్రంగా ఉంచుకోండి.",
+        "Extreme heat. Critical irrigation required for young saplings. Apply mulch to conserve soil moisture.": "తీవ్రమైన వేడి. చిన్న మొక్కలకు తక్షణ నీటిపారుదల అవసరం. నేల తేమను కాపాడటానికి మల్చింగ్ వేయండి.",
+        "Soil moisture is low. Scheduled irrigation recommended before peak noon.": "నేల తేమ తక్కువగా ఉంది. మధ్యాహ్నం వేడి పెరగక ముందే నీటిపారుదల చేయవలసిందిగా సిఫార్సు చేయబడింది.",
+        "Vegetation vigor is below optimal. Satellite data suggests potential nutrient stress.": "పంట ఎదుగుదల ఆశించిన స్థాయిలో లేదు. శాటిలైట్ సమాచారం ప్రకారం పోషకాల లోపం ఉండే అవకాశం ఉంది.",
+        "High humidity alert. Risk of pest infestation increases. Monitor crop leaves for fungal spots.": "అధిక తేమ హెచ్చరిక. తెగుళ్లు ఆశించే ప్రమాదం ఉంది. శిలీంధ్ర మచ్చల కోసం ఆకులను గమనించండి.",
+        "Ideal conditions for field work. Good window for fertilizer application and harvesting.": "క్షేత్ర పనులకు అనుకూలమైన పరిస్థితులు. ఎరువులు వేయడానికి మరియు పంట కోతకు ఇది మంచి సమయం."
+      },
+      "hi-IN": {
+        "Rain detected. Suspend irrigation. Ensure drainage channels in cotton/chilli fields are clear.": "बारिश दर्ज की गई। सिंचाई स्थगित करें। कपास/मिर्च के खेतों में जल निकासी नालियों को साफ रखें।",
+        "Extreme heat. Critical irrigation required for young saplings. Apply mulch to conserve soil moisture.": "अत्यधिक गर्मी। छोटे पौधों के लिए महत्वपूर्ण सिंचाई आवश्यक है। मिट्टी की नमी बनाए रखने के लिए मल्चिंग लगाएं।",
+        "Soil moisture is low. Scheduled irrigation recommended before peak noon.": "मिट्टी की नमी कम है। दोपहर की गर्मी से पहले निर्धारित सिंचाई की सलाह दी जाती है।",
+        "Vegetation vigor is below optimal. Satellite data suggests potential nutrient stress.": "वनस्पति का स्वास्थ्य अनुकूल से कम है। उपग्रह डेटा संभावित पोषक तत्वों की कमी का संकेत देता है।",
+        "High humidity alert. Risk of pest infestation increases. Monitor crop leaves for fungal spots.": "उच्च आर्द्रता की चेतावनी। कीटों के प्रकोप का खतरा बढ़ जाता है। फंगल धब्बों के लिए फसल की पत्तियों की निगरानी करें।",
+        "Ideal conditions for field work. Good window for fertilizer application and harvesting.": "खेत के काम के लिए आदर्श परिस्थितियां। उर्वरक प्रयोग और कटाई के लिए अच्छा समय है।"
+      }
+    };
+
+    const set = advDict[selectedLang];
+    if (set && set[advisory]) {
+      return set[advisory];
+    }
+    return advisory;
+  };
 
   // Voice Output (SpeechSynthesis)
   const speak = (text: string) => {
@@ -133,10 +173,11 @@ export default function ExpertHelpVoice() {
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I am having trouble connecting right now. Please try again.",
+          content: t("voiceError") || "Sorry, I am having trouble connecting right now. Please try again.",
         },
       ]);
     } finally {
+      loading && setLoading(false);
       setLoading(false);
     }
   };
@@ -154,7 +195,7 @@ export default function ExpertHelpVoice() {
         <div className="flex items-center justify-between mb-6 flex-shrink-0">
           <Link to="/expert-consult" className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 transition-colors font-bold text-sm">
             <ArrowLeft className="w-4 h-4" />
-            <span>{t("back") || "Back"}</span>
+            <span>{t("back")}</span>
           </Link>
 
           <div className="flex items-center gap-3">
@@ -164,7 +205,7 @@ export default function ExpertHelpVoice() {
                 window.speechSynthesis.cancel();
               }}
               className="p-3 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-xl hover:bg-slate-50 transition-colors"
-              title={muteVoice ? "Unmute Voice Answers" : "Mute Voice Answers"}
+              title={muteVoice ? t("unmuteVoice") : t("muteVoice")}
             >
               {muteVoice ? <VolumeX className="w-5 h-5 text-slate-400" /> : <Volume2 className="w-5 h-5 text-emerald-600" />}
             </button>
@@ -186,7 +227,7 @@ export default function ExpertHelpVoice() {
           <div className="mb-4 p-4 bg-amber-50 dark:bg-amber-950/20 border border-amber-200/50 rounded-2xl flex items-start gap-3 flex-shrink-0">
             <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <p className="text-xs font-bold text-amber-800 dark:text-amber-300 leading-normal">
-              Voice speech recognition is only supported in Google Chrome and Microsoft Edge on Android/PC. Text chat is fully functional!
+              {t("voiceWarning")}
             </p>
           </div>
         )}
@@ -198,9 +239,9 @@ export default function ExpertHelpVoice() {
               <CloudSun className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 leading-none mb-1.5">Live Weather Advisory</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 leading-none mb-1.5">{t("liveWeatherAdvisory")}</p>
               <p className="text-xs font-bold text-slate-700 dark:text-slate-300 leading-snug">
-                {weather.current?.temp}°C, {weather.current?.humidity}% Humidity — <span className="italic">{weather.advisory}</span>
+                {weather.current?.temp}°C, {weather.current?.humidity}% {t("humidity")} — <span className="italic">{getLocalizedWeatherAdvisory(weather.advisory)}</span>
               </p>
             </div>
           </div>
@@ -214,7 +255,7 @@ export default function ExpertHelpVoice() {
                 <MessageSquare className="w-12 h-12 text-slate-300 dark:text-slate-600" />
               </div>
               <p className="text-sm font-black uppercase tracking-widest leading-relaxed">
-                Press mic or type your farming question
+                {t("voicePrompt")}
               </p>
             </div>
           ) : (
@@ -268,7 +309,7 @@ export default function ExpertHelpVoice() {
           <input
             type="text"
             className="flex-1 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-2xl px-6 h-14 text-sm font-semibold outline-none focus:border-emerald-500 shadow-sm text-slate-800 dark:text-slate-100"
-            placeholder={listening ? "Listening... Speak now..." : "Ask me anything about farming..."}
+            placeholder={listening ? t("listeningSpeakNow") : t("askAnything")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={listening}
@@ -280,7 +321,7 @@ export default function ExpertHelpVoice() {
             className="h-14 px-6 bg-slate-900 hover:bg-emerald-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-md flex items-center gap-2"
           >
             <Send className="w-4 h-4" />
-            <span className="hidden sm:inline">Send</span>
+            <span className="hidden sm:inline">{t("send")}</span>
           </button>
         </form>
 

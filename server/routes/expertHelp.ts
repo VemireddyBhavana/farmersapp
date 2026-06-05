@@ -140,7 +140,16 @@ export const handleExpertHelpDisease = async (req: any, res: Response) => {
 
     const base64Image = req.file.buffer.toString("base64");
     const mimeType = req.file.mimetype;
-    const diseasePrompt = "You are an agricultural expert. Analyze this crop photo. Identify: 1) Disease name 2) Symptoms visible 3) Treatment steps 4) Prevention tips. Be specific and practical for Indian farmers.";
+    
+    // Retrieve language from req.body (populated by multer for text fields)
+    const lang = req.body.language || "en";
+    
+    let diseasePrompt = "You are an agricultural expert. Analyze this crop photo. Identify: 1) Disease name 2) Symptoms visible 3) Treatment steps 4) Prevention tips. Be specific and practical for Indian farmers.";
+    if (lang === "te") {
+      diseasePrompt += " Provide your response entirely in Telugu language.";
+    } else if (lang === "hi") {
+      diseasePrompt += " Provide your response entirely in Hindi language.";
+    }
 
     // 1. Try Groq (Vision Model)
     if (process.env.GROQ_API_KEY) {
@@ -201,9 +210,15 @@ export const handleExpertHelpDisease = async (req: any, res: Response) => {
       }
     }
 
-    // Mock response if all AI services fail/offline
+    // Mock response if all AI services fail/offline (localized)
+    const fallbacks: Record<string, string> = {
+      en: "**Disease Name**: Undetermined (Network Offline)\n\n**Symptoms**: Unable to process image analysis.\n\n**Treatment**: Please consult a local agricultural extension officer.\n\n**Prevention**: Keep tools sterilized and ensure optimal spacing between plants.",
+      hi: "**रोग का नाम**: अनिर्धारित (नेटवर्क ऑफ़लाइन)\n\n**लक्षण**: छवि विश्लेषण करने में असमर्थ।\n\n**उपचार**: कृपया स्थानीय कृषि विस्तार अधिकारी से संपर्क करें।\n\n**निवारण**: उपकरणों को रोगाणुरहित रखें और पौधों के बीच इष्टतम दूरी सुनिश्चित करें।",
+      te: "**వ్యాధి పేరు**: నిర్ధారించబడలేదు (నెట్‌వర్క్ ఆఫ్‌లైన్)\n\n**లక్షణాలు**: చిత్ర విశ్లేషణను ప్రాసెస్ చేయడం సాధ్యం కాలేదు.\n\n**చికిత్స**: దయచేసి స్థానిక వ్యవసాయ విస్తరణ అధికారిని సంప్రదించండి.\n\n**నివారణ**: పరికరాలను క్రిమిరహితంగా ఉంచండి మరియు మొక్కల మధ్య సరైన దూరాన్ని నిర్ధారించండి."
+    };
+
     res.json({
-      diagnosis: "**Disease Name**: Undetermined (Network Offline)\n\n**Symptoms**: Unable to process image analysis.\n\n**Treatment**: Please consult a local agricultural extension officer.\n\n**Prevention**: Keep tools sterilized and ensure optimal spacing between plants.",
+      diagnosis: fallbacks[lang] || fallbacks.en,
     });
   } catch (error) {
     console.error("❌ Disease Detection critical error:", error);

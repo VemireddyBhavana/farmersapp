@@ -2490,7 +2490,7 @@ export const ml = {
     "sunriseLabel": "സൂര്യോദയം",
     "sunsetLabel": "സൂര്യാസ്തമയം",
     "supplementation": "पूरक",
-    "supportEmail": "bhavanavemireddy6@gmail.com",
+    "supportEmail": "support@kisannetwork.com",
     "supportPortal": "പിന്തുണ പോർട്ടൽ",
     "supportPortalTitle": "Support Portal",
     "sustainabilityTitle": "സ്ഥിരത അളവുകോൽ",

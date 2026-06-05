@@ -54,7 +54,10 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
     // Clean text from markdown notations before speaking
     const cleanText = text.replace(/[*#_`~]/g, "");
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = "en-IN"; // English (Indian accent)
+
+    // Dynamic voice selection matching language selection
+    const langCode = language === "Telugu" ? "te-IN" : language === "Hindi" ? "hi-IN" : "en-IN";
+    utterance.lang = langCode;
     utterance.rate = 0.85;
 
     window.speechSynthesis.speak(utterance);
@@ -71,9 +74,9 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
   useEffect(() => {
     if (isOpen && mentor) {
       const greetings: Record<string, string> = {
-        English: `Hello! I'm ${mentor.name}. I'm here to help you with ${mentor.specialty || "agricultural topics"} Options. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`,
-        Hindi: `नमस्ते! मैं ${mentor.name} हूँ। मैं यहाँ ${mentor.specialty || "कृषि विषयों"} विकल्पों में आपकी मदद करने के लिए हूँ। अपनी खेती के बारे में कोई भी प्रश्न या संदेह पूछने में संकोच न करें। आप क्या जानना चाहेंगे?`,
-        Telugu: `నమస్తే! నేను ${mentor.name}. ఇక్కడ ${mentor.specialty || "వ్యవసాయ అంశాల"} విభాగంలో మీకు సహాయం చేయడానికి ఉన్నాను. మీ వ్యవసాయం గురించి మీకు ఏవైనా ప్రశ్నలు లేదా సందేహాలు ఉంటే అడగడానికి సంకోచించకండి. మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?`
+        English: `Hello! I'm ${mentor.name}. I'm here to help you with ${t(mentor.specialty) || "agricultural topics"}. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`,
+        Hindi: `नमस्ते! मैं ${mentor.name} हूँ। मैं यहाँ ${t(mentor.specialty) || "कृषि विषयों"} में आपकी मदद करने के लिए हूँ। अपनी खेती के बारे में कोई भी प्रश्न या संदेह पूछने में संकोच न करें। आप क्या जानना चाहेंगे?`,
+        Telugu: `నమస్తే! నేను ${mentor.name}. ఇక్కడ ${t(mentor.specialty) || "వ్యవసాయ అంశాల"} విభాగంలో మీకు సహాయం చేయడానికి ఉన్నాను. మీ వ్యవసాయం గురించి మీకు ఏవైనా ప్రశ్నలు లేదా సందేహాలు ఉంటే అడగడానికి సంకోచించకండి. మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?`
       };
       const greeting = greetings[language] || greetings.English;
       
@@ -125,7 +128,11 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
       speak(reply);
     } catch (err) {
       console.error("❌ [Expert Call] Error:", err);
-      const errorMsg = "Sorry, I am having trouble connecting to the network right now. Please try again.";
+      const errorMsg = language === "Telugu" 
+        ? "క్షమించండి, ప్రస్తుతం కనెక్ట్ చేయడంలో సమస్య ఉంది. దయచేసి మళ్లీ ప్రయత్నించండి." 
+        : language === "Hindi" 
+        ? "क्षमा करें, वर्तमान में कनेक्ट करने में समस्या आ रही है। कृपया पुनः प्रयास करें।" 
+        : "Sorry, I am having trouble connecting to the network right now. Please try again.";
       setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
       speak(errorMsg);
     } finally {
@@ -154,7 +161,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className="h-2.5 w-2.5 bg-emerald-400 rounded-full animate-pulse" />
                     <span className="text-xs text-white/80 font-bold">
-                      Live Call • {formatTime(seconds)}
+                      {t("liveCall")} • {formatTime(seconds)}
                     </span>
                   </div>
                 </div>
@@ -166,7 +173,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                     "h-10 w-10 rounded-full flex items-center justify-center transition-all",
                     muted ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/30"
                   )}
-                  title={muted ? "Unmute Mic" : "Mute Mic"}
+                  title={muted ? t("unmuteMic") : t("muteMic")}
                 >
                   {muted ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                 </button>
@@ -182,7 +189,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                     "h-10 w-10 rounded-full flex items-center justify-center transition-all",
                     !speakerOn ? "bg-red-500 text-white" : "bg-white/20 text-white hover:bg-white/30"
                   )}
-                  title={speakerOn ? "Mute Speaker" : "Unmute Speaker"}
+                  title={speakerOn ? t("muteSpeaker") : t("unmuteSpeaker")}
                 >
                   {speakerOn ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
                 </button>
@@ -215,7 +222,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                 <div className="flex items-center gap-3 text-indigo-600 ml-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-[10px] font-black uppercase tracking-widest">
-                    Mentor is thinking...
+                    {t("mentorThinking")}
                   </span>
                 </div>
               )}
@@ -228,7 +235,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  placeholder="Ask your question..."
+                  placeholder={t("askQuestion")}
                   className="flex-1 h-12 bg-white border border-slate-200 rounded-xl px-4 text-sm font-semibold focus-visible:ring-indigo-500"
                 />
                 <button
@@ -245,7 +252,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
                 onClick={onClose}
                 className="w-full h-12 border border-red-500 hover:bg-red-50 text-red-500 rounded-xl font-bold transition-colors mt-4 text-sm tracking-wide"
               >
-                End Call
+                {t("endCall")}
               </button>
             </div>
           </motion.div>

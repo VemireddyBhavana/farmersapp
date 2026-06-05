@@ -25,7 +25,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center space-x-3 text-muted-foreground">
               <Mail className="h-5 w-5 flex-shrink-0 text-primary" />
-              <span>bhavanavemireddy6@gmail.com</span>
+              <span>{t("supportEmail")}</span>
             </div>
             {/* Social Icons */}
             <div className="flex gap-3 pt-2">

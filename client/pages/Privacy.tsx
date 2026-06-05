@@ -48,7 +48,7 @@ export default function Privacy() {
                 <section className="space-y-4">
                     <h2 className="text-2xl font-bold text-emerald-600">{t('contactUs')}</h2>
                     <p className="text-muted-foreground">
-                        {t('privacyContactText')} bhavanavemireddy6@gmail.com.
+                        {t('privacyContactText')} {t('supportEmail')}.
                     </p>
                 </section>
             </div>

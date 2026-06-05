@@ -27,6 +27,8 @@ export default function ExpertHelpSchemes() {
       eligibilityTitle: "Who is Eligible?",
       applyBtn: "Official Portal / Apply Link",
       back: "Back",
+      nationalSchemes: "National Schemes",
+      govScheme: "Government Scheme",
     },
     hi: {
       title: "सरकारी कृषि योजनाएं",
@@ -35,6 +37,8 @@ export default function ExpertHelpSchemes() {
       eligibilityTitle: "कौन पात्र है?",
       applyBtn: "आधिकारिक पोर्टल / आवेदन लिंक",
       back: "पीछे",
+      nationalSchemes: "राष्ट्रीय योजनाएं",
+      govScheme: "सरकारी योजना",
     },
     te: {
       title: "ప్రభుత్వ వ్యవసాయ పథకాలు",
@@ -43,6 +47,8 @@ export default function ExpertHelpSchemes() {
       eligibilityTitle: "ఎవరు అర్హులు?",
       applyBtn: "అధికారిక పోర్టల్ / దరఖాస్తు లింక్",
       back: "వెనుకకు",
+      nationalSchemes: "జాతీయ పథకాలు",
+      govScheme: "ప్రభుత్వ పథకం",
     }
   };
 
@@ -251,7 +257,7 @@ export default function ExpertHelpSchemes() {
           </Link>
           <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400">
             <Award className="w-4 h-4 text-emerald-500" />
-            <span>National Schemes</span>
+            <span>{text.nationalSchemes}</span>
           </div>
         </div>
 
@@ -279,7 +285,7 @@ export default function ExpertHelpSchemes() {
                 <div>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100 dark:border-emerald-900/30">
                     <FileText className="w-3.5 h-3.5" />
-                    Government Scheme
+                    {text.govScheme}
                   </span>
                   <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-3 leading-none group-hover:text-emerald-600 transition-colors">
                     {scheme.title}

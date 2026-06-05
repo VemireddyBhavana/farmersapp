@@ -19,67 +19,67 @@ const EXPERTS = [
   { 
     id: 1, 
     name: "Dr. Rajesh Kumar", 
-    title: "PhD Agronomy, IARI Delhi", 
-    specialty: "Crop Pathology", 
+    title: "expert_title_1", 
+    specialty: "expert_specialty_1", 
     image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=300",
-    tags: ["Crop Health", "Pest Control", "Organic Farming"],
+    tags: ["expert_tag_CropHealth", "expert_tag_PestControl", "expert_tag_OrganicFarming"],
     rating: 5,
-    availability: "Mon-Fri, 6-9 PM",
+    availability: "expert_availability_1",
     price: 299
   },
   { 
     id: 2, 
     name: "Er. Sneha Rao", 
-    title: "M.Tech Water Resources, NIT", 
-    specialty: "Irrigation Expert", 
+    title: "expert_title_2", 
+    specialty: "expert_specialty_2", 
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
-    tags: ["Drip Irrigation", "Water Saving", "Micro-irrigation"],
+    tags: ["expert_tag_DripIrrigation", "expert_tag_WaterSaving", "expert_tag_MicroIrrigation"],
     rating: 4,
-    availability: "Tue-Sat, 5-8 PM",
+    availability: "expert_availability_2",
     price: 349
   },
   { 
     id: 3, 
     name: "Prof. Amit Singh", 
-    title: "Soil Science Expert, PAU", 
-    specialty: "Soil Scientist", 
+    title: "expert_title_3", 
+    specialty: "expert_specialty_3", 
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
-    tags: ["Soil Testing", "Nutrient Management", "Fertilizer Advice"],
+    tags: ["expert_tag_SoilTesting", "expert_tag_NutrientManagement", "expert_tag_FertilizerAdvice"],
     rating: 5,
-    availability: "Daily, 8-11 AM",
+    availability: "expert_availability_3",
     price: 399
   },
   { 
     id: 4, 
     name: "Dr. Priya Nair", 
-    title: "PhD Plant Biotechnology", 
-    specialty: "Genetic Specialist", 
+    title: "expert_title_4", 
+    specialty: "expert_specialty_4", 
     image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=300",
-    tags: ["Seed Quality", "GM Crops", "Hybrid Varieties"],
+    tags: ["expert_tag_SeedQuality", "expert_tag_GMCrops", "expert_tag_HybridVarieties"],
     rating: 5,
-    availability: "Mon-Thu, 4-7 PM",
+    availability: "expert_availability_4",
     price: 499
   },
   { 
     id: 5, 
     name: "Er. Anil Reddy", 
-    title: "B.E. Agricultural Engineering", 
-    specialty: "Machinery Expert", 
+    title: "expert_title_5", 
+    specialty: "expert_specialty_5", 
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300",
-    tags: ["Tractor Tech", "Automation", "Tool Design"],
+    tags: ["expert_tag_TractorTech", "expert_tag_Automation", "expert_tag_ToolDesign"],
     rating: 4,
-    availability: "Wed-Sun, 7-10 PM",
+    availability: "expert_availability_5",
     price: 249
   },
   { 
     id: 6, 
     name: "Prof. Sunita Sharma", 
-    title: "Horticulture lead, UASB", 
-    specialty: "Fruit Cultivation", 
+    title: "expert_title_6", 
+    specialty: "expert_specialty_6", 
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300",
-    tags: ["Grafting", "Greenhouse", "Post-Harvest"],
+    tags: ["expert_tag_Grafting", "expert_tag_Greenhouse", "expert_tag_PostHarvest"],
     rating: 5,
-    availability: "Fri-Sun, 3-6 PM",
+    availability: "expert_availability_6",
     price: 299
   }
 ];
@@ -164,7 +164,7 @@ const ExpertHelpFull = () => {
                       <h3 className="text-2xl font-black text-slate-900 group-hover:text-primary transition-colors">{expert.name}</h3>
                       <p className="text-sm text-muted-foreground font-semibold flex items-center gap-1.5 mt-1">
                         <Briefcase className="h-3.5 w-3.5" />
-                        {expert.title}
+                        {t(expert.title)}
                       </p>
                     </div>
                   </div>
@@ -172,7 +172,7 @@ const ExpertHelpFull = () => {
                   <div className="flex flex-wrap gap-2 mb-8">
                     {expert.tags.map(tag => (
                       <span key={tag} className="px-4 py-1.5 bg-slate-50 text-slate-600 rounded-full text-[10px] font-black uppercase tracking-wider border border-slate-100">
-                        {tag}
+                        {t(tag)}
                       </span>
                     ))}
                   </div>
@@ -188,7 +188,7 @@ const ExpertHelpFull = () => {
                     <div className="flex flex-col">
                       <div className="flex items-center gap-1.5 text-slate-400 mb-1">
                         <Clock className="h-3.5 w-3.5" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{expert.availability}</span>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{t(expert.availability)}</span>
                       </div>
                       <div className="text-2xl font-black text-emerald-600">₹{expert.price}<span className="text-xs text-muted-foreground font-medium ml-1">{t("perSession")}</span></div>
                     </div>
