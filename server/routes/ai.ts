@@ -85,11 +85,56 @@ export const handleAI = async (req: Request, res: Response) => {
     }
 
     // Fallback
-    const lastUserMsg = messages[messages.length - 1]?.content || "";
-    let fallbackReply = `🚀 [Expert Protocol] I recommend checking your soil moisture and applying organic fertilizers. How else can I help?`;
+    const lastUserMsg = (messages[messages.length - 1]?.content || "").toLowerCase().trim();
+    let fallbackReply = "";
     
     if (mode === "interviewer") {
         fallbackReply = `🎤 [Interview Mode] That's an interesting point about ${topic}. Can you tell me more about how you handle crop rotation?`;
+    } else {
+        const langKey = language === "Telugu" ? "te" : language === "Hindi" ? "hi" : "en";
+        
+        const replies: Record<string, { greet: string; disease: string; weather: string; scheme: string; price: string; def: string }> = {
+            en: {
+                greet: "🚀 Hello! How can I assist you with your crops, weather, market prices, or government schemes today?",
+                disease: "🚀 I recommend checking for leaf spots or fungal infections. Keep tools sterilized and ensure optimal spacing between plants. Feel free to upload a photo in our Crop Disease Detection section for detailed diagnosis.",
+                weather: "🚀 Ensure proper drainage for crops during rain and water early in the morning on sunny days. Keep an eye on local forecasts.",
+                scheme: "🚀 You can benefit from PM-KISAN (direct support of ₹6,000/yr) or get low-interest cultivation loans via Kisan Credit Card (KCC). Let me know if you need links to apply!",
+                price: "🚀 You can get competitive prices by registering on the official eNAM portal. Transparent electronic bidding helps avoid middlemen fees.",
+                def: "🚀 I recommend checking your soil moisture, testing pH levels, and applying organic manure. Let me know if you have specific questions about pests, weather, or pricing."
+            },
+            hi: {
+                greet: "🚀 नमस्ते! आज मैं आपकी फसलों, मौसम, बाजार की कीमतों या सरकारी योजनाओं के बारे में क्या मदद कर सकता हूँ?",
+                disease: "🚀 मैं पत्तों के धब्बों या कवक संक्रमण की जाँच करने की सलाह देता हूँ। औजारों को स्वच्छ रखें और रोग पहचान अनुभाग में फोटो अपलोड करें।",
+                weather: "🚀 बारिश के दौरान फसलों के लिए उचित जल निकासी सुनिश्चित करें और धूप वाले दिनों में सुबह जल्दी पानी दें।",
+                scheme: "🚀 आप पीएम-किसान (सीधी सहायता) या किसान क्रेडिट कार्ड (KCC) के माध्यम से कम ब्याज वाले ऋण का लाभ उठा सकते हैं।",
+                price: "🚀 आप आधिकारिक ई-नाम (eNAM) पोर्टल पर पंजीकरण करके प्रतिस्पर्धी मूल्य प्राप्त कर सकते हैं।",
+                def: "🚀 मैं मिट्टी की नमी की जाँच करने, पीएच (pH) स्तर का परीक्षण करने और जैविक खाद डालने की सलाह देता हूँ।"
+            },
+            te: {
+                greet: "🚀 నమస్తే! ఈరోజు మీ పంటలు, వాతావరణం, మార్కెట్ ధరలు లేదా ప్రభుత్వ పథకాల గురించి నేను మీకు ఎలా సహాయం చేయగలను?",
+                disease: "🚀 ఆకు మచ్చలు లేదా శిలీంధ్రాల సోకకుండా తనిఖీ చేయాలని నేను సిఫార్సు చేస్తున్నాను. పరికరాలను శుభ్రంగా ఉంచండి. వ్యాధి గుర్తింపు విభాగంలో ఫోటోను అప్‌లోడ్ చేయండి.",
+                weather: "🚀 వర్షం సమయంలో పంటలకు సరైన పారుదల సౌకర్యం కల్పించండి మరియు ఎండ రోజుల్లో ఉదయాన్నే నీరు పెట్టండి.",
+                scheme: "🚀 మీరు పీఎం-కిసాన్ (ఆదాయ మద్దతు) లేదా కిసాన్ క్రెడిట్ కార్డ్ (KCC) ద్వారా తక్కువ వడ్డీ రుణాల ప్రయోజనాన్ని పొందవచ్చు.",
+                price: "🚀 మీరు అధికారిక ఈ-నామ్ (eNAM) పోర్టల్‌లో నమోదు చేసుకోవడం ద్వారా పోటీ ధరలను పొందవచ్చు.",
+                def: "🚀 నేల తేమను తనిఖీ చేయాలని, పీహెచ్ (pH) స్థాయిలను పరీక్షించాలని మరియు సేంద్రీయ ఎరువులను వాడాలని నేను సిఫార్సు చేస్తున్నాను."
+            }
+        };
+
+        const set = replies[langKey] || replies.en;
+        
+        if (lastUserMsg.match(/\b(hi|hello|hey|namaste|hola|hii|helloo|hy)\b/)) {
+            fallbackReply = set.greet;
+        } else if (lastUserMsg.includes("disease") || lastUserMsg.includes("pest") || lastUserMsg.includes("leaf") || lastUserMsg.includes("spot") || lastUserMsg.includes("fungus") || lastUserMsg.includes("insect")) {
+            fallbackReply = set.disease;
+        } else if (lastUserMsg.includes("weather") || lastUserMsg.includes("rain") || lastUserMsg.includes("temperature") || lastUserMsg.includes("climate") || lastUserMsg.includes("monsoon")) {
+            fallbackReply = set.weather;
+        } else if (lastUserMsg.includes("scheme") || lastUserMsg.includes("loan") || lastUserMsg.includes("pm-kisan") || lastUserMsg.includes("pmkisan") || lastUserMsg.includes("kcc") || lastUserMsg.includes("subsidy")) {
+            fallbackReply = set.scheme;
+        } else if (lastUserMsg.includes("price") || lastUserMsg.includes("market") || lastUserMsg.includes("enam") || lastUserMsg.includes("mandi") || lastUserMsg.includes("sell")) {
+            fallbackReply = set.price;
+        } else {
+            fallbackReply = set.def;
+        }
     }
 
     res.json({ reply: fallbackReply });
