@@ -139,13 +139,6 @@ const ExpertHelpFull = () => {
                  <AlertCircle className="mr-2 h-5 w-5" />
                  {t("emergency")}
                </Button>
-               <Button 
-                onClick={() => navigate("/interview")}
-                className="h-14 px-8 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-emerald-500/20"
-               >
-                 <BrainCircuit className="mr-2 h-5 w-5" />
-                 {t("talkToAi")}
-               </Button>
             </div>
           </section>
 
