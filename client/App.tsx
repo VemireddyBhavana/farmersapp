@@ -34,6 +34,10 @@ import { FloatingChatbot } from "./components/FloatingChatbot";
 import Explore from "./pages/Explore";
 import Community from "./pages/Community";
 import ExpertHelpFull from "./pages/ExpertHelpFull";
+import ExpertHelpVoice from "./pages/ExpertHelpVoice";
+import ExpertHelpDisease from "./pages/ExpertHelpDisease";
+import ExpertHelpWeather from "./pages/ExpertHelpWeather";
+import ExpertHelpSchemes from "./pages/ExpertHelpSchemes";
 import YieldPrediction from "./pages/YieldPrediction";
 import SubsidyFinder from "./pages/SubsidyFinder";
 import SoilLabLocator from "./pages/SoilLabLocator";
@@ -91,6 +95,10 @@ const AppRoutes = () => {
       <Route path="/satellite-analysis" element={<CropHealthMonitor />} />
       <Route path="/community" element={<Community />} />
       <Route path="/expert-consult" element={<ExpertHelpFull />} />
+      <Route path="/expert-consult/voice" element={<ExpertHelpVoice />} />
+      <Route path="/expert-consult/disease" element={<ExpertHelpDisease />} />
+      <Route path="/expert-consult/weather" element={<ExpertHelpWeather />} />
+      <Route path="/expert-consult/schemes" element={<ExpertHelpSchemes />} />
       <Route path="/interview" element={<InterviewMode />} />
       <Route path="/yield-prediction" element={<YieldPrediction />} />
       <Route path="/subsidy-finder" element={<SubsidyFinder />} />

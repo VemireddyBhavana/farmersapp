@@ -24,6 +24,7 @@ import { handleExpertConsult, handleSmartAssistant } from "./routes/assistant";
 import { handleYieldPredict, handleYieldHistory } from "./routes/yield";
 import { handleSaveHistory, handleGetHistory } from "./routes/history";
 import { handleAI, handleInterviewFeedback } from "./routes/ai";
+import { handleExpertHelpChat, handleExpertHelpDisease, uploadImage } from "./routes/expertHelp";
 
 export function createServer() {
   const app = express();
@@ -69,6 +70,10 @@ export function createServer() {
   app.post("/api/smart-assistant", handleSmartAssistant);
   app.post("/api/ai", handleAI);
   app.post("/api/interview-feedback", handleInterviewFeedback);
+
+  // Farmer Expert Help Hub Routes
+  app.post("/api/expert-help/chat", handleExpertHelpChat);
+  app.post("/api/expert-help/disease", uploadImage as any, handleExpertHelpDisease as any);
 
   // Yield Prediction Module
   app.post("/api/predict", handleYieldPredict); // Matches frontend path
