@@ -1,136 +1,273 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { MessageSquare, ShieldAlert, CloudSun, ScrollText, ArrowRight, HeartHandshake } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { 
+  Phone, Video, Mic, Sparkles, Loader2, Send, 
+  AlertCircle, BrainCircuit, ShieldAlert, Star,
+  Clock, CheckCircle2, MessageSquare, Briefcase
+} from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import MentorBookingModal from "@/components/MentorBookingModal";
+import UPIPaymentScreen from "@/components/UPIPaymentScreen";
+import MentorChatInterface from "@/components/MentorChatInterface";
 
-export default function ExpertHelpFull() {
+const EXPERTS = [
+  { 
+    id: 1, 
+    name: "Dr. Rajesh Kumar", 
+    title: "PhD Agronomy, IARI Delhi", 
+    specialty: "Crop Pathology", 
+    image: "https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&q=80&w=300",
+    tags: ["Crop Health", "Pest Control", "Organic Farming"],
+    rating: 5,
+    availability: "Mon-Fri, 6-9 PM",
+    price: 299
+  },
+  { 
+    id: 2, 
+    name: "Er. Sneha Rao", 
+    title: "M.Tech Water Resources, NIT", 
+    specialty: "Irrigation Expert", 
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
+    tags: ["Drip Irrigation", "Water Saving", "Micro-irrigation"],
+    rating: 4,
+    availability: "Tue-Sat, 5-8 PM",
+    price: 349
+  },
+  { 
+    id: 3, 
+    name: "Prof. Amit Singh", 
+    title: "Soil Science Expert, PAU", 
+    specialty: "Soil Scientist", 
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
+    tags: ["Soil Testing", "Nutrient Management", "Fertilizer Advice"],
+    rating: 5,
+    availability: "Daily, 8-11 AM",
+    price: 399
+  },
+  { 
+    id: 4, 
+    name: "Dr. Priya Nair", 
+    title: "PhD Plant Biotechnology", 
+    specialty: "Genetic Specialist", 
+    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=300",
+    tags: ["Seed Quality", "GM Crops", "Hybrid Varieties"],
+    rating: 5,
+    availability: "Mon-Thu, 4-7 PM",
+    price: 499
+  },
+  { 
+    id: 5, 
+    name: "Er. Anil Reddy", 
+    title: "B.E. Agricultural Engineering", 
+    specialty: "Machinery Expert", 
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300",
+    tags: ["Tractor Tech", "Automation", "Tool Design"],
+    rating: 4,
+    availability: "Wed-Sun, 7-10 PM",
+    price: 249
+  },
+  { 
+    id: 6, 
+    name: "Prof. Sunita Sharma", 
+    title: "Horticulture lead, UASB", 
+    specialty: "Fruit Cultivation", 
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300",
+    tags: ["Grafting", "Greenhouse", "Post-Harvest"],
+    rating: 5,
+    availability: "Fri-Sun, 3-6 PM",
+    price: 299
+  }
+];
+
+const ExpertHelpFull = () => {
+  const navigate = useNavigate();
   const { t } = useLanguage();
+  
+  const [selectedExpert, setSelectedExpert] = useState<any>(null);
+  const [flowStep, setFlowStep] = useState<"idle" | "booking" | "payment" | "chat">("idle");
+  const [showEmergency, setShowEmergency] = useState(false);
 
-  const modules = [
-    {
-      title: t("voiceAndChatExpert") || "Voice & Chat Expert",
-      description: t("voiceChatDesc") || "Ask agricultural questions by voice or text. Get immediate help in Telugu, Hindi, or English.",
-      icon: MessageSquare,
-      path: "/expert-consult/voice",
-      color: "from-emerald-500/20 to-teal-500/20 text-emerald-600 dark:text-emerald-400",
-      btnText: t("openVoiceChat") || "Open Voice & Chat",
-    },
-    {
-      title: t("cropDiseaseDetection") || "Crop Disease Detection",
-      description: t("diseaseDetectDesc") || "Upload a photo of your crop's leaf to detect pests/diseases and get step-by-step treatment tips.",
-      icon: ShieldAlert,
-      path: "/expert-consult/disease",
-      color: "from-amber-500/20 to-orange-500/20 text-amber-600 dark:text-amber-400",
-      btnText: t("openDetector") || "Open Disease Detector",
-    },
-    {
-      title: t("weatherAdviceTitle") || "Weather Advice",
-      description: t("weatherAdviceDesc") || "Get live regional weather updates along with AI-generated farming advice and critical alerts.",
-      icon: CloudSun,
-      path: "/expert-consult/weather",
-      color: "from-blue-500/20 to-cyan-500/20 text-blue-600 dark:text-blue-400",
-      btnText: t("openWeather") || "Open Weather Tips",
-    },
-    {
-      title: t("governmentSchemesTitle") || "Government Schemes",
-      description: t("governmentSchemesDesc") || "Find benefits, direct payouts, and low-interest loans from PM-KISAN, PMFBY, KCC, and eNAM.",
-      icon: ScrollText,
-      path: "/expert-consult/schemes",
-      color: "from-purple-500/20 to-indigo-500/20 text-purple-600 dark:text-purple-400",
-      btnText: t("openSchemes") || "Open Schemes List",
-    },
-  ];
+  const handleStartBooking = (expert: any) => {
+    setSelectedExpert(expert);
+    setFlowStep("booking");
+  };
+
+  const handleProceedToPayment = () => {
+    setFlowStep("payment");
+  };
+
+  const handlePaymentSuccess = () => {
+    setFlowStep("chat");
+  };
+
+  const closeFlow = () => {
+    setFlowStep("idle");
+    setSelectedExpert(null);
+  };
 
   return (
-    <div className="min-h-screen bg-[#f0fdf4]/50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans pb-24 pt-10">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        
-        {/* Header Hero Section */}
-        <section className="text-center space-y-4 pt-10">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-emerald-200/50"
-          >
-            <HeartHandshake className="w-4 h-4 text-emerald-600" />
-            {t("empoweringFarmers") || "Empowering Farmers"}
-          </motion.div>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="expert-hub-root min-h-screen bg-[#f8fafc] text-foreground">
+      <div className="relative min-h-screen pt-24 pb-20 font-sans overflow-x-hidden">
+        <div className="container mx-auto px-4 max-w-7xl">
           
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white"
-          >
-            {t("expertHelpHubTitle") || "Farmer Expert Help Hub"}
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium"
-          >
-            {t("expertHelpHubSub") || "Free AI-powered agricultural advisor for farmers in Andhra Pradesh. Get direct answers to your farming needs at ₹0 cost."}
-          </motion.p>
-
-          {/* Feature Pills */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="flex flex-wrap justify-center items-center gap-3 pt-4 text-xs font-black uppercase tracking-widest"
-          >
-            <span className="px-4 py-2 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-full shadow-sm">🌱 Free to Use</span>
-            <span className="px-4 py-2 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-full shadow-sm">🗣️ Works in Telugu</span>
-            <span className="px-4 py-2 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-full shadow-sm">🎙️ Voice Support</span>
-          </motion.div>
-        </section>
-
-        {/* 2x2 Grid Modules */}
-        <section className="grid gap-8 md:grid-cols-2">
-          {modules.map((m, idx) => (
-            <motion.div
-              key={m.path}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * idx, duration: 0.5 }}
-              whileHover={{ y: -6 }}
+          {/* Header Section */}
+          <section className="relative z-10 mb-16 text-center">
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
             >
-              <Card className="h-full bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
-                <div className="space-y-6">
-                  {/* Icon with custom gradient background */}
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center shadow-inner`}>
-                    <m.icon className="h-7 w-7" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">
-                      {m.title}
-                    </h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-semibold">
-                      {m.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="pt-8">
-                  <Link to={m.path}>
-                    <button className="w-full h-14 bg-slate-900 hover:bg-emerald-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-md flex items-center justify-center gap-2 group/btn">
-                      {m.btnText}
-                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                  </Link>
-                </div>
-              </Card>
+              <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter text-slate-900 leading-tight">
+                {t("expertHelpHub")}
+              </h1>
+              <p className="text-muted-foreground text-xl max-w-3xl mx-auto font-medium">
+                {t("expertMentorSub")}
+              </p>
             </motion.div>
-          ))}
-        </section>
 
+            <div className="flex items-center justify-center gap-4 mt-10">
+               <Button 
+                onClick={() => setShowEmergency(true)}
+                variant="destructive" 
+                className="h-14 px-8 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl shadow-red-500/20"
+               >
+                 <AlertCircle className="mr-2 h-5 w-5" />
+                 {t("emergency")}
+               </Button>
+               <Button 
+                onClick={() => navigate("/interview")}
+                className="h-14 px-8 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-emerald-500/20"
+               >
+                 <BrainCircuit className="mr-2 h-5 w-5" />
+                 {t("talkToAi")}
+               </Button>
+            </div>
+          </section>
+
+          {/* Mentor Grid (Image 1 Style) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-20">
+            {EXPERTS.map((expert, index) => (
+              <motion.div
+                key={expert.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="group relative bg-white border-transparent hover:border-primary/20 rounded-[2.5rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] hover:shadow-[0_40px_80px_rgba(124,58,237,0.1)] transition-all duration-500 overflow-hidden">
+                  {/* Glass Background Micro-decoration */}
+                  <div className="absolute top-0 right-0 h-32 w-32 bg-primary/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-150 duration-700" />
+                  
+                  <div className="relative flex items-start gap-6 mb-8">
+                    <div className="h-20 w-20 min-w-[5rem] rounded-full border-4 border-slate-50 p-1 shadow-inner relative z-10">
+                      <img src={expert.image} className="w-full h-full object-cover rounded-full" alt={expert.name} />
+                      <div className="absolute -bottom-1 -right-1 h-6 w-6 bg-emerald-500 border-4 border-white rounded-full" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black text-slate-900 group-hover:text-primary transition-colors">{expert.name}</h3>
+                      <p className="text-sm text-muted-foreground font-semibold flex items-center gap-1.5 mt-1">
+                        <Briefcase className="h-3.5 w-3.5" />
+                        {expert.title}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {expert.tags.map(tag => (
+                      <span key={tag} className="px-4 py-1.5 bg-slate-50 text-slate-600 rounded-full text-[10px] font-black uppercase tracking-wider border border-slate-100">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 mb-8">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className={cn("h-4 w-4", i < expert.rating ? "text-yellow-400 fill-yellow-400" : "text-slate-200")} />
+                    ))}
+                    <span className="text-xs font-black ml-2 text-slate-400">({expert.rating}.0)</span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-1.5 text-slate-400 mb-1">
+                        <Clock className="h-3.5 w-3.5" />
+                        <span className="text-[10px] font-black uppercase tracking-widest">{expert.availability}</span>
+                      </div>
+                      <div className="text-2xl font-black text-emerald-600">₹{expert.price}<span className="text-xs text-muted-foreground font-medium ml-1">{t("perSession")}</span></div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 mt-8">
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button 
+                        onClick={() => handleStartBooking(expert)}
+                        className="h-14 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase text-xs tracking-widest shadow-lg shadow-primary/20"
+                      >
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        {t("chatBtn")}
+                      </Button>
+                      <Button 
+                        onClick={() => navigate(`/interview?topic=${encodeURIComponent(expert.specialty)}`)}
+                        variant="outline"
+                        className="h-14 rounded-2xl border-slate-200 hover:bg-emerald-50 text-emerald-600 border-2 font-black uppercase text-xs tracking-widest transition-all"
+                      >
+                        <Phone className="mr-2 h-4 w-4" />
+                        {t("callBtn")}
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Booking Form (Image 2 style) */}
+      <MentorBookingModal 
+        isOpen={flowStep === "booking"}
+        onClose={closeFlow}
+        mentor={selectedExpert}
+        onProceed={handleProceedToPayment}
+      />
+
+      {/* Payment Screen (UPI style) */}
+      <UPIPaymentScreen 
+        isOpen={flowStep === "payment"}
+        onClose={() => setFlowStep("booking")}
+        mentor={selectedExpert}
+        onSuccess={handlePaymentSuccess}
+      />
+
+      {/* Chat Interface (Image 3 style) */}
+      <MentorChatInterface 
+        isOpen={flowStep === "chat"}
+        onClose={closeFlow}
+        mentor={selectedExpert}
+      />
+
+      {/* Emergency Modal */}
+      <AnimatePresence> 
+        {showEmergency && ( 
+          <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-black/95 text-white">
+            <Card className="w-full max-w-lg bg-black border border-red-500/20 rounded-[3rem] p-12 text-center">
+              <ShieldAlert className="h-20 w-20 bg-red-600 rounded-3xl mx-auto mb-8 p-4 text-white" />
+              <h2 className="text-4xl font-black mb-4">{t("emergencySupport")}</h2>
+              <p className="mb-8 text-white/60">{t("emergencySub")}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+                <Button onClick={() => window.location.href = 'tel:18004251556'} className="p-8 h-20 rounded-[2.5rem] bg-white/5 font-black uppercase">{t("callGovt")}</Button>
+                <Button onClick={() => setShowEmergency(false)} className="p-8 h-20 rounded-[2.5rem] bg-emerald-600 font-black uppercase text-white">{t("cancel")}</Button>
+              </div>
+            </Card>
+          </div> 
+        )} 
+      </AnimatePresence>
+    </motion.div>
   );
-}
+};
+
+export default ExpertHelpFull;
+
