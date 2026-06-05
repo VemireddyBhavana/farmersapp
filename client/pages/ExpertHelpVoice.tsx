@@ -121,6 +121,7 @@ export default function ExpertHelpVoice() {
       const res = await axios.post("/api/expert-help/chat", {
         messages: newMessages,
         weatherContext: weatherText,
+        language: selectedLang
       });
 
       const reply = res.data.reply;

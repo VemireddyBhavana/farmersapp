@@ -25,7 +25,7 @@ Rules:
 // Express Handler for AI Voice/Text Chat
 export const handleExpertHelpChat = async (req: Request, res: Response) => {
   try {
-    const { messages, weatherContext } = req.body;
+    const { messages, weatherContext, language = "en" } = req.body;
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: "Messages array is required" });
     }
@@ -76,10 +76,55 @@ export const handleExpertHelpChat = async (req: Request, res: Response) => {
       }
     }
 
-    // Default hardcoded advice if both APIs are down/unconfigured
-    res.json({
-      reply: "Namaste! I am experiencing connection issues. Please check your soil moisture and ensure proper watering for your crops. Let's try again in a moment.",
-    });
+    // Default fallback responses if both APIs are down/unconfigured
+    const lastUserMsg = (messages[messages.length - 1]?.content || "").toLowerCase().trim();
+    const langKey = language.startsWith("te") ? "te" : language.startsWith("hi") ? "hi" : "en";
+    
+    const replies: Record<string, { greet: string; disease: string; weather: string; scheme: string; price: string; def: string }> = {
+        en: {
+            greet: "Hello! I am your AI agricultural expert. How can I assist you with your crops, weather, market prices, or government schemes today?",
+            disease: "For crop disease identification, please upload a leaf photo in our Crop Disease Detection section. I recommend keeping tools sterilized and ensuring proper plant spacing.",
+            weather: "Based on weather alerts, ensure paddy fields have proper drainage for upcoming heavy rains. Water early on hot sunny days.",
+            scheme: "You can apply for PM-KISAN for direct income support, or Kisan Credit Card (KCC) for low-interest cultivation loans starting at 4%.",
+            price: "Transparent bidding on the eNAM portal helps farmers secure competitive market rates. I can guide you through the registration process.",
+            def: "Namaste! I am your expert advisor. Please verify soil conditions and ensure optimal watering. Let me know how I can help you with crops, weather, or pricing."
+        },
+        hi: {
+            greet: "नमस्ते! आज मैं आपकी फसलों, मौसम, बाजार की कीमतों या सरकारी योजनाओं के बारे में क्या मदद कर सकता हूँ?",
+            disease: "फसल रोग की पहचान के लिए, कृपया हमारे फसल रोग पहचान अनुभाग में पत्ते की तस्वीर अपलोड करें। औजारों को स्वच्छ रखें।",
+            weather: "मौसम के अनुसार, भारी बारिश के लिए खेतों में पानी की निकासी की उचित व्यवस्था करें।",
+            scheme: "आप पीएम-किसान (सीधी सहायता) या किसान क्रेडिट कार्ड (KCC) के माध्यम से कम ब्याज वाले ऋण का लाभ उठा सकते हैं।",
+            price: "ई-नाम (eNAM) पोर्टल पर पंजीकरण करके प्रतिस्पर्धी मूल्य प्राप्त कर सकते हैं।",
+            def: "नमस्ते! मैं आपका कृषि सलाहकार हूँ। मिट्टी की नमी की जाँच करें और उचित सिंचाई करें। फसल, मौसम या कीमत के बारे में पूछें।"
+        },
+        te: {
+            greet: "నమస్తే! ఈరోజు మీ పంటలు, వాతావరణం, మార్కెట్ ధరలు లేదా ప్రభుత్వ పథకాల గురించి నేను మీకు ఎలా సహాయం చేయగలను?",
+            disease: "పంట తెగుళ్లను గుర్తించడానికి, దయచేసి పంట తెగుళ్ల గుర్తింపు విభాగంలో ఆకు ఫోటోను అప్‌లోడ్ చేయండి. పరికరాలను శుభ్రంగా ఉంచండి.",
+            weather: "వాతావరణ హెచ్చరికల ప్రకారం, రాబోయే భారీ వర్షాల కోసం వరి పొలాల్లో సరైన పారుదల సౌకర్యం కల్పించండి.",
+            scheme: "మీరు పీఎం-కిసాన్ (నేరుగా మద్దతు) లేదా కిసాన్ క్రెడిట్ కార్డ్ (KCC) ద్వారా తక్కువ వడ్డీ రుణాల ప్రయోజనాన్ని పొందవచ్చు.",
+            price: "అధికారిక ఈ-నామ్ (eNAM) పోర్టల్‌లో నమోదు చేసుకోవడం ద్వారా మధ్యవర్తుల ప్రమేయం లేకుండా మంచి ధరలు పొందవచ్చు.",
+            def: "నమస్తే! నేను మీ వ్యవసాయ సలహాదారుని. దయచేసి నేల తేమను తనిఖీ చేసి, తగినంత నీరు పెట్టండి. పంటలు, వాతావరణం లేదా ధరల గురించి నన్ను అడగండి."
+        }
+    };
+
+    const set = replies[langKey] || replies.en;
+    let fallbackReply = "";
+    
+    if (lastUserMsg.match(/\b(hi|hello|hey|namaste|hola|hii|helloo|hy)\b/)) {
+        fallbackReply = set.greet;
+    } else if (lastUserMsg.includes("disease") || lastUserMsg.includes("pest") || lastUserMsg.includes("leaf") || lastUserMsg.includes("spot") || lastUserMsg.includes("fungus") || lastUserMsg.includes("insect")) {
+        fallbackReply = set.disease;
+    } else if (lastUserMsg.includes("weather") || lastUserMsg.includes("rain") || lastUserMsg.includes("temperature") || lastUserMsg.includes("climate") || lastUserMsg.includes("monsoon")) {
+        fallbackReply = set.weather;
+    } else if (lastUserMsg.includes("scheme") || lastUserMsg.includes("loan") || lastUserMsg.includes("pm-kisan") || lastUserMsg.includes("pmkisan") || lastUserMsg.includes("kcc") || lastUserMsg.includes("subsidy")) {
+        fallbackReply = set.scheme;
+    } else if (lastUserMsg.includes("price") || lastUserMsg.includes("market") || lastUserMsg.includes("enam") || lastUserMsg.includes("mandi") || lastUserMsg.includes("sell")) {
+        fallbackReply = set.price;
+    } else {
+        fallbackReply = set.def;
+    }
+
+    res.json({ reply: fallbackReply });
   } catch (error) {
     console.error("❌ Chat API critical error:", error);
     res.status(500).json({ error: "Failed to process chat conversation" });
