@@ -19,7 +19,7 @@ interface ChatInterfaceProps {
 }
 
 const MentorChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, mentor }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -27,11 +27,17 @@ const MentorChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, me
 
   useEffect(() => {
     if (isOpen && mentor) {
+      const greetings: Record<string, string> = {
+        English: `Hello! I'm ${mentor.name}. I'm here to help you with ${mentor.specialty || "agricultural topics"}. Feel free to ask me any questions or doubts you have.`,
+        Hindi: `नमस्ते! मैं ${mentor.name} हूँ। मैं यहाँ ${mentor.specialty || "कृषि विषयों"} में आपकी मदद करने के लिए हूँ। अपने कोई भी प्रश्न या संदेह पूछने में संकोच न करें।`,
+        Telugu: `నమస్తే! నేను ${mentor.name}. ఇక్కడ ${mentor.specialty || "వ్యవసాయ అంశాల"} లో మీకు సహాయం చేయడానికి ఉన్నాను. మీకు ఏవైనా ప్రశ్నలు లేదా సందేహాలు ఉంటే అడగడానికి సంకోచించకండి.`
+      };
+      const greeting = greetings[language] || greetings.English;
       setMessages([
-        { role: "assistant", content: t("greeting", { name: mentor.name, specialty: mentor.specialty }) }
+        { role: "assistant", content: greeting }
       ]);
     }
-  }, [isOpen, mentor, t]);
+  }, [isOpen, mentor, language]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -52,13 +58,19 @@ const MentorChatInterface: React.FC<ChatInterfaceProps> = ({ isOpen, onClose, me
       const response = await axios.post("/api/ai", {
         messages: [...messages, userMsg].map(m => ({ role: m.role, content: m.content })),
         mode: "farmer",
-        mentor: mentor
+        mentor: mentor,
+        language: language
       });
 
       setMessages(prev => [...prev, { role: "assistant", content: response.data.reply }]);
     } catch (err) {
       console.error("❌ [Expert Hub] Chat Error:", err);
-      setMessages(prev => [...prev, { role: "assistant", content: t("errorConnecting") }]);
+      const errorMsg = language === "Telugu" 
+        ? "క్షమించండి, ప్రస్తుతం కనెక్ట్ చేయడంలో సమస్య ఉంది. దయచేసి మళ్లీ ప్రయత్నించండి." 
+        : language === "Hindi" 
+        ? "क्षमा करें, वर्तमान में कनेक्ट करने में समस्या आ रही है। कृपया पुनः प्रयास करें।" 
+        : "Sorry, I am having trouble connecting to the network right now. Please try again.";
+      setMessages(prev => [...prev, { role: "assistant", content: errorMsg }]);
     } finally {
       setIsThinking(false);
     }

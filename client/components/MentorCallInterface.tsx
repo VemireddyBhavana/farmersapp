@@ -20,7 +20,7 @@ interface CallInterfaceProps {
 }
 
 const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, mentor }) => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
@@ -70,8 +70,12 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
   // Initialize first greeting
   useEffect(() => {
     if (isOpen && mentor) {
-      const specialty = mentor.specialty || "agricultural topics";
-      const greeting = `Hello! I'm ${mentor.name}. I'm here to help you with ${specialty} Options. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`;
+      const greetings: Record<string, string> = {
+        English: `Hello! I'm ${mentor.name}. I'm here to help you with ${mentor.specialty || "agricultural topics"} Options. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`,
+        Hindi: `नमस्ते! मैं ${mentor.name} हूँ। मैं यहाँ ${mentor.specialty || "कृषि विषयों"} विकल्पों में आपकी मदद करने के लिए हूँ। अपनी खेती के बारे में कोई भी प्रश्न या संदेह पूछने में संकोच न करें। आप क्या जानना चाहेंगे?`,
+        Telugu: `నమస్తే! నేను ${mentor.name}. ఇక్కడ ${mentor.specialty || "వ్యవసాయ అంశాల"} విభాగంలో మీకు సహాయం చేయడానికి ఉన్నాను. మీ వ్యవసాయం గురించి మీకు ఏవైనా ప్రశ్నలు లేదా సందేహాలు ఉంటే అడగడానికి సంకోచించకండి. మీరు ఏమి తెలుసుకోవాలనుకుంటున్నారు?`
+      };
+      const greeting = greetings[language] || greetings.English;
       
       setMessages([
         { role: "assistant", content: greeting }
@@ -82,7 +86,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
         speak(greeting);
       }, 500);
     }
-  }, [isOpen, mentor]);
+  }, [isOpen, mentor, language]);
 
   // Cleanup speech synthesis on close
   useEffect(() => {
@@ -112,7 +116,8 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
       const response = await axios.post("/api/ai", {
         messages: [...messages, userMsg].map((m) => ({ role: m.role, content: m.content })),
         mode: "farmer",
-        mentor: mentor
+        mentor: mentor,
+        language: language
       });
 
       const reply = response.data.reply;
