@@ -70,9 +70,8 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
   // Initialize first greeting
   useEffect(() => {
     if (isOpen && mentor) {
-      const username = user?.username || "Farmer";
       const specialty = mentor.specialty || "agricultural topics";
-      const greeting = `Hello ${username}! I'm ${mentor.name}. I'm here to help you with ${specialty} Options. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`;
+      const greeting = `Hello! I'm ${mentor.name}. I'm here to help you with ${specialty} Options. Feel free to ask me any questions or doubts you have about your cultivation. What would you like to know?`;
       
       setMessages([
         { role: "assistant", content: greeting }
@@ -83,7 +82,7 @@ const MentorCallInterface: React.FC<CallInterfaceProps> = ({ isOpen, onClose, me
         speak(greeting);
       }, 500);
     }
-  }, [isOpen, mentor, user]);
+  }, [isOpen, mentor]);
 
   // Cleanup speech synthesis on close
   useEffect(() => {
