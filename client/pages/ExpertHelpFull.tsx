@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import MentorBookingModal from "@/components/MentorBookingModal";
 import UPIPaymentScreen from "@/components/UPIPaymentScreen";
 import MentorChatInterface from "@/components/MentorChatInterface";
+import MentorCallInterface from "@/components/MentorCallInterface";
 
 const EXPERTS = [
   { 
@@ -88,7 +89,7 @@ const ExpertHelpFull = () => {
   const { t } = useLanguage();
   
   const [selectedExpert, setSelectedExpert] = useState<any>(null);
-  const [flowStep, setFlowStep] = useState<"idle" | "booking" | "payment" | "chat">("idle");
+  const [flowStep, setFlowStep] = useState<"idle" | "booking" | "payment" | "chat" | "call">("idle");
   const [showEmergency, setShowEmergency] = useState(false);
 
   const handleStartBooking = (expert: any) => {
@@ -210,7 +211,10 @@ const ExpertHelpFull = () => {
                         {t("chatBtn")}
                       </Button>
                       <Button 
-                        onClick={() => navigate(`/interview?topic=${encodeURIComponent(expert.specialty)}`)}
+                        onClick={() => {
+                          setSelectedExpert(expert);
+                          setFlowStep("call");
+                        }}
                         variant="outline"
                         className="h-14 rounded-2xl border-slate-200 hover:bg-emerald-50 text-emerald-600 border-2 font-black uppercase text-xs tracking-widest transition-all"
                       >
@@ -245,6 +249,13 @@ const ExpertHelpFull = () => {
       {/* Chat Interface (Image 3 style) */}
       <MentorChatInterface 
         isOpen={flowStep === "chat"}
+        onClose={closeFlow}
+        mentor={selectedExpert}
+      />
+
+      {/* Call Interface (Screenshot style) */}
+      <MentorCallInterface 
+        isOpen={flowStep === "call"}
         onClose={closeFlow}
         mentor={selectedExpert}
       />
