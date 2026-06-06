@@ -21,7 +21,12 @@ files.forEach((file) => {
         { search: /KISAN AI/g, replace: 'AGRONEX' },
         { search: /kisan AI/g, replace: 'AgroNex' },
         { search: /Kisan ai/g, replace: 'AgroNex' },
-        { search: /kisan ai/g, replace: 'agronex' }
+        { search: /kisan ai/g, replace: 'agronex' },
+        { search: /AgriAI/g, replace: 'AgroNex' },
+        { search: /Agri AI/g, replace: 'AgroNex' },
+        { search: /agriai/g, replace: 'agronex' },
+        { search: /agri ai/g, replace: 'agronex' },
+        { search: /Agri Assistant/g, replace: 'AgroNex Assistant' }
     ];
     
     let original = content;

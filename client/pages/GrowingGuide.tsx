@@ -434,11 +434,11 @@ export default function GrowingGuide() {
       <div className="mt-12 p-12 rounded-[3rem] bg-primary text-white text-center space-y-6">
         <h2 className="text-3xl font-black">Need More Specific Advice?</h2>
         <p className="text-primary-foreground/80 max-w-2xl mx-auto text-lg">
-          Ask our AgriAI assistant about your specific soil test results or regional weather conditions for personalized guidance.
+          Ask our AgroNex assistant about your specific soil test results or regional weather conditions for personalized guidance.
         </p>
         <Link to="/chat">
           <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-6 text-lg font-bold">
-            Chat with AgriAI
+            Chat with AgroNex
           </Button>
         </Link>
       </div>
