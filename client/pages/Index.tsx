@@ -295,7 +295,7 @@ export default function Index() {
                 </p>
                 <Link to="/chat">
                   <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 py-6 text-lg">
-                    {t('chatAgriAI')}
+                    {t('chatAgroNex')}
                   </Button>
                 </Link>
               </div>
