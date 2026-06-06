@@ -51,7 +51,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const language = langMap[i18n.language] || "English";
 
   useEffect(() => {
-    localStorage.setItem("Kisan_lang", language);
+    localStorage.setItem("agronex_lang", language);
   }, [language]);
 
   return (

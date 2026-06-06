@@ -112,7 +112,7 @@ export default function Index() {
                       width="100%" 
                       height="100%" 
                       src="https://www.youtube.com/embed/Y6p9XF_N7_8?autoplay=1&mute=1&rel=0" 
-                      title="Kisan AI Farming Demo" 
+                      title="AgroNex Farming Demo" 
                       frameBorder="0" 
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                       allowFullScreen

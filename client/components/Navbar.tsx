@@ -120,9 +120,11 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 flex-shrink-0 group transition-all duration-300 hover:scale-105">
-            <div className="rounded-xl bg-primary p-1.5 shadow-md shadow-primary/30 group-hover:shadow-primary/50 transition-all">
-              <Leaf className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <img 
+              src="/agronex_logo.png" 
+              alt="AgroNex Logo" 
+              className="h-9 w-9 rounded-xl shadow-md shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300 object-cover" 
+            />
             <span className="text-lg font-extrabold tracking-tight text-primary hidden sm:block group-hover:text-primary/80 transition-colors">
               {brandName}
             </span>

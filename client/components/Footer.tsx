@@ -108,9 +108,11 @@ const Footer = () => {
         {/* Bottom Brand */}
         <div className="mt-16 border-t pt-12 flex flex-col items-center justify-center text-center space-y-6">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="rounded-xl bg-primary p-2 shadow-lg shadow-primary/20">
-              <Leaf className="h-8 w-8 text-primary-foreground" />
-            </div>
+            <img 
+              src="/agronex_logo.png" 
+              alt="AgroNex Logo" 
+              className="h-12 w-12 rounded-xl shadow-lg shadow-primary/20 object-cover" 
+            />
             <span className="text-2xl font-bold tracking-tight text-primary">
               {t("brandName")}
             </span>
