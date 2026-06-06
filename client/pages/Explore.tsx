@@ -3,7 +3,6 @@ import subsidyFinder from "@/assets/subsidy_finder.png";
 import expertPfp from "@/assets/expert_pfp.png";
 import communityHub from "@/assets/community_hub.png";
 import tractorPremium from "@/assets/tractor_premium.png";
-import pulsesFarm from "@/assets/pulses_farm.png";
 import heroRiceField from "@/assets/hero_rice_field.png";
 import explorePests from "@/assets/explore_pests.png";
 import exploreMandi from "@/assets/explore_mandi.png";
@@ -43,7 +42,7 @@ const Explore = () => {
       icon: LayoutDashboard,
       color: "bg-blue-500/10 text-blue-600",
       link: "/dashboard",
-      image: heroRiceField
+      image: "https://www.shutterstock.com/image-photo/farmer-uses-tablet-smart-farming-260nw-2642677661.jpg"
     },
     {
       title: t('equipmentRentalTitle'),
@@ -67,7 +66,7 @@ const Explore = () => {
       icon: MessageSquare,
       color: "bg-purple-500/10 text-purple-600",
       link: "/chat",
-      image: pulsesFarm
+      image: "https://cdn.analyticsvidhya.com/wp-content/uploads/2025/02/Agri-Bot-A-Multilingual-AI-Assistant-for-Farmers-using-AI-Agents-.webp"
     },
     {
       title: t('pestDiseaseDetectionTitle'),
@@ -83,7 +82,7 @@ const Explore = () => {
       icon: Leaf,
       color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       link: "/satellite-analysis",
-      image: pulsesFarm
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLXl1jzB5DFrG0ma3sy0HVJn4OxmDPbjVLlQ&s"
     },
     {
       title: t('communityHubTitle'),
