@@ -2,7 +2,6 @@ import yieldPrediction from "@/assets/yield_prediction.png";
 import subsidyFinder from "@/assets/subsidy_finder.png";
 import expertPfp from "@/assets/expert_pfp.png";
 import tractorPremium from "@/assets/tractor_premium.png";
-import heroRiceField from "@/assets/hero_rice_field.png";
 import explorePests from "@/assets/explore_pests.png";
 import exploreMandi from "@/assets/explore_mandi.png";
 import React from "react";
@@ -121,7 +120,7 @@ const Explore = () => {
       icon: Zap,
       color: "bg-emerald-500/10 text-emerald-600",
       link: "/agri-tools",
-      image: heroRiceField
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS82rw36-bel-4WJeirMyG-XPg09Ad_Aj09Gg&s"
     }
   ];
 
