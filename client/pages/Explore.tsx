@@ -1,7 +1,6 @@
 import yieldPrediction from "@/assets/yield_prediction.png";
 import subsidyFinder from "@/assets/subsidy_finder.png";
 import expertPfp from "@/assets/expert_pfp.png";
-import communityHub from "@/assets/community_hub.png";
 import tractorPremium from "@/assets/tractor_premium.png";
 import heroRiceField from "@/assets/hero_rice_field.png";
 import explorePests from "@/assets/explore_pests.png";
@@ -90,7 +89,7 @@ const Explore = () => {
       icon: MessageSquare,
       color: "bg-blue-500/10 text-blue-600",
       link: "/community",
-      image: communityHub
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCceksXeW64JqpL1-4BY4Dz-OitskS-evFLA&s"
     },
     {
       title: t('expertConsultTitle'),
