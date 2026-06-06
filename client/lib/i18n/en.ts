@@ -2985,6 +2985,7 @@ export const en = {
     "monthsSaved": "Months Saved",
     "timeSaved": "Time Saved",
     "interestSaved": "Interest Saved",
+    "actualTenure": "Actual Tenure",
     "weatherAdviceTitle": "Farming Weather Advice",
     "weatherAdviceDesc": "Real-time atmospheric analysis and micro-climate indicators synchronized to provide customized irrigation, spraying, and seeding advice.",
     "syncingWeatherData": "Syncing Weather Datasets...",

@@ -2985,6 +2985,7 @@ export const hi = {
     "monthsSaved": "महीने बचाए",
     "timeSaved": "बचाया गया समय",
     "interestSaved": "बचाया गया ब्याज",
+    "actualTenure": "वास्तविक कार्यकाल",
     "weatherAdviceTitle": "कृषि मौसम सलाह",
     "weatherAdviceDesc": "वास्तविक समय के वायुमंडलीय विश्लेषण और सूक्ष्म जलवायु संकेतक जो आपको सिंचाई, छिड़काव और बुवाई की अनुकूलित सलाह प्रदान करते हैं।",
     "syncingWeatherData": "मौसम डेटा सिंक किया जा रहा है...",
