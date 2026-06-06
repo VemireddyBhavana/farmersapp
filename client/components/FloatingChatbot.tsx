@@ -14,15 +14,26 @@ export const FloatingChatbot = () => {
 
     // Initial Welcome Message
     useEffect(() => {
-        if (messages.length === 0) {
-            setMessages([{
-                id: 1,
-                text: tl("botWelcome") + "\n" + tl("botOffer"),
-                sender: "bot",
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-        }
-    }, []);
+        setMessages((prev) => {
+            if (prev.length === 0) {
+                return [{
+                    id: 1,
+                    text: tl("botWelcome") + "\n" + tl("botOffer"),
+                    sender: "bot",
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }];
+            }
+            return prev.map((msg) => {
+                if (msg.id === 1 && msg.sender === "bot") {
+                    return {
+                        ...msg,
+                        text: tl("botWelcome") + "\n" + tl("botOffer")
+                    };
+                }
+                return msg;
+            });
+        });
+    }, [globalLanguage]);
 
     const generateBotResponse = (userText: string) => {
         const lowerText = userText.toLowerCase();

@@ -36,6 +36,21 @@ const SmartAiAssistant = ({ onClose }: { onClose: () => void }) => {
     }
   }, [messages, isThinking]);
 
+  // Update welcome message text when language changes
+  useEffect(() => {
+    setMessages((prev) =>
+      prev.map((msg, index) => {
+        if (index === 0 && msg.role === "ai") {
+          return {
+            ...msg,
+            text: t("botWelcome"),
+          };
+        }
+        return msg;
+      })
+    );
+  }, [i18n.language, t]);
+
   // COMPLETE SILENCE ON CLOSE: Forcefully stop all speech synthesis when component unmounts
   useEffect(() => {
     return () => {

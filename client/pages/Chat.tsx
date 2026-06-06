@@ -36,15 +36,19 @@ export default function ChatPage() {
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Update messages when chat language changes if only the welcome message exists
+  // Update messages when chat language changes
   useEffect(() => {
-    if (messages.length === 1 && messages[0].role === "bot") {
-      setMessages([{
-        role: "bot",
-        content: ct("botWelcome"),
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      }]);
-    }
+    setMessages((prev) =>
+      prev.map((msg, index) => {
+        if (index === 0 && msg.role === "bot") {
+          return {
+            ...msg,
+            content: ct("botWelcome"),
+          };
+        }
+        return msg;
+      })
+    );
   }, [chatLanguage]);
 
   useEffect(() => {
