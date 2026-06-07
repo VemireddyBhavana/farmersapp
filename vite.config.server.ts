@@ -41,6 +41,7 @@ export default defineConfig({
         "mongodb",
         "multer",
         "cloudinary",
+        "form-data",
       ],
       output: {
         format: "es",
